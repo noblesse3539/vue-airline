@@ -1,0 +1,74 @@
+.flight-search-wrapper {
+    width: 100%;
+    height: 350px;
+    background-color: rgba(0, 0, 2, 0.1);
+}
+
+.flight-search-pannel {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1%;
+    width: 75%;
+    height: 100%;
+    /* background-color: rgba(255, 0, 2, 0.1); */
+}
+
+.flight-search-radio {
+    padding-top: 70px;
+}
+
+.radio-container {
+    
+}
+
+
+input[type=radio] {
+    width: 2rem;
+    height: 100%;
+}
+
+input {
+    padding: 3%;
+}
+
+.flight-search-info {
+    margin-top: 2rem;
+    display: flex;
+}
+
+.flight-search-info > div {
+    width: 100%;
+}
+
+.flight-search-info input {
+    background: white;
+    display: inline-block;
+    width: 100%;
+    height: 3rem;
+    border: .0625rem solid #e6e4eb;
+}
+
+.flight-search-info input:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+.flight-search-info label {
+    color: black;
+}
+
+.flight-search-submit {
+    margin-top: 2rem;
+}
+
+.flight-search-submit > button {
+    color: black;
+    display: block;
+    height: 64px;
+    width: 150px;
+    background-color: rgba(47, 230, 62, 0.5);
+    border-radius: 10px 10px 10px 10px;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
