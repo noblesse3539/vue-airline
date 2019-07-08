@@ -3,7 +3,7 @@
         <div class="nav-left"><router-link to="/">Bision</router-link></div>
         <div class="nav-right">
             <router-link to="/#" class="hvr-underline-from-center">예매</router-link>
-            <router-link to="/#" class="hvr-underline-from-center">로그인</router-link>
+            <router-link to="/login" class="hvr-underline-from-center">로그인</router-link>
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
                 <v-container style="padding:0;">

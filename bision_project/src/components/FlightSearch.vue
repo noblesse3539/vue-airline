@@ -52,7 +52,7 @@ export default {
         return {
             RadioLabels: ["왕복", "편도", "다구간"],
             urls: {
-                'airline' : '/airlinepage'
+                'airline' : '/airlineDetail'
             },
         }
     },

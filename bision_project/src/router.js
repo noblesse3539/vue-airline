@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Pandora from './views/Pandora/Pandora'
+import AirLineDetailPage from './views/AirLineDetailPage'
+import LoginModal from './components/LoginModal'
+import GuideMyPage from './views/GuideMyPage'
+import MyPage from './views/MyPage'
 
 Vue.use(Router)
 
@@ -22,25 +26,25 @@ export default new Router({
             name: 'Pandora',
             component: Pandora
         },
-        // {
-        //     path: '/mypage',
-        //     name: 'Mypage',
-        //     component: MyPage
-        // },
-        // {
-        //     path: '/guidemypage',
-        //     name: 'GuideMyPage',
-        //     component: GuideMyPage
-        // },
-        // {
-        //     path: '/login',
-        //     name: 'Login',
-        //     component: Login
-        // },
-        // {
-        //     path: '/airlines',
-        //     name: 'AirLinePage',
-        //     component: AirLinePage
-        // },
+        {
+            path: '/mypage',
+            name: 'Mypage',
+            component: MyPage
+        },
+        {
+            path: '/guidemypage',
+            name: 'GuideMyPage',
+            component: GuideMyPage
+        },
+        {
+            path: '/login',
+            name: 'LoginModals',
+            component: LoginModal
+        },
+        {   
+            path: '/airlineDetail',
+            name: 'AirLineDetailPage',
+            component: AirLineDetailPage
+        },
     ]
 })
