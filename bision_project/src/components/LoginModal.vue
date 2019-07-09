@@ -1,7 +1,6 @@
 <template>
 <v-container>
   <v-layout>
-    <transition name="LoginModal">
       <div class="LoginModal-mask">
         <div class="LoginModal-wrapper">
           <div class="LoginModal-container">
@@ -29,31 +28,13 @@
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
                 <div class="links"> <a href="" @click="flip('password', $event)">Forgot your password?</a></div>
               </div>
-              <!-- <div class="LoginModal-header">
-                <slot name="header">
-                  default header
-                </slot>
-              </div>
-
-              <div class="LoginModal-body">
-                <slot name="body">
-                  default body
-                </slot>
-              </div>
-
-              <div class="LoginModal-footer">
-                <slot name="footer">
-                  default footer
-                  <button class="LoginModal-default-button" @click="goToPage('/')">
-                    OK
-                  </button>
-                </slot>
-              </div> -->
+            </div>
+            <div style="text-align:center">
+              <v-btn @click="close()">취소</v-btn>
             </div>
           </div>
         </div>
       </div>
-    </transition>
   </v-layout>
 </v-container>
 </template>
@@ -67,7 +48,7 @@ var modal_submit_login = 'Login';
 
 export default {
   name: 'LoginModal',
-  props: {},
+  props: { },
   methods: {
     goToPage: function(url) {
       this.$router.push(url)
@@ -102,11 +83,14 @@ export default {
           this.$set('passwordSubmit', 'Resetting Password...')
           break;
         }
+      },
+      close(){
+        this.$emit('child');
       }
   },
   data() {
     return {
-      active: null,
+      active: 'login',
       submitted: null,
 
       // Submit button text
@@ -129,8 +113,5 @@ export default {
 
     }
   },
-  mounted:{
-     // class="form-login" :class="{ 'active': active == 'login' }"
-  }
 }
 </script>

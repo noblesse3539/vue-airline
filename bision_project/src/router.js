@@ -42,7 +42,7 @@ export default new Router({
             name: 'LoginModals',
             component: LoginModal
         },
-        {   
+        {
             path: '/airlineDetail',
             name: 'AirLineDetailPage',
             component: AirLineDetailPage
