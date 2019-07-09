@@ -5,6 +5,7 @@ import 'vuetify/dist/vuetify.min.css'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import axios from 'axios'
 
 Vue.use(Vuex)
 Vue.use(Vuetify, {
@@ -20,6 +21,7 @@ Vue.use(Vuetify, {
 	}
 })
 
+Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 new Vue({
