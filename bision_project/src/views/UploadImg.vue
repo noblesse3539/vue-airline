@@ -2,6 +2,7 @@
   <div>
     <input type="file" @change="processImg" accept="image/*" >
     <button @click="uploadImg">업로드</button>
+    <img v-bind:src="imgurl" alt="">
   </div>
 </template>
 
@@ -9,13 +10,18 @@
 
 export default {
   name: 'UploadImg',
+  data: function(){
+    return {
+      imgurl: ''
+    }
+  },
   methods: {
     processImg: function(event) {
       this.Imgfile = event.target.files[0]
     },
     uploadImg: function(){
-      let formData = new FormData();
-      formData.append('image', this.Imgfile);
+      let form = new FormData();
+      form.append('image', this.Imgfile);
 
       var settings = {
         "url": "https://api.imgur.com/3/image",
@@ -29,10 +35,13 @@ export default {
         "contentType": false,
         "data": form
       };
-      this.$http.get()
+      this.$http(settings).then(res=>{
+        console.log(res.data.data.link)
+        this.imgurl=res.data.data.link
+      })
+    }
   }
 }
 </script>
-
 <style>
 </style>
