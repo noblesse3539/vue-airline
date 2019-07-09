@@ -6,7 +6,6 @@ import AirLineDetailPage from './views/AirLineDetailPage'
 import LoginModal from './components/LoginModal'
 import GuideMyPage from './views/GuideMyPage'
 import MyPage from './views/MyPage'
-
 Vue.use(Router)
 
 export default new Router({
@@ -41,7 +40,7 @@ export default new Router({
             name: 'LoginModals',
             component: LoginModal
         },
-        {   
+        {
             path: '/airlineDetail',
             name: 'AirLineDetailPage',
             component: AirLineDetailPage
