@@ -2,10 +2,41 @@
   <div class="container">
     <h2>&nbsp;&nbsp;&nbsp;회원정보</h2>
     <Profile/>
-    <h2>&nbsp;&nbsp;&nbsp;예약 내역</h2>
-    <v-layout>
-    </v-layout>
-    <v-data-table
+    <h2>&nbsp;&nbsp;&nbsp;내가 이용했던 여행 가이드</h2>
+    <v-flex xs4>
+      <v-card color="cyan darken-2" class="white--text">
+        <v-layout>
+          <v-flex xs5>
+            <v-img
+              src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
+              height="125px"
+              contain
+            ></v-img>
+          </v-flex>
+          <v-flex xs7>
+            <v-card-title primary-title>
+              <div>
+                <div class="headline">Supermodel</div>
+                <div>Foster the People</div>
+                <div>(2014)</div>
+              </div>
+            </v-card-title>
+          </v-flex>
+        </v-layout>
+        <v-divider light></v-divider>
+        <v-card-actions class="pa-3">
+          만족도
+          <v-spacer></v-spacer>
+          <v-icon color="yellow">fas fa-star</v-icon>
+          <v-icon>fas fa-star</v-icon>
+          <v-icon>fas fa-star</v-icon>
+          <v-icon>fas fa-star</v-icon>
+          <v-icon>fas fa-star</v-icon>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+    <!-- 항공권 이용내역 -->
+    <!-- <v-data-table
       :headers="headers"
       :items="desserts"
       class="elevation-1 my-3"
@@ -18,111 +49,7 @@
         <td class="text-xs-right">{{ props.item.protein }}</td>
         <td class="text-xs-right">{{ props.item.iron }}</td>
       </template>
-    </v-data-table>
-    <!-- <div
-      id="e3"
-      style="margin: auto;"
-      class="grey lighten-3"
-    >
-      <v-card>
-        <v-container
-          fluid
-          grid-list-lg
-        >
-          <v-layout row wrap>
-            <v-flex xs12>
-              <v-card >
-                <v-layout>
-                  <v-flex xs12>
-                    <v-data-table
-                      :headers="headers"
-                      :items="desserts"
-                      class="elevation-1"
-                    >
-                      <template v-slot:items="props">
-                        <td>{{ props.item.name }}</td>
-                        <td class="text-xs-right">{{ props.item.calories }}</td>
-                        <td class="text-xs-right">{{ props.item.fat }}</td>
-                        <td class="text-xs-right">{{ props.item.carbs }}</td>
-                        <td class="text-xs-right">{{ props.item.protein }}</td>
-                        <td class="text-xs-right">{{ props.item.iron }}</td>
-                      </template>
-                    </v-data-table>
-                  </v-flex>
-                </v-layout>
-              </v-card>
-            </v-flex>
-
-
-            <v-flex xs12>
-              <v-card >
-                <v-layout>
-                  <v-flex xs5>
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-                      height="125px"
-                      contain
-                    ></v-img>
-                  </v-flex>
-                  <v-flex xs7>
-                    <v-card-title primary-title>
-                      <div>
-                        <div class="headline">Supermodel</div>
-                        <div>Foster the People</div>
-                        <div>(2014)</div>
-                      </div>
-                    </v-card-title>
-                  </v-flex>
-                </v-layout>
-                <v-divider light></v-divider>
-                <v-card-actions class="pa-3">
-                  Rate this album
-                  <v-spacer></v-spacer>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-
-            <v-flex xs12>
-              <v-card class="white--text">
-                <v-layout row>
-                  <v-flex xs7>
-                    <v-card-title primary-title>
-                      <div>
-                        <div class="headline">Halycon Days</div>
-                        <div>Ellie Goulding</div>
-                        <div>(2013)</div>
-                      </div>
-                    </v-card-title>
-                  </v-flex>
-                  <v-flex xs5>
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/halcyon.png"
-                      height="125px"
-                      contain
-                    ></v-img>
-                  </v-flex>
-                </v-layout>
-                <v-divider light></v-divider>
-                <v-card-actions class="pa-3">
-                  Rate this album
-                  <v-spacer></v-spacer>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                  <v-icon>star_border</v-icon>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </div> -->
+    </v-data-table> -->
     <!-- 이용했던 상품들 -->
     <div class="container my-5" style="height: 700px;">
       <h1 class="text-xs-center my-3">내가 이용했던 여행 상품</h1>
@@ -131,14 +58,58 @@
           v-for="(item,i) in items"
           :key="i"
           :src="item.src"
+          style="width: 800px;"
+
         ></v-carousel-item>
       </v-carousel>
     </div>
+    <form>
+      <!-- <v-text-field
+        v-model="title"
+        :error-messages="nameErrors"
+        :counter="20"
+        label="Title"
+        required
+        @input="$v.name.$touch()"
+        @blur="$v.name.$touch()"
+      ></v-text-field> -->
+      <input type="text" name="title"></input>
+      <v-btn color="red">submit</v-btn>
+    </form>
   </div>
 </template>
 
 <script>
   import Profile from '../components/Profile'
+
+  // var baseurl = https://translation.googleapis.com/language/translate/v2?q=
+  // var key = AIzaSyD9-6TuS5C7IJVWPFv5i10l_Z2JjXyb9zw
+  // var url = bseurl + text + "&source=ko&target=en&model=nmt&key=" + key
+
+
+
+//   async function quickstart(
+//   projectId = 'bision-project-1562646252112' // Your GCP Project Id
+// ) {
+//   // Imports the Google Cloud client library
+//   const {Translate} = require('@google-cloud/translate');
+//
+//   // Instantiates a client
+//   const translate = new Translate({projectId});
+//
+//   // The text to translate
+//   const text = 'Hello, world!';
+//
+//   // The target language
+//   const target = 'ru';
+//
+//   // Translates some text into Russian
+//   const [translation] = await translate.translate(text, target);
+//   console.log(`Text: ${text}`);
+//   console.log(`Translation: ${translation}`);
+// }
+
+// quickstart();
 
   export default {
     name: 'MyPage',
