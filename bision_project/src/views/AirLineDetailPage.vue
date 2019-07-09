@@ -10,7 +10,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 // import AirLineList from '../components/airlinedetail/AirLineList'
 export default {
     name:'AirLineDetailPage',
@@ -31,13 +31,13 @@ export default {
     },
     methods: {
         createUser() {
-            axios.get('/api/samples/'+ this.name)
+            this.$http.get('/api/samples/'+ this.name)
             .then((response) => {
                 this.samples.push(response.data)
             })
         },
         getUser() {
-            axios.get('/api/samples/')
+            this.$http.get('/api/samples/getUser/' + this.name)
                 .then( res => {
                     console.log(res)
                 })
