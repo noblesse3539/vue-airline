@@ -1,4 +1,4 @@
-/* Mobile Size */ 
+/* Mobile Size */
 @media only screen and (max-width: 600px) {
     #navbox {
         top: 0 !important;
@@ -27,7 +27,7 @@
     }
 }
 
-/* Desktop Size */ 
+/* Desktop Size */
 
 a {
     color: black !important;
@@ -68,4 +68,8 @@ a:hover {
 }
 #nav-right-collapsed {
     display: none;
+}
+
+.modal{
+  display:none;
 }
