@@ -6,6 +6,7 @@ import AirLineDetailPage from './views/AirLineDetailPage'
 import LoginModal from './components/LoginModal'
 import GuideMyPage from './views/GuideMyPage'
 import MyPage from './views/MyPage'
+import Admin from './views/Admin'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
             path: '/airlineDetail',
             name: 'AirLineDetailPage',
             component: AirLineDetailPage
+        },
+        {   
+            path: '/admin',
+            name: 'Admin',
+            component: Admin
         },
     ]
 })
