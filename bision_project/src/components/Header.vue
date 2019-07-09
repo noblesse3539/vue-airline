@@ -3,7 +3,7 @@
         <div class="nav-left"><router-link to="/">Bision</router-link></div>
         <div class="nav-right">
             <router-link to="/#" class="hvr-underline-from-center">예매</router-link>
-            <router-link to="/login" class="hvr-underline-from-center">로그인</router-link>
+            <router-link to="/" class="hvr-underline-from-center"><span @click="open()">로그인</span></router-link>
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
                 <v-container style="padding:0;">
@@ -28,31 +28,51 @@
                     </v-list>
                 </v-navigation-drawer>
             </v-layout>
+            <div v-if="modal">
+              <LoginModal
+              :modalOfChild="modal"
+              @child="close"/>
+            </div>
     </div>
 </template>
 
 <script>
 import './Header.css'
+import './LoginModal.css'
+import LoginModal from './LoginModal'
 
 export default {
     name: 'Header',
+    components:{
+      LoginModal
+    },
     props: {},
     methods: {
         goToPage : function (url) {
             this.$router.push(url)
         },
+        // open: function(){
+        //   document.getElementById('modal').style.display = 'block';
+        // },
+        open: function(){
+          this.modal=true
+        },
+        close(){
+          this.modal=false
+        }
     },
     data () {
         return {
             drawer: null,
             items : [
-                { title: '#' , 
+                { title: '#' ,
                     url: '/#'},
-                { title: '#' , 
+                { title: '#' ,
                     url: '/#'},
-                { title: '# in' , 
+                { title: '# in' ,
                     url: '/#'},
-            ]
+            ],
+            modal:false
         }
     }
 }
