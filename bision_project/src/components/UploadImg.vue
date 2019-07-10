@@ -1,55 +1,69 @@
 <template>
-  <div>
-    <input type="file" value="이미지 선택" name="file"/>
-    <button @click="uploadImg">업로드</button>
-  </div>
+  <v-layout row justify-center>
+  <v-dialog v-model="modal" persistent max-width="600px">
+    <v-card>
+      <v-card-title>
+        <span class="headline">Upload Image</span>
+      </v-card-title>
+      <v-card-text>
+        <v-container grid-list-md>
+          <v-checkbox color="primary" v-model="random" label="'랜덤 이미지 사용'"></v-checkbox>
+          <input type="file" @change="processImg" accept="image/*" >
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
+        <v-btn color="blue darken-1" flat @click="uploadImg">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</v-layout>
+
 </template>
 
 <script>
 
 export default {
   name: 'UploadImg',
+  data: function(){
+    return {
+      imgurl: '',
+      modal: true,
+      random: false,
+    }
+  },
   methods: {
-    uploadImg: function(file){
-      var https = require('https');
+    processImg: function(event) {
+      this.Imgfile = event.target.files[0]
+    },
+    uploadImg: function(){
+      let form = new FormData();
+      form.append('image', this.Imgfile);
 
-    var options = {
-      'method': 'POST',
-      'hostname': 'api.imgur.com',
-      'path': '/3/image',
-      'headers': {
-        'Authorization': 'Client-ID 6def70bd30a2e6a'
-      }
-    };
-
-    var req = https.request(options, function (res) {
-      var chunks = [];
-
-      res.on("data", function (chunk) {
-        chunks.push(chunk);
-      });
-
-      res.on("end", function (chunk) {
-        var body = Buffer.concat(chunks);
-        console.log(body.toString());
-      });
-
-      res.on("error", function (error) {
-        console.error(error);
-      });
-    });
-
-    var postData = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"image\"\r\n\r\nR0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--";
-
-    req.setHeader('content-type', 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW');
-
-    req.write(postData);
-    console.log(res.data.link)
-    req.end();
+      var settings = {
+        "url": "https://api.imgur.com/3/image",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+          "Authorization": "Client-ID 6def70bd30a2e6a"
+        },
+        "processData": false,
+        "mimeType": "multipart/form-data",
+        "contentType": false,
+        "data": form
+      };
+      this.$http(settings).then(res=>{
+        // console.log(res.data.data.link)
+        this.imgurl=res.data.data.link
+        this.$emit('close',  this.imgurl)
+      })
+    },
+    close(){
+      this.$emit('close', false);
     }
   }
 }
 </script>
-
 <style>
 </style>

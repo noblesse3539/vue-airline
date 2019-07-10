@@ -47,7 +47,7 @@ export default new Router({
             name: 'AirLineDetailPage',
             component: AirLineDetailPage
         },
-        {   
+        {
             path: '/admin',
             name: 'Admin',
             component: Admin
