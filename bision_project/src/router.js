@@ -7,7 +7,6 @@ import LoginModal from './components/LoginModal'
 import GuideMyPage from './views/GuideMyPage'
 import MyPage from './views/MyPage'
 import Admin from './views/Admin'
-import UploadImg from './views/UploadImg'
 
 Vue.use(Router)
 
@@ -52,12 +51,6 @@ export default new Router({
             path: '/admin',
             name: 'Admin',
             component: Admin
-        },
-        {
-            path: '/uploadImg',
-            name: 'UploadImg',
-            component: UploadImg
-
         },
     ]
 })
