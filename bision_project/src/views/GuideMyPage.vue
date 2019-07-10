@@ -3,8 +3,6 @@
     <v-container>
     <v-layout xs12 my-5 mx-5 align-end>
       <v-flex xs3 mr-5>
-        <!-- <v-tooltip bottom> -->
-          <!-- <template v-slot:activator="{ on }"> -->
           <v-hover>
             <v-img fluid style="border-radius: 50%;" slot-scope="{hover}"v-on="on" class="profileImg" @click="showModal" v-bind:src="imgurl" aspect-ratio="1" alt="profile Img">
               <v-scale-transition>
@@ -14,9 +12,6 @@
               </v-scale-transition>
             </v-img>
           </v-hover>
-          <!-- </template>
-          <span>이미지 변경</span>
-        </v-tooltip> -->
         <UploadImg v-model="imgurl" v-show="isModalVisible" @close="closeModal"/>
       </v-flex>
       <v-flex xs6>

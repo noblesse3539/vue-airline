@@ -7,7 +7,8 @@
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
-            <input type="file" @change="processImg" accept="image/*" >
+          <v-checkbox color="primary" v-model="random" label="'랜덤 이미지 사용'"></v-checkbox>
+          <input type="file" @change="processImg" accept="image/*" >
         </v-container>
       </v-card-text>
       <v-card-actions>
@@ -28,7 +29,8 @@ export default {
   data: function(){
     return {
       imgurl: '',
-      modal: true
+      modal: true,
+      random: false,
     }
   },
   methods: {
