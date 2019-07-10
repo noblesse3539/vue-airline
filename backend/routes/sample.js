@@ -4,10 +4,10 @@ const router = express.Router()
 const User = require('../models/user.js')
 
 
-router.get('/', function (req, res, next) {
+router.get('/getUser/:name', function (req, res, next) {
 
-
-    User.find({ name: 'opalcat' }, function(err, docs){
+    const name = req.params.name
+    User.find({ name: name }, function(err, docs){
 
         if (err) {
             console.log(err)
