@@ -59,7 +59,7 @@ export default {
         },
         close(){
           this.modal=false
-        }
+        },
     },
     data () {
         return {
