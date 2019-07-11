@@ -3,44 +3,7 @@
     <h2>&nbsp;&nbsp;&nbsp;회원정보</h2>
     <Profile/>
     <h2>&nbsp;&nbsp;&nbsp;내가 이용했던 여행 가이드</h2>
-    <v-flex xs4>
-      <v-card>
-        <v-layout>
-          <v-flex xs8>
-            <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-              height="125px"
-              contain
-            ></v-img>
-          </v-flex>
-        </v-layout>
-
-        <v-divider light></v-divider>
-        <div class="container">
-          <div v-if="translateflag">
-            <div class="headline">{{guideinfo.name}}</div>
-            <div>{{guideinfo.title}}</div>
-            <div>{{guideinfo.content}}</div>
-          </div>
-          <div v-else>
-            <div class="headline">{{translatedText.name}}</div>
-            <div>{{translatedText.title}}</div>
-            <div>{{translatedText.content}}</div>
-          </div>
-          <v-btn color="blue" v-on:click="translateflag=!translateflag" style="width:">한/영</v-btn>
-        </div>
-        <v-divider light></v-divider>
-        <v-card-actions class="pa-3">
-          만족도
-          <v-spacer></v-spacer>
-          <v-icon color="yellow">fas fa-star</v-icon>
-          <v-icon>fas fa-star</v-icon>
-          <v-icon>fas fa-star</v-icon>
-          <v-icon>fas fa-star</v-icon>
-          <v-icon>fas fa-star</v-icon>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
+    <GuideList :load-more="true"></GuideList>
     <div class="container my-5" style="height: 700px;">
       <h1 class="text-xs-center my-3">내가 이용했던 여행 상품</h1>
       <v-carousel hide-delimiters style="max-width: 800px; margin: auto;">
@@ -57,63 +20,31 @@
 
 <script>
   import Profile from '../components/Profile'
-  import axios from 'axios'
+  import GuideList from '../components/GuideList'
 
   export default {
     name: 'MyPage',
     components: {
-  		Profile
+  		Profile,
+      GuideList,
   	},
     data: function () {
       return {
-        // text: '',
-        message: '',
-        translateflag: true,
-        content: '누구나 여행을 꿈꾸고 떠나기를 원하면서도 귀찮음과 불편함이 싫어 주저하시는 분들이 많으시죠. 그러한 분들에게 도움이 되어 여행의 즐거움을 느끼고 소중한 추억이 될 수 있게 해드리는 것이 저의 목표 입니다.',
-        guideinfo: {
-          title: '여행이 가고싶으신가요?',
-          name: '강혜리',
-          content: '누구나 여행을 꿈꾸고 떠나기를 원하면서도 귀찮음과 불편함이 싫어 주저하시는 분들이 많으시죠. 그러한 분들에게 도움이 되어 여행의 즐거움을 느끼고 소중한 추억이 될 수 있게 해드리는 것이 저의 목표 입니다.',
-        },
-        translatedText: {
-          title: '',
-          name: '',
-          content: '',
-        }
-      }
-    },
-    mounted() {
-      try {
-        this.translate();
-      } catch (err) {
-        console.log('translate error')
-      }
-    },
-    methods: {
-      async translate() {
-        // console.log(content)
-        try {
-          for (var gkey in this.guideinfo) {
-            console.log(gkey)
-            console.log(this.guideinfo[gkey])
-            const taxios = await axios.create({
-              baseURL: "https://translation.googleapis.com"
-            });
-            const getTranslate = await taxios.post("/language/translate/v2", null, {
-              params: {
-                source: "ko",
-                target: "en",
-                q: this.guideinfo[gkey],
-                key: "AIzaSyD9-6TuS5C7IJVWPFv5i10l_Z2JjXyb9zw"
-              }
-            })
-            ;
-            this.translatedText[gkey] = getTranslate.data.data.translations[0].translatedText
-            console.log(getTranslate)
+        items: [
+          {
+            src: 'https://new-image.withvolo.com/travel/423019/6-673h2it7pauB3D0naoffsjGMM=/0x0:900x900/809x/45e57a94c3a3f93db7ea5c6301aabc5d/76fb18f3-64cf-45df-9382-30c8afd42a97-cac8cd93c784d871aa3d1cac20ea67ea0a422222.jpg'
+          },
+          {
+            src: 'https://new-image.withvolo.com/travel/423019/l-_cOftnXSWPTzvnGKJVBXjen88=/0x0:900x900/809x/45e57a94c3a3f93db7ea5c6301aabc5d/5b96ea81-45c4-4265-aa6c-33ca173a711a-9ec2510a61c67d5f60485669ff630386b4c0f820.jpg'
+          },
+          {
+            src: 'https://new-image.withvolo.com/travel/423019/ksl1Sgn9cRQZr8CrPPBAIRX43lI=/0x0:900x900/809x/9d6947c4ad0d409eb70ee1ad94174f47/910b9b7a-a68a-4620-a09b-65f7aae8820e-0a8dfe91312ab12bd33f1564162a770d248e3149.jpg'
+          },
+          {
+            src: 'https://new-image.withvolo.com/travel/423019/foDky-GCJFSv4VIQIRw2uth9V1s=/0x0:900x900/809x/9d6947c4ad0d409eb70ee1ad94174f47/74f1457e-5970-42f6-9479-eabf1063dd74-1961afc650a9073e05adeae3311e6e9716b24e07.jpg'
           }
-        } catch (err) {
-        }
+        ],
       }
-    }
+    },
   }
 </script>
