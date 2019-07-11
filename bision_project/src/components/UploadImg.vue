@@ -1,6 +1,6 @@
 <template>
-  <v-layout row justify-center>
-  <v-dialog v-model="modal" persistent max-width="600px">
+  <!-- <v-layout row justify-center> -->
+  <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
       <v-alert transition dismissible v-if="imgurErr" :value="true" type="warning">
       잠시 후 다시 시도해주세요.
@@ -24,7 +24,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-</v-layout>
+<!-- </v-layout> -->
 
 
 </template>
@@ -35,7 +35,7 @@ export default {
   name: 'UploadImg',
   data: function(){
     return {
-      modal: true,
+      dialog: true,
       random: false,
       imageName: '',
       imageFile: '',

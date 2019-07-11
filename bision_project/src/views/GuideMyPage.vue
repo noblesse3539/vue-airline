@@ -5,8 +5,13 @@
 
       <!-- ProfileImg -->
       <v-flex xs3 mr-5>
+
+        <!-- if: 본인 아닐 때 -->
+        <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
+
+        <!-- else: 본인 일 때 -->
           <v-hover>
-            <v-img fluid style="border-radius: 50%;"  @click="showModal" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
+            <v-img fluid style="border-radius: 50%;"  @click="showIU" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
               <v-fade-transition>
                 <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
                     이미지 변경
@@ -14,21 +19,40 @@
               </v-fade-transition>
             </v-img>
           </v-hover>
-        <UploadImg v-model="imgurl" v-if="isModalVisible" @close="closeModal"/>
+          <UploadImg v-model="imgurl" v-if="isIUVisible" @close="closeIU"/>
+        <!-- else 끝 -->
       </v-flex>
 
       <!-- Introduction -->
       <v-flex xs6>
-        <h2 class="display-1 mb-3">GuideName<v-btn fab flat small>
-            <i class="fas fa-pen"></i>
-          </v-btn>
+        <h2 class="display-1 mb-3">GuideName
+
+          <!-- v-if: 본인일 때 -->
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-btn @click="textEdit = true" v-on="on" flat icon fab color="indigo">
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </template>
+            <span>내 소개 수정하기</span>
+          </v-tooltip>
+
+          <form v-if="textEdit">
+            <v-textarea v-model="intro" label="내 소개 수정" :value="intro"></v-textarea>
+            <v-btn @click="submit">submit</v-btn>
+            <v-btn @click="clear">clear</v-btn>
+          </form>
+          <!--  -->
         </h2>
-        <p class="title">guide introduction.............<br>소개를 작성해주세요.</p>
+
+        <p v-show="!textEdit" class="title"> {{intro}}</p>
       </v-flex>
 
+      <!--v-if 본인이면 -->
       <v-flex xs3 >
         <v-btn color="white">회원 탈퇴</v-btn>
       </v-flex>
+
     </v-layout>
     <v-sheet color="white">
       <v-tabs  color="white">
@@ -53,11 +77,17 @@
               </v-layout>
             </v-card>
             <v-divider></v-divider>
-            <h2>가이드 평균 별점</h2>
-            <v-rating readonly v-model="rating" background-color="yellow lighten-3" color="yellow" x-large></v-rating>
-             <v-list three-line>
 
+            <h2>가이드 평균 별점</h2>
+            <!-- vuetify 그대로 긁어왔는데 반쪽이랑 span 안댐 -->
+            <span class="grey--text text--lighten-2 caption mr-2"> ({{ this.rating }})</span>
+            <v-rating readonly x-large v-model="rating" background-color="grey" color="yellow accent-4" dense half-increments hover size="18"></v-rating>
+
+            <!-- 후기 영역 -->
+             <v-list three-line>
+              <!-- 차 후 후기 넣을것 -->
              </v-list>
+
           </v-flex>
         </v-tab-item>
         <v-tab-item key="Portfolio">
@@ -112,29 +142,32 @@ export default {
     getImgUrl(img){
       return require('../assets/' + img)
     },
-    showModal() {
-      this.isModalVisible = true;
+    showIU() {
+      this.isIUVisible = true;
     },
-    closeModal(value) {
+    closeIU(value) {
       console.log(value)
       if(value){
         this.imgurl=value;
       }
-      this.isModalVisible = false;
+      this.isIUVisible = false;
     }
 	},
   data (){
     return{
       rating: 4,
-      isModalVisible: false,
+      isIUVisible: false,
       imgurl: require('../assets/guideProfile.png'),
+      intro: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
+      editText: false,
       cards: [
         { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg'},
         { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'}
-      ]
+      ],
+
     }
   },
 }
