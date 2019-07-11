@@ -1,0 +1,16 @@
+@media only screen and (max-width: 600px) {
+    canvas {
+        display: none !important;
+    }
+}
+
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+    /* margin-top: 50px; */
+    margin-bottom: 100px;
+    padding: 20px;
+    border: 1px solid #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
