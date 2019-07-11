@@ -1,6 +1,14 @@
 <template>
     <div id="navbox">
-        <div class="nav-left"><router-link to="/">Bision</router-link></div>
+        <div class="nav-left">
+            <router-link to="/" class="nav-left-title">BisionTour</router-link>
+            <div class="nav-left-toggle">
+                <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i> 
+                    항공권</router-link>
+                <router-link to="/" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
+                    가이드</router-link>
+            </div>
+        </div>
         <div class="nav-right">
             <router-link to="/#" class="hvr-underline-from-center">예매</router-link>
             <router-link to="/" class="hvr-underline-from-center"><span @click="open()">로그인</span></router-link>
