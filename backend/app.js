@@ -10,6 +10,8 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const sampleRouter = require('./routes/sample')
 const bodyParser = require('body-parser')
+const winston = require("winston"), 
+    expressWinston = require('express-winston')
 
 /* =======================
     LOAD THE CONFIG
@@ -22,6 +24,20 @@ const config = require('./config')
 ==========================*/
 const app = express()
 const db = require('./db.js')
+
+// logging
+app.use(expressWinston.logger({
+  transports: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'app.log' })
+  ],
+  format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.json()
+  ),
+  meta: true,
+  msg: "HTTP {{req.method}} {{req.url}} {{req.headers['x-forwarded-for'] || req.connection.remoteAddress}} Welcome!",
+}))
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())

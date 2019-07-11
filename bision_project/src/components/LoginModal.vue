@@ -66,6 +66,7 @@ export default {
        }
     },
     submit: function(which, e) {
+        let context = {}
         e.preventDefault();
           this.submitted = which
             var data = {
@@ -77,11 +78,39 @@ export default {
           data.name = this.registerName;
           data.email = this.registerEmail;
           data.password = this.registerPassword;
+          context = {
+            'username': this.registerName,
+            'password': this.registerPassword,
+            'email': this.registerEmail
+          }
+          this.$http.post('/api/auth/register', context)
+            .then( res => {
+              console.log(res.status)
+            })
           this.$set('registerSubmit', 'Registering...');
           break;
           case 'login':
           data.user = this.loginUser;
           data.password = this.loginPassword;
+          context = {
+            'username': this.loginUser,
+            'password': this.loginPassword
+          }
+          this.$http.post('/api/auth/login', context)
+          .then( res => {
+            if(res.status == 200) {
+              let d = new Date()
+              d.setTime(d.getTime() + (1000*60*60)) // 1시간 유효
+              let expires = "expires=" + d.toUTCString()
+              document.cookie = "BisionToken=" + res.data.token
+            }
+            // 아래 요청도 가능
+            // this.$http.get('/api/auth/check', {headers: {'x-access-token':res.data.token}})
+            // this.$http.get(`api/user/list?token=${res.data.token}`)
+          })
+          .catch( error => {
+            console.log(error)
+          })
           this.$set('loginSubmit', 'Logging In...');
           break;
           case 'password':
