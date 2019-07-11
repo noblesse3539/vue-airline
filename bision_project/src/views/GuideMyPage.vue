@@ -2,18 +2,22 @@
   <div>
     <v-container>
     <v-layout xs12 my-5 mx-5 align-end>
+
+      <!-- ProfileImg -->
       <v-flex xs3 mr-5>
           <v-hover>
-            <v-img fluid style="border-radius: 50%;" slot-scope="{hover}"v-on="on" class="profileImg" @click="showModal" v-bind:src="imgurl" aspect-ratio="1" alt="profile Img">
-              <v-scale-transition>
+            <v-img fluid style="border-radius: 50%;"  @click="showModal" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
+              <v-fade-transition>
                 <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
                     이미지 변경
                 </div>
-              </v-scale-transition>
+              </v-fade-transition>
             </v-img>
           </v-hover>
-        <UploadImg v-model="imgurl" v-show="isModalVisible" @close="closeModal"/>
+        <UploadImg v-model="imgurl" v-if="isModalVisible" @close="closeModal"/>
       </v-flex>
+
+      <!-- Introduction -->
       <v-flex xs6>
         <h2 class="display-1 mb-3">GuideName<v-btn fab flat small>
             <i class="fas fa-pen"></i>
@@ -21,12 +25,11 @@
         </h2>
         <p class="title">guide introduction.............<br>소개를 작성해주세요.</p>
       </v-flex>
+
       <v-flex xs3 >
         <v-btn color="white">회원 탈퇴</v-btn>
       </v-flex>
     </v-layout>
-
-
     <v-sheet color="white">
       <v-tabs  color="white">
         <v-tab key="Now" > Now </v-tab>
