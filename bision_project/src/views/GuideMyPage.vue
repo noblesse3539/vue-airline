@@ -30,22 +30,23 @@
           <!-- v-if: 본인일 때 -->
           <v-tooltip right>
             <template v-slot:activator="{ on }">
-              <v-btn @click="textEdit = true" v-on="on" flat icon fab color="indigo">
+              <v-btn @click="editText = true" v-on="on" flat icon fab color="indigo">
                 <v-icon>edit</v-icon>
               </v-btn>
             </template>
             <span>내 소개 수정하기</span>
           </v-tooltip>
 
-          <form v-if="textEdit">
-            <v-textarea v-model="intro" label="내 소개 수정" :value="intro"></v-textarea>
-            <v-btn @click="submit">submit</v-btn>
-            <v-btn @click="clear">clear</v-btn>
+          <form v-if="editText">
+            <v-textarea clearable v-model="intro" label="내 소개 수정" :value="intro"></v-textarea>
+            <!-- intro 데이터에 수정여부 추가 -->
+            <v-btn @click="submit; editText = false;">submit</v-btn>
+            <v-btn @click="editText = false">cancel</v-btn>
           </form>
           <!--  -->
         </h2>
 
-        <p v-show="!textEdit" class="title"> {{intro}}</p>
+        <p v-show="!editText" class="title"> {{intro}}</p>
       </v-flex>
 
       <!--v-if 본인이면 -->
@@ -159,6 +160,7 @@ export default {
       isIUVisible: false,
       imgurl: require('../assets/guideProfile.png'),
       intro: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
+      introTemp: this.intro,
       editText: false,
       cards: [
         { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg'},
