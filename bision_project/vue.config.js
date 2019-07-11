@@ -1,4 +1,7 @@
-module.exports = { 
+const path = require('path')
+
+module.exports = {
+    outputDir: path.resolve(__dirname, "../backend/public/"),
     devServer: { 
         proxy: { 
             '/api': { 
@@ -9,6 +12,5 @@ module.exports = {
                 }
             }
       }
-    },
-    outputDir: '../backend/public',  
+    }
 }
