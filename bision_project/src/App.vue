@@ -2,7 +2,9 @@
   <div id="app">
     <Header></Header>
     <v-content>
+      <v-app>
 				<router-view/>
+      </v-app>
 		</v-content>
     <Footer></Footer>
   </div>
