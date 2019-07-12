@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="guidepage">
     <v-container>
     <v-layout xs12 my-5 mx-5 align-end>
 
@@ -30,23 +30,23 @@
           <!-- v-if: 본인일 때 -->
           <v-tooltip right>
             <template v-slot:activator="{ on }">
-              <v-btn @click="editText = true" v-on="on" flat icon fab color="indigo">
+              <v-btn @click="showET" v-on="on" flat icon fab color="indigo">
                 <v-icon>edit</v-icon>
               </v-btn>
             </template>
             <span>내 소개 수정하기</span>
           </v-tooltip>
 
-          <form v-if="editText">
-            <v-textarea clearable v-model="intro" label="내 소개 수정" :value="intro"></v-textarea>
+          <form v-if="isETVisible">
+            <v-textarea clearable v-model = "introTemp" label="내 소개 수정" :value="introTemp"></v-textarea>
             <!-- intro 데이터에 수정여부 추가 -->
-            <v-btn @click="submit; editText = false;">submit</v-btn>
-            <v-btn @click="editText = false">cancel</v-btn>
+            <v-btn @click="doneET">submit</v-btn>
+            <v-btn @click="cancelET">cancel</v-btn>
           </form>
           <!--  -->
         </h2>
 
-        <p v-show="!editText" class="title"> {{intro}}</p>
+        <p v-show="!isETVisible" class="title"> {{intro}}</p>
       </v-flex>
 
       <!--v-if 본인이면 -->
@@ -152,16 +152,29 @@ export default {
         this.imgurl=value;
       }
       this.isIUVisible = false;
-    }
-	},
+    },
+
+    showET(){
+      this.introTemp = this.intro;
+      this.isETVisible = true;
+    },
+    doneET(){
+      this.intro = this.introTemp;
+      this.isETVisible = false;
+    },
+    cancelET(){
+      this.introTemp = '';
+      this.isETVisible = false;
+    },
+  },
   data (){
     return{
       rating: 4,
       isIUVisible: false,
       imgurl: require('../assets/guideProfile.png'),
       intro: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-      introTemp: this.intro,
-      editText: false,
+      introTemp: '',
+      isETVisible: false,
       cards: [
         { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg'},
         { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg'},
@@ -176,7 +189,10 @@ export default {
 </script>
 
 <style>
-
+  .guidepage {
+    margin-top: 110px;
+    margin-bottom: 40px;
+  }
   .profileImg:hover {
     cursor: pointer;
   }
