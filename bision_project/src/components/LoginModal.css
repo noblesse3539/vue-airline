@@ -68,6 +68,7 @@
   max-width: 500px;
   background-color: #f6f6f6;
   cursor: initial;
+  height: 100% !important;
 }
 
 .LoginModal-container .form-login,
@@ -75,17 +76,20 @@
 .LoginModal-container .form-password {
   padding: 25px 25px 25px;
   display: none;
+  height: 100% !important;
 }
 
 .LoginModal-container .form-login.active,
 .LoginModal-container .form-register.active,
 .LoginModal-container .form-password.active {
   display: block;
+  height: 100% !important;
 }
 
 .LoginModal-container ul.form-switcher {
   margin: 0;
   padding: 0;
+  
 }
 
 .LoginModal-container ul.form-switcher li a {

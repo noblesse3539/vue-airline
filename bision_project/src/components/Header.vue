@@ -11,7 +11,9 @@
         </div>
         <div class="nav-right">
             <router-link to="/#" class="hvr-underline-from-center">예매</router-link>
-            <router-link to="/" class="hvr-underline-from-center"><span @click="open()">로그인</span></router-link>
+            <router-link to="/" class="hvr-underline-from-center">
+                <span class="loginBtn" @click="open()">로그인</span>
+            </router-link>
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
                 <v-container style="padding:0;">
@@ -55,18 +57,28 @@ export default {
       LoginModal
     },
     props: {},
+    mounted() {
+        document.body.addEventListener('click', this.close)
+    },
     methods: {
         goToPage : function (url) {
             this.$router.push(url)
         },
         // open: function(){
         //   document.getElementById('modal').style.display = 'block';
-        // },
+        // },   
         open: function(){
           this.modal=true
         },
-        close(){
-          this.modal=false
+        close(e){
+            console.log(e.target.classList[0])
+            const loginWrapper = document.querySelector('.LoginModal-container')
+            const loginBtn     = document.querySelector('.loginBtn')
+            if (this.modal == true && e.target.classList[0] !== 'loginBtn'
+                                   && e.target.classList[0] !== 'loginModal-container') {
+                this.modal = false
+            }
+        //   this.modal=false
         },
     },
     data () {

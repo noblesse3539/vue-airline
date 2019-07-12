@@ -26,18 +26,21 @@
                 <input type="text" name="user" placeholder="Email or Username" v-model="loginUser" @keyup.enter="submit('login', $event)">
                 <input type="password" name="password" placeholder="Password" v-model="loginPassword" @keyup.enter="submit('login', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
-                <div class="links"> <a href="" @click="flip('password', $event)">Forgot your password?</a></div>
+                <div class="links"> 
+                  <a href="" @click="flip('password', $event)">Forgot your password?</a>
+                  <div style="text-align:center">
+                    <fb:login-button
+                      scope="public_profile,email"
+                      onlogin="checkLoginState();">
+                    </fb:login-button>
+                  </div>
+                  <div style="text-align:center">
+                    <v-btn @click="close()">취소</v-btn>
+                  </div>
+                </div>
               </div>
             </div>
-            <div style="text-align:center">
-              <fb:login-button
-                scope="public_profile,email"
-                onlogin="checkLoginState();">
-              </fb:login-button>
-            </div>
-            <div style="text-align:center">
-              <v-btn @click="close()">취소</v-btn>
-            </div>
+            
           </div>
         </div>
       </div>
