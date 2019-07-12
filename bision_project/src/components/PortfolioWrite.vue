@@ -4,12 +4,19 @@
       <v-card-title>
         <v-btn color="black" flat icon @click="closePW">
           <v-icon>close</v-icon></v-btn>
-        <span class="headline">New Portfolio</span>
+        <span class="headline">{{currenttitle}}</span>
         <v-spacer></v-spacer>
-        <v-btn flat icon color="blue" @click="savePW">
+        <div class="subheading mr-3" style="color:grey;">{{step}}/3</div>
+        <v-btn v-if="complete" flat icon color="blue" @click="savePW">
         <v-icon large >check</v-icon></v-btn>
       </v-card-title>
+      <v-card-title>
+        <v-btn icon flat color="blue" v-if="step !== 1"><v-icon large> keyboard_arrow_left </v-icon></v-btn>
+        <v-spacer></v-spacer>
+        <v-btn icon flat color="blue" v-if="step !== 3"><v-icon large> keyboard_arrow_right </v-icon></v-btn>
+      </v-card-title>
 
+      <!-- page1 -->
       <v-card-text>
         <v-container grid-list-md>
           <v-layout wrap>
@@ -85,6 +92,8 @@ export default {
       dialog: true,
       fromMenu: false,
       toMenu: false,
+      step: 1,
+      complete: false,
       portfolio:{
         fromDate:'',
         toDate:'',
