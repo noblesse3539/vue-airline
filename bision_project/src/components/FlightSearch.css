@@ -77,7 +77,11 @@ input[type=radio]:checked {
         10px 0 80px #FFF222;         /* outer right cyan */
 }
 
-  
+
+.leavingDate:hover, .comingDate:hover {
+    cursor: pointer;
+}
+
 .checkmark {
     display: inline-block;
     font-size: 2rem;
@@ -87,6 +91,7 @@ input[type=radio]:checked {
 input {
     color: black;
     padding: 3%;
+    font-size: 1.47rem;
 }
 
 .flight-search-info {
@@ -103,7 +108,7 @@ input {
     display: inline-block;
     width: 100%;
     height: 4rem;
-    border: .0625rem solid #e6e4eb;
+    border: .0625rem solid black;
     /* border-radius: 5px; */
 }
 
@@ -127,27 +132,93 @@ input {
 
 .flight-search-submit {
     margin-top: 2rem;
+    position: relative;
 }
 
 .flight-search-submit > button {
     color: white;
     display: block;
     height: 64px;
-    width: 150px;
-    background-color: rgba(47, 230, 62, 0.8);
-    border-radius: 10px 10px 10px 10px;
-    font-size: 1.25rem;
+    width: 80%;
+    margin-left: auto;
+    background-color: rgba(47, 220, 62, 1);
+    font-size: 1.74rem;
     font-weight: bold;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
-.country-list {
+.flight-search-submit > button:hover {
+    background-color: rgba(47, 250, 62, 0.5);
+}
+
+.dep-triangle-box {
+    display: none;
+    width: 100%;
+    height: 20px;
+    opacity: 1.0;
+
+}
+
+.dst-triangle-box {
+    display: none;
+    width: 100%;
+    height: 20px;
+    opacity: 1.0;
+}
+
+.country-triangle {
+    width: 30px;
+    height: 20px;
+    margin-left: 50%;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid white;
+}
+
+.dep-country-list {
     display: none;
     width: 500px;
-    height: 100px;
-    margin-top: 10px;
+    min-height: 100px;
+    /* margin-top: px; */
     background: white;
     border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
     border-top-left-radius: 5px !important;
     border-bottom-left-radius: 5px !important;
+
+    /* border-left: 30px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black; */
+}
+
+.dep-country-item {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    color: black;
+    font-size: 2rem;
+    padding: 20px;
+}
+
+.dst-country-list {
+    display: none;
+    width: 500px;
+    min-height: 100px;
+    /* margin-top: px; */
+    background: white;
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+
+.leavingDate-picker {
+    display: none;
+}
+
+.comingDate-picker {
+    display: none;
 }

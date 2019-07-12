@@ -1,6 +1,8 @@
 <template>
-  <div>
+  <div class="guidepage">
     <v-container>
+
+    <!-- Profile 영역 -->
     <v-layout xs12 my-5 mx-5 align-end>
 
       <!-- ProfileImg -->
@@ -30,30 +32,32 @@
           <!-- v-if: 본인일 때 -->
           <v-tooltip right>
             <template v-slot:activator="{ on }">
-              <v-btn @click="textEdit = true" v-on="on" flat icon fab color="indigo">
+              <v-btn @click="showET" v-on="on" flat icon fab color="indigo">
                 <v-icon>edit</v-icon>
               </v-btn>
             </template>
             <span>내 소개 수정하기</span>
           </v-tooltip>
 
-          <form v-if="textEdit">
-            <v-textarea v-model="intro" label="내 소개 수정" :value="intro"></v-textarea>
-            <v-btn @click="submit">submit</v-btn>
-            <v-btn @click="clear">clear</v-btn>
+          <form v-if="isETVisible">
+            <v-textarea clearable v-model = "introTemp" label="내 소개 수정" :value="introTemp"></v-textarea>
+            <!-- intro 데이터에 수정여부 추가 -->
+            <v-btn @click="doneET">submit</v-btn>
+            <v-btn @click="cancelET">cancel</v-btn>
           </form>
           <!--  -->
         </h2>
 
-        <p v-show="!textEdit" class="title"> {{intro}}</p>
+        <p v-show="!isETVisible" class="title"> {{intro}}</p>
       </v-flex>
 
       <!--v-if 본인이면 -->
       <v-flex xs3 >
         <v-btn color="white">회원 탈퇴</v-btn>
       </v-flex>
-
     </v-layout>
+
+    <!-- tab 영역 -->
     <v-sheet color="white">
       <v-tabs  color="white">
         <v-tab key="Now" > Now </v-tab>
@@ -90,8 +94,13 @@
 
           </v-flex>
         </v-tab-item>
+
+        <!-- Portfolio tab item -->
         <v-tab-item key="Portfolio">
-          <v-btn color="white">포트폴리오 작성</v-btn>
+          <v-btn  @click="showPW" color="white">포트폴리오 작성</v-btn>
+          <PortfolioWrite v-if="isPWVisible" @close="closePW"></PortfolioWrite>
+
+          <!-- portfolio list -->
         <v-container fluid grid-list-md mx-2>
           <v-layout row wrap >
             <v-flex mx-2 my-2 v-for="card in cards" :key="card.title" xs4>
@@ -122,6 +131,7 @@
             </v-flex>
           </v-layout>
         </v-container>
+
         </v-tab-item>
       </v-tabs>
     </v-sheet>
@@ -132,11 +142,13 @@
 
 <script>
 import UploadImg from '../components/UploadImg'
+import PortfolioWrite from '../components/PortfolioWrite'
 
 export default {
   name: 'GuideMypage',
   components:{
     UploadImg,
+    PortfolioWrite,
   },
   methods: {
     getImgUrl(img){
@@ -151,15 +163,36 @@ export default {
         this.imgurl=value;
       }
       this.isIUVisible = false;
+    },
+
+    showET(){
+      this.introTemp = this.intro;
+      this.isETVisible = true;
+    },
+    doneET(){
+      this.intro = this.introTemp;
+      this.isETVisible = false;
+    },
+    cancelET(){
+      this.introTemp = '';
+      this.isETVisible = false;
+    },
+    showPW(){
+      this.isPWVisible = true;
+    },
+    closePW(){
+      this.isPWVisible = false;
     }
-	},
+  },
   data (){
     return{
       rating: 4,
       isIUVisible: false,
+      isETVisible: false,
+      isPWVisible: false,
       imgurl: require('../assets/guideProfile.png'),
       intro: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
-      editText: false,
+      introTemp: '',
       cards: [
         { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg'},
         { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg'},
@@ -174,7 +207,10 @@ export default {
 </script>
 
 <style>
-
+  .guidepage {
+    margin-top: 110px;
+    margin-bottom: 40px;
+  }
   .profileImg:hover {
     cursor: pointer;
   }
