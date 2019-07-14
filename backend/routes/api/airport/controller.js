@@ -31,7 +31,7 @@ exports.register = (req, res) => {
     }
 
     const onError = (error) => {
-        res.status(409).json({
+            res.status(409).json({
             message: error.message
         })
     }
@@ -42,11 +42,23 @@ exports.register = (req, res) => {
     .catch(onError)
 }
 
+// GET api/airport/list
 exports.listOfAirport = (req, res) => {
-    // res.json(Airport.find({}))
-    console.log('hello')
+    console.log('#### t e s t ####')
+    console.log(
+        // 원하는 값이 안나옴. 정말 주의! db아이디 비번 다나옴. 쿼리 수정해야함
+        Airport.find()
+        .where('nation')
+        .equals('')
+        .select('nation city airportName airportCode')
+    )
+    console.log('#### t e s t ####')
+    
+    res.json({})
 }
 
+
+// GET api/airport/search/:keyword
 // exports.searchAirport = (req, res) => {
 
 // }
