@@ -6,7 +6,6 @@ const airport = require('./airport')
 
 
 const guideservice =require('./guideservice')
-backend/routes/api/index.js
 
 router.use('/auth', auth)
 router.use('/user', authMiddleware)
