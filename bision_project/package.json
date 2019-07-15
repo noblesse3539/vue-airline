@@ -16,9 +16,11 @@
     "firebase": "^6.2.4",
     "http2": "^3.3.7",
     "path": "^0.12.7",
+    "qs": "^6.7.0",
     "vue": "^2.6.10",
     "vue-country-region-select": "^2.0.10",
     "vue-router": "^3.0.7",
+    "vuejs-logger": "^1.5.3",
     "vuetify": "^1.5.16",
     "vuex": "^3.1.1"
   },

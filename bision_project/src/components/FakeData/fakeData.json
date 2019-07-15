@@ -1,0 +1,18 @@
+{"flights": {
+        "korea" : [{
+            "seoul" : [
+                {"inchoen" : "ICN"},
+                {"gimpo"   : "GMP"}
+            ]
+        }],
+        "japan" : {
+            "tokyo" : {
+                "narita"   : "NRT",
+                "hanera"   : "HND"
+            },
+            "osaka" : {
+                "kansai"   : "KIX"
+            }
+        }
+    }
+}

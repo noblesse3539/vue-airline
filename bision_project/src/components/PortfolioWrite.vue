@@ -214,9 +214,13 @@ export default {
     },
     closePW(){
       const navBarZIndex = document.querySelector('#navbox')
+
       const footerZIndex = document.querySelector('#footer')
       navBarZIndex.style.zIndex = 1000;
       footerZIndex.style.zIndex = 1000;
+
+      navBarZIndex.style.zIndex = 1000;
+
       this.$emit('close', false);
     }
   }
