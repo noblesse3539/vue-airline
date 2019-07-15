@@ -110,6 +110,8 @@ export default {
       this.$emit('close')
     },
     closePW(){
+      const navBarZIndex = document.querySelector('#navbox')
+      navBarZIndex.style.zIndex = 1000;
       this.$emit('close', false);
     }
   }

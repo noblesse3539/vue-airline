@@ -10,6 +10,7 @@
   </div>
 </template>
 
+<script type="application/javascript" src="http://ipinfo.io/?format=jsonp&callback=getIP"></script>
 <script>
 import Header from './components/Header'
 import Footer from './components/Footer'

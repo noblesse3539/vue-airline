@@ -178,6 +178,8 @@ export default {
       this.isETVisible = false;
     },
     showPW(){
+      const navBarZIndex = document.querySelector('#navbox')
+      navBarZIndex.style.zIndex = 0;
       this.isPWVisible = true;
     },
     closePW(){
