@@ -1,5 +1,5 @@
 <template>
-  <v-dialog persistent v-model="dialog" max-width="800px">
+  <v-dialog persistent v-model="dialog" max-width="1000px">
     <v-card>
       <v-card-title>
         <v-btn color="black" flat icon @click="closePW">
@@ -96,6 +96,9 @@
               <v-layout wrap>
                 <!-- 대표 Img -->
                 <v-flex xs12>
+                  <img :src="imageUrl[0]" height="150"/>
+                  <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
+                  <input type="file" ref="image" style="display: none" @change="processImg" accept="image/*" >
                  업로드 이미지 컴포넌트 어떻게 적용?
                  컴포넌트 변경?
                 </v-flex>
@@ -108,15 +111,15 @@
         <v-window-item :value="3">
           <v-card-text>
             <v-container grid-list-md>
-              <v-layout wrap>
+              <v-layout wrap >
                 <!-- 대표 Img -->
-                <v-flex xs6>
-                  상세 설명 작성
+                <v-flex xs6 align-self-center>
+                  <p class="subheading">상세 설명 작성</p>
                 </v-flex>
-                <v-flex xs6>
-                  미리보기
+                <v-flex xs6 align-self-center>
+                  <p class="subheading">미리보기 <i class="fas fa-external-link-alt"></i></p>
                 </v-flex>
-                <v-flex xs12>
+                <v-flex xs12 >
                   <div id="MDeditor">
                    <textarea class="MDTextArea":value="MDinput" @input="MDupdate"></textarea>
                    <div v-html="compiledMarkdown"></div>
@@ -148,6 +151,10 @@
 export default {
   data (){
     return{
+      imageTag: 0,
+      imageName: '',
+      imageFile: ['','','','','','','','','',''],
+      imageUrl: [require('../assets/addImg.png'),'','','','','','','','',''],
       MDinput:'## 상세 여행 플랜을 입력해주세요.',
       PCountry:'',
       PCity:[],
@@ -174,7 +181,30 @@ export default {
       return marked(this.MDinput, { sanitize: true })
     }
   },
+  processImg(e) {
+    const files = e.target.files
+    if(files[0] !== undefined) {
+      this.imageName = files[0].name
+      if(this.imageName.lastIndexOf('.') <= 0) {
+        return
+      }
+      const fr = new FileReader()
+      fr.readAsDataURL(files[0])
+      fr.addEventListener('load', () => {
+        this.imageUrl[this.imageTag] = fr.result
+        this.imageFile[this.imageTag] = files[0]
+        this.imageTag++;
+      })
+    } else {
+      this.imageName = ''
+      this.imageFile = ''
+      this.imageUrl = ''
+    }
+  },
   methods : {
+    pickFile () {
+           this.$refs.image.click ()
+     },
     MDupdate: _.debounce(function (e) {
       this.MDinput = e.target.value
     }, 300),
@@ -194,14 +224,15 @@ export default {
 </script>
 
 <style>
-html, body, #MDeditor {
+#MDeditor {
   margin: 0;
+  min-height:300px;
   height: 100%;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #333;
 }
 
-textarea, #MDeditor div {
+.MDTextArea, #MDeditor div {
   display: inline-block;
   width: 49%;
   height: 100%;
