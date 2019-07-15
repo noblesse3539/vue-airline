@@ -26,13 +26,15 @@
                 <input type="text" name="user" placeholder="Email or Username" v-model="loginUser" @keyup.enter="submit('login', $event)">
                 <input type="password" name="password" placeholder="Password" v-model="loginPassword" @keyup.enter="submit('login', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
-                <div class="links"> 
+                <div class="links">
                   <a href="" @click="flip('password', $event)">Forgot your password?</a>
                   <div style="text-align:center">
-                    <fb:login-button
-                      scope="public_profile,email"
-                      onlogin="checkLoginState();">
-                    </fb:login-button>
+                    <facebook-login class="button"
+                      appId="2908747355834093"
+                      @login="getUserData"
+                      @logout="onLogout"
+                      @sdk-loaded="sdkLoaded">
+                    </facebook-login>
                   </div>
                   <div style="text-align:center">
                     <v-btn @click="close()">취소</v-btn>
@@ -40,7 +42,7 @@
                 </div>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -50,6 +52,7 @@
 
 <script>
 import './LoginModal.css'
+import facebookLogin from 'facebook-login-vuejs';
 
 var modal_submit_register = 'Register';
 var modal_submit_password = 'Reset Password';
@@ -58,6 +61,9 @@ var modal_submit_login = 'Login';
 export default {
   name: 'LoginModal',
   props: { },
+  components:{
+    facebookLogin
+  },
   methods: {
     goToPage: function(url) {
       this.$router.push(url)
@@ -125,36 +131,26 @@ export default {
       close(){
         this.$emit('child');
       },
-      fablogin(){
-          window.fbAsyncInit = function() {
-            FB.init({
-              appId      : '2908747355834093',
-              cookie     : true,
-              xfbml      : true,
-              version    : 'v3.3'
-            });
-
-            FB.AppEvents.logPageView();
-
-          };
-
-          (function(d, s, id){
-             var js, fjs = d.getElementsByTagName(s)[0];
-             if (d.getElementById(id)) {return;}
-             js = d.createElement(s); js.id = id;
-             js.src = "https://connect.facebook.net/en_US/sdk.js";
-             fjs.parentNode.insertBefore(js, fjs);
-           }(document, 'script', 'facebook-jssdk'));
-
-           FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-          });
-
-          function checkLoginState() {
-            FB.getLoginStatus(function(response) {
-              statusChangeCallback(response);
-            });
+      getUserData() {
+        this.FB.api('/me', 'GET', { fields: 'id,name,email' },
+          userInformation => {
+            this.personalID = userInformation.id;
+            this.email = userInformation.email;
+            this.name = userInformation.name;
           }
+        )
+      },
+      sdkLoaded(payload) {
+        this.isConnected = payload.isConnected
+        this.FB = payload.FB
+        if (this.isConnected) this.getUserData()
+      },
+      onLogin() {
+        this.isConnected = true
+        this.getUserData()
+      },
+      onLogout() {
+        this.isConnected = false;
       }
   },
   data() {
@@ -181,9 +177,6 @@ export default {
       passwordError: '',
 
     }
-  },
-  mounted(){
-    this.fablogin()
   }
 }
 </script>

@@ -3,7 +3,7 @@
         <div class="nav-left">
             <router-link to="/" class="nav-left-title">BisionTour</router-link>
             <div class="nav-left-toggle">
-                <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i> 
+                <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
                     항공권</router-link>
                 <router-link to="/" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
                     가이드</router-link>
@@ -66,19 +66,21 @@ export default {
         },
         // open: function(){
         //   document.getElementById('modal').style.display = 'block';
-        // },   
+        // },
         open: function(){
           this.modal=true
         },
         close(e){
-            console.log(e.target.classList[0])
-            const loginWrapper = document.querySelector('.LoginModal-container')
-            const loginBtn     = document.querySelector('.loginBtn')
-            if (this.modal == true && e.target.classList[0] !== 'loginBtn'
-                                   && e.target.classList[0] !== 'loginModal-container') {
-                this.modal = false
-            }
-        //   this.modal=false
+          // this.modal=false
+          console.log(e.target.classList[0])
+          // const loginWrapper = document.querySelector('.LoginModal-wrapper')
+          // const loginBtn     = document.querySelector('.loginBtn')
+          if (this.modal == true && e.target.classList[0] === 'LoginModal-wrapper') {
+              this.modal = false
+          }
+          if (this.modal == true && (e.target.classList[0] === 'v-btn' || e.target.classList[0] === 'v-btn__content')) {
+              this.modal = false
+          }
         },
     },
     data () {
