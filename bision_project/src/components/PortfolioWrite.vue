@@ -1,18 +1,18 @@
 <template>
-  <v-dialog style="z-index:2000 !important; position:relative;"persistent v-model="dialog" max-width="800px">
+  <v-dialog persistent v-model="dialog" max-width="800px">
     <v-card>
       <v-card-title>
         <v-btn color="black" flat icon @click="closePW">
           <v-icon>close</v-icon></v-btn>
-        <span class="headline">{{currentTitle}}</span>
+        <span class="headline ">지난 여행 작성</span>
         <v-spacer></v-spacer>
         <div class="subheading mr-3" style="color:grey;">{{step}}/3</div>
         <v-btn v-if="step === 3" flat icon color="blue" @click="savePW">
         <v-icon large >check</v-icon></v-btn>
       </v-card-title>
 
-      <!-- page1 -->
       <v-window v-model="step">
+        <!-- step1 -->
         <v-window-item :value="1">
           <v-card-text>
             <v-container grid-list-md>
@@ -88,10 +88,45 @@
             <small>*은 필수항목입니다.</small>
           </v-card-text>
         </v-window-item>
-        <v-window-item :value="2"> 2p
+
+        <!-- step2 -->
+        <v-window-item :value="2">
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <!-- 대표 Img -->
+                <v-flex xs12>
+                 업로드 이미지 컴포넌트 어떻게 적용?
+                 컴포넌트 변경?
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
         </v-window-item>
-        <v-window-item :value="3"> 3p
+
+        <!-- step3 -->
+        <v-window-item :value="3">
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <!-- 대표 Img -->
+                <v-flex xs6>
+                  상세 설명 작성
+                </v-flex>
+                <v-flex xs6>
+                  미리보기
+                </v-flex>
+                <v-flex xs12>
+                  <div id="MDeditor">
+                   <textarea class="MDTextArea":value="MDinput" @input="MDupdate"></textarea>
+                   <div v-html="compiledMarkdown"></div>
+                 </div>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
         </v-window-item>
+
       </v-window>
       <v-divider></v-divider>
       <v-card-actions>
@@ -103,15 +138,17 @@
   </v-dialog>
 </template>
 
+
 <script>
 
-import Vue from 'vue'
-import vueCountryRegionSelect from 'vue-country-region-select'
-Vue.use(vueCountryRegionSelect)
+// import Vue from 'vue'
+// import vueCountryRegionSelect from 'vue-country-region-select'
+// Vue.use(vueCountryRegionSelect)
 
 export default {
   data (){
     return{
+      MDinput:'## 상세 여행 플랜을 입력해주세요.',
       PCountry:'',
       PCity:[],
       country: ['대한민국'],
@@ -132,7 +169,16 @@ export default {
       }
     }
   },
+  computed: {
+    compiledMarkdown: function () {
+      return marked(this.MDinput, { sanitize: true })
+    }
+  },
   methods : {
+    MDupdate: _.debounce(function (e) {
+      this.MDinput = e.target.value
+    }, 300),
+
     savePW(){
       this.$emit('close')
     },
@@ -148,4 +194,34 @@ export default {
 </script>
 
 <style>
+html, body, #MDeditor {
+  margin: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+textarea, #MDeditor div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+.MDTextArea {
+  border: none;
+  border-right: 1px solid #ccc;
+  resize: none;
+  outline: none;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+}
+
+code {
+  color: #f66;
+}
 </style>
