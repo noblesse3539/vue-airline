@@ -98,7 +98,7 @@
         <!-- Portfolio tab item -->
         <v-tab-item key="Portfolio">
           <v-btn  @click="showPW" color="white">포트폴리오 작성</v-btn>
-          <PortfolioWrite v-if="isPWVisible" @close="closePW"></PortfolioWrite>
+          <PortfolioWrite style="z-index:2000 !important; position:relative;" v-if="isPWVisible" @close="closePW"></PortfolioWrite>
 
           <!-- portfolio list -->
         <v-container fluid grid-list-md mx-2>
@@ -178,6 +178,8 @@ export default {
       this.isETVisible = false;
     },
     showPW(){
+      const navBarZIndex = document.querySelector('#navbox')
+      navBarZIndex.style.zIndex = 0;
       this.isPWVisible = true;
     },
     closePW(){
