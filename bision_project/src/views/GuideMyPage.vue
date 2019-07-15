@@ -179,6 +179,8 @@ export default {
     },
     showPW(){
       const navBarZIndex = document.querySelector('#navbox')
+      const footerZIndex = document.querySelector('#footer')
+      footerZIndex.style.zIndex = 0;
       navBarZIndex.style.zIndex = 0;
       this.isPWVisible = true;
     },
