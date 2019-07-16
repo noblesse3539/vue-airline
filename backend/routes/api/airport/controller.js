@@ -14,13 +14,16 @@ const Airport = require('../../../models/airport')
     GET /api/airport/search/:keyword
 */
 exports.register = (req, res) => {
-    const { nation, city, airportName, airportCode } = req.body
+    const { name_eng, name_kor, nation_eng, nation_kor, city_eng, city_kor, code } = req.body
+    console.log('')
+    console.log(res.body)
+    console.log('')
 
     const create = (airport) => {
         if(airport) {
             throw new Error('airport exists')
         } else {
-            return Airport.create(nation, city, airportName, airportCode)
+            return Airport.create(name_eng, name_kor, nation_eng, nation_kor, city_eng, city_kor, code)
         }
     }
 
@@ -36,7 +39,7 @@ exports.register = (req, res) => {
         })
     }
 
-    Airport.findOneByAirportName(airportName)
+    Airport.create(name_eng, name_kor, nation_eng, nation_kor, city_eng, city_kor, code)
     .then(create)
     .then(respond)
     .catch(onError)
@@ -56,11 +59,17 @@ exports.listOfAirport = (req, res) => {
 exports.searchAirport = (req, res) => {
     const keyword = req.params.keyword
     Airport.find()
-    .or([{nation: { $regex: '.*' + keyword + '.*' }}, {city: { $regex: '.*' + keyword + '.*' }}, {airportName: { $regex: '.*' + keyword + '.*' }}, {airportCode: keyword}])
-    .select('nation city airportName airportCode')
+    .or([{name_eng: { $regex: '.*' + keyword + '.*' }},
+        {name_kor: { $regex: '.*' + keyword + '.*' }},
+        {nation_eng: { $regex: '.*' + keyword + '.*' }},
+        {nation_kor: { $regex: '.*' + keyword + '.*' }},
+        {city_eng: { $regex: '.*' + keyword + '.*' }},
+        {city_kor: { $regex: '.*' + keyword + '.*' }},
+        {code: keyword}])
+    .select('name_eng name_kor nation_eng nation_kor city_eng city_kor code')
     .then(
         airports => {
             res.json({airports})
         }
     )
-}
+ }
