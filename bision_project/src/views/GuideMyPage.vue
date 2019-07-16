@@ -21,7 +21,7 @@
               </v-fade-transition>
             </v-img>
           </v-hover>
-          <UploadImg v-model="imgurl" v-if="isIUVisible" @close="closeIU"/>
+          <UploadImgModal v-model="imgurl" v-if="isIUVisible" @close="closeIU"/>
         <!-- else 끝 -->
       </v-flex>
 
@@ -142,12 +142,14 @@
 
 <script>
 import UploadImg from '../components/UploadImg'
+import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
 
 export default {
   name: 'GuideMypage',
   components:{
     UploadImg,
+    UploadImgModal,
     PortfolioWrite,
   },
   methods: {
