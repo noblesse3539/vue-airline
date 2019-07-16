@@ -1,22 +1,24 @@
 <template>
-    <div className="home">
+    <div className="home" style="height: 100%;">
         <FlightSearch></FlightSearch>
-        <Weather></Weather>
+        <Recommendation></Recommendation>
         <Api></Api>
     </div>
 </template>
 
 <script>
 import FlightSearch from '../components/FlightSearch'
-import Weather from '../components/Weather' 
+// import Weather from '../components/Weather' 
 import Api from '../components/Api'
+import Recommendation from '../components/Recommendation'
 
 export default {
     name: "Home",
     components: {
         FlightSearch,
-        Weather,
+        // Weather,
         Api,
+        Recommendation,
     },
 }
 </script>

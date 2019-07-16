@@ -4,7 +4,14 @@
       <div class="LoginModal-mask">
         <div class="LoginModal-wrapper">
           <div class="LoginModal-container">
+            <div class="modal-upper">
+              <span class="modal-upper-title">BisionTour
+              </span>
+              <biutton class="closeBtn" @click="close()">&#x2716;</biutton>
+            </div>
             <div class="user-modal">
+            
+              <!--
               <ul class="form-switcher">
                 <li @click="flip('register', $event)">
                   <a href="" id="register-form">Register</a>
@@ -12,6 +19,7 @@
                 <li @click="flip('login', $event)">
                   <a href="" id="login-form">Login</a>
                 </li>
+                -->
               </ul>
               <div class="form-register" :class="{ 'active': active == 'register' }" id="form-register">
                 <div class="error-message" v-text="registerError"></div>
@@ -19,16 +27,17 @@
                 <input type="email" name="email" placeholder="Email" v-model="registerEmail" @keyup.enter="submit('register', $event)">
                 <input type="password" name="password" placeholder="Password" v-model="registerPassword" @keyup.enter="submit('register', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'register' }" @click="submit('register', $event)" v-model="registerSubmit" id="registerSubmit">
-                <div class="links"> <a href="" @click="flip('login', $event)">Already have an account?</a></div>
+                <div class="links"> <a href="" @click="flip('login', $event)">이미 계정이 있으신가요?</a></div>
               </div>
               <div class="form-login" :class="{ 'active': active == 'login' }" id="form-login">
                 <div class="error-message" v-text="loginError"></div>
-                <input type="text" name="user" placeholder="Email or Username" v-model="loginUser" @keyup.enter="submit('login', $event)">
-                <input type="password" name="password" placeholder="Password" v-model="loginPassword" @keyup.enter="submit('login', $event)">
+                <input type="text" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
+                <input type="password" name="password" placeholder="비밀번호 입력" v-model="loginPassword" @keyup.enter="submit('login', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
                 <div class="links">
-                  <a href="" @click="flip('password', $event)">Forgot your password?</a>
-                  <div style="text-align:center">
+                  <div class="links-div forgot-password"><a href="" @click="flip('password', $event)">비밀번호를 잊어버리셨나요?</a></div>
+                  <div class="links-div"><a href="" id="register-form">처음이신가요?  <span style="font-weight: bold;">가입하기</span></a></div>
+                  <div style="text-align:center" class="facebook-container">
                     <facebook-login class="button"
                       appId="2908747355834093"
                       @login="getUserData"
@@ -36,13 +45,9 @@
                       @sdk-loaded="sdkLoaded">
                     </facebook-login>
                   </div>
-                  <div style="text-align:center">
-                    <v-btn @click="close()">취소</v-btn>
-                  </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -54,9 +59,9 @@
 import './LoginModal.css'
 import facebookLogin from 'facebook-login-vuejs';
 
-var modal_submit_register = 'Register';
+var modal_submit_register = '회원가입';
 var modal_submit_password = 'Reset Password';
-var modal_submit_login = 'Login';
+var modal_submit_login = '로그인';
 
 export default {
   name: 'LoginModal',

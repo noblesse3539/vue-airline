@@ -17,7 +17,9 @@
                                         <div class="country-triangle"></div>
                                 </div>
                                 <div class="dep-country-list">
-                                    <div class="country-name">인천</div>
+                                    <div class="country-name">
+                                        <p style="color: black; font-size: 3rem;">{{departureOutput}}</p>
+                                    </div>
                                 </div>
                             </label>
                         </div>
@@ -29,7 +31,7 @@
                                 </div>
                                 <div class="dst-country-list">
                                     <div>
-                                        <p style="color: black; font-size: 3rem;">{{fakeDataResult}}</p>
+                                        <p style="color: black; font-size: 3rem;">{{destinationOutput}}</p>
                                     </div>
                                 </div>
                             </label>
@@ -88,7 +90,7 @@
                             </label>
                             <div class="flight-search-submit">
                                 <button class="flight-search-submitBtn" type="submit" 
-                                    @click="goToUrl(urls.airline)">항공권 검색</button>
+                                    @click="goToUrl()">항공권 검색</button>
                             </div>
                         </div>
                     </div>
@@ -112,14 +114,13 @@ export default {
             fakeDataResult: '',
 
             RadioLabels: ["왕복", "편도", "다구간"],
-            urls: {
-                'airline' : '/airlineDetail'
-            },
             classes: ['Economy', 'Business', 'First'],
 
             // 항공권 검색에 사용할 6가지 데이터
             departureInput: '',
             destinationInput: '',
+            departureOutput: '',
+            destinationOutput: '',
             leavingDate: new Date().toISOString().substr(0, 10),
             comingDate: new Date().toISOString().substr(0, 10),
             flightClass: 'Economy',
@@ -155,9 +156,19 @@ export default {
         // console.log(fakeData)
     },
     methods: {
-        goToUrl : function(url) {
-            
-            this.$router.push(url)
+
+        // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
+        goToUrl : function() {
+            const params = {}
+            params.departureInput = this.departureInput
+            params.destinationInput = this.destinationInput
+            params.leavingDate = this.leavingDate
+            params.comingDate  = this.comingDate
+            params.flightClass = this.flightClass
+            params.adults = this.adults
+
+            this.$router.push({name: "FlightListPage", params: params})
+
         },
         hideSearchResult : function(e) {
             
@@ -260,17 +271,23 @@ export default {
     },
     watch: {
         departureInput: function(userInput) {
-
+            
             const countryList = document.querySelector(".dep-country-list")
             const triangle    = document.querySelector(".dep-triangle-box")
             countryList.style.display = "block"
             countryList.style.position = "absolute"
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
-
-            // console.log(this.fakeDataResult)
-            this.fakeDataResult = userInput
-
+            
+            const keyword = userInput
+            this.$http.get('api/airport/search/'+ keyword)
+                .then( res => {
+                    console.log(res)
+                    return res.data.airports[0].airportName
+                })
+                .then ( res => {
+                    this.departureOutput = res
+                })
         },
         destinationInput: function(userInput) {
 
@@ -281,14 +298,14 @@ export default {
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
 
-            // this.fakeDataResult = userInput
-            let airport = ''
-            if (this.fakeData["flights"][userInput]) {
-                airport = this.fakeData["flights"][userInput][0]["seoul"].values()
-                const result = `${airport}`
-                this.fakeDataResult = result
-            }
-
+            const keyword = userInput
+            this.$http.get('api/airport/search/'+ keyword)
+                .then( res => {
+                    return res.data.airports[0].airportName
+                })
+                .then ( res => {
+                    this.destinationOutput = res
+                })
         },
         adults: function() {
             const increaseAdults = document.body.querySelector(".increaseAdults")

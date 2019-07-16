@@ -1,5 +1,9 @@
 <template>
     <div className="weather">
+
+        <div></div>
+        <div></div>
+        
         <h1>{{result[0].city}}</h1>
         <i v-bind:class="[result[0].cod, weatherIcon]"></i>
         <h1>{{result[0].temp}}°C</h1>
@@ -24,7 +28,7 @@ export default{
 
         // openweathermap API에서 현재 서울 날씨 가져오기
         const apiKey  = '79afaa4fcb45087af27c7ef8708f358c'
-        const baseUrl = `http://api.openweathermap.org/data/2.5/weather?lat=37.5667&lon=126.9783&APPID=${apiKey}`
+        const baseUrl = `http://api.openweathermap.org/data/2.5/weather?lat=40.7306&lon=-73.9867&APPID=${apiKey}`
         // const result  = []
         this.$http.get(baseUrl).
             then( (res) => {

@@ -46,12 +46,13 @@ export default new Router({
         {
             path: '/airlineDetail',
             name: 'AirLineDetailPage',
-            component: AirLineDetailPage
+            component: AirLineDetailPage,
         },
         {
             path: '/flightlist',
             name: 'FlightListPage',
-            component: FlightListPage
+            component: FlightListPage,
+            props: true,
         },
         {
             path: '/admin',

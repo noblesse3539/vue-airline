@@ -1,18 +1,19 @@
 <template>
     <div id="navbox">
         <div class="nav-left">
-            <router-link to="/" class="nav-left-title">BisionTour</router-link>
+                <router-link to="/" class="nav-left-title">
+                    BisionTour
+                </router-link>
             <div class="nav-left-toggle">
                 <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
-                    항공권</router-link>
+                    <span class="airline-reservation-text">항공권</span></router-link>
                 <router-link to="/" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
-                    가이드</router-link>
+                    <span class="airline-reservation-text">가이드</span></router-link>
             </div>
         </div>
         <div class="nav-right">
-            <router-link to="/#" class="hvr-underline-from-center">예매</router-link>
             <router-link to="/" class="hvr-underline-from-center">
-                <span class="loginBtn" @click="open()">로그인</span>
+                <span class="loginBtn" @click="open()">로그인 🌴</span>
             </router-link>
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
@@ -69,13 +70,15 @@ export default {
         // },
         open: function(){
           this.modal=true
+          const footerZIndex = document.body.querySelector(".v-footer")
+          footerZIndex.style.zIndex = 0
         },
         close(e){
           // this.modal=false
           console.log(e.target.classList[0])
           // const loginWrapper = document.querySelector('.LoginModal-wrapper')
           // const loginBtn     = document.querySelector('.loginBtn')
-          if (this.modal == true && e.target.classList[0] === 'LoginModal-wrapper') {
+          if (this.modal == true && (e.target.classList[0] === 'LoginModal-wrapper' || e.target.classList[0] === 'closeBtn' )) {
               this.modal = false
           }
           if (this.modal == true && (e.target.classList[0] === 'v-btn' || e.target.classList[0] === 'v-btn__content')) {
