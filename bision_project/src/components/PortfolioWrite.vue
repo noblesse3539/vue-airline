@@ -98,8 +98,8 @@
                 <v-flex xs12>
                   <h2>메인 이미지 추가</h2><br>
                   <UploadImg :imgUrl="getImgUrl('addImg.png')"></UploadImg>
-                 업로드 이미지 컴포넌트 어떻게 적용?
-                 컴포넌트 변경?
+                  <h2 class="my-5">이미지 추가(최대 10개)</h2>
+                  <UploadImgList :imgUrl="getImgUrl('addImg.png')"></UploadImgList>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -144,6 +144,7 @@
 <script>
 
 import UploadImg from '@/components/UploadImg'
+import UploadImgList from '@/components/UploadImgList'
 // import Vue from 'vue'
 // import vueCountryRegionSelect from 'vue-country-region-select'
 // Vue.use(vueCountryRegionSelect)
@@ -151,7 +152,8 @@ import UploadImg from '@/components/UploadImg'
 export default {
   name: 'PortfolioWrite',
   components:{
-    UploadImg
+    UploadImg,
+    UploadImgList
   },
   data (){
     return{
