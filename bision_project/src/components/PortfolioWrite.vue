@@ -98,7 +98,7 @@
                 <v-flex xs12>
                   <h2>메인 이미지 추가</h2><br>
                   <UploadImg :imgUrl="getImgUrl('addImg.png')"></UploadImg>
-                  <h2 class="my-5">이미지 추가(최대 10개)</h2>
+                  <h2 class="mt-5">이미지 추가(최대 10개)</h2>
                   <UploadImgList :imgUrl="getImgUrl('addImg.png')"></UploadImgList>
                 </v-flex>
               </v-layout>
