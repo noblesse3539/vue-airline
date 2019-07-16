@@ -96,9 +96,8 @@
               <v-layout wrap>
                 <!-- 대표 Img -->
                 <v-flex xs12>
-                  <img :src="imageUrl[0]" height="150"/>
-                  <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
-                  <input type="file" ref="image" style="display: none" @change="processImg" accept="image/*" >
+                  <h2>메인 이미지 추가</h2><br>
+                  <UploadImg :imgUrl="getImgUrl('addImg.png')"></UploadImg>
                  업로드 이미지 컴포넌트 어떻게 적용?
                  컴포넌트 변경?
                 </v-flex>
@@ -144,17 +143,18 @@
 
 <script>
 
+import UploadImg from '@/components/UploadImg'
 // import Vue from 'vue'
 // import vueCountryRegionSelect from 'vue-country-region-select'
 // Vue.use(vueCountryRegionSelect)
 
 export default {
+  name: 'PortfolioWrite',
+  components:{
+    UploadImg
+  },
   data (){
     return{
-      imageTag: 0,
-      imageName: '',
-      imageFile: ['','','','','','','','','',''],
-      imageUrl: [require('../assets/addImg.png'),'','','','','','','','',''],
       MDinput:'## 상세 여행 플랜을 입력해주세요.',
       PCountry:'',
       PCity:[],
@@ -181,46 +181,21 @@ export default {
       return marked(this.MDinput, { sanitize: true })
     }
   },
-  processImg(e) {
-    const files = e.target.files
-    if(files[0] !== undefined) {
-      this.imageName = files[0].name
-      if(this.imageName.lastIndexOf('.') <= 0) {
-        return
-      }
-      const fr = new FileReader()
-      fr.readAsDataURL(files[0])
-      fr.addEventListener('load', () => {
-        this.imageUrl[this.imageTag] = fr.result
-        this.imageFile[this.imageTag] = files[0]
-        this.imageTag++;
-      })
-    } else {
-      this.imageName = ''
-      this.imageFile = ''
-      this.imageUrl = ''
-    }
-  },
   methods : {
-    pickFile () {
-           this.$refs.image.click ()
-     },
+    getImgUrl(img){
+      return require('../assets/' + img)
+    },
     MDupdate: _.debounce(function (e) {
       this.MDinput = e.target.value
     }, 300),
-
     savePW(){
       this.$emit('close')
     },
     closePW(){
       const navBarZIndex = document.querySelector('#navbox')
-
       const footerZIndex = document.querySelector('#footer')
       navBarZIndex.style.zIndex = 1000;
       footerZIndex.style.zIndex = 1000;
-
-      navBarZIndex.style.zIndex = 1000;
-
       this.$emit('close', false);
     }
   }
@@ -228,6 +203,9 @@ export default {
 </script>
 
 <style>
+.imgUpdate:hover {
+  cursor:pointer;
+}
 #MDeditor {
   margin: 0;
   min-height:300px;
