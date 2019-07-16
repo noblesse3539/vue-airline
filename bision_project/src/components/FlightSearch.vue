@@ -39,7 +39,7 @@
                                 <input  class="leavingDate" type="text" :placeholder="todayDate" :value="leavingDate" disabled>
 
                                 <div class="leavingDate-picker"> 
-                                    <v-date-picker  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                                    <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                                 </div>
                             </label>
                         </div>
@@ -47,7 +47,7 @@
                             <label class="comingDateText"> 오는날
                                 <input class="comingDate" type="text" placeholder="" :value="comingDate" disabled>
                                 <div class="comingDate-picker">
-                                    <v-date-picker v-model="comingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                                    <v-date-picker :min="minDate" locale="ko-KR" v-model="comingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                                 </div>
                             </label>
                         </div>
@@ -71,7 +71,7 @@
                                             ></v-select>
                                         </v-flex>
                                         <p class="noOfAdults">성인</p>
-                                        <v-btn @click="decreaseAdults" fab dark color="rgba(47, 220, 62, 1)">
+                                        <v-btn class="decreaseAdults" @click="decreaseAdults" fab dark color="rgba(47, 220, 62, 1)">
                                             <v-icon dark>remove</v-icon>
                                         </v-btn>
                                         <span class="adultsCount">{{adults}}</span>
@@ -87,7 +87,8 @@
                                 </div>
                             </label>
                             <div class="flight-search-submit">
-                                <button class="flight-search-submitBtn" type="submit" @click="goToUrl(urls.airline)">항공권 검색</button>
+                                <button class="flight-search-submitBtn" type="submit" 
+                                    @click="goToUrl(urls.airline)">항공권 검색</button>
                             </div>
                         </div>
                     </div>
@@ -115,6 +116,7 @@ export default {
                 'airline' : '/airlineDetail'
             },
             classes: ['Economy', 'Business', 'First'],
+
             // 항공권 검색에 사용할 6가지 데이터
             departureInput: '',
             destinationInput: '',
@@ -122,13 +124,15 @@ export default {
             comingDate: new Date().toISOString().substr(0, 10),
             flightClass: 'Economy',
             adults: 1,
-
             todayDate: new Date(),
+
+            // data picker 관련 데이터
             reactive: true,
             datePickerFlag: {
                 '.leavingDate': false,
                 '.comingDate': false,
             },
+            minDate: new Date().toISOString().substr(0, 10),
         }
     },
     mounted(){
@@ -148,7 +152,7 @@ export default {
         document.body.addEventListener("tap", this.hideSearchResult)
         document.body.addEventListener("keydown", this.hideSearchResult)
 
-        console.log(fakeData)
+        // console.log(fakeData)
     },
     methods: {
         goToUrl : function(url) {
@@ -164,7 +168,7 @@ export default {
             const flightSearchBtn = document.querySelector(".flight-search-submit")
             
             // 인원 수 고를 때 제출 숨긴 버튼 다시 보이게 하기
-            console.log(flightSearchBtn.style.display)
+            // console.log(flightSearchBtn.style.display)
 
             if (e.target.classList[0] !== 'leavingDate' && e.target.classList[0] !== 'comingDate') {
                 
@@ -247,6 +251,7 @@ export default {
             comingDateText.style.color = "white"
         },
         increaseAdults: function() {
+            
             this.adults += 1
         },
         decreaseAdults: function() {
@@ -263,7 +268,7 @@ export default {
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
 
-            console.log(this.fakeDataResult)
+            // console.log(this.fakeDataResult)
             this.fakeDataResult = userInput
 
         },
@@ -278,7 +283,6 @@ export default {
 
             // this.fakeDataResult = userInput
             let airport = ''
-            console.log(this.fakeData["flights"][userInput])
             if (this.fakeData["flights"][userInput]) {
                 airport = this.fakeData["flights"][userInput][0]["seoul"].values()
                 const result = `${airport}`
@@ -288,11 +292,25 @@ export default {
         },
         adults: function() {
             const increaseAdults = document.body.querySelector(".increaseAdults")
+            const decreaseAdults = document.body.querySelector(".decreaseAdults")
+
             if (this.adults >= 8) {
-                console.log(increaseAdults)
+                // console.log(increaseAdults)
                 increaseAdults.disabled = true
                 increaseAdults.style.cursor = "not-allowed"
                 increaseAdults.style.background = "grey"
+            } else if ( this.adults <= 1) {
+                decreaseAdults.disabled = true
+                decreaseAdults.style.curosr = "not-allowed"
+                decreaseAdults.style.backgronud = "grey"
+
+            } else {
+                increaseAdults.disabled = false
+                increaseAdults.style.cursor = "pointer"
+                increaseAdults.style.background = "rgba(47, 250, 62, 1)"
+                decreaseAdults.disabled = false
+                decreaseAdults.style.curosr = "not-pointer"
+                decreaseAdults.style.backgronud = "rgba(47, 250, 62, 1)"
             }
         },
         deep: true,
