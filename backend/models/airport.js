@@ -19,11 +19,13 @@ Airport.statics.create = function( nation, city, airportName, airportCode) {
 
     return airport.save()
 }
-
+Airport.statics.findAll = function() {
+    return this.find({}).exec()
+}
 Airport.statics.findOneByAirportName = function(airportName) {
     return this.findOne({
         airportName
-    }).exec()
+    }).select('nation city airportName airportCode').exec()
 }
 
 
