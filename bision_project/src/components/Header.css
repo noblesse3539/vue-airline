@@ -27,6 +27,12 @@
     }
 }
 
+@media only screen and (max-width: 1024px) {
+    .airline-reservation-text {
+        display: none;
+    }
+}
+
 /* Desktop Size */
 
 a {
@@ -64,6 +70,7 @@ a:hover {
     height: 60%;
     font-size: 2rem;
     font-weight: bold;
+    width: 20%;
 }
 
 .nav-left-toggle {
@@ -85,6 +92,54 @@ a:hover {
 .nav-taps {
     width: 65%;
     color: black;
+}
+
+.hvr-underline-from-center {
+    display: inline-block !important;
+    height: 1rem;
+}
+
+.loginBtn {
+    padding: 10px;
+    color: rgba(47, 180, 62, 1) !important;
+    font-size: 1.25rem !important;
+    font-weight: bolder !important;
+    border: 2px solid 	rgb(211,211,211);
+    background-size: 500%;
+    /* border: none; */
+    border-radius: 5rem;
+    color: white;
+    cursor: pointer;
+    font: 1.5em Raleway, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 5rem;
+    letter-spacing: .05em;
+    outline: none;
+    /* -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; */
+    width: 20rem;
+}
+
+
+.loginBtn:hover {
+    animation-name: gradient !important;
+    -webkit-animation-name: gradient  !important;
+    animation-duration: 1s  !important;
+    -webkit-animation-duration: s  !important;
+    animation-iteration-count: 1  !important;
+    -webkit-animation-iteration-count: 1  !important;
+    animation-fill-mode: forwards  !important;
+    -webkit-animation-fill-mode: forwards  !important;
+    background-position: 0% !important;
+}
+
+@keyframes gradient {
+  from {background-position: 0% 50%}
+  to {background-position: 100%}
 }
 
 .airline-reservation{

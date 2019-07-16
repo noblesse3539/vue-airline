@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="margin-top: 110px;">
         <v-text-field v-model="name" label="Regular"></v-text-field>
         {{name}}
         <v-btn v-on:click="createUser">전송</v-btn>

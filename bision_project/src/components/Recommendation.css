@@ -1,0 +1,90 @@
+.Recommendation {
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+    height: 100%;
+}
+
+.Recommendation > h2 {
+    font-size: 2rem;
+}
+
+.Recommendation > h3 {
+    color: grey;
+    padding-top: 0.74%;
+}
+
+.Recommended-city {
+    display: flex;
+    margin-top: 10px;
+}
+
+
+.city-right-sec {
+    /* padding: 50px; */
+    width: 100%;
+}
+
+.city-left-sec {
+    width: 1200px;
+    height: inherit;
+    overflow: hidden;
+    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.city-name {
+    width: 100%;
+    height: 100%;
+
+    background-image: url("https://i.ytimg.com/vi/Cxb6btMB6J8/maxresdefault.jpg");
+    background-size: cover;
+    background-position: center;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+
+}
+
+.city-left-sec:hover .city-name,
+.city-left-sec:focus .city-name {
+    transform: scale(1.2);
+}
+
+.city-name::before {
+  content: "";
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* background-color: rgba(52, 73, 94, 0.75); */
+}
+
+.city-left-sec:hover .city-name:before,
+.city-left-sec:focus .city-name:before {
+  display: block;
+}
+
+.city-name-text {
+    display: block !important;
+    text-align: center;
+    color: white;
+    font-size: 3rem;
+    position: absolute;
+    padding: 8px;
+    bottom: 0;
+    z-index: 1;
+    vertical-align: bottom;
+}
+
+/* .city-left-sec:hover city-name-text,
+.city-left-sec:focus city-name-text {
+  display: block;
+} */
+
+.city-name-conutry {
+    font-size: 2rem;
+}
