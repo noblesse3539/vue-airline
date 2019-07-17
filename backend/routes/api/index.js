@@ -16,16 +16,15 @@ router.use('/user', user)
 router.use('/createGuide',guide)
 router.use('/deleteGuide',guide)
 router.use('/updateGuide',guide)
-router.use('/findGSByGuideId',guide)
-
+router.use('/findGuideByUserObId',guide)
 
 // GuideService
 router.use('/createGuideService',guideservice)
-// router.use('/deleteGuideService',guideservice)
-// router.use('/updateGuideService',guideservice)
-// router.use('/findGSByGuideIdTitle',guideservice)
+router.use('/deleteGuideService',guideservice)
+router.use('/updateGuideService',guideservice)
+router.use('/findGSByGuideIdTitle',guideservice)
 
-// router.use('/airport', airport)
+router.use('/airport', airport)
 
 
 module.exports = router
