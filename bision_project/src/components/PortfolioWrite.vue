@@ -93,64 +93,18 @@
                 <h2>상세 정보 입력</h2>
               </v-flex>
               <v-flex>
-
+                <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
               </v-flex>
             </v-layout>
-
-
-
-        <!-- step2 -->
-          <!-- <v-expansion-panel v-model="panel" expand flat>
-            <v-expansion-panel-content>
-              <template v-slot:header>상세 설명 작성 </template>
-              <v-card>
-                <v-card-text>
-                  dlfjz[dlfjzpdlfjzl]
-                </v-card-text>
-              </v-card>
-            </v-expansion-panel-content>
-          </v-expansion-panel> -->
           </v-container>
       </v-card-text>
-
-
-        <!-- step3 -->
-        <!-- <v-window-item :value="3">
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap >
-                <!-- 대표 Img -->
-                <!-- <v-flex xs6 align-self-center>
-                  <p class="subheading">상세 설명 작성</p>
-                </v-flex>
-                <v-flex xs6 align-self-center>
-                  <p class="subheading">미리보기 <i class="fas fa-external-link-alt"></i></p>
-                </v-flex>
-                <v-flex xs12 >
-                  <div id="MDeditor">
-                   <textarea class="MDTextArea":value="MDinput" @input="MDupdate"></textarea>
-                   <div v-html="compiledMarkdown"></div>
-                 </div>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-        </v-window-item>
-
-      </v-window>
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-btn icon flat color="warning" v-if="step !== 1" @click="step--"><v-icon large> keyboard_arrow_left </v-icon></v-btn>
-        <v-spacer></v-spacer>
-        <v-btn icon flat color="warning" v-if="step !== 3" @click="step++"><v-icon large> keyboard_arrow_right </v-icon></v-btn>
-      </v-card-actions> -->
     </v-card>
   </v-dialog>
 </template>
 
 
 <script>
-
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import UploadImg from '@/components/UploadImg'
 import UploadImgList from '@/components/UploadImgList'
 // import Vue from 'vue'
@@ -169,6 +123,11 @@ export default {
   },
   data (){
     return{
+      editor: ClassicEditor,
+      editorData: '',
+      editorConfig: {
+          // The configuration of the editor.
+      },
       MDinput:'## 상세 여행 플랜을 입력해주세요.',
       Pnation:'',
       PCity:[],
