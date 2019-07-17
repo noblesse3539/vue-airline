@@ -2,10 +2,11 @@
 <div>
   <v-hover>
     <!-- 크기 조정하기 -->
-    <v-img v-if="imgUrl" slot-scope="{hover}" v-on="on" class="addImg" :src="imgUrl" max-width=100px height=auto @click='pickFile'>
+
+    <v-img v-if="imgUrl" slot-scope="{hover}" v-on="on" class="addImg" v-bind:class="{ main: isMain }" :src="imgUrl" @click='pickFile'>
       <v-fade-transition>
         <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal black--text" style="height: 100%;">
-            이미지 추가
+            이미지 변경
         </div>
       </v-fade-transition>
     </v-img>
@@ -22,8 +23,8 @@
 export default {
   name: 'UploadImg',
   props : {
-    // true면 이미지, false면 텍스트필드
-    imgUrl: String
+    imgUrl: String,
+    isMain: Boolean,
   },
   data (){
     return{
@@ -50,8 +51,14 @@ export default {
 </script>
 
 <style>
+
 .addImg:hover{
   cursor: pointer;
-
+}
+.main {
+  height: 390px;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>
