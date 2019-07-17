@@ -1,11 +1,10 @@
 const router = require('express').Router()
 const controller = require('./controller')
 
-// router.get('/:guideID/:title',controller.findGSByGuideIdTitle)
+router.get('/:user',controller.findByUserObId)
 router.post('/',controller.createGuide)
 
-// router.delete('/:guideID/:title',controller.deleteGuideService)
-// router.put('/:guideID/:title',controller.updateGuideService)
-
+router.delete('/:user',controller.deleteByUserObId)
+router.put('/:user',controller.updateByUserObId)
 
 module.exports = router
