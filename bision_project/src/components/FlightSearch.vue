@@ -12,13 +12,22 @@
                     <div class="flight-search-info">    
                         <div class="departure">
                             <label> 출발지
-                                <input v-model="departureInput" type="text" placeholder="국가, 도시 또는 공항" class="left-end-input">
+                                <input v-model="departureInput" type="text" placeholder="국가, 도시 또는 공항" class="left-end-input">                                                             
                                 <div class="dep-triangle-box">
                                         <div class="country-triangle"></div>
                                 </div>
                                 <div class="dep-country-list">
-                                    <div class="country-name">
-                                        <p style="color: black; font-size: 3rem;">{{departureOutput}}</p>
+                                    <div v-for="airport in departureOutput" class="country-name">
+                                        <!-- 출발지 검색 리스트 -->
+                                        <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'departure')" style="color: black; font-size: 3rem;">
+                                            <div class="airportList">
+                                                <div class="airport-name">
+                                                    <i class="fas fa-plane-departure"></i>
+                                                    {{airport.name_kor}} {{airport.code}}<br>
+                                                    <span class="nation-name">{{airport.nation_kor}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </label>
@@ -30,8 +39,17 @@
                                         <div class="country-triangle"></div>
                                 </div>
                                 <div class="dst-country-list">
-                                    <div>
-                                        <p style="color: black; font-size: 3rem;">{{destinationOutput}}</p>
+                                    <div v-for="airport in destinationOutput" class="country-name">
+                                        <!-- 도착지 검색 리스트 -->
+                                        <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'destination')" style="color: black; font-size: 3rem;">
+                                            <div class="airportList">
+                                                <div class="airport-name">
+                                                    <i class="fas fa-plane-departure"></i>
+                                                    {{airport.name_kor}} {{airport.code}}<br>
+                                                    <span class="nation-name">{{airport.nation_kor}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </label>
@@ -39,7 +57,6 @@
                         <div class="duration-start" @click="openCalender('.leavingDate', '.leavingDate-picker', e)">
                             <label> 가는날
                                 <input  class="leavingDate" type="text" :placeholder="todayDate" :value="leavingDate" disabled>
-
                                 <div class="leavingDate-picker"> 
                                     <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                                 </div>
@@ -102,32 +119,29 @@
 <script>
 import './FlightSearch.css'
 
-// 테스트용 더미 데이터
-import fakeData from './FakeData/fakeData.json'
-
 export default {
     name: 'FlightSearch',
     data() {
         return {
             
-            fakeData : fakeData,
-            fakeDataResult: '',
-
             RadioLabels: ["왕복", "편도", "다구간"],
             classes: ['Economy', 'Business', 'First'],
-
-            // 항공권 검색에 사용할 6가지 데이터
+            
+            // 출발지 및 도착지 관련 변수
             departureInput: '',
             destinationInput: '',
             departureOutput: [],
-            destinationOutput: '',
+            destinationOutput: [],
+
+            // 항공권 검색에 사용할 6가지 데이터
+            departure: '',
+            destination: '',
             leavingDate: new Date().toISOString().substr(0, 10),
             comingDate: new Date().toISOString().substr(0, 10),
             flightClass: 'Economy',
-            
             adults: 1,
-            todayDate: new Date(),
 
+            todayDate: new Date(),
             // data picker 관련 데이터
             reactive: true,
             datePickerFlag: {
@@ -137,10 +151,13 @@ export default {
             minDate: new Date().toISOString().substr(0, 10),
         }
     },
-    mounted(){
+    created() {
+        this.getAirportList()
+    },
+    mounted() {
         const roundTrip = document.querySelector("input")
         roundTrip.checked = true
-
+        
         // 편도 버튼 클릭시 <오는날> 버튼 비활성화 처리
         const radioBtnOneWay = document.querySelectorAll('.radio-container')[1].children[0]
         radioBtnOneWay.addEventListener('click', this.oneWayTrip)
@@ -153,16 +170,14 @@ export default {
         document.body.addEventListener("click",  this.hideSearchResult)
         document.body.addEventListener("tap", this.hideSearchResult)
         document.body.addEventListener("keydown", this.hideSearchResult)
-
-        // console.log(fakeData)
+    
     },
     methods: {
-
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
             const params = {}
-            params.departureInput = this.departureInput
-            params.destinationInput = this.destinationInput
+            params.departure = this.departure
+            params.destination = this.destination
             params.leavingDate = this.leavingDate
             params.comingDate  = this.comingDate
             params.flightClass = this.flightClass
@@ -269,18 +284,8 @@ export default {
         decreaseAdults: function() {
             this.adults -= 1
         },
-    },
-    watch: {
-        departureInput: function(userInput) {
-            
-            const countryList = document.querySelector(".dep-country-list")
-            const triangle    = document.querySelector(".dep-triangle-box")
-            countryList.style.display = "block"
-            countryList.style.position = "absolute"
-            countryList.style.zIndex = "1000"
-            triangle.style.display = 'block'
-            
-            const keyword = userInput
+        getDepartureOutput: function() {
+            const keyword = this.departureInput
             this.$http.get('api/airport/search/'+ keyword)
                 .then( res => {
                     console.log(res)
@@ -288,9 +293,54 @@ export default {
                 })
                 .then ( res => {
                         this.departureOutput = res.map( each => {
-                            return each.name_kor
+                            return {name_kor : each.name_kor, 
+                                    name_eng: each.name_eng,
+                                    nation_kor: each.nation_kor,
+                                    nation_eng: each.nation_eng,
+                                    code: each.code }
                         })
                 })
+        },
+        getDestinationOutput: function() {
+            const keyword = this.destinationInput
+            this.$http.get('api/airport/search/'+ keyword)
+                .then( res => {
+                    console.log(res)
+                    return res.data.airports
+                })
+                .then ( res => {
+                        this.destinationOutput = res.map( each => {
+                            return {name_kor : each.name_kor, 
+                                    name_eng: each.name_eng,
+                                    nation_kor: each.nation_kor,
+                                    nation_eng: each.nation_eng,
+                                    code: each.code }
+                        })
+                })
+        },
+        saveUserChoiceAirport: function(userChoiceAirport, airportName, travelType) {
+
+            const airportNameSplit = airportName.replace(/\s/g, '');
+
+            if (travelType == "departure") {
+                this.departure = userChoiceAirport
+                this.departureInput = `${airportNameSplit}, ${this.departure}`
+            } else {
+                this.destintaion = userChoiceAirport
+                this.destinationInput = `${airportNameSplit}, ${this.destintaion}`
+            }
+        },
+    },
+    watch: {
+        departureInput: function() {
+            
+            const countryList = document.querySelector(".dep-country-list")
+            const triangle    = document.querySelector(".dep-triangle-box")
+            countryList.style.display = "block"
+            countryList.style.position = "absolute"
+            countryList.style.zIndex = "1000"
+            triangle.style.display = 'block'
+            this.getDepartureOutput()
         },
         destinationInput: function(userInput) {
 
@@ -300,15 +350,8 @@ export default {
             countryList.style.position = "absolute"
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
+            this.getDestinationOutput()
 
-            const keyword = userInput
-            this.$http.get('api/airport/search/'+ keyword)
-                .then( res => {
-                    return res.data.airports[0].airportName
-                })
-                .then ( res => {
-                    this.destinationOutput = res
-                })
         },
         adults: function() {
             const increaseAdults = document.body.querySelector(".increaseAdults")

@@ -191,13 +191,14 @@ input {
 .dep-country-list {
     display: none;
     width: 500px;
-    min-height: 100px;
+    min-height: 50px;
     /* margin-top: px; */
     background: white;
     border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
     border-top-left-radius: 5px !important;
     border-bottom-left-radius: 5px !important;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
     /* border-left: 30px solid transparent;
     border-right: 5px solid transparent;
@@ -223,6 +224,7 @@ input {
     border-bottom-right-radius: 5px !important;
     border-top-left-radius: 5px !important;
     border-bottom-left-radius: 5px !important;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .passengers {
@@ -305,4 +307,38 @@ input {
     font-size: 1.25rem;
     padding: 10px;
     text-align: right;
+}
+
+.airportList {
+    min-height: 50px;
+    font-size: 1.75rem;
+    color: rgba(0, 0, 0, 0.8);
+    border-bottom: 0.0625rem solid rgb(211,211,211);
+    text-align: left;
+    line-height: 50px;
+    padding-left: 10px;
+}
+
+.airport-name {
+    font-size: 1.5rem;
+}
+
+.country-name {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.country-name:hover {
+    cursor: pointer;
+    background: rgb(211,211,211);
+}
+
+.fa-plane-departure {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.nation-name {
+    margin-left: 40px;
+    color: grey;
 }
