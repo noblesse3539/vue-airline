@@ -119,11 +119,12 @@ export default {
             // 항공권 검색에 사용할 6가지 데이터
             departureInput: '',
             destinationInput: '',
-            departureOutput: '',
+            departureOutput: [],
             destinationOutput: '',
             leavingDate: new Date().toISOString().substr(0, 10),
             comingDate: new Date().toISOString().substr(0, 10),
             flightClass: 'Economy',
+            
             adults: 1,
             todayDate: new Date(),
 
@@ -283,10 +284,12 @@ export default {
             this.$http.get('api/airport/search/'+ keyword)
                 .then( res => {
                     console.log(res)
-                    return res.data.airports[0].airportName
+                    return res.data.airports
                 })
                 .then ( res => {
-                    this.departureOutput = res
+                        this.departureOutput = res.map( each => {
+                            return each.name_kor
+                        })
                 })
         },
         destinationInput: function(userInput) {

@@ -8,6 +8,7 @@ import GuideMyPage from './views/GuideMyPage'
 import MyPage from './views/MyPage'
 import Admin from './views/Admin'
 import FlightListPage from './views/FlightListPage'
+import VuexTutorial from './views/VuexTutorial'
 
 Vue.use(Router)
 
@@ -58,6 +59,11 @@ export default new Router({
             path: '/admin',
             name: 'Admin',
             component: Admin
+        },
+        {
+            path: '/vuex',
+            name: 'Vuex',
+            component: VuexTutorial
         },
     ]
 })

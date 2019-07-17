@@ -39,7 +39,8 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('load', this.getFlights)
+        // window.addEventListener('load', this.getFlights)
+        this.getFlights();
     },
     methods: {
         getFlights: function(){
