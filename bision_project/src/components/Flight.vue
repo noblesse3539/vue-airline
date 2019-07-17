@@ -39,10 +39,24 @@
         <!-- 소요시간, 경유여부, 화살표 -->
         <div class="">
           <div class="center" style="height: 50%">
-            <i class="fas fa-long-arrow-alt-right"></i>
+            <div class="">
+              <div class="">
+                {{OutDuration}}
+              </div>
+              <div class="center">
+                <i class="fas fa-long-arrow-alt-right"></i>
+              </div>
+            </div>
           </div>
           <div class="center" style="height: 50%">
-            <i class="fas fa-long-arrow-alt-right"></i>
+            <div class="">
+              <div class="">
+                {{InDuration}}
+              </div>
+              <div class="center">
+                <i class="fas fa-long-arrow-alt-right"></i>
+              </div>
+            </div>
           </div>
         </div>
         <!-- 도착 시각, 도착 공항 -->
@@ -50,7 +64,13 @@
           <div class="center" style="height: 50%;">
             <div class="">
               <div class="">
-                {{OutArrivalTime}}
+                <v-badge right>
+                  <span>{{OutArrivalTime}}</span>
+                  <template v-slot:badge v-if="OutDay">
+                    <span>+1</span>
+                  </template>
+                </v-badge>
+                <!-- {{OutArrivalTime}} -->
               </div>
               <div class="">
                 {{DestinationAirportCode}}
@@ -60,7 +80,13 @@
           <div class="center" style="height: 50%">
             <div class="">
               <div class="">
-                {{InArrivalTime}}
+                <v-badge right>
+                  <span>{{InArrivalTime}}</span>
+                  <template v-slot:badge v-if="InDay">
+                    <span>+1</span>
+                  </template>
+                </v-badge>
+                <!-- {{InArrivalTime}} -->
               </div>
               <div class="">
                 {{OriginAirportCode}}
@@ -78,9 +104,6 @@
             <i class="fas fa-won-sign"></i>{{Price}}
           </div>
           <div class="center">
-            <!-- <a :href="DeeplinkUrl">
-              <v-btn depressed color="primary" style="border-radius: 20px;">선택</v-btn>
-            </a> -->
             <v-btn :href="DeeplinkUrl" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
           </div>
         </div>
@@ -100,9 +123,13 @@ export default {
       InDepartureTime: {type: String},
       InArrivalTime: {type: String},
       InCarrierImageUrl: {type: String},
+      InDuration: {type: String},
+      InDay: {type: Boolean},
       OutDepartureTime: {type: String},
       OutArrivalTime: {type: String},
       OutCarrierImageUrl: {type: String},
+      OutDuration: {type: String},
+      OutDay: {type: Boolean},
       Price: {type: String},
       DeeplinkUrl: {type: String},
       OriginAirportCode: {type: String},

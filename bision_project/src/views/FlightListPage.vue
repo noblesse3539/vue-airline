@@ -1,22 +1,27 @@
 <template>
     <div class="Api">
-      <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length">
+      <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
         <Flight class="ma-3"
             :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
             :InDepartureTime="flights[i - 1].InDepartureTime"
             :InArrivalTime="flights[i - 1].InArrivalTime"
             :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
+            :InDuration="flights[i - 1].InDuration"
+            :InDay="flights[i - 1].InDay"
             :OutDepartureTime="flights[i - 1].OutDepartureTime"
             :OutArrivalTime="flights[i - 1].OutArrivalTime"
             :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
+            :OutDuration="flights[i - 1].OutDuration"
+            :OutDay="flights[i - 1].OutDay"
             :Price="flights[i - 1].Price"
             :DeeplinkUrl="flights[i - 1].DeeplinkUrl"
             :OriginAirportCode="flights[i - 1].OriginAirportCode"
             :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
         ></Flight>
       </v-layout>
-      <h1>ㅎㅇ</h1>
-      <h1>ㅎㅇ</h1>
+      <div style="height:100px; width:100px;">
+
+      </div>
     </div>
 </template>
 
@@ -39,7 +44,8 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('load', this.getFlights)
+        // window.addEventListener('load', this.getFlights)
+        this.getFlights();
     },
     methods: {
         getFlights: function(){
@@ -94,42 +100,54 @@ export default {
                       console.log(res)
 
                       // 출발, 도착 공항이름
+                      let Originflag = false
+                      let Destinationflag = false
                       let OriginAirportCode, DestinationAirportCode
                       for (let j=0; j<res.data.Places.length; j++) {
-                        if (res.data.Places[j].Id == res.data.Query.OriginPlace) {
+                        if (Originflag == false && res.data.Places[j].Id == res.data.Query.OriginPlace) {
                           OriginAirportCode = res.data.Places[j].Code
+                          Originflag == true
                         }
-                        if (res.data.Places[j].Id == res.data.Query.DestinationPlace) {
+                        if (Destinationflag == false && res.data.Places[j].Id == res.data.Query.DestinationPlace) {
                           DestinationAirportCode = res.data.Places[j].Code
+                          Destinationflag == true
+                        }
+                        if (Originflag == true && Destinationflag == true) {
+                          break;
                         }
                       }
 
                       // 가격, 에이전트연결 url
                       let OutboundLegId, InboundLegId, AgentsCode, Price, DeeplinkUrl
                       for (let j=0; j<res.data.Itineraries.length; j++) {
-                        Price = res.data.Itineraries[j].PricingOptions[0].Price
+                        Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
                         DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
                         InboundLegId = res.data.Itineraries[j].InboundLegId
                         AgentsCode = res.data.Itineraries[j].PricingOptions[0].Agents[0]
 
-                        // 출발 시간, 도착시간 (왕복)
+                        // 출발 시간, 도착시간 (왕복), 날짜 변화, 걸리는 시8
                         let Inflag = false
                         let Outflag = false
-                        let InDepartureTime, InArrivalTime, OutDepartureTime, OutArrivalTime, InCarrierId, OutCarrierId
+                        let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay
+                        let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
 
                         for (let k=0; k<res.data.Legs.length; k++) {
-                          if (Inflag == false && res.data.Legs[k].Id == InboundLegId) {
-                            InDepartureTime = res.data.Legs[k].Departure
-                            InArrivalTime = res.data.Legs[k].Arrival
-                            InCarrierId = res.data.Legs[k].Carriers
-                            Inflag = true
-                          }
                           if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
                             OutDepartureTime = res.data.Legs[k].Departure
                             OutArrivalTime = res.data.Legs[k].Arrival
+                            OutDay = this.dayCalculate(OutDepartureTime, OutArrivalTime)
                             OutCarrierId = res.data.Legs[k].Carriers
+                            OutDuration = this.durationTransfer(res.data.Legs[k].Duration)
                             Outflag = false
+                          }
+                          if (Inflag == false && res.data.Legs[k].Id == InboundLegId) {
+                            InDepartureTime = res.data.Legs[k].Departure
+                            InArrivalTime = res.data.Legs[k].Arrival
+                            InDay = this.dayCalculate(InDepartureTime, InArrivalTime)
+                            InCarrierId = res.data.Legs[k].Carriers
+                            InDuration = this.durationTransfer(res.data.Legs[k].Duration)
+                            Inflag = true
                           }
                           if (Inflag == true && Outflag == true) {
                             break;
@@ -164,11 +182,15 @@ export default {
                                   'InDepartureTime': InDepartureTime,
                                   'InArrivalTime': InArrivalTime,
                                   'InCarrierImageUrl': InCarrierImageUrl,
+                                  'InDay': InDay,
                                   'OutDepartureTime': OutDepartureTime,
                                   'OutArrivalTime': OutArrivalTime,
                                   'OutCarrierImageUrl': OutCarrierImageUrl,
+                                  'OutDay': OutDay,
                                   'Price': Price,
                                   'DeeplinkUrl': DeeplinkUrl,
+                                  'OutDuration': OutDuration,
+                                  'InDuration': InDuration,
                                  }
                         this.flights.push(flight)
 
@@ -180,24 +202,46 @@ export default {
         },
         // 시간 변환 함수
         timeTransfer: function (time) {
-          let hour = parseInt(time.slice(12, 14))
+          let hour = parseInt(time.slice(11, 13))
           if (hour > 12) {
-            hour = time.slice(12, 14) - 12
+            hour -= 12
             return "오후 " + hour + ":" + time.slice(14, 16)
           } else {
             return "오전 " + hour + ":" + time.slice(14, 16)
           }
         },
-        // priceTransfer: function (price) {
-        //   for (let i=0; i<price.length; i++) {
-        //     if (price[i] == ".")
-        //       price = price.slice(,i)
-        //   }
-        //   let result = ''
-        //   for (let i=price.length-1; i>=0; i--) {
-        //
-        //   }
-        // }
+        dayCalculate: function (departureTime, arrivalTime) {
+          if (parseInt(departureTime.slice(0,4)) < parseInt(arrivalTime.slice(0,4))) {
+            return true
+          } else if (parseInt(departureTime.slice(5,7)) < parseInt(arrivalTime.slice(5,7))) {
+            return true
+          } else if (parseInt(departureTime.slice(8,10)) < parseInt(arrivalTime.slice(8,10))) {
+            return true
+          } else {
+            return false
+          }
+        },
+        priceTransfer: function (price) {
+          price = price.toString()
+          for (let i=0; i<price.length; i++) {
+            if (price[i] == ".")
+              price = price.slice(0,i)
+          }
+          let result = ''
+          for (let i=0; i<price.length; i++) {
+            if (i>0 && i%3 == 0)
+              result += ","
+            result += price[price.length-i-1]
+          }
+          let reverse = ''
+          for (let i=result.length-1; i>=0; i--) {
+            reverse += result[i]
+          }
+          return reverse
+        },
+        durationTransfer: function (duration) {
+          return parseInt(parseInt(duration)/60) + "시간 " + parseInt(duration)%60 + "분"
+        }
     },
 }
 </script>
