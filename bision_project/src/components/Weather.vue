@@ -1,11 +1,7 @@
 <template>
-    <div className="weather">
-
-        <div></div>
-        <div></div>
-        
-        <h1>{{result[0].city}}</h1>
-        <i v-bind:class="[result[0].cod, weatherIcon]"></i>
+    <div class="weather">
+        <h1 class="weather-city-name">현재 {{result[0].city}}의 날씨</h1>
+        <i class="weather-icon" v-bind:class="[result[0].cod, weatherIcon]"></i>
         <h1>{{result[0].temp}}°C</h1>
         <p>습도: {{result[0].humidity}}</p>
         <p>바람: {{result[0].wind}} m/s</p>

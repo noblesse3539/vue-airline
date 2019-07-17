@@ -33,6 +33,8 @@
                 <div class="error-message" v-text="loginError"></div>
                 <input type="text" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
                 <input type="password" name="password" placeholder="비밀번호 입력" v-model="loginPassword" @keyup.enter="submit('login', $event)">
+                
+                <!-- 로그인 제출 버튼 -->
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
                 <div class="links">
                   <div class="links-div forgot-password"><a href="" @click="flip('password', $event)">비밀번호를 잊어버리셨나요?</a></div>
@@ -65,7 +67,6 @@ var modal_submit_login = '로그인';
 
 export default {
   name: 'LoginModal',
-  props: { },
   components:{
     facebookLogin
   },
@@ -117,6 +118,11 @@ export default {
               d.setTime(d.getTime() + (1000*60*60)) // 1시간 유효
               let expires = "expires=" + d.toUTCString()
               document.cookie = "BisionToken=" + res.data.token
+              const loginBtn = document.querySelector('.loginBtn')
+              loginBtn.style.display = "none"
+
+              this.$emit('closeModal')
+              
             }
             // 아래 요청도 가능
             // this.$http.get('/api/auth/check', {headers: {'x-access-token':res.data.token}})

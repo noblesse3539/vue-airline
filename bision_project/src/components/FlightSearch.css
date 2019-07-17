@@ -1,5 +1,5 @@
 .flight-search-bg {
-    background: linear-gradient( rgba(0,0,0,0.5), rgba(0, 0, 0, 0.5 )), url("http://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjEyMDd9") no-repeat center center;
+    background: linear-gradient( rgba(0,0,0,0.2), rgba(0, 0, 0, 0.8 )), url("http://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjEyMDd9") no-repeat center center;
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -77,10 +77,18 @@ input[type=radio]:checked {
         10px 0 80px #FFF222;         /* outer right cyan */
 }
 
+.duration-start {
+    width: 50% !important;
+}
+
+.duration-end {
+    width: 50% !important;
+}
 
 .leavingDate:hover, .comingDate:hover {
     cursor: pointer;
 }
+
 
 .checkmark {
     display: inline-block;

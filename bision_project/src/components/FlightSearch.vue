@@ -326,8 +326,8 @@ export default {
                 this.departure = userChoiceAirport
                 this.departureInput = `${airportNameSplit}, ${this.departure}`
             } else {
-                this.destintaion = userChoiceAirport
-                this.destinationInput = `${airportNameSplit}, ${this.destintaion}`
+                this.destination = userChoiceAirport
+                this.destinationInput = `${airportNameSplit}, ${this.destination}`
             }
         },
     },
