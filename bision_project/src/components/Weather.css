@@ -2,3 +2,20 @@
     font-size: 3rem;
     color: skyblue;
 }
+
+.weather-city-name {
+    font-size: 1.74rem;
+    font-weight: bold;
+    /* margin: 0; */
+    margin-bottom: 20px !important;
+}
+
+.weather-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+
+.weather h1 {
+    padding: 0;
+    margin: 0;
+}

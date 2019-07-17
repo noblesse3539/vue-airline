@@ -14,6 +14,9 @@
         <div class="nav-right">
             <router-link to="/" class="hvr-underline-from-center">
                 <span class="loginBtn" @click="open()">로그인 🌴</span>
+
+                <!-- 로그인 됐을 경우에만 보여줄 것 -->
+                <span class="logoutBtn" @click="logout()">로그아웃</span>
             </router-link>
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
@@ -41,7 +44,7 @@
             </v-layout>
             <div v-if="modal">
               <LoginModal
-              :modalOfChild="modal"
+              @closeModal="closeModal"
               @child="close"/>
             </div>
     </div>
@@ -84,6 +87,12 @@ export default {
           if (this.modal == true && (e.target.classList[0] === 'v-btn' || e.target.classList[0] === 'v-btn__content')) {
               this.modal = false
           }
+        },
+        logout() {
+
+        },
+        closeModal() {
+            this.modal = false
         },
     },
     data () {

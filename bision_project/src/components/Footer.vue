@@ -4,7 +4,8 @@
 		<meta name="keywords" content="">
 		<meta name="author" content="">
 		<div id="footer-inner">
-			<p>Bision © 2019</p>
+			<p>
+			Bision © 2019</p>
 		</div>
 	</v-footer>
 </template>
