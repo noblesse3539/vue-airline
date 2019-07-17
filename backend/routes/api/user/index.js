@@ -3,5 +3,5 @@ const controller = require('./controller')
 
 router.get('/list', controller.list)
 router.post('/assign-admin/:username', controller.assignAdmin)
-
+router.delete('/:username', controller.userDelete)
 module.exports = router

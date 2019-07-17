@@ -9,4 +9,7 @@ router.use('/check', authMiddleware)
 router.get('/check', controller.check)
 
 
+
+
+
 module.exports = router
