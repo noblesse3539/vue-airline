@@ -33,25 +33,47 @@
                 </v-bottom-nav>
             </v-card>
         </v-container>
-
+        <UserTable></UserTable>
         <CommitGraph></CommitGraph>
     </v-container>
 </template>
 
 <script>
 import CommitGraph from "../components/CommitGraph"
+import UserTable from "../components/userTable/UserTable"
 import './Admin.css'
 
 export default {
     name: "Admin",
     components: {
         CommitGraph,
+        UserTable
     },
     data () {
       return {
         bottomNav: 3,
         pageList: ['Logs', 'GitGraph', 'Etc'],
       }
+    },
+    beforeCreate () {
+      console.log('비포어크리에잇!!!')
+      const getCookie = function(name) {
+        const cookie = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
+        return cookie? cookie[2] : null;
+      }
+      const token = getCookie('BisionToken')
+      const context = {
+        headers: {'x-access-token': token}
+      }
+      this.$http.get('/api/user/list', context)
+      .then( res => {
+        console.log(res)
+      })
+      .catch( err => {
+        this.$router.go(-1)
+
+        
+      })
     },
     computed: {
       color () {

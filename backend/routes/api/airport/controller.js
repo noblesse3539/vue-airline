@@ -47,7 +47,7 @@ exports.register = (req, res) => {
 
 // GET api/airport/list
 exports.listOfAirport = (req, res) => {
-    Airport.find({}).select('nation city airportName airportCode')
+    Airport.find({}).select('name_eng name_kor nation_eng nation_kor city_eng city_kor code')
     .then(
         airports => {
             res.json({airports})

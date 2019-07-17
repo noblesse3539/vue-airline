@@ -96,7 +96,7 @@ exports.login = (req, res) => {
                         },
                         secret,
                         {
-                            expiresIn: '7d',
+                            expiresIn: '1h',
                             subject: 'userInfo'
                         }, (err, token) => {
                             if (err) reject (err)
@@ -143,3 +143,4 @@ exports.check = (req, res) => {
         info: req.decoded
     })
 }
+

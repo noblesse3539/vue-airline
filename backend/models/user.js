@@ -44,4 +44,9 @@ User.methods.assignAdmin = function() {
     return this.save()
 }
 
+User.methods.deleteUser = function( username ) {
+    const user = User.findOneByUserName(username)
+    return user.delete()
+}
+
 module.exports = mongoose.model('User', User)

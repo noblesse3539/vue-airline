@@ -41,3 +41,17 @@ exports.assignAdmin = (req, res) => {
         })
     )
 }
+
+exports.userDelete = (req, res) => {
+    if(!req.decoded.admin) {
+        return res.status(403).json({
+            message: 'yue are not an admin'
+        })
+    }
+    
+    User.remove({ username: req.params.username}, function(err, output) {
+        if(err) return res.status(500).json({ error: 'database failure'})
+
+        res.status(204).end()
+    })
+}
