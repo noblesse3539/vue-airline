@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Counter from './modules/counter'
 import Alerter from './modules/alerter'
+import Admin from './modules/admin'
+
 // import createLogger from '../../../src/plugins/logger'
 
 Vue.use(Vuex)
@@ -11,6 +13,7 @@ export default new Vuex.Store({
   modules: {
     Counter,
     Alerter,
+    Admin,
   },
   strict: debug,
   // plugins: debug ? [createLogger()] : []

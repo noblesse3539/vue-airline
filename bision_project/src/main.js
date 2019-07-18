@@ -24,6 +24,16 @@ Vue.use(Vuetify, {
 })
 
 Vue.prototype.$http = axios
+Vue.prototype.$getToken = (cookieName) => {
+	const cookie = document.cookie.match('(^|;) ?' + cookieName + '=([^;]*)(;|$)')
+	return cookie? cookie[2] : null;
+}
+Vue.prototype.$setCookie = (name, value, exp) => {
+	let d = new Date()
+	d.setTime(d.getTime() + (1000*60*60*exp)) // exp가 1일 때 1시간 유효
+	let expires = ";expires=" + d.toUTCString()
+	document.cookie = name+ "=" + value + expires
+}
 Vue.config.productionTip = false
 
 new Vue({

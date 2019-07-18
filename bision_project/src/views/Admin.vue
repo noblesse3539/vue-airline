@@ -1,5 +1,6 @@
 <template>
-    <v-container>
+  <div>
+    <v-container v-if="getIsAdmin">
         <div id="leaves">
             <i></i>
             <i></i>
@@ -36,44 +37,40 @@
         <UserTable></UserTable>
         <CommitGraph></CommitGraph>
     </v-container>
+    <v-container v-else>
+      <AdminLogin></AdminLogin>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import CommitGraph from "../components/CommitGraph"
 import UserTable from "../components/userTable/UserTable"
+import AdminLogin from "../components/AdminLogin"
 import './Admin.css'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     name: "Admin",
     components: {
         CommitGraph,
-        UserTable
+        UserTable,
+        AdminLogin,
     },
     data () {
       return {
         bottomNav: 3,
         pageList: ['Logs', 'GitGraph', 'Etc'],
+        admin: false,
+        res: null,
       }
     },
-    beforeCreate () {
-      console.log('비포어크리에잇!!!')
-      const getCookie = function(name) {
-        const cookie = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
-        return cookie? cookie[2] : null;
-      }
-      const token = getCookie('BisionToken')
-      const context = {
-        headers: {'x-access-token': token}
-      }
-      this.$http.get('/api/user/list', context)
-      .then( res => {
-        console.log(res)
-      })
-      .catch( err => {
-        this.$router.go(-1)
+    created () {
+      
 
-        
-      })
+    },
+    mounted () {
+      this.check ()
     },
     computed: {
       color () {
@@ -83,7 +80,29 @@ export default {
           case 2: return 'brown'
           case 3: return 'indigo'
         }
-      }
+      },
+      ...mapGetters({
+        getIsAdmin: 'getIsAdmin',
+      })
+    },
+    methods: {
+      check () {
+        const token = this.$getToken('BisionAdminToken')
+        const config = {
+            'headers': {'x-access-token': token}
+        }
+        this.$http.get('/api/superauth/check', config)
+          .then( res => {
+            this.$store.commit('setIsAdmin', true)
+            this.res = res
+            console.log(res)
+          })
+          .catch( err => {
+            console.log(err)
+            this.$store.commit('setIsAdmin', false)
+          })
+      },
+      
     }
 }
 </script>
