@@ -149,18 +149,10 @@ export default {
       }
     }
   },
-  computed: {
-    compiledMarkdown: function () {
-      return marked(this.MDinput, { sanitize: true })
-    }
-  },
   methods : {
     getImgUrl(img){
       return require('../assets/' + img)
     },
-    MDupdate: _.debounce(function (e) {
-      this.MDinput = e.target.value
-    }, 300),
     savePW(){
       this.$emit('close')
     },
@@ -179,35 +171,7 @@ export default {
 .imgUpdate:hover {
   cursor:pointer;
 }
-#MDeditor {
-  margin: 0;
-  min-height:300px;
-  height: 100%;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #333;
-}
-
-.MDTextArea, #MDeditor div {
-  display: inline-block;
-  width: 49%;
-  height: 100%;
-  vertical-align: top;
-  box-sizing: border-box;
-  padding: 0 20px;
-}
-
-.MDTextArea {
-  border: none;
-  border-right: 1px solid #ccc;
-  resize: none;
-  outline: none;
-  background-color: #f6f6f6;
-  font-size: 14px;
-  font-family: 'Monaco', courier, monospace;
-  padding: 20px;
-}
-
-code {
-  color: #f66;
+.ck-editor__editable_inline {
+    min-height: 700px;
 }
 </style>
