@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container id="fuckNonAdmins">
         <div id="leaves">
             <i></i>
             <i></i>
@@ -72,7 +72,6 @@ export default {
       .catch( err => {
         this.$router.go(-1)
 
-        
       })
     },
     computed: {

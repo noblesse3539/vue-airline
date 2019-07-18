@@ -17,7 +17,7 @@
                                         <div class="country-triangle"></div>
                                 </div>
                                 <div class="dep-country-list">
-                                    <div v-for="airport in departureOutput" class="country-name">
+                                    <div v-for="airport in airportDepartureSearch" class="country-name">
                                         <!-- 출발지 검색 리스트 -->
                                         <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'departure')" style="color: black; font-size: 3rem;">
                                             <div class="airportList">
@@ -127,6 +127,9 @@ export default {
             RadioLabels: ["왕복", "편도", "다구간"],
             classes: ['Economy', 'Business', 'First'],
             
+            // 전체 DB 내 공항 리스트
+            airportList: [],
+
             // 출발지 및 도착지 관련 변수
             departureInput: '',
             destinationInput: '',
@@ -170,9 +173,29 @@ export default {
         document.body.addEventListener("click",  this.hideSearchResult)
         document.body.addEventListener("tap", this.hideSearchResult)
         document.body.addEventListener("keydown", this.hideSearchResult)
-    
+        this.getAirportList
     },
     methods: {
+        
+        // Autocomplete를 위해 공항 정보 한번에 가져오기
+        getAirportList: function() {
+            const keyword = this.departureInput
+            this.$http.get('api/airport/list')
+                .then( res => {
+                    console.log(res)
+                    return res.data.airports
+                })
+                .then ( res => {
+                        this.airportList = res.map( each => {
+                            return {name_kor : each.name_kor, 
+                                    name_eng: each.name_eng,
+                                    nation_kor: each.nation_kor,
+                                    nation_eng: each.nation_eng,
+                                    code: each.code }
+                        })
+                })
+        },
+
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
             const params = {}
@@ -253,11 +276,13 @@ export default {
             const psgTriangleBox = document.querySelector(".psg-triangle-box")
             const psgaAdultsPicker = document.querySelector(".psg-adults-picker")
             const flightSearchBtn = document.querySelector(".flight-search-submit")
+            const flightSearchRadio = document.querySelector('.flight-search-radio')
             psgTriangleBox.style.display = "block"
             psgTriangleBox.style.zIndex = "1010"            
             psgaAdultsPicker.style.display = "block"
             psgaAdultsPicker.style.zIndex = "1010"
             flightSearchBtn.style.display = "none"
+            flightSearchRadio.scrollIntoView()
 
         },
         oneWayTrip: function() {
@@ -282,7 +307,10 @@ export default {
             this.adults += 1
         },
         decreaseAdults: function() {
-            this.adults -= 1
+
+            if (this.adults != 1 ){
+                this.adults -= 1
+            }
         },
         getDepartureOutput: function() {
             const keyword = this.departureInput
@@ -331,6 +359,19 @@ export default {
             }
         },
     },
+    computed: {
+        airportDepartureSearch() {
+            console.log("count")
+            return this.airportList.filter( airport => {
+                return airport.name_kor.includes(this.departureInput) ||
+                        airport.nation_kor.includes(this.departureInput) ||
+                        airport.code.includes(this.departureInput)
+            })
+        },
+        airportDestinationSearch() {
+
+        },
+    },
     watch: {
         departureInput: function() {
             
@@ -340,7 +381,9 @@ export default {
             countryList.style.position = "absolute"
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
-            this.getDepartureOutput()
+            // this.getDepartureOutput()
+            this.departureOutput = this.airportDepartureSearch()
+            console.log(this.departureOutput)
         },
         destinationInput: function(userInput) {
 
@@ -350,7 +393,7 @@ export default {
             countryList.style.position = "absolute"
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
-            this.getDestinationOutput()
+            // this.getDestinationOutput()
 
         },
         adults: function() {
@@ -362,11 +405,17 @@ export default {
                 increaseAdults.disabled = true
                 increaseAdults.style.cursor = "not-allowed"
                 increaseAdults.style.background = "grey"
-            } else if ( this.adults <= 1) {
-                decreaseAdults.disabled = true
-                decreaseAdults.style.curosr = "not-allowed"
-                decreaseAdults.style.backgronud = "grey"
-
+                // decreaseAdults.style.cursor = "pointer"
+                // decreaseAdults.style.background = "rgba(47, 250, 62, 1)"
+            } else if ( this.adults > 1) {
+                decreaseAdults.disabled = false
+                decreaseAdults.style.cursor = "pointer"
+                decreaseAdults.style.background = "rgba(47, 250, 62, 1)"
+            } else if ( this.adults == 1) {
+                decreaseAdults.style.background = "grey"
+                increaseAdults.disabled = false
+                increaseAdults.style.cursor = "pointer"
+                increaseAdults.style.background = "rgba(47, 250, 62, 1)"
             } else {
                 increaseAdults.disabled = false
                 increaseAdults.style.cursor = "pointer"
