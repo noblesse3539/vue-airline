@@ -176,8 +176,8 @@ export default {
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
             const params = {}
-            params.departure = this.departure
-            params.destination = this.destination
+            params.departure = this.departure // ICN
+            params.destination = this.destination // NRT
             params.leavingDate = this.leavingDate
             params.comingDate  = this.comingDate
             params.flightClass = this.flightClass
