@@ -7,6 +7,8 @@ const User = new Schema({
     username: String,
     password: String,
     email: String,
+    firstName: String,
+    lastName: String,
     age: Number,
     gender: String,
     languages: [String],
@@ -59,4 +61,21 @@ User.methods.deleteUser = function( username ) {
     return user.delete()
 }
 
+
+/*
+    username: String,
+    password: String,
+    email: String,
+    age: Number,
+    gender: String,
+    languages: [String],
+    intro: String,
+    UsedGuides: [{ type: Schema.Types.ObjectId, ref: 'guide'}],
+    UsedGuideServices: [{ type: Schema.Types.ObjectId, ref: 'guideservice'}]
+*/
+// User.statics.updateByUserObId = function(username, password, email, age, gender, languages, intro, UsedGuides, UsedGuideServices) {
+//     return this.findOneAndUpdate({
+
+//     })
+// }
 module.exports = mongoose.model('User', User)
