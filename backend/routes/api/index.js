@@ -2,10 +2,17 @@ const router = require('express').Router()
 const authMiddleware = require('../../middlewares/auth')
 const auth = require('./auth')
 const user = require('./user')
+const superUser = require('./superUser')
+const superAuth = require('./superAuth')
 const airport = require('./airport')
 
 const guide =require('./guide')
 const guideservice =require('./guideservice')
+
+// SuperUser
+router.use('/superauth', superAuth)
+router.use('/superuser', authMiddleware)
+router.use('/superuser', superUser)
 
 // User
 router.use('/auth', auth)

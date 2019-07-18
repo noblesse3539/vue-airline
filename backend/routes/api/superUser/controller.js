@@ -1,7 +1,7 @@
-const User = require('../../../models/user')
+const User = require('../../../models/superUser')
 
 /*
-    GET /api/user/list
+    GET /api/superuser/list
 */
 
 exports.list = (req, res) => {
@@ -20,23 +20,27 @@ exports.list = (req, res) => {
     )
 }
 
-// exports.assignAdmin = (req, res) => {
-//     // refuse if not an admin
-//     if(!req.decoded.admin) {
-//         return res.status(403).json({
-//             message: 'you are not an admin'
-//         })
-//     }
+/*
+    POST /api/superuser/assign-admin/:username
+*/
 
-//     User.findOneByUserName(req.params.username)
-//     .then(
-//         user => user.assignAdmin()
-//     ).then(
-//         res.json({
-//             success: true
-//         })
-//     )
-// }
+exports.assignAdmin = (req, res) => {
+    // refuse if not an admin
+    if(!req.decoded.admin) {
+        return res.status(403).json({
+            message: 'you are not an admin'
+        })
+    }
+
+    User.findOneByUserName(req.params.username)
+    .then(
+        user => user.assignAdmin()
+    ).then(
+        res.json({
+            success: true
+        })
+    )
+}
 
 exports.userDelete = (req, res) => {
     if(!req.decoded.admin) {
