@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
-const User = require('../../../models/user')
+const User = require('../../../models/superUser')
 
 /*
-    POST /api/auth/register
+    POST /api/superauth/register
     {
         username,
         password,
@@ -13,7 +13,9 @@ const User = require('../../../models/user')
 exports.register = (req, res) => {
     const { username, password, email } = req.body
     let newUser = null
-    
+    console.log('이건 수퍼유저 생성')
+    console.log( username, password, email)
+    console.log('')
     // create a new user if does not exist
     const create = (user) => {
         if(user) {
@@ -30,20 +32,20 @@ exports.register = (req, res) => {
     }
 
     // assign admin if count is 1
-    // const assign = (count) => {
-    //     if(count === 1) {
-    //         return newUser.assignAdmin()
-    //     } else {
-    //         // if not, return a promise that return false
-    //         return Promise.resolve(false)
-    //     }
-    // }
+    const assign = (count) => {
+        if(count === 1) {
+            return newUser.assignAdmin()
+        } else {
+            // if not, return a promise that return false
+            return Promise.resolve(false)
+        }
+    }
 
     // respond to the client
-    const respond = (count) => {
+    const respond = (isAdmin) => {
         res.json({
             message: 'registered successfully',
-            // admin: isAdmin ? true : false
+            admin: isAdmin ? true : false
         })
     }
 
@@ -58,7 +60,7 @@ exports.register = (req, res) => {
     User.findOneByUserName(username)
     .then(create)
     .then(count)
-    // .then(assign)
+    .then(assign)
     .then(respond)
     .catch(onError)
 }
