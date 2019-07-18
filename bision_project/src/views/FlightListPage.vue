@@ -47,20 +47,22 @@ export default {
         // window.addEventListener('load', this.getFlights)
         this.getFlights();
     },
-    methods: {
+    methods: { 
         getFlights: function(){
             console.log("실행")
+            console.log(this.$route.params)
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
-            const data  = {
-                            'country': 'KR',
-                            'currency': 'KRW',
-                            'locale': 'ko-KR',
-                            'originPlace': 'ICN-sky',
-                            'destinationPlace': 'NRT-sky',
-                            'outboundDate': '2019-07-17',
-                            'inboundDate': '2019-07-20',
-                            'adults': '1'
+            let data  = {
+                            'country': 'US',
+                            'currency': 'USD',
+                            'locale': 'en-US',
+                            'originPlace': this.$route.params.departure + '-sky',
+                            'destinationPlace': this.$route.params.destination + '-sky',
+                            'outboundDate': this.$route.params.leavingDate,
+                            'inboundDate': this.$route.params.comingDate,
+                            'adults': this.$route.params.adults
                         }
+
 
             this.$http({
                 method: 'POST',
