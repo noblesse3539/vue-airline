@@ -1,7 +1,31 @@
 <template>
     <div class="Api">
       <!-- 헤더 공백 -->
-      <div style="height:100px; width:100px;"></div>
+      <div style="height:150px; width:100px;"></div>
+      <!-- 정렬메뉴바 -->
+      <div class="text-xs-right ">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              color="primary"
+              dark
+              v-on="on"
+            >
+              정렬 기준
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-tile
+              v-for="(sortType, index) in sortTypes"
+              :key="index"
+              @click="getFlightsbyOptional(1, index)"
+            >
+              <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </div>
+      <!-- 항공권 리스트 -->
       <div v-if="!error">
         <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
           <Flight class="ma-3"
@@ -50,18 +74,32 @@ export default {
     data: function() {
         return {
           flights: [],
+          sortTypes: [
+            '최저가순',
+            '최단여행시간순',
+            '출국: 출발시간',
+            '귀국: 출발시간',
+            '경유',
+          ],
+          optionType: [
+            {text: '&sortType=price&sortOrder=asc'},
+            {text: '&sortType=duration&sortOrder=asc'},
+            {text: '&sortType=outbounddeparttime&sortOrder=asc'},
+            {text: '&sortType=inbounddeparttime&sortOrder=asc'},
+          ]
         }
     },
     mounted() {
         // window.addEventListener('load', this.getFlights)
-        this.getFlights(0);
+        this.getFlights(0, 0);
         // this.isLists();
         this.$nextTick(() => {
-          this.getFlights(1);
+          this.getFlights(1, 0);
       });
     },
     methods: {
-        getFlights: function(moreflag){
+        getFlights: function(moreflag, optionTypeIndex){
+
             console.log("실행")
             console.log(this.$route.params)
             console.log(this.flights)
@@ -72,7 +110,7 @@ export default {
             if (moreflag == 1) {
               this.pageIndex = 0
               this.pageSize = 1000
-            } else {
+            } else if (moreflag == 0) {
               this.pageIndex = 0
               this.pageSize = 10
             }
@@ -94,7 +132,7 @@ export default {
                             // 'adults': this.$route.params.adults
                         }
             const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
-            let option = '?sortType=price&sortOrder=asc&pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize
+            let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
             this.$http({
                 method: 'POST',
                 url   : baseUrl,
@@ -304,6 +342,11 @@ export default {
         //   // this.error = true;
         //   return;
         // }
+        getFlightsbyOptional: function (flag, optionType) {
+          this.flights = []
+          this.limits = 10
+          this.getFlights(flag, optionType);
+        }
     },
 }
 </script>
