@@ -7,7 +7,7 @@ const superAuth = require('./superAuth')
 const airport = require('./airport')
 
 const guide =require('./guide')
-const guideservice =require('./guideservice')
+const guideservice = require('./guideservice')
 
 // SuperUser
 router.use('/superauth', superAuth)
