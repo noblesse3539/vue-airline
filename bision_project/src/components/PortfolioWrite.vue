@@ -126,9 +126,15 @@ export default {
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
+        ckfinder: {
+           options: {
+               resourceType: 'Images'
+           },
+           Authorization: "Client-ID 6def70bd30a2e6a",
+           uploadUrl:"https://api.imgur.com/3/image"
           // The configuration of the editor.
+        }
       },
-      MDinput:'## 상세 여행 플랜을 입력해주세요.',
       Pnation:'',
       PCity:[],
       nation: ['대한민국'],
