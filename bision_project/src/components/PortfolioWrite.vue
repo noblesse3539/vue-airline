@@ -131,7 +131,6 @@ export default {
   },
   data (){
     return{
-      planTitle:'',
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
@@ -146,6 +145,7 @@ export default {
           // The configuration of the editor.
         }
       },
+      planTitle:'',
       Pnation:'',
       PCity:[],
       nation: ['대한민국'],
