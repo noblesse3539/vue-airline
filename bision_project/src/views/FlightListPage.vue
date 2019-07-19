@@ -3,6 +3,7 @@
       <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
         <Flight class="ma-3"
             :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
+            :CurrencySymbol="flights[i - 1].CurrencySymbol"
             :InDepartureTime="flights[i - 1].InDepartureTime"
             :InArrivalTime="flights[i - 1].InArrivalTime"
             :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
@@ -19,6 +20,8 @@
             :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
         ></Flight>
       </v-layout>
+      <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+
       <div style="height:100px; width:100px;">
 
       </div>
@@ -33,7 +36,9 @@ export default {
     name: 'FlightList',
     props: {
       limits: {type: Number, default: 10},
-      loadMore: {type: Boolean, default: true}
+      pageIndex: {type: String, default: 0},
+      pageSize: {type: String, default: 10},
+      // loadMore: {type: Boolean, default: true}
     },
     components: {
       Flight
@@ -47,7 +52,7 @@ export default {
         // window.addEventListener('load', this.getFlights)
         this.getFlights();
     },
-    methods: { 
+    methods: {
         getFlights: function(){
             console.log("실행")
             console.log(this.$route.params)
@@ -56,13 +61,18 @@ export default {
                             'country': 'US',
                             'currency': 'USD',
                             'locale': 'en-US',
-                            'originPlace': this.$route.params.departure + '-sky',
-                            'destinationPlace': this.$route.params.destination + '-sky',
-                            'outboundDate': this.$route.params.leavingDate,
-                            'inboundDate': this.$route.params.comingDate,
-                            'adults': this.$route.params.adults
-                        }
+                            'originPlace': 'LHR-sky',
+                            'destinationPlace': 'ICN-sky',
+                            'outboundDate': '2019-07-18',
+                            'inboundDate': '2019-07-20',
+                            'adults': '1',
 
+                            // 'originPlace': this.$route.params.departure + '-sky',
+                            // 'destinationPlace': this.$route.params.destination + '-sky',
+                            // 'outboundDate': this.$route.params.leavingDate,
+                            // 'inboundDate': this.$route.params.comingDate,
+                            // 'adults': this.$route.params.adults
+                        }
 
             this.$http({
                 method: 'POST',
@@ -89,9 +99,15 @@ export default {
                 })
                 .then( sessionKey => {
                     console.log(sessionKey)
+                    let data  = {
+                                    'pageIndex': '0',
+                                    'pageSize': '10',
+                                }
+                    console.log(data)
                     this.$http({
                         method: 'GET',
                         url   : 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' + sessionKey,
+                        data  : qs.stringify(data),
                         headers: {
                         'X-RapidAPI-Host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
                         'X-RapidAPI-Key' : '25703e8168mshcbae189ae6af368p1fcb8djsnead03bdc43f6',
@@ -99,6 +115,7 @@ export default {
                         }
                     })
                     .then( res => {
+                      console.log(data)
                       console.log(res)
 
                       // 출발, 도착 공항이름
@@ -118,6 +135,10 @@ export default {
                           break;
                         }
                       }
+                      // 통화 심벌
+                      let CurrencySymbol
+                      CurrencySymbol = res.data.Currencies[0].Symbol
+                      console.log(CurrencySymbol)
 
                       // 가격, 에이전트연결 url
                       let OutboundLegId, InboundLegId, AgentsCode, Price, DeeplinkUrl
@@ -180,6 +201,7 @@ export default {
 
                         flight = {'OriginAirportCode': OriginAirportCode,
                                   'DestinationAirportCode': DestinationAirportCode,
+                                  'CurrencySymbol': CurrencySymbol,
                                   'AgentsImageUrl': AgentsImageUrl,
                                   'InDepartureTime': InDepartureTime,
                                   'InArrivalTime': InArrivalTime,
@@ -243,6 +265,11 @@ export default {
         },
         durationTransfer: function (duration) {
           return parseInt(parseInt(duration)/60) + "시간 " + parseInt(duration)%60 + "분"
+        },
+        loadMoreFlightList: function () {
+          this.limits += 10
+          this.pageIndex += 1
+          this.pageSize += 10
         }
     },
 }

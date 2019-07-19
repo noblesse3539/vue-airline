@@ -101,7 +101,7 @@
             <v-img :src="AgentsImageUrl" width="100px"></v-img>
           </div>
           <div class="center container" style="font-weight: bold; font-size: 20px; padding: 10px;">
-            <i class="fas fa-won-sign"></i>{{Price}}
+            {{CurrencySymbol}}&nbsp{{Price}}
           </div>
           <div class="center">
             <v-btn :href="DeeplinkUrl" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
@@ -120,6 +120,7 @@ export default {
     name: 'Flight',
     props: {
       AgentsImageUrl: {type: String},
+      CurrencySymbol: {type: String},
       InDepartureTime: {type: String},
       InArrivalTime: {type: String},
       InCarrierImageUrl: {type: String},
