@@ -67,7 +67,6 @@ export default {
     },
     created () {
       
-
     },
     mounted () {
       this.check ()
@@ -95,10 +94,8 @@ export default {
           .then( res => {
             this.$store.commit('setIsAdmin', true)
             this.res = res
-            console.log(res)
           })
           .catch( err => {
-            console.log(err)
             this.$store.commit('setIsAdmin', false)
           })
       },

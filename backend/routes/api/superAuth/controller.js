@@ -22,6 +22,7 @@ exports.register = (req, res) => {
             throw new Error('username exists')
         } else {
             return User.create(username, password, email)
+            
         }
     }
 
@@ -146,3 +147,19 @@ exports.check = (req, res) => {
     })
 }
 
+/**
+ *  PUT /api/auth/update
+ */
+
+exports.update = (req, res) => {
+    const {_id} = req.decoded
+    User.update(
+        {_id: _id}, 
+        { $set: req.body },
+        (err, output) => {
+            if(err) res.status(500).json({ error: 'database failure' })
+            if(!output.n) return res.status(404).json({ error: 'user not found'})
+            res.json({ message: 'user updated'})
+        }
+    )
+}

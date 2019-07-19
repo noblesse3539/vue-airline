@@ -7,28 +7,35 @@
                         <v-toolbar-title>Login</v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-toolbar>
-                    <v-card-text>
-                        <v-form>
-                        <v-text-field v-model="id" prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
-                        <v-text-field v-model="password" prepend-icon="lock" name="password" label="Password" id="password" type="password"></v-text-field>
+                        <v-form ref="adminLoginForm">
+                            <v-card-text>
+                                <v-text-field v-model="id" :rules="idRules" prepend-icon="person" name="login" label="Login" type="text" required></v-text-field>
+                                <v-text-field v-model="password" :rules="pwRules" prepend-icon="lock" name="password" label="Password" id="password" type="password" required></v-text-field>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn v-on:click="validate" color="primary">Login</v-btn>
+                            </v-card-actions>
                         </v-form>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn v-on:click="login" color="primary">Login</v-btn>
-                    </v-card-actions>
                 </v-card>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
+
 <script>
 export default {
     name: 'AdminLogin',
     data () {
         return {
             id: '',
-            password: ''
+            password: '',
+            idRules: [
+                v => !!v || 'id를 입력하세요.'
+            ],
+            pwRules: [
+                v => !!v || 'password를 입력하세요.'
+            ],
         }
     },
     methods: {
@@ -46,6 +53,18 @@ export default {
                     this.$store.commit('setIsAdmin', true)
                 }
             })
+            .catch( err => {
+                this.reset()
+                alert('로그인 실패')
+            })
+        },
+        validate () {
+            if (this.$refs.adminLoginForm.validate()) {
+                this.login()   
+            }
+        },
+        reset () {
+            this.$refs.adminLoginForm.reset()
         },
     },
     mounted() {
