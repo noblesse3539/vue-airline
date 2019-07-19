@@ -22,11 +22,12 @@
                 -->
               <div class="form-register" :class="{ 'active': active == 'register' }" id="form-register">
                 <div class="error-message" v-text="registerError"></div>
-                <input type="text" name="name" placeholder="Name" v-model="registerName" @keyup.enter="submit('register', $event)">
+                <div class="welcomeImg"></div>
+                <input type="text" name="name" placeholder="이메일 입력" v-model="registerName" @keyup.enter="submit('register', $event)">
                 <!-- <input type="email" name="email" placeholder="Email" v-model="registerEmail" @keyup.enter="submit('register', $event)"> -->
-                <input type="password" name="password" placeholder="Password" v-model="registerPassword" @keyup.enter="submit('register', $event)">
+                <input type="password" name="password" placeholder="비밀번호 입력" v-model="registerPassword" @keyup.enter="submit('register', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'register' }" @click="submit('register', $event)" v-model="registerSubmit" id="registerSubmit">
-                <div class="links"> <a href="" @click="flip('login', $event)">이미 계정이 있으신가요?</a></div>
+                <div class="links-what"> <a href="" @click="flip('login', $event)">이미 계정이 있으신가요?</a></div>
               </div>
               <div class="form-login" :class="{ 'active': active == 'login' }" id="form-login">
                 <div class="error-message" v-text="loginError"></div>
@@ -39,12 +40,9 @@
                 <!-- <input type="email" name="email" placeholder="Email" v-model="registerEmail" @keyup.enter="submit('register', $event)">
                 <input type="password" name="password" placeholder="Password" v-model="registerPassword" @keyup.enter="submit('register', $event)">
                  -->
-                <li @click="flip('register', $event)">
-                  <a href="" id="register-form">Register</a>
-                </li>
                 <div class="links">
                   <div class="links-div forgot-password"><a href="" @click="flip('password', $event)">비밀번호를 잊어버리셨나요?</a></div>
-                  <div class="links-div"><a href="" id="register-form">처음이신가요?  <span style="font-weight: bold;" @click="signup()">가입하기</span></a></div>
+                  <div class="links-div"><span style="color: black; margin-right: 10px;">처음이신가요?</span> <a href="" id="register-form" @click="flip('register', $event)">가입하기</a></div>
                   <div style="text-align:center" class="facebook-container">
                     <facebook-login class="button"
                       appId="2908747355834093"
