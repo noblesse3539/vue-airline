@@ -22,7 +22,8 @@
         <td class="text-xs-right">{{ props.item.password }}</td>
         <td class="text-xs-right">{{ props.item.email }}</td>
         <td class="text-xs-right">{{ props.item._id }}</td>
-        <v-btn @click="assignAdmin(props.item.username)" round color="success" outline>권한부여</v-btn>
+        <v-btn v-if="props.item.admin" @click="assignAdmin(props.item.username)" round color="pink" outline>권한취소</v-btn>
+        <v-btn v-else @click="assignAdmin(props.item.username)" round color="success" outline>권한부여</v-btn>
         <v-btn round color="info" outline>수정</v-btn>
         <v-btn round color="red" outline>삭제</v-btn>
       </template>
@@ -90,10 +91,10 @@
           return res.data.success 
         })
         .then( success => {
-          // this.superusers.filter( user => {
-          //   user.username === username
-          // })[0].admin = true
-          console.log(success)
+          const target = this.superusers.filter( user => {
+            return user.username === username
+          })[0]
+          target.admin = !target.admin
         })
         .catch( err => {
           console.log(err)

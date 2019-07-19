@@ -37,7 +37,7 @@ SuperUser.methods.verify = function(password) {
 }
 
 SuperUser.methods.assignAdmin = function() {
-    this.admin = true
+    this.admin = !this.admin
     return this.save()
 }
 
