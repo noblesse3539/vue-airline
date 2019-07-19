@@ -1,5 +1,5 @@
 <template>
-    <div class="weather">
+    <div class="weather" v-if="isApiDone">
         <h1 class="weather-city-name">현재 {{result[0].city}}의 날씨</h1>
         <i class="weather-icon" v-bind:class="[result[0].cod, weatherIcon]"></i>
         <h1>{{result[0].temp}}°C</h1>
@@ -17,7 +17,8 @@ export default{
     data: function() {
         return {
             result: [],
-            weatherIcon: "weatherIcon"
+            weatherIcon: "weatherIcon",
+            isApiDone: false,
         }
     },
     mounted() {
@@ -26,17 +27,19 @@ export default{
         const apiKey  = '79afaa4fcb45087af27c7ef8708f358c'
         const baseUrl = `http://api.openweathermap.org/data/2.5/weather?lat=40.7306&lon=-73.9867&APPID=${apiKey}`
         // const result  = []
-        this.$http.get(baseUrl).
-            then( (res) => {
+        this.$http.get(baseUrl)
+            .then( (res) => {
                 let tempResult = {}
-                tempResult.city       = res.data.name
+                tempResult.city       = res.data.names
                 tempResult.temp       = Math.floor(res.data.main.temp - 273.15)
                 tempResult.humidity   = res.data.main.humidity
                 tempResult.wind       = res.data.wind.speed
                 tempResult.weather    = res.data.weather[0].main.toLowerCase()
                 tempResult.cod        = `wi wi-owm-${res.data.weather[0].id}`
                 this.result.push(tempResult)
+                this.isApiDone = true
             })
+            
     },
 }
 </script>

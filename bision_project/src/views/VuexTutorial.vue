@@ -29,6 +29,7 @@ export default {
         // state값에 어떠한 연산을 해서 가져오고 싶을 경우
         ...mapGetters({
             getCountWithFriend : 'getCountWithFriend',
+            
         }),
     },
     methods: {
