@@ -15,6 +15,12 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
+              <v-flex mt-3 xs12>
+                <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;" text-display-3
+                v-model="planTitle" label="제목을 입력해주세요." solo></v-text-field>
+                <!-- <ckeditor :editor="titleEditor" v-model="titleData" :config="titleConfig"></ckeditor> -->
+              </v-flex>
+
               <h2>메인 이미지 선택</h2>
               <v-flex xs12 d-flex>
                 <UploadImg :imgUrl="getImgUrl('main.jpg')" :isMain="true"></UploadImg>
@@ -93,7 +99,7 @@
                 <h2>상세 정보 입력</h2>
               </v-flex>
               <v-flex>
-                <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+                <ckeditor id="edit" :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
               </v-flex>
             </v-layout>
           </v-container>
@@ -104,7 +110,8 @@
 
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import InlineEditor from '@ckeditor/ckeditor5-build-inline'
 import UploadImg from '@/components/UploadImg'
 import UploadImgList from '@/components/UploadImgList'
 // import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
@@ -120,13 +127,15 @@ export default {
   },
   components:{
     UploadImg,
-    UploadImgList
+    UploadImgList,
   },
   data (){
     return{
+      planTitle:'',
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
+
         ckfinder: {
            options: {
                resourceType: 'Images'
@@ -182,4 +191,5 @@ export default {
 .ck-editor__editable_inline {
     min-height: 700px;
 }
+
 </style>
