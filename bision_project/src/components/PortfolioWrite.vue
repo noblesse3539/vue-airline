@@ -107,6 +107,7 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import UploadImg from '@/components/UploadImg'
 import UploadImgList from '@/components/UploadImgList'
+// import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 // import Vue from 'vue'
 // import vuenationRegionSelect from 'vue-nation-region-select'
 // Vue.use(vuenationRegionSelect)
@@ -126,9 +127,16 @@ export default {
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
+        ckfinder: {
+           options: {
+               resourceType: 'Images'
+           },
+           // Authorization: "Client-ID 6def70bd30a2e6a",
+           uploadUrl:"https://api.imgur.com/3/image"
+            // uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json'
           // The configuration of the editor.
+        }
       },
-      MDinput:'## 상세 여행 플랜을 입력해주세요.',
       Pnation:'',
       PCity:[],
       nation: ['대한민국'],
