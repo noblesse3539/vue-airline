@@ -16,7 +16,7 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex mt-3 xs12>
-                <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;" text-display-3
+                <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
                 v-model="planTitle" label="제목을 입력해주세요." solo></v-text-field>
                 <!-- <ckeditor :editor="titleEditor" v-model="titleData" :config="titleConfig"></ckeditor> -->
               </v-flex>
