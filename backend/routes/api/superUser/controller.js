@@ -13,11 +13,9 @@ exports.list = (req, res) => {
     }
 
     User.find({})
-    .then(
-        users => {
-            res.json({users})
-        }
-    )
+    .then( users => {
+        res.json({users})
+    })
 }
 
 /*
