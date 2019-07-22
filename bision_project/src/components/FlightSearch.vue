@@ -13,11 +13,11 @@
                         <div class="departure">
                             <label> 출발지
                                 <input 
-                                    v-model="departureInput" 
                                     type="text"
                                     placeholder="국가, 도시 또는 공항" 
                                     class="left-end-input"
-                                    @input="getDepartureOutput"
+                                    @input="departureInput = $event.target.value"
+                                    @keyup="getDepartureOutput"
                                 >
                                 <div class="searchListWrapper" v-show="isOpen">
                                     <div class="dep-triangle-box">
@@ -46,10 +46,10 @@
                         <div class="destination">
                             <label> 도착지
                                 <input 
-                                    v-model="destinationInput" 
                                     type="text" 
                                     placeholder="국가, 도시 또는 공항"
-                                    @input="getDestinationOutput"
+                                    @input="destinationInput = $event.target.value"
+                                    @keyup="getDestinationOutput"
                                 >
                                 <div class="dst-triangle-box">
                                         <div class="country-triangle"></div>
