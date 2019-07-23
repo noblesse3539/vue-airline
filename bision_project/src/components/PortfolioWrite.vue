@@ -2,13 +2,13 @@
   <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable >
     <v-card tile>
       <v-toolbar card dark color="blue">
-         <v-btn icon dark @click="closePW">
+         <v-btn icon dark @click="checkClose">
            <v-icon>close</v-icon>
          </v-btn>
          <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
-           <v-btn dark flat @click="savePW">Save</v-btn>
+           <v-btn dark flat @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>
 
@@ -101,13 +101,24 @@
                 <h2>상세 정보 입력</h2>
               </v-flex>
               <v-flex>
-                <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded" v-model="htmlForEditor"> </vue-editor>
+                <vue-editor useCustomImageHandler @imageAdded="handleImageAdded" v-model="tourProgram.detail"> </vue-editor>
               </v-flex>
             </v-layout>
           </v-container>
       </v-card-text>
     </v-card>
+    <v-dialog v-model="check" max-width="290">
+      <v-card>
+         <v-card-title v-html="checkText"></v-card-title>
+         <v-card-actions>
+           <v-spacer></v-spacer>
+           <v-btn color="green darken-1" flat="flat" @click="check = false">아니요</v-btn>
+           <v-btn color="green darken-1" flat="flat" @click="closePW">예</v-btn>
+         </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-dialog>
+
 </template>
 
 
@@ -132,9 +143,10 @@ export default {
   },
   data (){
     return{
-      complete: true,
+      checkText:'',
+      check : false,
+      validate: false,
       tempMain:'https:\/\/i.imgur.com\/9ge6Osc.jpg',
-      htmlForEditor: "",
       nation: ['대한민국'],
       city: ['서울', '부산', '대전'],
       dialog: true,
@@ -150,11 +162,11 @@ export default {
         toDate:'',
         duration: '',
         cost:'',
-        refund:'',
+        // refund:'',
         minTrav:'',
         maxTrav: '',
         desc:'',
-        tags:[],
+        // tags:[],
         detail:''
       }
     }
@@ -192,29 +204,37 @@ export default {
          console.log(err)
        })
     },
-    savePW(){
+    checkSave(){
+      console.log(this.tourProgram)
       for(var item in this.tourProgram){
-        if(!item.value) {
+        if(!this.tourProgram[item]) {
+          console.log(this.tourProgram[item])
           return alert('빈 칸을 모두 작성해주세요.')
         }
       }
-      // 보내는 함수 추가.
-      alert('작성이 완료되었습니다.')
-      console.log(this.tourProgram)
-      this.$emit('close')
+      this.check = true
+      this.validate=true
+      this.checkText="작성을 완료하시겠습니까?"
+    },
+    checkClose(){
+      for(var item in this.tourProgram){
+        if(this.tourProgram[item]) {
+          this.check=true
+          this.checkText="이 페이지를 나가시겠습니까?<br>변경사항이 저장되지 않을 수 있습니다."
+          return true
+        }
+      }
     },
     closePW(){
-      for(var item in this.tourProgram){
-        if(item.value) {
-          alert('빈 칸을 모두 작성해주세요.')
-        }
+      if(this.validate){
+        // 정보 보내기.
       }
       const navBarZIndex = document.querySelector('#navbox')
       const footerZIndex = document.querySelector('#footer')
       navBarZIndex.style.zIndex = 1000;
       footerZIndex.style.zIndex = 1000;
       this.$emit('close', false);
-    }
+    },
   }
 }
 </script>
