@@ -3,7 +3,7 @@
       <!-- 헤더 공백 -->
       <div style="height:150px; width:100px;"></div>
       <!-- 정렬메뉴바 -->
-      <div class="text-xs-right ">
+      <div class="text-xs-right">
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -25,6 +25,13 @@
           </v-list>
         </v-menu>
       </div>
+
+      <v-flex xs3 sm3 d-flex v-if="!error">
+        <v-select
+          :items="sortTypes"
+          solo
+        ></v-select>
+      </v-flex>
       <!-- 항공권 리스트 -->
       <div v-if="!error">
         <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
@@ -73,6 +80,8 @@ export default {
     },
     data: function() {
         return {
+          i: 0,
+          count: 0,
           flights: [],
           sortTypes: [
             '최저가순',
@@ -91,21 +100,23 @@ export default {
     },
     mounted() {
         // window.addEventListener('load', this.getFlights)
-        this.getFlights(0, 0);
+        this.getFlights(0, 0, 0)
         // this.isLists();
         this.$nextTick(() => {
           this.getFlights(1, 0);
       });
     },
     methods: {
-        getFlights: function(moreflag, optionTypeIndex){
-            console.log("실행")
-            console.log(this.$route.params)
-            console.log(this.flights)
-            // 처음엔 10개만 불러오고 두번 째에 900개 더 불러옴
-            // if (this.error) {
-            //   return;
+        getFlights: function(moreflag, optionTypeIndex, s =  0){
+
+            // // 세 번의 추가요청에도 결과 없을 시 추가리스트를 불러올 필요가 없음
+            // if (this.error == true) {
+            //   return
             // }
+            console.log("실행")
+            // console.log(this.$route.params)
+            // console.log(this.flights)
+            // 처음엔 10개만 불러오고 두번 째에 900개 더 불러옴
             if (moreflag == 1) {
               this.pageIndex = 0
               this.pageSize = 1000
@@ -118,17 +129,18 @@ export default {
                             'country': 'KW',
                             'currency': 'USD',
                             'locale': 'en-US',
-                            // 'originPlace': 'IPC-sky',
+                            'originPlace': 'IPC-sky',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            // 'outboundDate': '2019-07-23',
-                            // 'inboundDate': '2019-07-23',
-                            // 'adults': '1',
-                            'originPlace': this.$route.params.departure + '-sky',
-                            'destinationPlace': this.$route.params.destination + '-sky',
-                            'outboundDate': this.$route.params.leavingDate,
-                            'inboundDate': this.$route.params.comingDate,
-                            'adults': this.$route.params.adults
+                            'destinationPlace': 'HND-sky',
+                            'outboundDate': '2019-07-23',
+                            'inboundDate': '2019-07-28',
+                            'adults': '1',
+                            // 'originPlace': this.$route.params.departure + '-sky',
+                            // 'destinationPlace': this.$route.params.destination + '-sky',
+                            // 'outboundDate': this.$route.params.leavingDate,
+                            // 'inboundDate': this.$route.params.comingDate,
+                            // 'adults': this.$route.params.adults
                         }
             const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
             let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
@@ -167,20 +179,10 @@ export default {
                         }
                     })
                     .then( res => {
-                      //console.log("요기")
-                       // console.log(res.data)
                       console.log(res)
-                      //console.log(this.error)
                       // 리스트가 존재하지 않으면 false 리턴
                       let value = res.data.Itineraries
-                      console.log(value)
-                      console.log(typeof value)
-                      if (value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length )) {
-                      // if (res.data.Itineraries.length == 0) {
-                        console.log("맞니?")
-                        return false;
-                      }
-                      // console.log("지나간다~")
+
                       // 출발, 도착 공항이름
                       let Originflag = false
                       let Destinationflag = false
@@ -278,9 +280,22 @@ export default {
                         this.flights.push(flight)
                       }
                       console.log(this.flights)
-                    })
+                      return s
+
                 })
-                return true
+                .then( (s) => {
+                  // console.log(this.flights.length)
+                  if (s == 2) {
+                    this.error = true
+                    return
+                  }
+                  if (this.flights.length == 0 && moreflag == 0) {
+                    return this.getFlights(0, 0, s+1)
+                  } else {
+                    return
+                  }
+                })
+            })
         },
         // 시간 변환 함수
         timeTransfer: function (time) {
@@ -326,18 +341,6 @@ export default {
         },
         loadMoreFlightList: function () {
           this.limits += 10
-        },
-        isLists: function () {
-          for (let i=0; i<3; i++) {
-            console.log(i)
-            console.log(this.getFlights(0))
-            if (this.getFlights(0)) {
-              // console.log("나간다")
-              return;
-            }
-          }
-          // this.error = true;
-          return;
         },
         getFlightsbyOptional: function (flag, optionType) {
           this.flights = []
