@@ -357,6 +357,12 @@ input {
     border-top-right-radius: 5px;
 }
 
+.country-name.is-active,
+.country-name:hover {
+    background: rgba(47, 220, 62, 1);
+    color: white;
+}
+
 .country-name:hover {
     cursor: pointer;
     background: rgb(211,211,211);

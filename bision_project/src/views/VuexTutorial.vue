@@ -1,6 +1,7 @@
 <template>
     <div class="VuexTutorial" style="margin-top: 200px;">
         <h1>Welcome to Vuex</h1>
+        test: {{getIsHeaderOpen}}
         <p class="counter-from-store">Store에서 가져온 state값: {{getCounter}}</p>
         <p class="counter-from-store">getters로 가져온 state값: {{getCountWithFriend}}</p>
         <button class="mutation-from-store" @click="getMutationFunc">+</button>
@@ -23,7 +24,8 @@ export default {
         // state값을 그대로 갖고올 경우
         ...mapState({
             getCounter: state => state.Counter.counter,
-            getMessage: state => state.Alerter.message
+            getMessage: state => state.Alerter.message,
+            getIsHeaderOpen : state => state.Header.isHeaderOpen
             }),
 
         // state값에 어떠한 연산을 해서 가져오고 싶을 경우

@@ -2,55 +2,79 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height:150px; width:100px;"></div>
-      <!-- 정렬메뉴바 -->
-      <div class="text-xs-right ">
-        <v-menu offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              color="primary"
-              dark
-              v-on="on"
-            >
-              정렬 기준
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-tile
-              v-for="(sortType, index) in sortTypes"
-              :key="index"
-              @click="getFlightsbyOptional(1, index)"
-            >
-              <v-list-tile-title>{{ sortType }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-      </div>
-      <!-- 항공권 리스트 -->
-      <div v-if="!error">
-        <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
-          <Flight class="ma-3"
-              :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
-              :CurrencySymbol="flights[i - 1].CurrencySymbol"
-              :InDepartureTime="flights[i - 1].InDepartureTime"
-              :InArrivalTime="flights[i - 1].InArrivalTime"
-              :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
-              :InDuration="flights[i - 1].InDuration"
-              :InDay="flights[i - 1].InDay"
-              :OutDepartureTime="flights[i - 1].OutDepartureTime"
-              :OutArrivalTime="flights[i - 1].OutArrivalTime"
-              :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
-              :OutDuration="flights[i - 1].OutDuration"
-              :OutDay="flights[i - 1].OutDay"
-              :Price="flights[i - 1].Price"
-              :DeeplinkUrl="flights[i - 1].DeeplinkUrl"
-              :OriginAirportCode="flights[i - 1].OriginAirportCode"
-              :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
-          ></Flight>
-        </v-layout>
-        <div style="display: flex; justify-content: center;">
-            <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+
+      <!-- <v-flex xs2 d-flex v-if="!error">
+        <v-select
+          :items="sortTypes"
+          solo
+          @change="changedValue"
+          label="정렬기준"
+        ></v-select>
+      </v-flex> -->
+      <div class="wrapper252">
+        <v-container>
+          <v-container fluid>
+            <p>{{ selected }}</p>
+            <v-checkbox v-model="selected" label="직항" value="0" @change="onCheckboxChange"></v-checkbox>
+            <v-checkbox v-model="selected" label="1회 경유" value="1" @change="onCheckboxChange"></v-checkbox>
+            <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="onCheckboxChange"></v-checkbox>
+          </v-container>
+        </v-container>
+        <!-- 항공권 리스트 -->
+        <div v-if="!error">
+          <!-- 정렬메뉴바 -->
+          <div class="text-xs-right">
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  color="primary"
+                  dark
+                  v-on="on"
+                >
+                  정렬 기준
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-tile
+                  v-for="(sortType, index) in sortTypes"
+                  :key="index"
+                  @click="getFlightsbyOptional(1, index)"
+                >
+                  <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </div>
+          <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
+            <Flight class="ma-3"
+                :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
+                :CurrencySymbol="flights[i - 1].CurrencySymbol"
+                :InDepartureTime="flights[i - 1].InDepartureTime"
+                :InArrivalTime="flights[i - 1].InArrivalTime"
+                :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
+                :InDuration="flights[i - 1].InDuration"
+                :InDay="flights[i - 1].InDay"
+                :OutDepartureTime="flights[i - 1].OutDepartureTime"
+                :OutArrivalTime="flights[i - 1].OutArrivalTime"
+                :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
+                :OutDuration="flights[i - 1].OutDuration"
+                :OutDay="flights[i - 1].OutDay"
+                :Price="flights[i - 1].Price"
+                :DeeplinkUrl="flights[i - 1].DeeplinkUrl"
+                :OriginAirportCode="flights[i - 1].OriginAirportCode"
+                :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
+            ></Flight>
+          </v-layout>
+
+        </div>
+        <div class="">
+
         </div>
       </div>
+      <div style="display: flex; justify-content: center;">
+          <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+      </div>
+
       <v-alert v-if="error" :value="true" type="warning">결과가 존재하지 않습니다.</v-alert>
       <!-- 푸터 공백 -->
       <div style="height:100px; width:100px;"></div>
@@ -66,13 +90,13 @@ export default {
       pageIndex: {type: Number, default: 0},
       pageSize: {type: Number, default: 10},
       error: {type: Boolean, default: false},
-      temp: {type: Boolean, default: false},
     },
     components: {
       Flight
     },
     data: function() {
         return {
+          selected: [],
           flights: [],
           sortTypes: [
             '최저가순',
@@ -91,22 +115,18 @@ export default {
     },
     mounted() {
         // window.addEventListener('load', this.getFlights)
-        this.getFlights(0, 0);
-        // this.isLists();
+        this.getFlights(0, 0, 0)
         this.$nextTick(() => {
           this.getFlights(1, 0);
       });
     },
     methods: {
-        getFlights: function(moreflag, optionTypeIndex){
+        getFlights: function(moreflag, optionTypeIndex, s =  0){
 
             console.log("실행")
-            console.log(this.$route.params)
-            console.log(this.flights)
+            // console.log(this.$route.params)
+            // console.log(this.flights)
             // 처음엔 10개만 불러오고 두번 째에 900개 더 불러옴
-            // if (this.error) {
-            //   return;
-            // }
             if (moreflag == 1) {
               this.pageIndex = 0
               this.pageSize = 1000
@@ -119,11 +139,12 @@ export default {
                             'country': 'KW',
                             'currency': 'USD',
                             'locale': 'en-US',
-                            // 'originPlace': 'IPC-sky',
-                            'originPlace': 'ICN-sky',
-                            'destinationPlace': 'HNL-sky',
-                            'outboundDate': '2019-08-18',
-                            'inboundDate': '2019-08-20',
+                            'originPlace': 'IPC-sky',
+                            // 'originPlace': 'ICN-sky',
+                            // 'destinationPlace': 'HNL-sky',
+                            'destinationPlace': 'HND-sky',
+                            'outboundDate': '2019-07-23',
+                            'inboundDate': '2019-07-28',
                             'adults': '1',
                             // 'originPlace': this.$route.params.departure + '-sky',
                             // 'destinationPlace': this.$route.params.destination + '-sky',
@@ -168,19 +189,9 @@ export default {
                         }
                     })
                     .then( res => {
-                      //console.log("요기")
-                       // console.log(res.data)
                       console.log(res)
-                      //console.log(this.error)
-
                       // 리스트가 존재하지 않으면 false 리턴
-                      // let value = res.data.Itineraries
-                      // if (value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length )) {
-                      // // if (res.data.Itineraries.length == 0) {
-                      //   console.log("맞니?")
-                      //   return false;
-                      // }
-                      // console.log("지나간다~")
+                      let value = res.data.Itineraries
 
                       // 출발, 도착 공항이름
                       let Originflag = false
@@ -207,8 +218,7 @@ export default {
                       let OutboundLegId, InboundLegId, AgentsCode, Price, DeeplinkUrl
                       for (let j=0; j<res.data.Itineraries.length; j++) {
                         if (moreflag && j< 10)
-                          continue;
-
+                          continue;                        
                         Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
                         DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
@@ -280,10 +290,20 @@ export default {
                         this.flights.push(flight)
                       }
                       console.log(this.flights)
-                    })
                 })
-                return true
-
+                .then( () => {
+                  // console.log(this.flights.length)
+                  if (s == 2) {
+                    this.error = true
+                    return
+                  }
+                  if (this.flights.length == 0 && moreflag == 0) {
+                    return this.getFlights(0, 0, s+1)
+                  } else {
+                    return
+                  }
+                })
+            })
         },
         // 시간 변환 함수
         timeTransfer: function (time) {
@@ -330,23 +350,24 @@ export default {
         loadMoreFlightList: function () {
           this.limits += 10
         },
-        // isLists: function () {
-        //   for (let i=0; i<3; i++) {
-        //     console.log(i)
-        //     console.log(this.getFlights(0))
-        //     if (this.getFlights(0)) {
-        //       // console.log("나간다")
-        //       return;
-        //     }
-        //   }
-        //   // this.error = true;
-        //   return;
-        // }
         getFlightsbyOptional: function (flag, optionType) {
           this.flights = []
           this.limits = 10
           this.getFlights(flag, optionType);
+        },
+        changedValue: function (value) {
+          this.flights = []
+          this.getFlights(1, this.sortTypes.indexOf(value), 0)
+        },
+        onCheckboxChange : function () {
+          console.log(this.selected)
         }
     },
 }
 </script>
+<style>
+  .wrapper252 {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+  }
+</style>
