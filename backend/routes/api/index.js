@@ -8,6 +8,8 @@ const airport = require('./airport')
 
 const guide =require('./guide')
 const guideservice = require('./guideservice')
+const review = require('./review')
+const tag=require('./tag')
 
 // SuperUser
 router.use('/superauth', superAuth)
@@ -30,6 +32,17 @@ router.use('/createGuideService',guideservice)
 router.use('/deleteGuideService',guideservice)
 router.use('/updateGuideService',guideservice)
 router.use('/findGSByGuideIdTitle',guideservice)
+
+
+router.use('/findReview',guideservice)
+router.use('/createReview',review)
+router.use('/deleteReview',review)
+
+router.use('/createTag',tag)
+router.use('/deleteTag',tag)
+router.use('/findGSByTag',tag)
+router.use('/deleteTag',tag)
+
 
 router.use('/airport', airport)
 
