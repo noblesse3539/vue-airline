@@ -96,6 +96,41 @@
                 <v-textarea label="상품 요약*" auto-grow solo v-model="tourProgram.desc" color="blue"></v-textarea>
               </v-flex>
 
+              <!-- Tags -->
+              <v-flex xs12>
+                <v-combobox v-model="tourProgram.tags" :filter="filter" :hide-no-data="!search" :items="items"
+                            :search-input.sync="search"  hide-selected label="Search for an option"
+                            multiple small-chips solo >
+                  <template v-slot:no-data>
+                    <v-list-tile>
+                      <span class="subheading">Create</span>
+                      <v-chip :color="`green lighten-3`" label>{{ search }}</v-chip>
+                    </v-list-tile>
+                  </template>
+                  <template v-slot:selection="{ item, parent, selected }">
+                    <v-chip v-if="item === Object(item)" :color="`green lighten-3`" :selected="selected" label>
+                      <span class="pr-2">{{ item.text }}</span>
+                      <v-icon small @click="parent.selectItem(item)">close</v-icon>
+                    </v-chip>
+                  </template>
+                  <template v-slot:item="{ index, item }">
+                    <v-list-tile-content>
+                      <v-text-field v-if="editing === item" v-model="editing.text" autofocus flat
+                        background-color="transparent" hide-details solo @keyup.enter="edit(index, item)"></v-text-field>
+                      <v-chip v-else :color="`green lighten-3`" dark label>
+                        {{ item.text }}
+                      </v-chip>
+                    </v-list-tile-content>
+                    <v-spacer></v-spacer>
+                    <v-list-tile-action @click.stop>
+                      <v-btn icon @click.stop.prevent="edit(index, item)">
+                        <v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </template>
+                </v-combobox>
+              </v-flex>
+
               <!-- 상세 정보 Editor -->
               <v-flex xs12>
                 <h2>상세 정보 입력</h2>
@@ -143,6 +178,29 @@ export default {
   },
   data (){
     return{
+      activator: null,
+      attach: null,
+      editing: null,
+      index: -1,
+      items: [
+        { header: '선택하거나 추가해주세요.' },
+        {
+          text: '액티비티',
+        },
+        {
+          text: '공연관람',
+        },
+        {
+          text: '쇼핑',
+        },
+        {
+          text: '문화체험',
+        }
+      ],
+      menu: false,
+      x: 0,
+      search: null,
+      y: 0,
       checkText:'',
       check : false,
       validate: false,
@@ -166,12 +224,49 @@ export default {
         minTrav:'',
         maxTrav: '',
         desc:'',
-        // tags:[],
+        tags: [{ text:'시티투어' }],
         detail:''
       }
     }
   },
+  watch: {
+   model (val, prev) {
+     if (val.length === prev.length) return
+
+     this.tourProgram.tags = val.map(v => {
+       if (typeof v === 'string') {
+         v = {
+           text: v,
+         }
+         this.items.push(v)
+        }
+        return v
+      })
+    }
+  },
   methods : {
+    edit (index, item) {
+      if (!this.editing) {
+        this.editing = item
+        this.index = index
+      } else {
+        this.editing = null
+        this.index = -1
+      }
+    },
+    filter (item, queryText, itemText) {
+      if (item.header) return false
+
+      const hasValue = val => val != null ? val : ''
+
+      const text = hasValue(itemText)
+      const query = hasValue(queryText)
+
+      return text.toString()
+        .toLowerCase()
+        .indexOf(query.toString().toLowerCase()) > -1
+
+    },
     getMain(value) {
       if(value){
         this.tourProgram.mainImg = value
@@ -207,7 +302,7 @@ export default {
     checkSave(){
       console.log(this.tourProgram)
       for(var item in this.tourProgram){
-        if(!this.tourProgram[item]) {
+        if(item != "tags" && !this.tourProgram[item]) {
           console.log(this.tourProgram[item])
           return alert('빈 칸을 모두 작성해주세요.')
         }
@@ -218,7 +313,7 @@ export default {
     },
     checkClose(){
       for(var item in this.tourProgram){
-        if(this.tourProgram[item]) {
+        if(item != "tags" && this.tourProgram[item]) {
           this.check=true
           this.checkText="이 페이지를 나가시겠습니까?<br>변경사항이 저장되지 않을 수 있습니다."
           return true
