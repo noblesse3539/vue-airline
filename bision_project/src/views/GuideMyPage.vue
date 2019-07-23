@@ -61,7 +61,7 @@
     <v-sheet color="white">
       <v-tabs  color="white">
         <v-tab key="Now" > Now </v-tab>
-        <v-tab key="Portfolio"> Portfolio </v-tab>
+        <v-tab key="Portfolio"> 지난 여행 상품 </v-tab>
         <v-tab-item key="Now">
           <v-flex xs12>
             <v-card flat>
@@ -97,7 +97,7 @@
 
         <!-- Portfolio tab item -->
         <v-tab-item key="Portfolio">
-          <v-btn  @click="showPW" color="white">포트폴리오 작성</v-btn>
+          <v-btn  @click="showPW" color="white">여행 상품 등록</v-btn>
           <PortfolioWrite v-if="isPWVisible" title="지난 기록 작성" @close="closePW"></PortfolioWrite>
 
           <!-- portfolio list -->

@@ -1,44 +1,13 @@
 const Guide = require('../../../models/guide')
 
 exports.createGuide = (req,res) =>{
-  const {
-      user,
-      nation_kor,
-      nation_eng,
-      city_kor,
-      city_eng,
-      language_kor,
-      language_eng,
-      starRating,
-      starRatingList
-  } = req.body
-  let newGuideService=null
+  console.log(req.body);
+  var guide=new Guide(req.body);
 
-  const repond=()=>{
-    res.json({
-      message:"create Guide Account OK"
-    })
-  }
-
-  const onError = (error) => {
-      res.status(403).json({
-          message: error.message
-      })
-  }
-
-  Guide.create(
-    user,
-    nation_kor,
-    nation_eng,
-    city_kor,
-    city_eng,
-    language_kor,
-    language_eng,
-    starRating,
-    starRatingList
-  )
-  .then(repond)
-  .catch(onError)
+  guide.save(err => {
+    if (err) return res.status(500).send(err);
+    return res.status(200).send(guide);
+  })
 }
 
 exports.deleteByUserObId = (req,res) => {
@@ -61,32 +30,20 @@ exports.deleteByUserObId = (req,res) => {
 }
 
 exports.updateByUserObId = (req,res) => {
-    const {user}=req.params
-    const {
-      nation_kor,
-      nation_eng,
-      city_kor,
-      city_eng,
-      language_kor,
-      language_eng
-    }=req.body
-
-    const repond=()=>{
-      res.json({
-        message:"update Guide Account OK"
-      })
-    }
-
-    const onError = (error) => {
-        res.status(403).json({
-            message: error.message
-        })
-    }
-
-    Guide.updateByUserObId(user,nation_kor,nation_eng,city_kor,city_eng,language_kor,language_eng)
-    .then(repond)
-    .catch(onError)
+  Guide.update=(_id)=>{(
+        {_id: _id},
+        { $set: req.body },
+        (err, output) => {
+            if(err) res.status(500).json({ error: 'database failure' })
+            if(!output.n) return res.status(404).json({ error: 'user not found'})
+            res.json({ message: 'user updated'})
+        }
+    )
   }
+
+  Guide.findByUserObId(req.params)
+  .then(Guide.update(res.data._id))
+}
 
 exports.findByUserObId = (req,res) => {
   const {user}=req.params

@@ -7,31 +7,13 @@ const Guide = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User'},
     nation_eng:String,
     nation_kor:String,
-    city_eng:[String],
-    city_kor:[String],
+    city_eng:String,
+    city_kor:String,
     language_eng:[String],
     language_kor:[String],
     starRating:Number,
     starRatingList:[{userId:String,starRating:Number}],
-    admin: { type: Boolean, default: false }
 })
-
-Guide.statics.create = function( user, nation_kor, nation_eng, city_kor, city_eng, language_kor, language_eng, starRating, starRatingList) {
-    const guide = new this({
-        user,
-        nation_kor,
-        nation_eng,
-        city_kor,
-        city_eng,
-        language_kor,
-        language_eng,
-        starRating,
-        starRatingList
-    })
-
-    // return the Promise
-    return guide.save()
-}
 
 Guide.statics.deleteByUserObId = function(user){
   return this.findOneAndRemove({

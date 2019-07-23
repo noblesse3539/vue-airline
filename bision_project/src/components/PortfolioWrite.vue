@@ -15,6 +15,12 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
+              <v-flex mt-3 xs12>
+                <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
+                v-model="planTitle" label="제목을 입력해주세요." solo></v-text-field>
+                <!-- <ckeditor :editor="titleEditor" v-model="titleData" :config="titleConfig"></ckeditor> -->
+              </v-flex>
+
               <h2>메인 이미지 선택</h2>
               <v-flex xs12 d-flex>
                 <UploadImg :imgUrl="getImgUrl('main.jpg')" :isMain="true"></UploadImg>
@@ -93,7 +99,7 @@
                 <h2>상세 정보 입력</h2>
               </v-flex>
               <v-flex>
-                <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+                <ckeditor id="edit" :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
               </v-flex>
             </v-layout>
           </v-container>
@@ -104,9 +110,11 @@
 
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import InlineEditor from '@ckeditor/ckeditor5-build-inline'
 import UploadImg from '@/components/UploadImg'
 import UploadImgList from '@/components/UploadImgList'
+// import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 // import Vue from 'vue'
 // import vuenationRegionSelect from 'vue-nation-region-select'
 // Vue.use(vuenationRegionSelect)
@@ -119,16 +127,25 @@ export default {
   },
   components:{
     UploadImg,
-    UploadImgList
+    UploadImgList,
   },
   data (){
     return{
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
+
+        ckfinder: {
+           options: {
+               resourceType: 'Images'
+           },
+           // Authorization: "Client-ID 6def70bd30a2e6a",
+           uploadUrl:"https://api.imgur.com/3/image"
+            // uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json'
           // The configuration of the editor.
+        }
       },
-      MDinput:'## 상세 여행 플랜을 입력해주세요.',
+      planTitle:'',
       Pnation:'',
       PCity:[],
       nation: ['대한민국'],
@@ -149,18 +166,10 @@ export default {
       }
     }
   },
-  computed: {
-    compiledMarkdown: function () {
-      return marked(this.MDinput, { sanitize: true })
-    }
-  },
   methods : {
     getImgUrl(img){
       return require('../assets/' + img)
     },
-    MDupdate: _.debounce(function (e) {
-      this.MDinput = e.target.value
-    }, 300),
     savePW(){
       this.$emit('close')
     },
@@ -179,35 +188,8 @@ export default {
 .imgUpdate:hover {
   cursor:pointer;
 }
-#MDeditor {
-  margin: 0;
-  min-height:300px;
-  height: 100%;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #333;
+.ck-editor__editable_inline {
+    min-height: 700px;
 }
 
-.MDTextArea, #MDeditor div {
-  display: inline-block;
-  width: 49%;
-  height: 100%;
-  vertical-align: top;
-  box-sizing: border-box;
-  padding: 0 20px;
-}
-
-.MDTextArea {
-  border: none;
-  border-right: 1px solid #ccc;
-  resize: none;
-  outline: none;
-  background-color: #f6f6f6;
-  font-size: 14px;
-  font-family: 'Monaco', courier, monospace;
-  padding: 20px;
-}
-
-code {
-  color: #f66;
-}
 </style>

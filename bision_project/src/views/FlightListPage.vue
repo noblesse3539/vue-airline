@@ -1,39 +1,72 @@
 <template>
     <div class="Api">
-      <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
-        <Flight class="ma-3"
-            :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
-            :InDepartureTime="flights[i - 1].InDepartureTime"
-            :InArrivalTime="flights[i - 1].InArrivalTime"
-            :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
-            :InDuration="flights[i - 1].InDuration"
-            :InDay="flights[i - 1].InDay"
-            :OutDepartureTime="flights[i - 1].OutDepartureTime"
-            :OutArrivalTime="flights[i - 1].OutArrivalTime"
-            :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
-            :OutDuration="flights[i - 1].OutDuration"
-            :OutDay="flights[i - 1].OutDay"
-            :Price="flights[i - 1].Price"
-            :DeeplinkUrl="flights[i - 1].DeeplinkUrl"
-            :OriginAirportCode="flights[i - 1].OriginAirportCode"
-            :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
-        ></Flight>
-      </v-layout>
-      <div style="height:100px; width:100px;">
-
+      <!-- 헤더 공백 -->
+      <div style="height:150px; width:100px;"></div>
+      <!-- 정렬메뉴바 -->
+      <div class="text-xs-right ">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              color="primary"
+              dark
+              v-on="on"
+            >
+              정렬 기준
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-tile
+              v-for="(sortType, index) in sortTypes"
+              :key="index"
+              @click="getFlightsbyOptional(1, index)"
+            >
+              <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </div>
+      <!-- 항공권 리스트 -->
+      <div v-if="!error">
+        <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
+          <Flight class="ma-3"
+              :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
+              :CurrencySymbol="flights[i - 1].CurrencySymbol"
+              :InDepartureTime="flights[i - 1].InDepartureTime"
+              :InArrivalTime="flights[i - 1].InArrivalTime"
+              :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
+              :InDuration="flights[i - 1].InDuration"
+              :InDay="flights[i - 1].InDay"
+              :OutDepartureTime="flights[i - 1].OutDepartureTime"
+              :OutArrivalTime="flights[i - 1].OutArrivalTime"
+              :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
+              :OutDuration="flights[i - 1].OutDuration"
+              :OutDay="flights[i - 1].OutDay"
+              :Price="flights[i - 1].Price"
+              :DeeplinkUrl="flights[i - 1].DeeplinkUrl"
+              :OriginAirportCode="flights[i - 1].OriginAirportCode"
+              :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
+          ></Flight>
+        </v-layout>
+        <div style="display: flex; justify-content: center;">
+            <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+        </div>
+      </div>
+      <v-alert v-if="error" :value="true" type="warning">결과가 존재하지 않습니다.</v-alert>
+      <!-- 푸터 공백 -->
+      <div style="height:100px; width:100px;"></div>
     </div>
 </template>
-
 <script>
 import qs from 'qs'
 import Flight from '../components/Flight'
-
 export default {
     name: 'FlightList',
     props: {
       limits: {type: Number, default: 10},
-      loadMore: {type: Boolean, default: true}
+      pageIndex: {type: Number, default: 0},
+      pageSize: {type: Number, default: 10},
+      error: {type: Boolean, default: false},
+      temp: {type: Boolean, default: false},
     },
     components: {
       Flight
@@ -41,27 +74,65 @@ export default {
     data: function() {
         return {
           flights: [],
+          sortTypes: [
+            '최저가순',
+            '최단여행시간순',
+            '출국: 출발시간',
+            '귀국: 출발시간',
+            '경유',
+          ],
+          optionType: [
+            {text: '&sortType=price&sortOrder=asc'},
+            {text: '&sortType=duration&sortOrder=asc'},
+            {text: '&sortType=outbounddeparttime&sortOrder=asc'},
+            {text: '&sortType=inbounddeparttime&sortOrder=asc'},
+          ]
         }
     },
     mounted() {
         // window.addEventListener('load', this.getFlights)
-        this.getFlights();
+        this.getFlights(0, 0);
+        // this.isLists();
+        this.$nextTick(() => {
+          this.getFlights(1, 0);
+      });
     },
     methods: {
-        getFlights: function(){
-            console.log("실행")
-            const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
-            const data  = {
-                            'country': 'KR',
-                            'currency': 'KRW',
-                            'locale': 'ko-KR',
-                            'originPlace': 'ICN-sky',
-                            'destinationPlace': 'NRT-sky',
-                            'outboundDate': '2019-07-17',
-                            'inboundDate': '2019-07-20',
-                            'adults': '1'
-                        }
+        getFlights: function(moreflag, optionTypeIndex){
 
+            console.log("실행")
+            console.log(this.$route.params)
+            console.log(this.flights)
+            // 처음엔 10개만 불러오고 두번 째에 900개 더 불러옴
+            // if (this.error) {
+            //   return;
+            // }
+            if (moreflag == 1) {
+              this.pageIndex = 0
+              this.pageSize = 1000
+            } else if (moreflag == 0) {
+              this.pageIndex = 0
+              this.pageSize = 10
+            }
+            const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
+            let data  = {
+                            'country': 'KW',
+                            'currency': 'USD',
+                            'locale': 'en-US',
+                            // 'originPlace': 'IPC-sky',
+                            'originPlace': 'ICN-sky',
+                            'destinationPlace': 'HNL-sky',
+                            'outboundDate': '2019-08-18',
+                            'inboundDate': '2019-08-20',
+                            'adults': '1',
+                            // 'originPlace': this.$route.params.departure + '-sky',
+                            // 'destinationPlace': this.$route.params.destination + '-sky',
+                            // 'outboundDate': this.$route.params.leavingDate,
+                            // 'inboundDate': this.$route.params.comingDate,
+                            // 'adults': this.$route.params.adults
+                        }
+            const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
+            let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
             this.$http({
                 method: 'POST',
                 url   : baseUrl,
@@ -86,10 +157,10 @@ export default {
                     return sessionKey
                 })
                 .then( sessionKey => {
-                    console.log(sessionKey)
+                    //console.log(sessionKey)
                     this.$http({
                         method: 'GET',
-                        url   : 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/' + sessionKey,
+                        url   : optionUrl + sessionKey + option,
                         headers: {
                         'X-RapidAPI-Host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
                         'X-RapidAPI-Key' : '25703e8168mshcbae189ae6af368p1fcb8djsnead03bdc43f6',
@@ -97,7 +168,19 @@ export default {
                         }
                     })
                     .then( res => {
+                      //console.log("요기")
+                       // console.log(res.data)
                       console.log(res)
+                      //console.log(this.error)
+
+                      // 리스트가 존재하지 않으면 false 리턴
+                      // let value = res.data.Itineraries
+                      // if (value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length )) {
+                      // // if (res.data.Itineraries.length == 0) {
+                      //   console.log("맞니?")
+                      //   return false;
+                      // }
+                      // console.log("지나간다~")
 
                       // 출발, 도착 공항이름
                       let Originflag = false
@@ -116,22 +199,26 @@ export default {
                           break;
                         }
                       }
-
+                      // 통화 심벌
+                      let CurrencySymbol
+                      CurrencySymbol = res.data.Currencies[0].Symbol
+                      //console.log(CurrencySymbol)
                       // 가격, 에이전트연결 url
                       let OutboundLegId, InboundLegId, AgentsCode, Price, DeeplinkUrl
                       for (let j=0; j<res.data.Itineraries.length; j++) {
+                        if (moreflag && j< 10)
+                          continue;
+
                         Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
                         DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
                         InboundLegId = res.data.Itineraries[j].InboundLegId
                         AgentsCode = res.data.Itineraries[j].PricingOptions[0].Agents[0]
-
-                        // 출발 시간, 도착시간 (왕복), 날짜 변화, 걸리는 시8
+                        // 출발 시간, 도착시간 (왕복), 날짜 변화, 걸리는 시간
                         let Inflag = false
                         let Outflag = false
                         let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay
                         let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
-
                         for (let k=0; k<res.data.Legs.length; k++) {
                           if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
                             OutDepartureTime = res.data.Legs[k].Departure
@@ -153,7 +240,6 @@ export default {
                             break;
                           }
                         }
-
                         // 에이전트이미지 url, 항공사이미지 url
                         let AgentsImageUrl, flight, InCarrierImageUrl, OutCarrierImageUrl
                         for (let k=0; k<res.data.Agents.length; k++) {
@@ -169,15 +255,14 @@ export default {
                             OutCarrierImageUrl = res.data.Carriers[k].ImageUrl
                           }
                         }
-
                         // 시간 변환
                         OutDepartureTime = this.timeTransfer(OutDepartureTime)
                         OutArrivalTime = this.timeTransfer(OutArrivalTime)
                         InDepartureTime = this.timeTransfer(InDepartureTime)
                         InArrivalTime = this.timeTransfer(InArrivalTime)
-
                         flight = {'OriginAirportCode': OriginAirportCode,
                                   'DestinationAirportCode': DestinationAirportCode,
+                                  'CurrencySymbol': CurrencySymbol,
                                   'AgentsImageUrl': AgentsImageUrl,
                                   'InDepartureTime': InDepartureTime,
                                   'InArrivalTime': InArrivalTime,
@@ -193,11 +278,11 @@ export default {
                                   'InDuration': InDuration,
                                  }
                         this.flights.push(flight)
-
                       }
                       console.log(this.flights)
                     })
                 })
+                return true
 
         },
         // 시간 변환 함수
@@ -241,6 +326,26 @@ export default {
         },
         durationTransfer: function (duration) {
           return parseInt(parseInt(duration)/60) + "시간 " + parseInt(duration)%60 + "분"
+        },
+        loadMoreFlightList: function () {
+          this.limits += 10
+        },
+        // isLists: function () {
+        //   for (let i=0; i<3; i++) {
+        //     console.log(i)
+        //     console.log(this.getFlights(0))
+        //     if (this.getFlights(0)) {
+        //       // console.log("나간다")
+        //       return;
+        //     }
+        //   }
+        //   // this.error = true;
+        //   return;
+        // }
+        getFlightsbyOptional: function (flag, optionType) {
+          this.flights = []
+          this.limits = 10
+          this.getFlights(flag, optionType);
         }
     },
 }

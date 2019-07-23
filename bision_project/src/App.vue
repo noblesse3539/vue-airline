@@ -6,7 +6,7 @@
 				<router-view/>
       </v-app>
 		</v-content>
-    <Footer></Footer>
+    <Footer style="z-index: 2000 !important;"></Footer>
   </div>
 </template>
 

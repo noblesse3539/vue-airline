@@ -79,10 +79,12 @@ input[type=radio]:checked {
 
 .duration-start {
     width: 50% !important;
+    z-index: 2;
 }
 
 .duration-end {
     width: 50% !important;
+    z-index: 2;
 }
 
 .leavingDate:hover, .comingDate:hover {
@@ -164,7 +166,8 @@ input {
 }
 
 .dep-triangle-box {
-    display: none;
+    display: block;
+    z-index: 1000;
     width: 100%;
     height: 20px;
     opacity: 1.0;
@@ -197,7 +200,10 @@ input {
 }
 
 .dep-country-list {
-    display: none;
+    display: block;
+    position: absolute;
+    z-index: 1000;
+
     width: 500px;
     min-height: 50px;
     /* margin-top: px; */
@@ -237,6 +243,7 @@ input {
 
 .passengers {
     width: 100% !important;
+    z-index: 2;
 }
 
 .psg-triangle-box {
@@ -296,6 +303,12 @@ input {
 
 .noOfAdults {
     font-size: 1.25rem;
+    margin-bottom: 0;
+}
+
+.noOfInfants {
+    font-size: 1.25rem;
+    margin-bottom: 0;
 }
 
 .adultsCount {
@@ -304,7 +317,15 @@ input {
     margin-right: 10px;
 }
 
+.infantsCount {
+    font-size: 1.25rem;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 .confirm {
+    display: inline-block;
+    margin-top: 10px;
     padding: 8px;
     font-size: 0.84rem;
     color: grey;
@@ -349,4 +370,9 @@ input {
 .nation-name {
     margin-left: 40px;
     color: grey;
+}
+
+.decreaseAdults {
+    background: grey;
+    cursor: not-allowed;
 }

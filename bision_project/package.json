@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^12.3.1",
+    "@ckeditor/ckeditor5-build-inline": "^12.3.1",
+    "@ckeditor/ckeditor5-ckfinder": "^11.0.4",
     "@ckeditor/ckeditor5-vue": "^1.0.0-beta.2",
     "@google-cloud/storage": "^3.0.2",
     "@google-cloud/translate": "^4.1.1",
