@@ -19,8 +19,8 @@ const GuideService = new Schema({
   totalTrav:Number, // 추가 됨.
   desc:String,
   detail:String,
-  reviews:[{userId:String,starRating:Number,content:String}],
-  tags:[String] // 추가됨.
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }]
 })
 
 GuideService.statics.updateByTitle = function(guide,title,title,mainImg,nation,city,fromDate,toDate,duration,cost,minTrav,maxTrav,desc,detail,reviewList){

@@ -7,6 +7,8 @@ const User = new Schema({
     username: String,
     password: String,
     email: String,
+    profileImg:String, // 일단 모델에만 추가
+    registered:String, // 일단 모델에만 추가(회원가입날짜)
     firstName: String,
     lastName: String,
     age: Number,
