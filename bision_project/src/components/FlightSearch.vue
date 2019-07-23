@@ -16,15 +16,23 @@
                                     type="text"
                                     placeholder="국가, 도시 또는 공항" 
                                     class="left-end-input"
+                                    v-model="departureInput"
                                     @input="departureInput = $event.target.value"
                                     @keyup="getDepartureOutput"
+                                    @keydown.up="onArrowUp('departure')"
+                                    @keydown.down="onArrowDown('departure')"
+                                    @keydown.enter="onEnter('departure')"
                                 >
                                 <div class="searchListWrapper" v-show="isOpen">
                                     <div class="dep-triangle-box">
                                             <div class="country-triangle"></div>
                                     </div>
                                     <div class="dep-country-list">
-                                        <div v-for="(airport, id) in departureOutput.slice(0, 10)" :key="id" class="country-name">
+                                        <div v-for="(airport, id) in departureOutput.slice(0, 10)" 
+                                            :key="id" 
+                                            class="country-name"
+                                            :class="{ 'is-active' : id === departureArrowCounter }"
+                                        >
                                             <!-- 출발지 검색 리스트 -->
                                             <div
                                                 @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'departure')" 
@@ -47,22 +55,33 @@
                             <label> 도착지
                                 <input 
                                     type="text" 
+                                    v-model="destinationInput"
                                     placeholder="국가, 도시 또는 공항"
+                                    class="right-end-input"
                                     @input="destinationInput = $event.target.value"
                                     @keyup="getDestinationOutput"
+                                    @keydown.up="onArrowUp('destination')"
+                                    @keydown.down="onArrowDown('destination')"
+                                    @keydown.enter="onEnter('destination')"
                                 >
-                                <div class="dst-triangle-box">
-                                        <div class="country-triangle"></div>
-                                </div>
-                                <div class="dst-country-list">
-                                    <div v-for="(airport, id) in destinationOutput.slice(0, 10)" :key="id" class="country-name">
-                                        <!-- 도착지 검색 리스트 -->
-                                        <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'destination')" style="color: black; font-size: 3rem;">
-                                            <div class="airportList">
-                                                <div class="airport-name">
-                                                    <i class="fas fa-plane-departure"></i>
-                                                    {{airport.name_kor}} {{airport.code}}<br>
-                                                    <span class="nation-name">{{airport.nation_kor}}</span>
+                                <div class="searchListWrapper-dst">
+                                    <div class="dst-triangle-box">
+                                            <div class="country-triangle"></div>
+                                    </div>
+                                    <div class="dst-country-list">
+                                        <div v-for="(airport, id) in destinationOutput.slice(0, 10)" 
+                                            :key="id" 
+                                            class="country-name"
+                                            :class="{ 'is-active' : id === destinationArrowCounter }"
+                                        >
+                                            <!-- 도착지 검색 리스트 -->
+                                            <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'destination')" style="color: black; font-size: 3rem;">
+                                                <div class="airportList">
+                                                    <div class="airport-name">
+                                                        <i class="fas fa-plane-departure"></i>
+                                                        {{airport.name_kor}} {{airport.code}}<br>
+                                                        <span class="nation-name">{{airport.nation_kor}}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,6 +188,10 @@ export default {
             departureOutput: [],
             destinationOutput: [],
 
+            // 출발지 및 도착지 검색 리스트에서 사용할 arrow key 관련 변수
+            departureArrowCounter: -1,
+            destinationArrowCounter: -1,
+
             // 항공권 검색에 사용할 6가지 데이터
             departure: '',
             destination: '',
@@ -178,8 +201,8 @@ export default {
             adults: 1,
             infants: 0,
 
-            todayDate: new Date(),
             // data picker 관련 데이터
+            todayDate: new Date(),
             reactive: true,
             datePickerFlag: {
                 '.leavingDate': false,
@@ -209,33 +232,13 @@ export default {
 
         // 검색창 바깥 부분 클릭 시 출발지 및 도착지 검색 모달 숨기기
         document.body.addEventListener("click",  this.hideSearchResult)
-        document.body.addEventListener("tap", this.hideSearchResult)
-        document.body.addEventListener("keydown", this.hideSearchResult)
+        document.body.addEventListener('keyup', this.showSearchResult)
+    },
+    destroyed() {
+        document.body.removeEventListener("click",  this.hideSearchResult)
     },
     methods: {
         
-        // Autocomplete를 위해 공항 정보 한번에 가져오기
-        // getAirportList: function() {
-        //     this.$http.get('api/airport/list')
-        //         .then( res => {
-        //             console.log(res)
-        //             return res.data.airports
-        //         })
-        //         .then ( res => {
-        //                 this.airportList = res.map( each => {
-        //                     return {name_kor : each.name_kor, 
-        //                             name_eng: each.name_eng,
-        //                             nation_kor: each.nation_kor,
-        //                             nation_eng: each.nation_eng,
-        //                             code: each.code,
-        //                             city_kor: each.city_kor,
-        //                             city_eng: each.city_eng
-        //                             }
-        //                 })
-                        
-        //         })
-        // },
-
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
             const params = {}
@@ -248,6 +251,18 @@ export default {
 
             this.$router.push({name: "FlightListPage", params: params})
 
+        },
+        showSearchResult : function(e) {
+            const leftInput = document.querySelector('.searchListWrapper')
+            const rightInput = document.querySelector('.searchListWrapper-dst')
+
+            console.log(e.target.classList[0])
+            // left-end-input
+            if (e.key !== 'Enter' && e.target.classList[0] === 'left-end-input') {
+                leftInput.style.display = "block"
+            } else if (e.key !== 'Enter' && e.target.classList[0] === 'right-end-input') {
+                rightInput.style.display = "block"
+            }
         },
         hideSearchResult : function(e) {
             
@@ -295,6 +310,51 @@ export default {
                 psgaAdultsPicker.style.display = "none"
 
             }
+        },
+
+        // future task) 
+        // 검색 결과물 중 상위 10개 항목만 보여주므로 인덱스가 11개 이상 넘어갔을 때 처리해줘야합니다.
+        onArrowDown(travelType) {
+
+            if (travelType == 'departure') {
+                if (this.departureArrowCounter < this.departureOutput.length) {
+                    this.departureArrowCounter += 1
+                }
+            } else {
+                if (this.destinationArrowCounter < this.destinationOutput.length) {
+                    this.destinationArrowCounter += 1
+                }
+            }
+        },
+        onArrowUp(travelType) {
+            if (travelType == 'departure') {
+                if (this.departureArrowCounter > 0) {
+                    this.departureArrowCounter --
+                }
+            } else {
+                if (this.destinationArrowCounter > 0) {
+                    this.destinationArrowCounter --
+                }
+            }
+        },
+        onEnter(travelType) { 
+            
+            
+            const leftInput = document.querySelector('.searchListWrapper')
+            const rightInput = document.querySelector('.searchListWrapper-dst')
+        
+            if (travelType == 'departure') {
+                this.saveUserChoiceAirport(this.departureOutput[this.departureArrowCounter].code, 
+                                           this.departureOutput[this.departureArrowCounter].name_kor, 
+                                           "departure")
+                leftInput.style.display = "none"
+            } else {
+                this.saveUserChoiceAirport(this.destinationOutput[this.destinationArrowCounter].code, 
+                                           this.destinationOutput[this.destinationArrowCounter].name_kor, 
+                                           "destination")
+                rightInput.style.display = "none"
+            }
+
         },
         openCalender: function(className, data, e) {
             
@@ -352,42 +412,9 @@ export default {
                 this.adults -= 1
             }
         },
-        // getDepartureOutput: function() {
-        //     const word = this.departureInput
-        //     this.$http.get('api/airport/search/'+ keyword)
-        //         .then( res => {
-        //             console.log(res)
-        //             return res.data.airports
-        //         })
-        //         .then ( res => {
-        //                 this.departureOutput = res.map( each => {
-        //                     return {name_kor : each.name_kor, 
-        //                             name_eng: each.name_eng,
-        //                             nation_kor: each.nation_kor,
-        //                             nation_eng: each.nation_eng,
-        //                             code: each.code }
-        //                 })
-        //         })
-        // },
-        // getDestinationOutput: function() {
-        //     const keyword = this.destinationInput
-        //     this.$http.get('api/airport/search/'+ keyword)
-        //         .then( res => {
-        //             console.log(res)
-        //             return res.data.airports
-        //         })
-        //         .then ( res => {
-        //                 this.destinationOutput = res.map( each => {
-        //                     return {name_kor : each.name_kor, 
-        //                             name_eng: each.name_eng,
-        //                             nation_kor: each.nation_kor,
-        //                             nation_eng: each.nation_eng,
-        //                             code: each.code }
-        //                 })
-        //         })
-        // },
         getDepartureOutput() {
             this.isOpen = true
+            
             this.DepartureAirportAutoCompleteSearch()
         },
         getDestinationOutput() {
@@ -417,7 +444,7 @@ export default {
                     return airport
                 }
             })
-            console.log(this.departureOutput)
+            // console.log(this.departureOutput)
         },
         DestinationAirportAutoCompleteSearch() {
             this.destinationOutput = this.airportList.filter( airport => {
@@ -431,7 +458,7 @@ export default {
                     return airport
                 }
             })
-             console.log(this.destinationOutput)
+            //  console.log(this.destinationOutput)
         },
         focusOnSubmit() {
 
@@ -439,24 +466,12 @@ export default {
     },
     // 공항 출발지 및 도착지 Autocomplete 방식으로 검색
     computed: {
-        // airportDepartureSearch() {
-        //     // return this.airportList.filter( airport => {
-        //     //     return airport.name_kor.includes(this.departureInput) ||
-        //     //             airport.nation_kor.includes(this.departureInput) ||
-        //     //             airport.code.includes(this.departureInput)
-        //     // })
-        //     // this.results = this.items.filter( item => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1)
-        //     this.departureOutput = this.airportList.filter( airport => {
-        //         airport.name_kor.toLowerCase().indexOf(this.departureInput.toLowerCase() > -1)
-        //     })
-        // },
-        airportDestinationSearch() {
-
-        },
+        
     },
     watch: {
         departureInput: function() {
             
+            const leftInput = document.querySelector('.searchListWrapper')
             const countryList = document.querySelector(".dep-country-list")
             const triangle    = document.querySelector(".dep-triangle-box")
             countryList.style.display = "block"

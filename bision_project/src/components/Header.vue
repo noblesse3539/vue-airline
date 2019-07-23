@@ -1,6 +1,6 @@
 <template>
-    <div id="navbox">
-        <div class="nav-left">
+    <div id="navbox" v-if="getIsHeaderOpen">
+        <div class="nav-left"><form action="" method="get"></form>
                 <router-link to="/" class="nav-left-title">
                     BisionTour
                 </router-link>
@@ -55,11 +55,26 @@
 import './Header.css'
 import './LoginModal.css'
 import LoginModal from './LoginModal'
+import {mapGetters, mapState} from 'vuex'
 
 export default {
     name: 'Header',
     components:{
       LoginModal
+    },
+    data () {
+        return {
+            drawer: null,
+            items : [
+                { title: '#' ,
+                    url: '/#'},
+                { title: '#' ,
+                    url: '/#'},
+                { title: '# in' ,
+                    url: '/#'},
+            ],
+            modal: false,
+        }
     },
     props: {},
     mounted() {
@@ -106,19 +121,10 @@ export default {
             this.modal = false
         },
     },
-    data () {
-        return {
-            drawer: null,
-            items : [
-                { title: '#' ,
-                    url: '/#'},
-                { title: '#' ,
-                    url: '/#'},
-                { title: '# in' ,
-                    url: '/#'},
-            ],
-            modal:false
-        }
-    }
+    computed: {
+        ...mapState({
+            getIsHeaderOpen : state => state.Header.isHeaderOpen
+        })
+    },
 }
 </script>
