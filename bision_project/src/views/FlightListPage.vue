@@ -99,7 +99,6 @@ export default {
     },
     methods: {
         getFlights: function(moreflag, optionTypeIndex){
-
             console.log("실행")
             console.log(this.$route.params)
             console.log(this.flights)
@@ -120,16 +119,16 @@ export default {
                             'currency': 'USD',
                             'locale': 'en-US',
                             // 'originPlace': 'IPC-sky',
-                            'originPlace': 'ICN-sky',
-                            'destinationPlace': 'HNL-sky',
-                            'outboundDate': '2019-08-18',
-                            'inboundDate': '2019-08-20',
-                            'adults': '1',
-                            // 'originPlace': this.$route.params.departure + '-sky',
-                            // 'destinationPlace': this.$route.params.destination + '-sky',
-                            // 'outboundDate': this.$route.params.leavingDate,
-                            // 'inboundDate': this.$route.params.comingDate,
-                            // 'adults': this.$route.params.adults
+                            // 'originPlace': 'ICN-sky',
+                            // 'destinationPlace': 'HNL-sky',
+                            // 'outboundDate': '2019-07-23',
+                            // 'inboundDate': '2019-07-23',
+                            // 'adults': '1',
+                            'originPlace': this.$route.params.departure + '-sky',
+                            'destinationPlace': this.$route.params.destination + '-sky',
+                            'outboundDate': this.$route.params.leavingDate,
+                            'inboundDate': this.$route.params.comingDate,
+                            'adults': this.$route.params.adults
                         }
             const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
             let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
@@ -172,16 +171,16 @@ export default {
                        // console.log(res.data)
                       console.log(res)
                       //console.log(this.error)
-
                       // 리스트가 존재하지 않으면 false 리턴
-                      // let value = res.data.Itineraries
-                      // if (value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length )) {
-                      // // if (res.data.Itineraries.length == 0) {
-                      //   console.log("맞니?")
-                      //   return false;
-                      // }
+                      let value = res.data.Itineraries
+                      console.log(value)
+                      console.log(typeof value)
+                      if (value == "" || value == null || value == undefined || ( value != null && typeof value == "object" && !Object.keys(value).length )) {
+                      // if (res.data.Itineraries.length == 0) {
+                        console.log("맞니?")
+                        return false;
+                      }
                       // console.log("지나간다~")
-
                       // 출발, 도착 공항이름
                       let Originflag = false
                       let Destinationflag = false
@@ -208,7 +207,6 @@ export default {
                       for (let j=0; j<res.data.Itineraries.length; j++) {
                         if (moreflag && j< 10)
                           continue;
-
                         Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
                         DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
@@ -283,7 +281,6 @@ export default {
                     })
                 })
                 return true
-
         },
         // 시간 변환 함수
         timeTransfer: function (time) {
@@ -330,18 +327,18 @@ export default {
         loadMoreFlightList: function () {
           this.limits += 10
         },
-        // isLists: function () {
-        //   for (let i=0; i<3; i++) {
-        //     console.log(i)
-        //     console.log(this.getFlights(0))
-        //     if (this.getFlights(0)) {
-        //       // console.log("나간다")
-        //       return;
-        //     }
-        //   }
-        //   // this.error = true;
-        //   return;
-        // }
+        isLists: function () {
+          for (let i=0; i<3; i++) {
+            console.log(i)
+            console.log(this.getFlights(0))
+            if (this.getFlights(0)) {
+              // console.log("나간다")
+              return;
+            }
+          }
+          // this.error = true;
+          return;
+        },
         getFlightsbyOptional: function (flag, optionType) {
           this.flights = []
           this.limits = 10
