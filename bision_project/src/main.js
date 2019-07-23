@@ -6,10 +6,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store/store'
 import axios from 'axios'
-import CKEditor from '@ckeditor/ckeditor5-vue'
+import Vue2Editor from "vue2-editor"
 
+Vue.use(Vue2Editor)
 Vue.use(Vuex)
-Vue.use( CKEditor );
 Vue.use(Vuetify, {
 	iconfont: 'fa',
 	icons: {
