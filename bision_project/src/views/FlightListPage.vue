@@ -218,21 +218,9 @@ export default {
                       let OutboundLegId, InboundLegId, AgentsCode, Price, DeeplinkUrl
                       for (let j=0; j<res.data.Itineraries.length; j++) {
                         if (moreflag && j< 10)
-                          continue;
-
-                        let option
-                        for (let k=0; k<res.data.Itineraries[j].PricingOptions.length; k++) {
-                          option = {'PricingOption': this.priceTransfer(res.data.Itineraries[j].PricingOptions[k].Price)
-                                    'DeeplinkUrl': res.data.Itineraries[j].PricingOptions[k].DeeplinkUrl
-
-                                    }
-                          PricingOptions.push(this.priceTransfer(res.data.Itineraries[j].PricingOptions[k].Price))
-                          DeeplinkUrls.push(res.data.Itineraries[j].PricingOptions[k].DeeplinkUrl)
-                          Options.push(option)
-                        }
-                        // PricingOptions = res.data.Itineraries[j].PricingOptions[0]
-                        // Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
-                        // DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
+                          continue;                        
+                        Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
+                        DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
                         InboundLegId = res.data.Itineraries[j].InboundLegId
                         AgentsCode = res.data.Itineraries[j].PricingOptions[0].Agents[0]
