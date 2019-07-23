@@ -311,6 +311,9 @@ export default {
 
             }
         },
+
+        // future task) 
+        // 검색 결과물 중 상위 10개 항목만 보여주므로 인덱스가 11개 이상 넘어갔을 때 처리해줘야합니다.
         onArrowDown(travelType) {
 
             if (travelType == 'departure') {
@@ -335,6 +338,7 @@ export default {
             }
         },
         onEnter(travelType) { 
+            
             
             const leftInput = document.querySelector('.searchListWrapper')
             const rightInput = document.querySelector('.searchListWrapper-dst')
