@@ -99,11 +99,11 @@
               <!-- Tags -->
               <v-flex xs12>
                 <v-combobox v-model="tourProgram.tags" :filter="filter" :hide-no-data="!search" :items="items"
-                            :search-input.sync="search"  hide-selected label="Search for an option"
+                            :search-input.sync="search"  hide-selected label="태그를 추가해주세요"
                             multiple small-chips solo >
                   <template v-slot:no-data>
                     <v-list-tile>
-                      <span class="subheading">Create</span>
+                      <span class="subheading">추가</span>
                       <v-chip :color="`green lighten-3`" label>{{ search }}</v-chip>
                     </v-list-tile>
                   </template>
@@ -230,7 +230,7 @@ export default {
     }
   },
   watch: {
-   model (val, prev) {
+   tags (val, prev) {
      if (val.length === prev.length) return
 
      this.tourProgram.tags = val.map(v => {
