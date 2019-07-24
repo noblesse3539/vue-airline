@@ -71,8 +71,7 @@ exports.mypage = (req, res) => {
     const {_id} = req.decoded
     User.findById(_id)
     .select('-password')
-    .populate('UsedGuideServices')
-    .populate('UsedGuides')
+    .populate({ path: 'UsedGuideServices', populate: {path: 'user'}, model: GuideService})
     .then( userInfo => {
         res.json({userInfo})
     })
@@ -86,8 +85,7 @@ exports.addUsedGuideServices = (req, res) => {
         if(err) res.status(404).json({err})
         if(user){
             GuideService.findOne({_id:req.params.guideServiceId},(err,guideservice)=>{
-                console.log(guideservice)
-                user.UsedGuideServices.push(req.params.guideServiceId)
+                user.UsedGuideServices.push(guideservice)
                 user.save()
                 res.json({message:'success save!!'})
             })
@@ -102,9 +100,9 @@ exports.removeUsedGuideServices = (req, res) => {
     User.findById(_id)
     .then( async (user) => {
         const deleted = await user.UsedGuideServices.filter( service => {
-            return service._id !== req.params.guideServiceId
+            return service._id != req.params.guideServiceId
         })
-        user.UsedGuideServices = deleted
+        user.UsedGuideServices = [...deleted]
         await user.save()
         res.json({'message': 'deleted!!'})
     })
