@@ -100,6 +100,7 @@
     mounted() {
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
+      this.getUserInfo()
     },
     beforeDestroy() {
       this.openHeader()
@@ -138,6 +139,8 @@
           prevEl: '.swiper-button-prev'
           },
         },
+        isImgModalOpen : false,
+        userInfo: {}, // username email profileImg registeredAt firstName lastName age gender languages intro UsedGuides UsedGuideServices
       }
     },
     methods: {
@@ -156,7 +159,7 @@
       openImgModal: function() {
         this.isImgModalOpen = true
       },
-      revisdeUserInfo: function() {
+      revisedUserInfo: function() {
         
       },
 
@@ -168,6 +171,20 @@
       closeUserInfoModifier: function() {
         this.isUserInfoOpen = true
       },
+      getUserInfo: function() {
+        const token= this.$getToken('BisionToken')
+        const config = {
+            'headers': {'x-access-token': token}
+        }
+        this.$http.get('/api/user/mypage', config)
+          .then( res => {
+            this.userInfo = res.data.userInfo
+          })
+          .catch( err => {
+            console.log(err)
+          })
+      },
+
     },
     computed: {
       ...mapGetters({
