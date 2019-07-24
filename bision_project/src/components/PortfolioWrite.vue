@@ -110,7 +110,7 @@
                     <v-text-field :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
                     <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund100"
-                    always-dirty color="red" track-color="grey" :rules="refund_rule1" ></v-slider>
+                    always-dirty color="red" track-color="grey"></v-slider>
                   </v-container>
                   <v-container>
                     <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
@@ -217,9 +217,9 @@ export default {
   },
   data (){
     return{
-      refund_rule1:[v => this.tourProgram.refund.refund50 < v  || '환불 기간을 확인해주세요.'],
-      refund_rule2:[v => (this.tourProgram.refund.refund30 < v && v < this.tourProgram.refund.refund100) || '환불 기간을 확인해주세요.'],
-      refund_rule3:[v => ( v && v < this.tourProgram.refund.refund50 ) || '환불 기간을 확인해주세요.'],
+      // refund_rule1:[v => this.tourProgram.refund.refund50 < v  || '환불 기간을 확인해주세요.'],
+      // refund_rule2:[v => (this.tourProgram.refund.refund30 < v && v < this.tourProgram.refund.refund100) || '환불 기간을 확인해주세요.'],
+      // refund_rule3:[v => ( v && v < this.tourProgram.refund.refund50 ) || '환불 기간을 확인해주세요.'],
       activator: null,
       attach: null,
       editing: null,
