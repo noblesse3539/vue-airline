@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="border-radius: 20px; background-color: white;">
+  <div class="container" style="border-radius: 20px; background-color: white; padding: 0px;">
     <div class="wrapper">
       <div>
         <div style="height: 50%">
@@ -12,10 +12,8 @@
             <div style="font-weight: bold; font-size: 15px;">
               <div class="center">
                 <div>
-                  <div>{{OutDepartureTime}}</div>
-                  <div sytle="display: flex; justify-content: center; padding: 10px;">
-                    <div>{{OriginAirportCode}}</div>
-                  </div>
+                  <span style="display: block; text-align: center;">{{OutDepartureTime}}</span>
+                  <span style="display: block; text-align: right;">{{OriginAirportCode}}</span>
                 </div>
               </div>
             </div>
@@ -23,18 +21,23 @@
             <div class="center">
               <div>
                 <!-- 소요시간 -->
-                <div class="container text-xs-center" style="width: 120px; padding-top: 0px; font-size: 13px;">
-                  {{OutDuration}}
+                <div style="display: flex; justify-content: center; width: 104px; font-size: 13px;">
+                  <span>{{OutDuration}}</span>
                 </div>
                 <!-- 비행기 슝 -->
-                <div class="center container" style=" display: grid; grid-template-columns: 80% 20%; padding: 0px;">
+                <div class="center container" style="display: grid; grid-template-columns: 80% 20%; padding: 0px;">
                   <hr class="animated-width"/>
                   <div style="padding-left: 5px;">
                     <i class="fas fa-plane"></i>
                   </div>
                 </div>
+                <div style="display: flex; justify-content: center">
+                  <span v-if="OutNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
+                  <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유</span>
+                </div>
               </div>
             </div>
+            <!-- 도착시간, 도착공항 -->
             <div style="font-weight: bold; font-size: 15px;">
               <div class="center">
                 <div>
@@ -64,10 +67,8 @@
             <div style="font-weight: bold; font-size: 15px;">
               <div class="center">
                 <div>
-                  <div>{{InDepartureTime}}</div>
-                  <div sytle="display: flex; justify-content: center; padding: 10px;">
-                    <div>{{DestinationAirportCode}}</div>
-                  </div>
+                  <span style="display: block; text-align: center;">{{InDepartureTime}}</span>
+                  <span style="display: block; text-align: right;">{{DestinationAirportCode}}</span>
                 </div>
               </div>
             </div>
@@ -75,7 +76,7 @@
             <div class="center">
               <div>
                 <!-- 소요시간 -->
-                <div class="container text-xs-center" style="width: 120px; padding-top: 0px; font-size: 13px;">
+                <div style="display: flex; justify-content: center; width: 104px; font-size: 13px;">
                   {{InDuration}}
                 </div>
                 <!-- 비행기 슝 -->
@@ -84,6 +85,10 @@
                   <div style="padding-left: 5px;">
                     <i class="fas fa-plane"></i>
                   </div>
+                </div>
+                <div style="display: flex; justify-content: center">
+                  <span v-if="InNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
+                  <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유</span>
                 </div>
               </div>
             </div>
@@ -109,12 +114,12 @@
 
       <div class="center">
         <div class="">
-          <div class="center">
+          <!-- <div class="center">
             <v-img :src="LowestAgentsImageUrl" width="100px"></v-img>
-          </div>
-          <div class="center" v-if="NumofOptions == 1">상품 1개</div>
-          <div class="center" v-else>총 {{NumofOptions}}건 중 최저가</div>
-          <div class="center container" style="font-weight: bold; font-size: 20px; padding: 10px;">
+          </div> -->
+          <div class="center" v-if="NumofOptions == 1" style="font-size: 13px;">상품 1개</div>
+          <div class="center" v-else style="font-size: 13px;">총 {{NumofOptions}}건 중 최저가</div>
+          <div class="center" style="font-weight: bold; font-size: 20px; padding-top: 0px;">
             {{CurrencySymbol}}&nbsp{{LowestPrice}}
           </div>
           <div class="center">
@@ -136,12 +141,14 @@ export default {
       InCarrierImageUrl: {type: String},
       InDuration: {type: String},
       InDay: {type: Boolean},
+      InNumofStop: {type: String},
       OutDepartureTime: {type: String},
       OutArrivalTime: {type: String},
       OutCarrierImageUrl: {type: String},
       OutDuration: {type: String},
       OutDay: {type: Boolean},
-      NumofOptions: {type: String},
+      OutNumofStop: {type: String},
+      NumofOptions: {type: Number},
       LowestPrice: {type: String},
       LowestDeeplinkUrl: {type: String},
       LowestAgentsImageUrl: {type: String},

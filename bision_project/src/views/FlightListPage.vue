@@ -2,7 +2,6 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height:150px; width:100px;"></div>
-
       <!-- <v-flex xs2 d-flex v-if="!error">
         <v-select
           :items="sortTypes"
@@ -49,26 +48,27 @@
             </div>
             <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 700px;">
               <Flight class="ma-3"
-                  :CurrencySymbol="flights[i - 1].CurrencySymbol"
-                  :InDepartureTime="flights[i - 1].InDepartureTime"
-                  :InArrivalTime="flights[i - 1].InArrivalTime"
-                  :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
-                  :InDuration="flights[i - 1].InDuration"
-                  :InDay="flights[i - 1].InDay"
-                  :OutDepartureTime="flights[i - 1].OutDepartureTime"
-                  :OutArrivalTime="flights[i - 1].OutArrivalTime"
-                  :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
-                  :OutDuration="flights[i - 1].OutDuration"
-                  :OutDay="flights[i - 1].OutDay"
-                  :NumofOptions="flights[i - 1].NumofOptions"
-                  :LowestPrice="flights[i - 1].LowestPrice"
-                  :LowestDeeplinkUrl="flights[i - 1].LowestDeeplinkUrl"
-                  :LowestAgentsImageUrl="flights[i - 1].LowestAgentsImageUrl"
-                  :OriginAirportCode="flights[i - 1].OriginAirportCode"
-                  :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
+                :CurrencySymbol="flights[i - 1].CurrencySymbol"
+                :InDepartureTime="flights[i - 1].InDepartureTime"
+                :InArrivalTime="flights[i - 1].InArrivalTime"
+                :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
+                :InDuration="flights[i - 1].InDuration"
+                :InDay="flights[i - 1].InDay"
+                :InNumofStop="flights[i - 1].InNumofStop"
+                :OutDepartureTime="flights[i - 1].OutDepartureTime"
+                :OutArrivalTime="flights[i - 1].OutArrivalTime"
+                :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
+                :OutDuration="flights[i - 1].OutDuration"
+                :OutDay="flights[i - 1].OutDay"
+                :OutNumofStop="flights[i - 1].OutNumofStop"
+                :NumofOptions="flights[i - 1].NumofOptions"
+                :LowestPrice="flights[i - 1].LowestPrice"
+                :LowestDeeplinkUrl="flights[i - 1].LowestDeeplinkUrl"
+                :LowestAgentsImageUrl="flights[i - 1].LowestAgentsImageUrl"
+                :OriginAirportCode="flights[i - 1].OriginAirportCode"
+                :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
               ></Flight>
             </v-layout>
-
           </div>
         </v-flex>
       </v-layout>
@@ -127,7 +127,7 @@ export default {
       });
     },
     methods: {
-        getFlights: function(moreflag, optionTypeIndex, s =  0){
+        getFlights: function(moreflag, optionTypeIndex, s =  0, checkbox = false){
 
             console.log("실행")
             // console.log(this.$route.params)
@@ -142,22 +142,22 @@ export default {
             }
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
-                            'country': 'KW',
+                            'country': 'US',
                             'currency': 'USD',
                             'locale': 'en-US',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            'originPlace': 'IPC-sky',
-                            'destinationPlace': 'HND-sky',
-                            'outboundDate': '2019-07-24',
-                            'adults': '1',
-                            // 'originPlace': this.$route.params.departure + '-sky',
-                            // 'destinationPlace': this.$route.params.destination + '-sky',
-                            // 'outboundDate': this.$route.params.leavingDate,
-                            // 'adults': this.$route.params.adults,
+                            // 'originPlace': 'ICN-sky',
+                            // 'destinationPlace': 'PEK-sky',
+                            // 'outboundDate': '2019-07-25',
+                            // 'adults': '1',
+                            'originPlace': this.$route.params.departure + '-sky',
+                            'destinationPlace': this.$route.params.destination + '-sky',
+                            'outboundDate': this.$route.params.leavingDate,
+                            'adults': this.$route.params.adults,
                         }
             let inboundDate = this.$route.params.comingDate
-            // let inboundDate = '2019-07-28'
+            // let inboundDate = '2019-07-30'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
             }
@@ -264,20 +264,23 @@ export default {
                         // 출발 시간, 도착시간 (왕복), 날짜 변화, 걸리는 시간
                         let Inflag = false
                         let Outflag = false
-                        let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay
+                        let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay, OutNumofStop
                         // let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
                         let InDepartureTime = ''
                         let InArrivalTime = ''
                         let InCarrierId = ''
                         let InDuration = ''
                         let InDay = ''
+                        let InNumofStop = ''
+                        let InStopCodes = []
                         for (let k=0; k<res.data.Legs.length; k++) {
                           if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
-                            OutDepartureTime = res.data.Legs[k].Departure
-                            OutArrivalTime = res.data.Legs[k].Arrival
+                            OutDepartureTime = this.timeTransfer(res.data.Legs[k].Departure)
+                            OutArrivalTime = this.timeTransfer(res.data.Legs[k].Arrival)
                             OutDay = this.dayCalculate(OutDepartureTime, OutArrivalTime)
                             OutCarrierId = res.data.Legs[k].Carriers
                             OutDuration = this.durationTransfer(res.data.Legs[k].Duration)
+                            OutNumofStop = res.data.Legs[k].Stops.length.toString()
                             Outflag = false
                           }
                           if (inboundDate != "" && Inflag == false && res.data.Legs[k].Id == InboundLegId) {
@@ -286,6 +289,8 @@ export default {
                             InDay = this.dayCalculate(InDepartureTime, InArrivalTime)
                             InCarrierId = res.data.Legs[k].Carriers
                             InDuration = this.durationTransfer(res.data.Legs[k].Duration)
+                            InNumofStop = res.data.Legs[k].Stops.length.toString()
+                            InStopCodes = res.data.Legs[k].Stops
                             Inflag = true
                           }
                           if (Inflag == true && Outflag == true) {
@@ -304,31 +309,70 @@ export default {
                             OutCarrierImageUrl = res.data.Carriers[k].ImageUrl
                           }
                         }
-                        // 시간 변환
-                        OutDepartureTime = this.timeTransfer(OutDepartureTime)
-                        OutArrivalTime = this.timeTransfer(OutArrivalTime)
-                        // InDepartureTime = this.timeTransfer(InDepartureTime)
-                        // InArrivalTime = this.timeTransfer(InArrivalTime)
-                        flight = {'OriginAirportCode': OriginAirportCode,
-                                  'DestinationAirportCode': DestinationAirportCode,
-                                  'CurrencySymbol': CurrencySymbol,
-/                                 'InDepartureTime': InDepartureTime,
-                                  'InArrivalTime': InArrivalTime,
-                                  'InCarrierImageUrl': InCarrierImageUrl,
-                                  'InDay': InDay,
-                                  'OutDepartureTime': OutDepartureTime,
-                                  'OutArrivalTime': OutArrivalTime,
-                                  'OutCarrierImageUrl': OutCarrierImageUrl,
-                                  'OutDay': OutDay,
-                                  'OutDuration': OutDuration,
-                                  'InDuration': InDuration,
-                                  'Options': Options,
-                                  'NumofOptions': NumofOptions,
-                                  'LowestPrice': LowestPrice,
-                                  'LowestDeeplinkUrl': LowestDeeplinkUrl,
-                                  'LowestAgentsImageUrl': LowestAgentsImageUrl,
-                                 }
-                        this.flights.push(flight)
+
+                        // 체크박스
+                        let a
+                        // console.log(typeof InNumofStop)
+                        // console.log(typeof this.selected[0])
+                        if (checkbox) {
+                          if ((InNumofStop in this.selected) || (OutNumofStop in this.selected) || ('2' in this.selected && Number(InNumofStop) > 1) || ('2' in this.selected && Number(OutNumofStop) > 1)) {
+                            console.log(this.selected)
+                            console.log(InNumofStop in this.selected)
+                            console.log(OutNumofStop in this.selected)
+                            console.log(OutNumofStop)
+                            console.log('2' in this.selected && Number(InNumofStop))
+                            console.log('2' in this.selected && Number(OutNumofStop) > 1)
+                            a = 1
+                          } else {
+                            flight = {'OriginAirportCode': OriginAirportCode,
+                                      'DestinationAirportCode': DestinationAirportCode,
+                                      'CurrencySymbol': CurrencySymbol,
+                                      'InDepartureTime': InDepartureTime,
+                                      'InArrivalTime': InArrivalTime,
+                                      'InCarrierImageUrl': InCarrierImageUrl,
+                                      'InDay': InDay,
+                                      'InDuration': InDuration,
+                                      'InNumofStop': InNumofStop,
+                                      'OutDepartureTime': OutDepartureTime,
+                                      'OutArrivalTime': OutArrivalTime,
+                                      'OutCarrierImageUrl': OutCarrierImageUrl,
+                                      'OutDay': OutDay,
+                                      'OutDuration': OutDuration,
+                                      'OutNumofStop': OutNumofStop,
+                                      'Options': Options,
+                                      'NumofOptions': NumofOptions,
+                                      'LowestPrice': LowestPrice,
+                                      'LowestDeeplinkUrl': LowestDeeplinkUrl,
+                                      'LowestAgentsImageUrl': LowestAgentsImageUrl,
+                                     }
+                            this.flights.push(flight)
+                          }
+                        } else {
+                          flight = {'OriginAirportCode': OriginAirportCode,
+                                    'DestinationAirportCode': DestinationAirportCode,
+                                    'CurrencySymbol': CurrencySymbol,
+                                    'InDepartureTime': InDepartureTime,
+                                    'InArrivalTime': InArrivalTime,
+                                    'InCarrierImageUrl': InCarrierImageUrl,
+                                    'InDay': InDay,
+                                    'InDuration': InDuration,
+                                    'InNumofStop': InNumofStop,
+                                    'OutDepartureTime': OutDepartureTime,
+                                    'OutArrivalTime': OutArrivalTime,
+                                    'OutCarrierImageUrl': OutCarrierImageUrl,
+                                    'OutDay': OutDay,
+                                    'OutDuration': OutDuration,
+                                    'OutNumofStop': OutNumofStop,
+                                    'Options': Options,
+                                    'NumofOptions': NumofOptions,
+                                    'LowestPrice': LowestPrice,
+                                    'LowestDeeplinkUrl': LowestDeeplinkUrl,
+                                    'LowestAgentsImageUrl': LowestAgentsImageUrl,
+                                   }
+                          this.flights.push(flight)
+                        }
+
+
                       }
                       console.log(this.flights)
                 })
@@ -402,7 +446,22 @@ export default {
         },
         onCheckboxChange : function () {
           console.log(this.selected)
-        }
+          this.flights = []
+          this.getFlights(1, 0, 0, true)
+          // console.log(this.selected)
+          // console.log(this.flights)
+          //
+          // let Sortedflights = []
+          // for (let i=0; i<this.flights.length; i++) {
+          //   for (let j=0; j<this.selected.length; j++) {
+          //     if (this.flights[i].InNumofStop == this.selected[j] || this.flights[i].OutNumofStop == this.selected[j] || ("2" in this.selected && this.flights[i].InNumofStop > 1) || ("2" in this.selected && this.flights[i].InNumofStop > 1)) {
+          //       Sortedflights.push(this.flights[i])
+          //       break;
+          //     }
+          //   }
+          // }
+          // this.flights = Sortedflights
+        },
     },
 }
 </script>
