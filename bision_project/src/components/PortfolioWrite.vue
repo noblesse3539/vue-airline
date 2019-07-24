@@ -91,12 +91,52 @@
                               clearable clear-icon="clear" type="number" color="blue"></v-text-field>
               </v-flex>
 
+
               <!-- description 글자수 제약?-->
               <v-flex xs12>
                 <v-textarea label="상품 요약*" auto-grow solo v-model="tourProgram.desc" color="blue"></v-textarea>
               </v-flex>
 
+              <!-- 환불 정책 -->
+              <v-flex xs12>
+                <h2>환불 가능 기간 설정</h2>
+              </v-flex>
+              <!-- 테이블로 바꾸기 -->
+              <v-flex xs12 md3 align-self-center>
+                <v-switch color="success" v-model="tourProgram.refund.refund100" :label="`환불 ${tourProgram.refund.refund100? '가능':'불가'}`"></v-switch>
+              </v-flex>
+              <v-flex xs12 md9>
+                  <v-container>
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >100% 환불 : {{tourProgram.cost}}원</v-chip>
+                    <v-text-field :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
+                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
+                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund100"
+                    always-dirty color="red" track-color="grey" :rules="refund_rule1" ></v-slider>
+                  </v-container>
+                  <v-container>
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
+                    <v-text-field :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
+                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
+                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund50"
+                     always-dirty color="red" track-color="grey" :rules="refund_rule2"></v-slider>
+                  </v-container>
+                  <v-container>
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불 : {{tourProgram.cost*0.3}}원</v-chip>
+                    <v-text-field suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
+                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
+                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund30"
+                      always-dirty color="red" track-color="grey" :rules="refund_rule3" ></v-slider>
+                  </v-container>
+              </v-flex>
+              <!-- <v-flex xs6 md5>
+                <v-text-field></v-text-field>
+                <v-text-field></v-text-field>
+
+              </v-flex> -->
               <!-- Tags -->
+              <v-flex xs12>
+                <h2>태그 추가</h2>
+              </v-flex>
               <v-flex xs12>
                 <v-combobox v-model="tourProgram.tags" :filter="filter" :hide-no-data="!search" :items="items"
                             :search-input.sync="search"  hide-selected label="태그를 추가해주세요"
@@ -178,6 +218,9 @@ export default {
   },
   data (){
     return{
+      refund_rule1:[v => this.tourProgram.refund.refund50 < v  || '환불 기간을 확인해주세요.'],
+      refund_rule2:[v => (this.tourProgram.refund.refund30 < v && v < this.tourProgram.refund.refund100) || '환불 기간을 확인해주세요.'],
+      refund_rule3:[v => ( v && v < this.tourProgram.refund.refund50 ) || '환불 기간을 확인해주세요.'],
       activator: null,
       attach: null,
       editing: null,
@@ -220,7 +263,11 @@ export default {
         toDate:'',
         duration: '',
         cost:'',
-        // refund:'',
+        refund: {
+          refund100: 1,
+          refund50: 0,
+          refund30: 0
+        },
         minTrav:'',
         maxTrav: '',
         desc:'',
@@ -230,7 +277,7 @@ export default {
     }
   },
   watch: {
-   tags (val, prev) {
+   tourProgram: function(val, prev) {
      if (val.length === prev.length) return
 
      this.tourProgram.tags = val.map(v => {
@@ -341,5 +388,14 @@ export default {
 .ql-container {
     min-height: 700px;
 }
-
+.refund-act {
+  background-color: white !important;
+  color: lightcoral !important;
+  border: 1.5px solid lightcoral !important;
+}
+.refund-dis {
+  background-color: white !important;
+  color: lightgrey !important;
+  border: 1.5px solid lightgrey !important;
+}
 </style>
