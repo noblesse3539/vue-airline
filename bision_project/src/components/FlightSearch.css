@@ -359,7 +359,7 @@ input {
 
 .country-name.is-active,
 .country-name:hover {
-    background: rgba(47, 220, 62, 1);
+    background: #00c3ff;
     color: white;
 }
 

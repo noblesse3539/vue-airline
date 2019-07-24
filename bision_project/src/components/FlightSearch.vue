@@ -174,7 +174,7 @@ export default {
     data() {
         return {
             
-            RadioLabels: ["왕복", "편도", "다구간"],
+            RadioLabels: ["왕복", "편도", ],
             classes: ['Economy', 'Business', 'First'],
 
             isOpen : false,
