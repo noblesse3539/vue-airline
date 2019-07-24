@@ -17,7 +17,7 @@
             <v-layout wrap>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
-                v-model="tourProgram.planTitle" label="제목을 입력해주세요." solo></v-text-field>
+                v-model="tourProgram.title" label="제목을 입력해주세요." solo></v-text-field>
                 <!-- <ckeditor :editor="titleEditor" v-model="titleData" :config="titleConfig"></ckeditor> -->
               </v-flex>
 
@@ -32,10 +32,10 @@
 
               <!-- 나라, 도시 선택 -->
               <v-flex xs12 sm4 d-flex>
-                <v-select prepend-icon="fa-globe-asia" label="나라 선택*" v-model="tourProgram.Pnation" :items="nation"></v-select>
+                <v-select prepend-icon="fa-globe-asia" label="나라 선택*" v-model="tourProgram.nation_kor" :items="nation"></v-select>
               </v-flex>
               <v-flex xs12 sm8 d-flex>
-                <v-select prepend-icon="map" label="도시 선택(다수 가능)*" v-model="tourProgram.PCity" :items="city" attach small-chips multiple></v-select>
+                <v-select prepend-icon="map" label="도시 선택(다수 가능)*" v-model="tourProgram.city_kor" :items="city" attach small-chips multiple></v-select>
               </v-flex>
 
               <!-- 시작날짜 -->
@@ -101,7 +101,6 @@
               <v-flex xs12>
                 <h2>환불 가능 기간 설정</h2>
               </v-flex>
-              <!-- 테이블로 바꾸기 -->
               <v-flex xs12 md3 align-self-center>
                 <v-switch color="success" v-model="tourProgram.refund.refund100" :label="`환불 ${tourProgram.refund.refund100? '가능':'불가'}`"></v-switch>
               </v-flex>
@@ -117,25 +116,25 @@
                     <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
                     <v-text-field :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund50"
-                     always-dirty color="red" track-color="grey" :rules="refund_rule2"></v-slider>
+                    <!-- <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund50"
+                     always-dirty color="red" track-color="grey" :rules="refund_rule2"></v-slider> -->
+                     <v-slider :disabled="!tourProgram.refund.refund100" min="0" :max="tourProgram.refund.refund100" v-model="tourProgram.refund.refund50"
+                      always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund100/365) *100}%`"></v-slider>
                   </v-container>
                   <v-container>
                     <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불 : {{tourProgram.cost*0.3}}원</v-chip>
                     <v-text-field suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund30"
-                      always-dirty color="red" track-color="grey" :rules="refund_rule3" ></v-slider>
+                    <!-- <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund30"
+                      always-dirty color="red" track-color="grey" :rules="refund_rule3" ></v-slider> -->
+                      <v-slider :disabled="!tourProgram.refund.refund50" min="0" :max="tourProgram.refund.refund50" v-model="tourProgram.refund.refund30"
+                       always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund50/365) *100}%`"></v-slider>
                   </v-container>
               </v-flex>
-              <!-- <v-flex xs6 md5>
-                <v-text-field></v-text-field>
-                <v-text-field></v-text-field>
 
-              </v-flex> -->
               <!-- Tags -->
               <v-flex xs12>
-                <h2>태그 추가</h2>
+                <h2>태그 추가(아직안대여..)</h2>
               </v-flex>
               <v-flex xs12>
                 <v-combobox v-model="tourProgram.tags" :filter="filter" :hide-no-data="!search" :items="items"
@@ -255,10 +254,10 @@ export default {
       toMenu: false,
       complete: false,
       tourProgram:{
-        planTitle:'',
+        title:'',
         mainImg:'',
-        Pnation:'',
-        PCity:[],
+        nation_kor: '',
+        city_kor:[],
         fromDate:'',
         toDate:'',
         duration: '',
@@ -271,7 +270,7 @@ export default {
         minTrav:'',
         maxTrav: '',
         desc:'',
-        tags: [{ text:'시티투어' }],
+        tags: ['시티투어'],
         detail:''
       }
     }
@@ -348,12 +347,12 @@ export default {
     },
     checkSave(){
       console.log(this.tourProgram)
-      for(var item in this.tourProgram){
-        if(item != "tags" && !this.tourProgram[item]) {
-          console.log(this.tourProgram[item])
-          return alert('빈 칸을 모두 작성해주세요.')
-        }
-      }
+      // for(var item in this.tourProgram){
+      //   if(item != "tags" && !this.tourProgram[item]) {
+      //     console.log(this.tourProgram[item])
+      //     return alert('빈 칸을 모두 작성해주세요.')
+      //   }
+      // }
       this.check = true
       this.validate=true
       this.checkText="작성을 완료하시겠습니까?"
@@ -368,9 +367,16 @@ export default {
       }
     },
     closePW(){
-      if(this.validate){
-        // 정보 보내기.
-      }
+      // if(this.validate){
+      //   this.$http.post('/api/createGuideService', this.tourProgram)
+      //     .then( res => {
+      //       console.log(res.status)
+      //     })
+      // }
+      this.$http.post('/api/createGuideService', this.tourProgram)
+        .then( res => {
+          console.log(res.status)
+        })
       const navBarZIndex = document.querySelector('#navbox')
       const footerZIndex = document.querySelector('#footer')
       navBarZIndex.style.zIndex = 1000;
