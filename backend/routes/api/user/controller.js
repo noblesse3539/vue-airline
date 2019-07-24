@@ -84,6 +84,10 @@ exports.addUsedGuideServices = (req, res) => {
     User.findOne({_id:_id},(err,user)=>{
         if(err) res.status(404).json({err})
         if(user){
+            const service = user.UsedGuideServices.filter( service => {
+               return service == req.params.guideServiceId
+            })
+            if (service.length !== 0 )  return  res.status(409).json({ error: 'exist aleady!'})
             GuideService.findOne({_id:req.params.guideServiceId},(err,guideservice)=>{
                 user.UsedGuideServices.push(guideservice)
                 user.save()
@@ -100,6 +104,9 @@ exports.removeUsedGuideServices = (req, res) => {
     User.findById(_id)
     .then( async (user) => {
         const deleted = await user.UsedGuideServices.filter( service => {
+            console.log(service._id)
+            console.log(req.params.guideServiceId)
+            console.log(service._id.toString() !== req.params.guideServiceId)
             return service._id != req.params.guideServiceId
         })
         user.UsedGuideServices = [...deleted]
