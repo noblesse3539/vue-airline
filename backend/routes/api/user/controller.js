@@ -1,5 +1,6 @@
 const User = require('../../../models/user')
-
+const GuideService = require('../../../models/guideservice')
+const ObjectID = require('mongodb').ObjectID; 
 /*
     GET /api/user/list
 */
@@ -72,5 +73,37 @@ exports.mypage = (req, res) => {
     .select('-password')
     .then( userInfo => {
         res.json({userInfo})
+    })
+}
+
+exports.addUsedGuideServices = (req, res) => {
+    const {_id, username, admin} = req.decoded
+    if( !admin && username !== req.params.username ) return res.status(403).json({ error: 'permission denied!!!'})
+
+    User.findOne({_id:_id},(err,user)=>{
+        if(err) res.status(404).json({err})
+        if(user){
+            GuideService.findOne({_id:req.params.guideServiceId},(err,guideservice)=>{
+                console.log(guideservice)
+                user.UsedGuideServices.push(req.params.guideServiceId)
+                user.save()
+                res.json({message:'success save!!'})
+            })
+        }
+    })
+}
+
+exports.removeUsedGuideServices = (req, res) => {
+    const {_id, username, admin} = req.decoded
+    if( !admin && username !== req.params.username ) return res.status(403).json({ error: 'permission denied!!!'})
+
+    User.findById(_id)
+    .then( async (user) => {
+        const deleted = await user.UsedGuideServices.filter( service => {
+            return service._id !== req.params.guideServiceId
+        })
+        user.UsedGuideServices = deleted
+        await user.save()
+        res.json({'message': 'deleted!!'})
     })
 }
