@@ -104,10 +104,7 @@ exports.removeUsedGuideServices = (req, res) => {
     User.findById(_id)
     .then( async (user) => {
         const deleted = await user.UsedGuideServices.filter( service => {
-            console.log(service._id)
-            console.log(req.params.guideServiceId)
-            console.log(service._id.toString() !== req.params.guideServiceId)
-            return service._id != req.params.guideServiceId
+            return service._id.toString() !== req.params.guideServiceId
         })
         user.UsedGuideServices = [...deleted]
         await user.save()
