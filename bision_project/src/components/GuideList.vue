@@ -10,8 +10,8 @@
       ></Guide>
     </v-flex>
     <v-flex xs12 text-xs-center round class="loadMore">
-      <v-btn v-if="loadMore" color="info" dark v-on:click="loadMoreGuideList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
-      <v-btn v-else color="info" dark v-on:click="hideGuideList"><v-icon size="25" class="mr-2">fa-minus</v-icon> 숨기기</v-btn>
+      <v-btn v-if="loadMore" class="user-guide-serve__loadmore" dark v-on:click="loadMoreGuideList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+      <v-btn v-else class="user-guide-serve__loadmore" dark v-on:click="hideGuideList"><v-icon size="25" class="mr-2">fa-minus</v-icon> 숨기기</v-btn>
     </v-flex>
   </v-layout>
 </template>

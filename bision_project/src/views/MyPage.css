@@ -241,7 +241,7 @@
     justify-content: center !important;
     align-items: center !important;
     padding-left: 10px;
-    z-index: 1200 !important;
+    z-index: 1050 !important;
     background: red !important;
     left: 0 !important;
     left: -24px !important;
@@ -285,6 +285,14 @@
 
 .swiper-button-next:hover {
     cursor: pointer !important;
+    background: rgba(34,250,34, 0.4) !important;
+    color: white !important;
+}
+
+.swiper-button-prev:hover {
+    cursor: pointer !important;
+    background: rgba(34,250,34, 0.4) !important;
+    color: white !important;
 }
 
 .myTourExperience-description {
