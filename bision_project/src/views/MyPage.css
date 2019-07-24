@@ -12,7 +12,6 @@
 
 .user-profileinfo {
     width: 100%;
-    height: 300px;
     display: flex;
     /* background: #f7f7f7; */
     /* border: 1px solid grey; */
@@ -33,11 +32,11 @@
 }
 
 .user-metainfo__modifier {
-    color: #0e7fe1;
+    color: rgb(34,139,34);
 }
 
 .user-line__section-divider {
-    height: 20px;
+    height: 100%;
     width: 100%;
 }
 
@@ -49,19 +48,19 @@
 .user-metainfo__modifier:hover {
     text-decoration: underline;
     cursor: pointer;
-    color: rgba(14, 127, 225, 0.8);
+    color: rgb(34,139,34);
 }
 
 .user-image__modifier {
     margin-top: 2rem;
     font-size: 1.25rem;
     font-weight: 1000;
-    color: rgb(14, 127, 225);
+    color: rgb(34,139,34);
 }
 
 .user-image__modifier:hover {
     cursor: pointer;
-    color: rgba(14, 127, 225, 0.8);
+    color: rgb(34,139,34);
     text-decoration: underline;
 }
 
@@ -100,4 +99,89 @@
 
 .section-divider-inside {
     width: 100%;
+}
+
+.user-info__modifier {
+    margin-top: 16px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info__modifier label {
+    color: black;
+    font-size: 1.25rem;
+    font-weight: 1000;
+    margin-bottom: 8px;
+}
+
+.user-info__modifier input {
+    padding: 11px;
+    border: 1px solid rgb(235, 235, 235);
+    border-radius: 2px;
+    margin-bottom: 8px;
+
+}
+
+.user-info__modifier input:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(47, 90, 62, 1);
+}
+
+.user-intro-box {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+
+.user-langauge {
+    font-size: 1.25rem;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.user-language-box {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.user-info-button-box {
+    margin-bottom: 16px;
+}
+
+.user-info-button-box button:first-child {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    margin-right: 16px;
+    width: 100px;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: rgb(34,139,34);
+    border: 1px solid white;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.user-info-button-box button:first-child:hover {
+    background: rgba(34,139,34, 0.8);
+}
+
+.user-info-button-box button {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.swiper-slide {
+    width: 500px !important;
+    height: 500px !important;
+    background: red !important;
+
 }

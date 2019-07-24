@@ -7,6 +7,8 @@ import router from './router'
 import store from './store/store'
 import axios from 'axios'
 import Vue2Editor from "vue2-editor"
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
 Vue.use(Vue2Editor)
 Vue.use(Vuex)
@@ -22,6 +24,7 @@ Vue.use(Vuetify, {
 		error: '#b71c1c'
 	}
 })
+Vue.use(VueAwesomeSwiper, /* { default global options } */)
 
 Vue.prototype.$http = axios
 Vue.prototype.$getToken = (cookieName) => {
