@@ -183,15 +183,15 @@ a:hover {
 }
 
 .mypageBtn {
-    /* margin-right: 5px; */
-    display: none;
+    margin-right: 24px;
+    display: inline;
     font-size: 1rem !important;
     height: 1rem !important;
 
 }
 
 .logoutBtn {
-    display: none;
+    display: inline;
     font-size: 1rem !important;
     height: 1rem !important;
 }

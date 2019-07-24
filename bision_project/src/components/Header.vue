@@ -12,13 +12,14 @@
             </div>
         </div>
         <div class="nav-right">
-            <router-link to="/" class="hvr-underline-from-center">
+            <span v-if="getIsLoggedIn">
+                <router-link to="/mypage" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
+                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
+            </span>
+            <router-link v-else to="/" class="hvr-underline-from-center">
                 <span class="loginBtn" @click="open()">로그인 🌴</span>
             </router-link>
             <!-- 로그인 됐을 경우에만 보여줄 것 -->
-            <router-link to="/mypage" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
-            <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
-
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
                 <v-container style="padding:0;">
@@ -55,7 +56,7 @@
 import './Header.css'
 import './LoginModal.css'
 import LoginModal from './LoginModal'
-import {mapGetters, mapState} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     name: 'Header',
@@ -77,6 +78,10 @@ export default {
         }
     },
     props: {},
+    created() {
+        this.getIsLoggedIn
+        console.log(this.getIsLoggedIn)
+    },
     mounted() {
         document.body.addEventListener('click', this.close)
     },
@@ -123,7 +128,8 @@ export default {
     },
     computed: {
         ...mapState({
-            getIsHeaderOpen : state => state.Header.isHeaderOpen
+            getIsHeaderOpen : state => state.Header.isHeaderOpen,
+            getIsLoggedIn : state => state.User.isLoggedIn,
         })
     },
 }

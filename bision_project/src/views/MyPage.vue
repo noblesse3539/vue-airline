@@ -105,10 +105,13 @@
       GuideList,
       UploadImgModal,
     },
+    created() {
+      this.getUserInfo()
+    },
     mounted() {
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
-      this.getUserInfo()
+      // this.deleteGuideServiceToUser()
       // this.addGuideServiceToUser()
     },
     beforeDestroy() {
@@ -130,15 +133,15 @@
             src: 'https://new-image.withvolo.com/travel/423019/foDky-GCJFSv4VIQIRw2uth9V1s=/0x0:900x900/809x/9d6947c4ad0d409eb70ee1ad94174f47/74f1457e-5970-42f6-9479-eabf1063dd74-1961afc650a9073e05adeae3311e6e9716b24e07.jpg'
           }
         ],
-        userImage: 'https://i.pinimg.com/736x/ac/a0/2a/aca02a058d78c3eb348a1a842a1a1522.jpg',
+        userImage: '',
         isImgModalOpen: false,
         isUserInfoOpen: true,
         
         userName : "",
-        userIntro: "안녕하세요, 여행가고 싶어요.",
-        userLanguage: ["한국어", "영어", "프랑스어", "스페인어"],
+        userIntro: "",
+        userLanguage: [],
         userGuideServices: [],
-
+        
         swiperOption: {
           slidesPerView: 4,
           spaceBetween: 20,
@@ -170,6 +173,7 @@
         this.isImgModalOpen = false
         if(imgUrl) {
           this.userImage = imgUrl
+          this.updateUserInfo()
         }
       },
       openImgModal: function() {
@@ -196,13 +200,13 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             this.userInfo = res.data.userInfo
-            console.log(this.userInfo)
+            // console.log(this.userInfo)
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
             this.userImage = this.userInfo.profileImg
             this.userGuideServices  = this.userInfo.UsedGuideServices
-            console.log(this.userGuideServices)
+            // console.log(this.userGuideServices)
           })
           .catch( err => {
             console.log(err)
@@ -229,7 +233,7 @@
             console.log(err)
           })
       },
-
+      
       addGuideServiceToUser: function() {
         // api/user/opalcat1013/usedguideservices/5d37e5aa1b38180f50acbb43
         // opalcat1013 == 유저 아이디
@@ -237,9 +241,25 @@
         const config = {
             'headers': {'x-access-token': token},
         }
-        this.$http.post('/api/user/minkyo/usedguideservices/5d37e5ed1b38180f50acbb44', {}, config)
+        this.$http.post('/api/user/minkyo/usedguideservices/5d37e5aa1b38180f50acbb43', {}, config)
+          .then( res => {
+              // console.log(res.data)
+          })
+      },
+
+      deleteGuideServiceToUser: function() {
+        // api/user/opalcat1013/usedguideservices/5d37e5aa1b38180f50acbb43
+        // opalcat1013 == 유저 아이디
+        const token= this.$getToken('BisionToken')
+        const config = {
+            'headers': {'x-access-token': token},
+        }
+        this.$http.delete('/api/user/minkyo/usedguideservices/5d37e5ed1b38180f50acbb44', config)
           .then( res => {
               console.log(res.data)
+          })
+          .catch( err => {
+            console.log(err)
           })
       },
 
