@@ -60,6 +60,7 @@
     },
     mounted() {
       this.closeHeader()
+      this.getUserInfo()
     },
     beforeDestroy() {
       this.openHeader()
@@ -82,6 +83,7 @@
         ],
         userImage: 'https://i.pinimg.com/736x/ac/a0/2a/aca02a058d78c3eb348a1a842a1a1522.jpg',
         isImgModalOpen : false,
+        userInfo: {}, // username email profileImg registeredAt firstName lastName age gender languages intro UsedGuides UsedGuideServices
       }
     },
     methods: {
@@ -100,9 +102,23 @@
       openImgModal: function() {
         this.isImgModalOpen = true
       },
-      revisdeUserInfo: function() {
+      revisedUserInfo: function() {
         
       },
+      getUserInfo: function() {
+        const token= this.$getToken('BisionToken')
+        const config = {
+            'headers': {'x-access-token': token}
+        }
+        this.$http.get('/api/user/mypage', config)
+          .then( res => {
+            this.userInfo = res.data.userInfo
+          })
+          .catch( err => {
+            console.log(err)
+          })
+      },
+
     },
     computed: {
       ...mapGetters({
