@@ -347,12 +347,12 @@ export default {
     },
     checkSave(){
       console.log(this.tourProgram)
-      // for(var item in this.tourProgram){
-      //   if(item != "tags" && !this.tourProgram[item]) {
-      //     console.log(this.tourProgram[item])
-      //     return alert('빈 칸을 모두 작성해주세요.')
-      //   }
-      // }
+      for(var item in this.tourProgram){
+        if(item != "tags" && !this.tourProgram[item]) {
+          console.log(this.tourProgram[item])
+          return alert('빈 칸을 모두 작성해주세요.')
+        }
+      }
       this.check = true
       this.validate=true
       this.checkText="작성을 완료하시겠습니까?"
@@ -367,12 +367,12 @@ export default {
       }
     },
     closePW(){
-      // if(this.validate){
-      //   this.$http.post('/api/createGuideService', this.tourProgram)
-      //     .then( res => {
-      //       console.log(res.status)
-      //     })
-      // }
+      if(this.validate){
+        this.$http.post('/api/createGuideService', this.tourProgram)
+          .then( res => {
+            console.log(res.status)
+          })
+      }
       this.$http.post('/api/createGuideService', this.tourProgram)
         .then( res => {
           console.log(res.status)
