@@ -71,6 +71,8 @@ exports.mypage = (req, res) => {
     const {_id} = req.decoded
     User.findById(_id)
     .select('-password')
+    .populate('UsedGuideServices')
+    .populate('UsedGuides')
     .then( userInfo => {
         res.json({userInfo})
     })
