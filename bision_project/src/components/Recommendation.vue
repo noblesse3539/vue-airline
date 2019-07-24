@@ -1,6 +1,6 @@
 <template>
     <div class="Recommendation">
-        <h2>Bision 개발자의 추천 상품</h2>
+        <h2>이번 휴가 여기는 어때요?</h2>
         <h3>2019년 7월 New York</h3>
     
         <div class="Recommended-city">

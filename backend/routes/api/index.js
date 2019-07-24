@@ -2,10 +2,19 @@ const router = require('express').Router()
 const authMiddleware = require('../../middlewares/auth')
 const auth = require('./auth')
 const user = require('./user')
+const superUser = require('./superUser')
+const superAuth = require('./superAuth')
 const airport = require('./airport')
 
 const guide =require('./guide')
-const guideservice =require('./guideservice')
+const guideservice = require('./guideservice')
+const review = require('./review')
+const tag=require('./tag')
+
+// SuperUser
+router.use('/superauth', superAuth)
+router.use('/superuser', authMiddleware)
+router.use('/superuser', superUser)
 
 // User
 router.use('/auth', auth)
@@ -23,6 +32,17 @@ router.use('/createGuideService',guideservice)
 router.use('/deleteGuideService',guideservice)
 router.use('/updateGuideService',guideservice)
 router.use('/findGSByGuideIdTitle',guideservice)
+
+
+router.use('/findReview',guideservice)
+router.use('/createReview',review)
+router.use('/deleteReview',review)
+
+router.use('/createTag',tag)
+router.use('/deleteTag',tag)
+router.use('/findGSByTag',tag)
+router.use('/deleteTag',tag)
+
 
 router.use('/airport', airport)
 

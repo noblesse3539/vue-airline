@@ -95,6 +95,7 @@
 
 .weatherBox {
     right: 0 !important;
+    z-index: -1;
     height: 100%;
     width: 20%;
     margin-left: 67.5%;

@@ -1,6 +1,6 @@
 <template>
-    <div id="navbox">
-        <div class="nav-left">
+    <div id="navbox" v-if="getIsHeaderOpen">
+        <div class="nav-left"><form action="" method="get"></form>
                 <router-link to="/" class="nav-left-title">
                     BisionTour
                 </router-link>
@@ -14,10 +14,11 @@
         <div class="nav-right">
             <router-link to="/" class="hvr-underline-from-center">
                 <span class="loginBtn" @click="open()">로그인 🌴</span>
-
-                <!-- 로그인 됐을 경우에만 보여줄 것 -->
-                <span class="logoutBtn" @click="logout()">로그아웃</span>
             </router-link>
+            <!-- 로그인 됐을 경우에만 보여줄 것 -->
+            <router-link to="/mypage" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
+            <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
+
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
                 <v-container style="padding:0;">
@@ -54,11 +55,26 @@
 import './Header.css'
 import './LoginModal.css'
 import LoginModal from './LoginModal'
+import {mapGetters, mapState} from 'vuex'
 
 export default {
     name: 'Header',
     components:{
       LoginModal
+    },
+    data () {
+        return {
+            drawer: null,
+            items : [
+                { title: '#' ,
+                    url: '/#'},
+                { title: '#' ,
+                    url: '/#'},
+                { title: '# in' ,
+                    url: '/#'},
+            ],
+            modal: false,
+        }
     },
     props: {},
     mounted() {
@@ -89,25 +105,26 @@ export default {
           }
         },
         logout() {
+            const deleteCookie = (name) => {
+                document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                }
+            deleteCookie('BisionToken')
 
+            const logoutBtn = document.querySelector('.logoutBtn')
+            logoutBtn.style.display = "none"
+            const mypageBtn = document.querySelector('.mypageBtn')
+            mypageBtn.style.display = "none"
+
+            window.location.replace("/");
         },
         closeModal() {
             this.modal = false
         },
     },
-    data () {
-        return {
-            drawer: null,
-            items : [
-                { title: '#' ,
-                    url: '/#'},
-                { title: '#' ,
-                    url: '/#'},
-                { title: '# in' ,
-                    url: '/#'},
-            ],
-            modal:false
-        }
-    }
+    computed: {
+        ...mapState({
+            getIsHeaderOpen : state => state.Header.isHeaderOpen
+        })
+    },
 }
 </script>

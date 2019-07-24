@@ -1,5 +1,5 @@
 <template>
-  <v-layout mt-5 wrap>
+  <v-layout wrap>
     <v-flex xs3 v-for="i in guides.length > limits ? limits : guides.length">
       <Guide class="ma-3"
           :title="guides[i - 1].title"
@@ -9,7 +9,7 @@
           :imgSrc="guides[i - 1].img"
       ></Guide>
     </v-flex>
-    <v-flex xs12 text-xs-center round my-5 >
+    <v-flex xs12 text-xs-center round class="loadMore">
       <v-btn v-if="loadMore" color="info" dark v-on:click="loadMoreGuideList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
       <v-btn v-else color="info" dark v-on:click="hideGuideList"><v-icon size="25" class="mr-2">fa-minus</v-icon> 숨기기</v-btn>
     </v-flex>
@@ -18,6 +18,7 @@
 
 <script>
 import Guide from '@/components/Guide'
+import './GuideList.css'
 
 export default {
 	name: 'GuideList',

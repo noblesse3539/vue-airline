@@ -30,20 +30,20 @@ exports.register = (req, res) => {
     }
 
     // assign admin if count is 1
-    const assign = (count) => {
-        if(count === 1) {
-            return newUser.assignAdmin()
-        } else {
-            // if not, return a promise that return false
-            return Promise.resolve(false)
-        }
-    }
+    // const assign = (count) => {
+    //     if(count === 1) {
+    //         return newUser.assignAdmin()
+    //     } else {
+    //         // if not, return a promise that return false
+    //         return Promise.resolve(false)
+    //     }
+    // }
 
     // respond to the client
-    const respond = (isAdmin) => {
+    const respond = (count) => {
         res.json({
             message: 'registered successfully',
-            admin: isAdmin ? true : false
+            // admin: isAdmin ? true : false
         })
     }
 
@@ -58,7 +58,7 @@ exports.register = (req, res) => {
     User.findOneByUserName(username)
     .then(create)
     .then(count)
-    .then(assign)
+    // .then(assign)
     .then(respond)
     .catch(onError)
 }
@@ -144,3 +144,19 @@ exports.check = (req, res) => {
     })
 }
 
+/**
+ *  PUT /api/auth/update
+ */
+
+exports.update = (req, res) => {
+    const {_id} = req.decoded
+    User.update(
+        {_id: _id}, 
+        { $set: req.body },
+        (err, output) => {
+            if(err) res.status(500).json({ error: 'database failure' })
+            if(!output.n) return res.status(404).json({ error: 'user not found'})
+            res.json({ message: 'user updated'})
+        }
+    )
+}

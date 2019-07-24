@@ -7,7 +7,17 @@ const User = new Schema({
     username: String,
     password: String,
     email: String,
-    admin: { type: Boolean, default: false }
+    profileImg:String, // 일단 모델에만 추가
+    registered:String, // 일단 모델에만 추가(회원가입날짜)
+    firstName: String,
+    lastName: String,
+    age: Number,
+    gender: String,
+    languages: [String],
+    intro: String,
+    UsedGuides: [{ type: Schema.Types.ObjectId, ref: 'guide'}],
+    UsedGuideServices: [{ type: Schema.Types.ObjectId, ref: 'guideservice'}]
+    // admin: { type: Boolean, default: false }
 })
 
 // create new User document
@@ -31,6 +41,10 @@ User.statics.findOneByUserName = function(username) {
     }).exec()
 }
 
+User.statics.findOneById = function(id) {
+    return this.findOne({_id:id}).exec()
+}
+
 // verify the password of the User document
 User.methods.verify = function(password) {
     const encrypted = crypto.createHmac('sha1', config.secret)
@@ -39,14 +53,31 @@ User.methods.verify = function(password) {
     return this.password === encrypted
 }
 
-User.methods.assignAdmin = function() {
-    this.admin = true
-    return this.save()
-}
+// User.methods.assignAdmin = function() {
+//     this.admin = true
+//     return this.save()
+// }
 
 User.methods.deleteUser = function( username ) {
     const user = User.findOneByUserName(username)
     return user.delete()
 }
 
+
+/*
+    username: String,
+    password: String,
+    email: String,
+    age: Number,
+    gender: String,
+    languages: [String],
+    intro: String,
+    UsedGuides: [{ type: Schema.Types.ObjectId, ref: 'guide'}],
+    UsedGuideServices: [{ type: Schema.Types.ObjectId, ref: 'guideservice'}]
+*/
+// User.statics.updateByUserObId = function(username, password, email, age, gender, languages, intro, UsedGuides, UsedGuideServices) {
+//     return this.findOneAndUpdate({
+
+//     })
+// }
 module.exports = mongoose.model('User', User)

@@ -3,72 +3,60 @@ const Schema = mongoose.Schema
 const config = require('../config')
 
 const GuideService = new Schema({
-  guideID: String,
+  user: { type: Schema.Types.ObjectId, ref: 'User'},
   title:String,
-  nation: String,
-  city: [String],
-  fromDate:String, // Date??
+  mainImg:String,
+  nation_kor: String,
+  nation_eng: String,
+  city_kor: [String],
+  city_eng: [String],
+  fromDate:String,
   todate:String,
   duration:String,
-  coreImg:String,
-  imgList:[String],
   cost:Number,
+  minTrav:Number,
+  maxTrav:Number,
+  totalTrav:Number, // 추가 됨.
   desc:String,
   detail:String,
-  numOfGuest:Number,
-  reviewList:[{userId:String,starRating:Number,content:String}]
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }]
 })
 
-GuideService.statics.create = function(guideID,title,nation,city,fromDate,toDate,duration,coreImg,imgList,cost,desc,detail,numOfGuest,reviewList){
-  const guideservice = new this({
-    guideID,
-    title,
-    nation,
-    city,
-    fromDate,
-    toDate,
-    duration,
-    coreImg,
-    imgList,
-    cost,
-    desc,
-    detail,
-    numOfGuest,
-    reviewList
-  })
-  return guideservice.save()
-}
-
-GuideService.statics.updateByTitle = function(guideID,title,title,nation,city,fromDate,toDate,duration,coreImg,imgList,cost,desc,detail,numOfGuest,reviewList){
+GuideService.statics.updateByTitle = function(guide,title,title,mainImg,nation,city,fromDate,toDate,duration,cost,minTrav,maxTrav,desc,detail,reviewList){
   return this.findOneAndUpdate({
-    guideID,
+    guide,
     title, // findOne을 위한 인자값
     title, // 수정될 값들
-    nation,
-    city,
+    mainImg,
+    nation_kor,
+    nation_eng,
+    city_kor,
+    city_eng,
     fromDate,
     toDate,
     duration,
-    coreImg,
-    imgList,
     cost,
+    minTrav,
+    maxTrav,
+    totalTrav,
     desc,
     detail,
-    numOfGuest,
-    reviewList
+    reviews,
+    tags
   }).exec()
 }
 
-GuideService.statics.deleteByTitle = function(guideID,title){
+GuideService.statics.deleteByTitle = function(guide,title){
   return this.findOneAndRemove({
-    guideID,title
+    guide,title
   }).exec()
 }
 
 
-GuideService.statics.findGSByGuideIdTitle = function(guideID,title) {
+GuideService.statics.findGSByUserObIdTitle = function(guide,title) {
     return this.findOne({
-        guideID,title
+      guide,title
     }).exec()
 }
 

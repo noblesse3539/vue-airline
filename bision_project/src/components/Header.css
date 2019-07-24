@@ -179,5 +179,41 @@ a:hover {
 }
 
 .modal{
-  display:none;
+  display: none;
+}
+
+.mypageBtn {
+    /* margin-right: 5px; */
+    display: none;
+    font-size: 1rem !important;
+    height: 1rem !important;
+
+}
+
+.logoutBtn {
+    display: none;
+    font-size: 1rem !important;
+    height: 1rem !important;
+}
+
+.mypageBtnInner {
+    padding: 10px;
+    color: #1e90ff !important;
+    /* font-size: 1.25rem !important; */
+    font-weight: bolder !important;
+    border: 2px solid 	rgb(211,211,211);
+    /* background-size: 500%; */
+    /* border: none; */
+    border-radius: 5rem;
+    color: white;
+    cursor: pointer;
+    /* font: 1.5em Raleway, sans-serif; */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: .05em;
+    outline: none;
+}
+
+.mypageBtnInner:hover {
+
 }
