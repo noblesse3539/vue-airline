@@ -51,3 +51,26 @@ exports.userDelete = (req, res) => {
         res.status(204).end()
     })
 }
+
+exports.update = (req, res) => {
+    const {_id } = req.decoded
+
+    User.update(
+        {_id: _id},
+        { $set: req.body },
+        (err, output) => {
+            if(err) res.status(500).json({ error: 'database failure' })
+            if(!output.n) return res.status(404).json({ error: 'user not found'})
+            res.json({ message: 'user updated'})
+        }
+    )
+}
+
+exports.mypage = (req, res) => {
+    const {_id} = req.decoded
+    User.findById(_id)
+    .select('-password')
+    .then( userInfo => {
+        res.json({userInfo})
+    })
+}
