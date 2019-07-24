@@ -11,7 +11,7 @@ const GuideService = new Schema({
   city_kor: [String],
   city_eng: [String],
   fromDate:String,
-  todate:String,
+  toDate:String,
   duration:String,
   cost:Number,
   minTrav:Number,
@@ -20,7 +20,12 @@ const GuideService = new Schema({
   desc:String,
   detail:String,
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-  tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }]
+  tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+  refund:[{
+    'refund100':Number, // 0이면 환불 불가.
+    'refund50':Number,
+    'refund30':Number
+  }]
 })
 
 GuideService.statics.updateByTitle = function(guide,title,title,mainImg,nation,city,fromDate,toDate,duration,cost,minTrav,maxTrav,desc,detail,reviewList){

@@ -30,19 +30,20 @@ exports.deleteByUserObId = (req,res) => {
 }
 
 exports.updateByUserObId = (req,res) => {
-  Guide.update=(_id)=>{(
-        {_id: _id},
-        { $set: req.body },
-        (err, output) => {
-            if(err) res.status(500).json({ error: 'database failure' })
-            if(!output.n) return res.status(404).json({ error: 'user not found'})
-            res.json({ message: 'user updated'})
-        }
-    )
-  }
-
-  Guide.findByUserObId(req.params)
-  .then(Guide.update(res.data._id))
+  Guide.findOne({user:req.params.user}, (err,guide) => {
+      if (guide) {
+            console.log(guide)
+            let id=guide._id
+            Guide.update({ _id: id }, { $set: req.body }, function(err, output){
+                if(err) res.status(500).json({ error: 'database failure' });
+                console.log(output);
+                if(!output.n) return res.status(404).json({ error: 'guide not found' });
+                res.json( { message: 'guide updated' } );
+            })
+        if(err) res.status(500).json({err})
+      }
+      if(err) res.status(500).json({err})
+    })
 }
 
 exports.findByUserObId = (req,res) => {

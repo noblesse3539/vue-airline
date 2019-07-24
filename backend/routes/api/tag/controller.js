@@ -19,6 +19,24 @@ exports.createTag = (req,res)=>{
     })
 }
 
+exports.updateTag=(req,res)=>{
+    Tag.findOne({guideservice:req.params.id,tag:req.params.tag}, (err,tag) => {
+        if (tag) {
+              console.log(tag)
+              let id=tag._id
+              Tag.update({ _id: id }, { $set: req.body }, function(err, output){
+                  if(err) res.status(500).json({ error: 'database failure' });
+                  console.log(output);
+                  if(!output.n) return res.status(404).json({ error: 'tag not found' });
+                  res.json( { message: 'tag updated' } );
+              })
+          if(err) res.status(500).json({err})
+        }
+        if(err) res.status(500).json({err})
+      })
+
+  }
+
 exports.deleteTag = (req,res)=>{
   let newTag
   let tagId
@@ -59,4 +77,4 @@ exports.findGSByTag = (req, res) => {
       .catch((error) => {
         res.status(500).json({ error });
       });
-};
+}

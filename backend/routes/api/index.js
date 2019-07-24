@@ -32,17 +32,20 @@ router.use('/createGuideService',guideservice)
 router.use('/deleteGuideService',guideservice)
 router.use('/updateGuideService',guideservice)
 router.use('/findGSByGuideIdTitle',guideservice)
+router.use('/findGSById',guideservice)
 
-
+// Review
 router.use('/findReview',guideservice)
 router.use('/createReview',review)
 router.use('/deleteReview',review)
+router.use('/updateReview',review)
 
+//Tag
 router.use('/createTag',tag)
 router.use('/deleteTag',tag)
 router.use('/findGSByTag',tag)
 router.use('/deleteTag',tag)
-
+router.use('/updateTag',tag)
 
 router.use('/airport', airport)
 
