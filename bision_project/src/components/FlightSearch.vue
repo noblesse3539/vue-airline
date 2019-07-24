@@ -57,7 +57,7 @@
                                     type="text" 
                                     v-model="destinationInput"
                                     placeholder="국가, 도시 또는 공항"
-                                    class="right-end-input"
+                                    class="right-end-input cancelBorder"
                                     @input="destinationInput = $event.target.value"
                                     @keyup="getDestinationOutput"
                                     @keydown.up="onArrowUp('destination')"
