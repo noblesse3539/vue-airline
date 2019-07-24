@@ -133,6 +133,11 @@ input {
     cursor: pointer;
 }
 
+.cancelBorder {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius : 0px !important;
+}
+
 .flight-search-info input:not(:last-child) {
     border-right: 1px solid black;
 }
