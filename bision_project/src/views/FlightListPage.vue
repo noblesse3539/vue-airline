@@ -11,66 +11,71 @@
           label="정렬기준"
         ></v-select>
       </v-flex> -->
-      <div class="wrapper252">
-        <v-container>
+      <v-layout wrap>
+        <v-flex style="width:200px; display: inline-block" mx-0>
           <v-container fluid>
+            경유
             <p>{{ selected }}</p>
             <v-checkbox v-model="selected" label="직항" value="0" @change="onCheckboxChange"></v-checkbox>
             <v-checkbox v-model="selected" label="1회 경유" value="1" @change="onCheckboxChange"></v-checkbox>
             <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="onCheckboxChange"></v-checkbox>
           </v-container>
-        </v-container>
+        </v-flex>
         <!-- 항공권 리스트 -->
-        <div v-if="!error">
-          <!-- 정렬메뉴바 -->
-          <div class="text-xs-right">
-            <v-menu offset-y>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  color="primary"
-                  dark
-                  v-on="on"
-                >
-                  정렬 기준
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-tile
-                  v-for="(sortType, index) in sortTypes"
-                  :key="index"
-                  @click="getFlightsbyOptional(1, index)"
-                >
-                  <v-list-tile-title>{{ sortType }}</v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
+        <v-flex style="width: 700px">
+          <div v-if="!error" style="display: inline-block">
+            <!-- 정렬메뉴바 -->
+            <div class="text-xs-right">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    color="primary"
+                    dark
+                    v-on="on"
+                  >
+                    정렬 기준
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-tile
+                    v-for="(sortType, index) in sortTypes"
+                    :key="index"
+                    @click="getFlightsbyOptional(1, index)"
+                  >
+                    <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
+            </div>
+            <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 700px;">
+              <Flight class="ma-3"
+                  :CurrencySymbol="flights[i - 1].CurrencySymbol"
+                  :InDepartureTime="flights[i - 1].InDepartureTime"
+                  :InArrivalTime="flights[i - 1].InArrivalTime"
+                  :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
+                  :InDuration="flights[i - 1].InDuration"
+                  :InDay="flights[i - 1].InDay"
+                  :OutDepartureTime="flights[i - 1].OutDepartureTime"
+                  :OutArrivalTime="flights[i - 1].OutArrivalTime"
+                  :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
+                  :OutDuration="flights[i - 1].OutDuration"
+                  :OutDay="flights[i - 1].OutDay"
+                  :NumofOptions="flights[i - 1].NumofOptions"
+                  :LowestPrice="flights[i - 1].LowestPrice"
+                  :LowestDeeplinkUrl="flights[i - 1].LowestDeeplinkUrl"
+                  :LowestAgentsImageUrl="flights[i - 1].LowestAgentsImageUrl"
+                  :OriginAirportCode="flights[i - 1].OriginAirportCode"
+                  :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
+              ></Flight>
+            </v-layout>
+
           </div>
-          <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i">
-            <Flight class="ma-3"
-                :AgentsImageUrl="flights[i - 1].AgentsImageUrl"
-                :CurrencySymbol="flights[i - 1].CurrencySymbol"
-                :InDepartureTime="flights[i - 1].InDepartureTime"
-                :InArrivalTime="flights[i - 1].InArrivalTime"
-                :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
-                :InDuration="flights[i - 1].InDuration"
-                :InDay="flights[i - 1].InDay"
-                :OutDepartureTime="flights[i - 1].OutDepartureTime"
-                :OutArrivalTime="flights[i - 1].OutArrivalTime"
-                :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
-                :OutDuration="flights[i - 1].OutDuration"
-                :OutDay="flights[i - 1].OutDay"
-                :Price="flights[i - 1].Price"
-                :DeeplinkUrl="flights[i - 1].DeeplinkUrl"
-                :OriginAirportCode="flights[i - 1].OriginAirportCode"
-                :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
-            ></Flight>
-          </v-layout>
+        </v-flex>
+      </v-layout>
+      <div style="">
 
-        </div>
-        <div class="">
-
-        </div>
       </div>
+
       <div style="display: flex; justify-content: center;">
           <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
       </div>
@@ -96,6 +101,7 @@ export default {
     },
     data: function() {
         return {
+          inboundDate: '',
           selected: [],
           flights: [],
           sortTypes: [
@@ -139,21 +145,23 @@ export default {
                             'country': 'KW',
                             'currency': 'USD',
                             'locale': 'en-US',
-                            'originPlace': 'IPC-sky',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
+                            'originPlace': 'IPC-sky',
                             'destinationPlace': 'HND-sky',
-                            'outboundDate': '2019-07-23',
-                            'inboundDate': '2019-07-28',
+                            'outboundDate': '2019-07-24',
                             'adults': '1',
                             // 'originPlace': this.$route.params.departure + '-sky',
                             // 'destinationPlace': this.$route.params.destination + '-sky',
                             // 'outboundDate': this.$route.params.leavingDate,
-                            // 'inboundDate': this.$route.params.comingDate,
-                            // 'adults': this.$route.params.adults
+                            // 'adults': this.$route.params.adults,
                         }
-            const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
-            let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
+            let inboundDate = this.$route.params.comingDate
+            // let inboundDate = '2019-07-28'
+            if (inboundDate != '') {
+              data['inboundDate'] = inboundDate
+            }
+
             this.$http({
                 method: 'POST',
                 url   : baseUrl,
@@ -178,6 +186,8 @@ export default {
                     return sessionKey
                 })
                 .then( sessionKey => {
+                    const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
+                    let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
                     //console.log(sessionKey)
                     this.$http({
                         method: 'GET',
@@ -215,20 +225,52 @@ export default {
                       CurrencySymbol = res.data.Currencies[0].Symbol
                       //console.log(CurrencySymbol)
                       // 가격, 에이전트연결 url
-                      let OutboundLegId, InboundLegId, AgentsCode, Price, DeeplinkUrl
+                      let OutboundLegId, InboundLegId
                       for (let j=0; j<res.data.Itineraries.length; j++) {
                         if (moreflag && j< 10)
-                          continue;                        
-                        Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
-                        DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
+                          continue;
+
+                        let Options = []
+                        let option, AgentsCode, AgentsImageUrl
+                        for (let k=0; k<res.data.Itineraries[j].PricingOptions.length; k++) {
+                          AgentsCode = res.data.Itineraries[j].PricingOptions[k].Agents[0]
+                          for (let l=0; l<res.data.Agents.length; l++) {
+                            if (res.data.Agents[l].Id == AgentsCode) {
+                              AgentsImageUrl = res.data.Agents[l].ImageUrl
+                            }
+                          }
+                          option = {'Price': this.priceTransfer(res.data.Itineraries[j].PricingOptions[k].Price),
+                                    'DeeplinkUrl': res.data.Itineraries[j].PricingOptions[k].DeeplinkUrl,
+                                    'AgentsImageUrl': AgentsImageUrl,
+                                    }
+                          Options.push(option)
+                        }
+                        var sortingField = 'Price'
+                        Options.sort(function(a, b) {
+                          return a[sortingField] - b[sortingField];
+                        })
+                        let NumofOptions = Options.length
+                        let LowestPrice = Options[0].Price
+                        let LowestDeeplinkUrl = Options[0].DeeplinkUrl
+                        let LowestAgentsImageUrl = Options[0].AgentsImageUrl
+
+                        // Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
+                        // DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
+                        // AgentsCode = res.data.Itineraries[j].PricingOptions[0].Agents[0]
+
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
                         InboundLegId = res.data.Itineraries[j].InboundLegId
-                        AgentsCode = res.data.Itineraries[j].PricingOptions[0].Agents[0]
+
                         // 출발 시간, 도착시간 (왕복), 날짜 변화, 걸리는 시간
                         let Inflag = false
                         let Outflag = false
                         let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay
-                        let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
+                        // let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
+                        let InDepartureTime = ''
+                        let InArrivalTime = ''
+                        let InCarrierId = ''
+                        let InDuration = ''
+                        let InDay = ''
                         for (let k=0; k<res.data.Legs.length; k++) {
                           if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
                             OutDepartureTime = res.data.Legs[k].Departure
@@ -238,9 +280,9 @@ export default {
                             OutDuration = this.durationTransfer(res.data.Legs[k].Duration)
                             Outflag = false
                           }
-                          if (Inflag == false && res.data.Legs[k].Id == InboundLegId) {
-                            InDepartureTime = res.data.Legs[k].Departure
-                            InArrivalTime = res.data.Legs[k].Arrival
+                          if (inboundDate != "" && Inflag == false && res.data.Legs[k].Id == InboundLegId) {
+                            InDepartureTime = this.timeTransfer(res.data.Legs[k].Departure)
+                            InArrivalTime = this.timeTransfer(res.data.Legs[k].Arrival)
                             InDay = this.dayCalculate(InDepartureTime, InArrivalTime)
                             InCarrierId = res.data.Legs[k].Carriers
                             InDuration = this.durationTransfer(res.data.Legs[k].Duration)
@@ -251,14 +293,11 @@ export default {
                           }
                         }
                         // 에이전트이미지 url, 항공사이미지 url
-                        let AgentsImageUrl, flight, InCarrierImageUrl, OutCarrierImageUrl
-                        for (let k=0; k<res.data.Agents.length; k++) {
-                          if (res.data.Agents[k].Id == AgentsCode) {
-                            AgentsImageUrl = res.data.Agents[k].ImageUrl
-                          }
-                        }
+                        let flight, OutCarrierImageUrl
+                        let InCarrierImageUrl = ''
+
                         for (let k=0; k<res.data.Carriers.length; k++) {
-                          if (res.data.Carriers[k].Id == InCarrierId) {
+                          if (inboundDate && res.data.Carriers[k].Id == InCarrierId) {
                             InCarrierImageUrl = res.data.Carriers[k].ImageUrl
                           }
                           if (res.data.Carriers[k].Id == OutCarrierId) {
@@ -268,13 +307,12 @@ export default {
                         // 시간 변환
                         OutDepartureTime = this.timeTransfer(OutDepartureTime)
                         OutArrivalTime = this.timeTransfer(OutArrivalTime)
-                        InDepartureTime = this.timeTransfer(InDepartureTime)
-                        InArrivalTime = this.timeTransfer(InArrivalTime)
+                        // InDepartureTime = this.timeTransfer(InDepartureTime)
+                        // InArrivalTime = this.timeTransfer(InArrivalTime)
                         flight = {'OriginAirportCode': OriginAirportCode,
                                   'DestinationAirportCode': DestinationAirportCode,
                                   'CurrencySymbol': CurrencySymbol,
-                                  'AgentsImageUrl': AgentsImageUrl,
-                                  'InDepartureTime': InDepartureTime,
+/                                 'InDepartureTime': InDepartureTime,
                                   'InArrivalTime': InArrivalTime,
                                   'InCarrierImageUrl': InCarrierImageUrl,
                                   'InDay': InDay,
@@ -282,10 +320,13 @@ export default {
                                   'OutArrivalTime': OutArrivalTime,
                                   'OutCarrierImageUrl': OutCarrierImageUrl,
                                   'OutDay': OutDay,
-                                  'Price': Price,
-                                  'DeeplinkUrl': DeeplinkUrl,
                                   'OutDuration': OutDuration,
                                   'InDuration': InDuration,
+                                  'Options': Options,
+                                  'NumofOptions': NumofOptions,
+                                  'LowestPrice': LowestPrice,
+                                  'LowestDeeplinkUrl': LowestDeeplinkUrl,
+                                  'LowestAgentsImageUrl': LowestAgentsImageUrl,
                                  }
                         this.flights.push(flight)
                       }
