@@ -36,8 +36,9 @@
         <v-rating
           v-model="rating"
           color="yellow accent-4"
+          empty-icon="$vuetify.icons.ratingFull"
+          half-icon="$vuetify.icons.ratingFull"
           dense
-          half-increments
           hover
           size="18"
         ></v-rating>
@@ -79,12 +80,12 @@ export default {
   },
   methods: {
     async translate() {
-      console.log(this._props)
+      // console.log(this._props)
 
       try {
         for (var gkey in this._props) {
-          console.log(gkey)
-          console.log(this._props[gkey])
+          // console.log(gkey)
+          // console.log(this._props[gkey])
           const taxios = await axios.create({
             baseURL: "https://translation.googleapis.com"
           });
@@ -98,7 +99,7 @@ export default {
           })
           ;
           this.translatedText[gkey] = getTranslate.data.data.translations[0].translatedText
-          console.log(getTranslate)
+          // console.log(getTranslate)
         }
       } catch (err) {
       }

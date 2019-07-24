@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mypage-container">
     <router-link to="/" > 홈으로 가기</router-link>
     
     <!-- 프로필 섹션 -->
@@ -11,7 +11,7 @@
       </div>
       <div class="user-infobox">
         <p style="font-size: 3rem; font-weight: 1000; margin-bottom: 0.5rem;">안녕하세요, 이빵글입니다.</p>
-        <p class="user-metainfo" @click="revisdeUserInfo">
+        <p class="user-metainfo">
           가입일: 2019 · <span class="user-metainfo__modifier" @click="showUserInfoModifier">회원정보 수정하기</span>
         </p>
 
@@ -20,21 +20,27 @@
           <p class="user-quote-symbol">“</p>
           <p class="user-description">{{userIntro}}</p>
           <div class="user-line__section-divider"><div class="divider"></div></div>
-          <p class="user-langauge"><i class="fas fa-language"></i> 구사 언어: {{userLanguage}}</p>
+          <p class="user-langauge">
+            <i class="fas fa-language"></i> 
+              구사 언어: 
+              <span v-for=" (language, idx) in userLanguage" :key="idx">
+                {{language}}
+              </span>
+          </p>
         </div>
         
         <!-- 사용자 정보 수정 섹션 -->
-        <div class="user-info__modifier" v-else>
+        <div class="user-info__modifier" @keydown.enter="updateUserInfo" v-else>
           <div class="user-intro-box">
             <label for="user-intro">소개</label>
             <input type="text" id="userIntro"  v-model="userIntro" autofocus>
           </div>
           <div class="user-language-box">
-            <label for="userLanguage">사용 언어</label>
+            <label for="userLanguage">구사 언어</label>
             <input type="text" id="userLangauge" v-model="userLanguage">  
           </div>
           <div class="user-info-button-box">
-            <button @click="closeUserInfoModifier">수정하기</button>
+            <button @click="updateUserInfo">수정하기</button>
             <button @click="closeUserInfoModifier">취소</button>
           </div>
         </div>
@@ -51,32 +57,34 @@
 
     <!-- 내가 이용했던 가이드 상품 -->
     <h2 style="margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
-    <div class="container" style="height: 700px;">
-      <v-carousel hide-delimiters style="max-width: 100%; margin: auto;">
-        <v-carousel-item
-          v-for="(item,i) in items"
-          :key="i"
-          :src="item.src"
-          
-        ></v-carousel-item>
-      </v-carousel>
-    </div>
 
     <!-- Swiper -->
-    <swiper :options="swiperOption" ref="mySwiper" @someSwiperEvent="callback">
+    <swiper 
+      :options="swiperOption" 
+      ref="mySwiper" 
+      @someSwiperEvent="callback"
+    >
       <!-- slides -->
-      <swiper-slide>I'm Slide 1</swiper-slide>
-      <swiper-slide>I'm Slide 2</swiper-slide>
-      <swiper-slide>I'm Slide 3</swiper-slide>
-      <swiper-slide>I'm Slide 4</swiper-slide>
-      <swiper-slide>I'm Slide 5</swiper-slide>
-      <swiper-slide>I'm Slide 6</swiper-slide>
-      <swiper-slide>I'm Slide 7</swiper-slide>
+      <swiper-slide
+        v-for=" (guideService, id) in userGuideServices"
+        :key=id
+      >
+        <img class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <div class="myTourExperience-description">
+          <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.user.username}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p>
+        </div>
+      </swiper-slide>
       <!-- Optional controls -->
       <div class="swiper-pagination"  slot="pagination"></div>
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
-      <div class="swiper-scrollbar"   slot="scrollbar"></div>
+      <div class="swiper-button-prev" slot="button-prev">
+        <svg viewBox="0 0 18 18" role="img" aria-label="이전" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m13.7 16.29a1 1 0 1 1 -1.42 1.41l-8-8a1 1 0 0 1 0-1.41l8-8a1 1 0 1 1 1.42 1.41l-7.29 7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+      <div class="swiper-button-next" slot="button-next">
+        <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+      <!-- <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
     </swiper>
 
   </div>
@@ -101,6 +109,7 @@
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       this.getUserInfo()
+      // this.addGuideServiceToUser()
     },
     beforeDestroy() {
       this.openHeader()
@@ -127,20 +136,27 @@
         
         userName : "",
         userIntro: "안녕하세요, 여행가고 싶어요.",
-        userLanguage: "한국어, 영어, 프랑스어, 스페인어",
+        userLanguage: ["한국어", "영어", "프랑스어", "스페인어"],
+        userGuideServices: [],
+
         swiperOption: {
-          spaceBetween: 30,
+          slidesPerView: 4,
+          spaceBetween: 20,
+          // freeMode: true,
           pagination: {
             el: '.swiper-pagination',
             clickable: true
           },
           navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
           },
         },
         isImgModalOpen : false,
         userInfo: {}, // username email profileImg registeredAt firstName lastName age gender languages intro UsedGuides UsedGuideServices
+
+        // 수정 필 !!!!!!!!!!!!!!!!!!!!!!
+        myTourExperience: ["http://www.dream-wallpaper.com/free-wallpaper/travel-wallpaper/jeju-island--korea-scenery-wallpaper/1920x1200/free-wallpaper-13.jpg", "https://i.pinimg.com/originals/23/2e/f2/232ef249a037d9424a0e67a41eba8200.jpg", "https://i.pinimg.com/originals/98/e4/4e/98e44e7ce7245678d79e29e1075746a1.jpg", "http://luxurytraveler.s3.amazonaws.com/wp-content/uploads/2016/02/21144831/marina_bay_sands_singapore_view-pool.jpg"],
       }
     },
     methods: {
@@ -171,6 +187,7 @@
       closeUserInfoModifier: function() {
         this.isUserInfoOpen = true
       },
+
       getUserInfo: function() {
         const token= this.$getToken('BisionToken')
         const config = {
@@ -179,9 +196,50 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             this.userInfo = res.data.userInfo
+            console.log(this.userInfo)
+            this.userName = this.userInfo.username
+            this.userIntro = this.userInfo.intro
+            this.userLanguage = this.userInfo.languages
+            this.userImage = this.userInfo.profileImg
+            this.userGuideServices  = this.userInfo.UsedGuideServices
+            console.log(this.userGuideServices)
           })
           .catch( err => {
             console.log(err)
+          })
+      },
+
+      updateUserInfo: function() {
+        // api/user/:username
+        this.isUserInfoOpen = true
+        const token= this.$getToken('BisionToken')
+        const config = {
+            'headers': {'x-access-token': token},
+        }
+        const data = {
+            'intro' : this.userIntro,
+            'languages' : this.userLanguage,
+            'profileImg' : this.userImage,
+        }
+        this.$http.put('/api/user/username', data, config)
+          .then( res => {
+            // console.log(res)
+          })
+          .catch( err => {
+            console.log(err)
+          })
+      },
+
+      addGuideServiceToUser: function() {
+        // api/user/opalcat1013/usedguideservices/5d37e5aa1b38180f50acbb43
+        // opalcat1013 == 유저 아이디
+        const token= this.$getToken('BisionToken')
+        const config = {
+            'headers': {'x-access-token': token},
+        }
+        this.$http.post('/api/user/minkyo/usedguideservices/5d37e5ed1b38180f50acbb44', {}, config)
+          .then( res => {
+              console.log(res.data)
           })
       },
 
