@@ -391,6 +391,7 @@ export default {
             comingDatePicker.placeholder = "(편도)"
             comingDatePicker.value = ""
             comingDateText.style.color = "white"
+            this.comingDate = ''
             
         },
         roundTrip: function() {
