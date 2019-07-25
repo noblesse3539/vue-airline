@@ -1,12 +1,12 @@
 <template>
   <v-layout wrap>
-    <v-flex xs3 v-for="i in guides.length > limits ? limits : guides.length">
+    <v-flex xs3 v-for="(i, idx) in userGuideServices.length > limits ? limits : userGuideServices.length" :key="idx">
       <Guide class="ma-3"
-          :title="guides[i - 1].title"
-          :name="guides[i - 1].name"
-          :content="guides[i - 1].content"
-          :region="guides[i - 1].region"
-          :imgSrc="guides[i - 1].img"
+          :title="userGuideServices[i - 1].title"
+          :name="userGuideServices[i - 1].user.username"
+          :content="userGuideServices[i - 1].detail"
+          :region="userGuideServices[i - 1].city_kor"
+          :imgSrc="userGuideServices[i - 1].mainImg"
       ></Guide>
     </v-flex>
     <v-flex xs12 text-xs-center round class="loadMore">
@@ -24,7 +24,8 @@ export default {
 	name: 'GuideList',
 	props: {
     limits: {type: Number, default: 4},
-    loadMore: {type: Boolean, default: true}
+    loadMore: {type: Boolean, default: true},
+    userGuideServices: {type: Array, default: []},
 	},
   components: {
     Guide
@@ -80,6 +81,9 @@ export default {
         },
       ]
 		}
-	}
+  },
+  updated() {
+    console.log(this.userGuideServices)
+  },
 }
 </script>
