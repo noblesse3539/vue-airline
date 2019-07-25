@@ -63,3 +63,11 @@ exports.findByUserObId = (req,res) => {
   .then(repond)
   .catch(onError)
 }
+
+exports.guideList = (req, res) => {
+  Guide.find({})
+  .populate('user', '-password')
+  .then( guides => {
+    res.json({guides})
+  })
+}

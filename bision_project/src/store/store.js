@@ -4,6 +4,7 @@ import Counter from './modules/counter'
 import Alerter from './modules/alerter'
 import Admin from './modules/admin'
 import Header from './modules/header'
+import User from './modules/user'
 
 // import createLogger from '../../../src/plugins/logger'
 
@@ -15,7 +16,8 @@ export default new Vuex.Store({
     Counter,
     Alerter,
     Admin,
-    Header
+    Header,
+    User
   },
   strict: debug,
   // plugins: debug ? [createLogger()] : []

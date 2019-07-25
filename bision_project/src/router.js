@@ -9,6 +9,7 @@ import MyPage from './views/MyPage'
 import Admin from './views/Admin'
 import FlightListPage from './views/FlightListPage'
 import VuexTutorial from './views/VuexTutorial'
+import GuideListPage from './views/GuideListPage'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
             path: '/guidemypage',
             name: 'GuideMyPage',
             component: GuideMyPage
+        },
+        {
+            path: '/guideListPage',
+            name: 'GuideListPage',
+            component: GuideListPage,
         },
         {
             path: '/login',

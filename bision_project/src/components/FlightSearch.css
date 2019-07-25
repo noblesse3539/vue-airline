@@ -133,6 +133,11 @@ input {
     cursor: pointer;
 }
 
+.cancelBorder {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius : 0px !important;
+}
+
 .flight-search-info input:not(:last-child) {
     border-right: 1px solid black;
 }
@@ -359,7 +364,7 @@ input {
 
 .country-name.is-active,
 .country-name:hover {
-    background: rgba(47, 220, 62, 1);
+    background: #00c3ff;
     color: white;
 }
 

@@ -9,12 +9,12 @@
                             <span class="checkmark">{{label}}</span>
                         </label>
                     </div>
-                    <div class="flight-search-info">    
+                    <div class="flight-search-info">
                         <div class="departure">
                             <label> 출발지
-                                <input 
+                                <input
                                     type="text"
-                                    placeholder="국가, 도시 또는 공항" 
+                                    placeholder="국가, 도시 또는 공항"
                                     class="left-end-input"
                                     v-model="departureInput"
                                     @input="departureInput = $event.target.value"
@@ -28,14 +28,14 @@
                                             <div class="country-triangle"></div>
                                     </div>
                                     <div class="dep-country-list">
-                                        <div v-for="(airport, id) in departureOutput.slice(0, 10)" 
-                                            :key="id" 
+                                        <div v-for="(airport, id) in departureOutput.slice(0, 10)"
+                                            :key="id"
                                             class="country-name"
                                             :class="{ 'is-active' : id === departureArrowCounter }"
                                         >
                                             <!-- 출발지 검색 리스트 -->
                                             <div
-                                                @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'departure')" 
+                                                @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'departure')"
                                                 style="color: black; font-size: 3rem;"
                                             >
                                                 <div class="airportList">
@@ -53,11 +53,11 @@
                         </div>
                         <div class="destination">
                             <label> 도착지
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     v-model="destinationInput"
                                     placeholder="국가, 도시 또는 공항"
-                                    class="right-end-input"
+                                    class="right-end-input cancelBorder"
                                     @input="destinationInput = $event.target.value"
                                     @keyup="getDestinationOutput"
                                     @keydown.up="onArrowUp('destination')"
@@ -69,8 +69,8 @@
                                             <div class="country-triangle"></div>
                                     </div>
                                     <div class="dst-country-list">
-                                        <div v-for="(airport, id) in destinationOutput.slice(0, 10)" 
-                                            :key="id" 
+                                        <div v-for="(airport, id) in destinationOutput.slice(0, 10)"
+                                            :key="id"
                                             class="country-name"
                                             :class="{ 'is-active' : id === destinationArrowCounter }"
                                         >
@@ -92,7 +92,7 @@
                         <div class="duration-start" @click="openCalender('.leavingDate', '.leavingDate-picker')">
                             <label> 가는날
                                 <input  class="leavingDate" type="text" :placeholder="todayDate" :value="leavingDate" disabled>
-                                <div class="leavingDate-picker"> 
+                                <div class="leavingDate-picker">
                                     <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                                 </div>
                             </label>
@@ -151,7 +151,7 @@
                                 </div>
                             </label>
                             <div class="flight-search-submit">
-                                <button class="flight-search-submitBtn" type="submit" 
+                                <button class="flight-search-submitBtn" type="submit"
                                     @click="goToUrl()">항공권 검색</button>
                             </div>
                         </div>
@@ -173,8 +173,8 @@ export default {
     },
     data() {
         return {
-            
-            RadioLabels: ["왕복", "편도", "다구간"],
+
+            RadioLabels: ["왕복", "편도", ],
             classes: ['Economy', 'Business', 'First'],
 
             isOpen : false,
@@ -221,7 +221,7 @@ export default {
     mounted() {
         const roundTrip = document.querySelector("input")
         roundTrip.checked = true
-        
+
         // 편도 버튼 클릭시 <오는날> 버튼 비활성화 처리
         const radioBtnOneWay = document.querySelectorAll('.radio-container')[1].children[0]
         radioBtnOneWay.addEventListener('click', this.oneWayTrip)
@@ -238,7 +238,7 @@ export default {
         document.body.removeEventListener("click",  this.hideSearchResult)
     },
     methods: {
-        
+
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
             const params = {}
@@ -265,27 +265,27 @@ export default {
             }
         },
         hideSearchResult : function(e) {
-            
+
             const leavingDatePicker = document.querySelector('.leavingDate-picker')
             const comingDatePicker = document.querySelector('.comingDate-picker')
             const psgTriangleBox = document.querySelector(".psg-triangle-box")
             const psgaAdultsPicker = document.querySelector(".psg-adults-picker")
             const flightSearchBtn = document.querySelector(".flight-search-submit")
-            
+
             // 인원 수 고를 때 제출 숨긴 버튼 다시 보이게 하기
             // console.log(flightSearchBtn.style.display)
 
             if (e.target.classList[0] !== 'leavingDate' && e.target.classList[0] !== 'comingDate') {
-                
-                const searchInput = [".dep-country-list", ".dst-country-list", 
+
+                const searchInput = [".dep-country-list", ".dst-country-list",
                                         ".dep-triangle-box", ".dst-triangle-box"]
-                searchInput.forEach( className => { 
+                searchInput.forEach( className => {
                     const countryList = document.querySelector(className)
                     countryList.style.display = "none"
                     countryList.style.position = "none"
                     countryList.style.zIndex = "-1"
                 })
-                    
+
                 if (this.datePickerFlag['.leavingDate'] == true || this.datePickerFlag['.comingDate'] == true){
                     leavingDatePicker.style.display = "none"
                     comingDatePicker.style.display = "none"
@@ -293,7 +293,7 @@ export default {
 
             }
 
-            if (e.target.classList[0] !== 'flight-search-submitBtn' 
+            if (e.target.classList[0] !== 'flight-search-submitBtn'
                 && e.target.classList[0] !== 'right-end-input'
                 && e.target.classList[0] !== 'psg-adults-picker'
                 && e.target.classList[0] !== 'psg-adults-picker-inside'
@@ -312,7 +312,7 @@ export default {
             }
         },
 
-        // future task) 
+        // future task)
         // 검색 결과물 중 상위 10개 항목만 보여주므로 인덱스가 11개 이상 넘어갔을 때 처리해줘야합니다.
         onArrowDown(travelType) {
 
@@ -337,40 +337,40 @@ export default {
                 }
             }
         },
-        onEnter(travelType) { 
-            
-            
+        onEnter(travelType) {
+
+
             const leftInput = document.querySelector('.searchListWrapper')
             const rightInput = document.querySelector('.searchListWrapper-dst')
-        
+
             if (travelType == 'departure') {
-                this.saveUserChoiceAirport(this.departureOutput[this.departureArrowCounter].code, 
-                                           this.departureOutput[this.departureArrowCounter].name_kor, 
+                this.saveUserChoiceAirport(this.departureOutput[this.departureArrowCounter].code,
+                                           this.departureOutput[this.departureArrowCounter].name_kor,
                                            "departure")
                 leftInput.style.display = "none"
             } else {
-                this.saveUserChoiceAirport(this.destinationOutput[this.destinationArrowCounter].code, 
-                                           this.destinationOutput[this.destinationArrowCounter].name_kor, 
+                this.saveUserChoiceAirport(this.destinationOutput[this.destinationArrowCounter].code,
+                                           this.destinationOutput[this.destinationArrowCounter].name_kor,
                                            "destination")
                 rightInput.style.display = "none"
             }
 
         },
         openCalender: function(className, data, e) {
-            
+
             if (className == ".comingDate") {
                 const comingDatePicker = document.querySelector(".comingDate")
                 const roundTrip = document.querySelector("input")
                 // this.comingDate = new Date().toISOString().substr(0, 10)
                 roundTrip.checked = true
-                
+
             }
 
             const leavingDataPicker = document.querySelector(data)
             leavingDataPicker.style.display = "block"
             leavingDataPicker.style.zIndex = "1005"
             this.datePickerFlag[className] = true
-            
+
         },
         openClassPicker: function() {
             const psgTriangleBox = document.querySelector(".psg-triangle-box")
@@ -378,7 +378,7 @@ export default {
             const flightSearchBtn = document.querySelector(".flight-search-submit")
             const passengers = document.querySelector('.passengers')
             psgTriangleBox.style.display = "block"
-            psgTriangleBox.style.zIndex = "1010"            
+            psgTriangleBox.style.zIndex = "1010"
             psgaAdultsPicker.style.display = "block"
             psgaAdultsPicker.style.zIndex = "1010"
             flightSearchBtn.style.display = "none"
@@ -391,6 +391,7 @@ export default {
             comingDatePicker.placeholder = "(편도)"
             comingDatePicker.value = ""
             comingDateText.style.color = "white"
+            this.comingDate = ''
             
         },
         roundTrip: function() {
@@ -403,25 +404,25 @@ export default {
             comingDateText.style.color = "white"
         },
         increaseAdults: function() {
-            
+
             this.adults += 1
         },
         decreaseAdults: function() {
-            
+
             if (this.adults != 1 ){
                 this.adults -= 1
             }
         },
         getDepartureOutput() {
             this.isOpen = true
-            
+
             this.DepartureAirportAutoCompleteSearch()
         },
         getDestinationOutput() {
             this.DestinationAirportAutoCompleteSearch()
         },
         saveUserChoiceAirport: function(userChoiceAirport, airportName, travelType) {
-        
+
             const airportNameSplit = airportName.replace(/\s/g, '');
 
             if (travelType == "departure") {
@@ -435,7 +436,7 @@ export default {
         DepartureAirportAutoCompleteSearch() {
             this.departureOutput = this.airportList.filter( airport => {
                 if ( airport.name_kor.includes(this.departureInput)
-                    || airport.name_eng.toLowerCase().match(this.departureInput.toLowerCase()) 
+                    || airport.name_eng.toLowerCase().match(this.departureInput.toLowerCase())
                     || airport.nation_kor.includes(this.departureInput)
                     || airport.city_kor.toLowerCase().includes(this.departureInput)
                     || airport.city_eng.toLowerCase().includes(this.departureInput.toLowerCase())
@@ -449,7 +450,7 @@ export default {
         DestinationAirportAutoCompleteSearch() {
             this.destinationOutput = this.airportList.filter( airport => {
                 if ( airport.name_kor.includes(this.destinationInput)
-                    || airport.name_eng.toLowerCase().match(this.destinationInput.toLowerCase()) 
+                    || airport.name_eng.toLowerCase().match(this.destinationInput.toLowerCase())
                     || airport.nation_kor.includes(this.destinationInput)
                     || airport.city_kor.includes(this.destinationInput)
                     || airport.city_eng.toLowerCase().includes(this.destinationInput.toLowerCase())
@@ -466,11 +467,11 @@ export default {
     },
     // 공항 출발지 및 도착지 Autocomplete 방식으로 검색
     computed: {
-        
+
     },
     watch: {
         departureInput: function() {
-            
+
             const leftInput = document.querySelector('.searchListWrapper')
             const countryList = document.querySelector(".dep-country-list")
             const triangle    = document.querySelector(".dep-triangle-box")
@@ -524,5 +525,5 @@ export default {
         },
         deep: true,
     }
-} 
+}
 </script>

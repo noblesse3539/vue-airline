@@ -11,5 +11,6 @@ router.post('/create/',controller.createGuideService)
 router.delete('/delete/:user/:title',controller.deleteGuideService)
 router.put('/update/:user/:title',controller.updateGuideService)
 
+router.post('/:guideServiceId/:userId', controller.likeGuideService)
 
 module.exports = router

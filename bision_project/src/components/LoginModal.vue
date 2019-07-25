@@ -64,6 +64,7 @@
 <script>
 import './LoginModal.css'
 import facebookLogin from 'facebook-login-vuejs';
+import { mapGetters, mapState } from 'vuex'
 
 var modal_submit_register = '회원가입';
 var modal_submit_password = 'Reset Password';
@@ -125,13 +126,14 @@ export default {
 
               const loginBtn = document.querySelector('.loginBtn')
               loginBtn.style.display = "none"
-              const logoutBtn = document.querySelector('.logoutBtn')
-              logoutBtn.style.display = "inline"
-              const mypageBtn = document.querySelector('.mypageBtn')
-              mypageBtn.style.display = "inline"
-
-              this.$emit('closeModal')
+              // const logoutBtn = document.querySelector('.logoutBtn')
+              // logoutBtn.style.display = "inline"
+              // const mypageBtn = document.querySelector('.mypageBtn')
+              // mypageBtn.style.display = "inline"
               
+              this.$emit('closeModal')
+              this.$store.commit('setIsLoggedIn')
+
             }
             // 아래 요청도 가능
             // this.$http.get('/api/auth/check', {headers: {'x-access-token':res.data.token}})

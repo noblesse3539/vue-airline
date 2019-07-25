@@ -2,7 +2,7 @@
   <v-card>
     <v-layout>
       <v-flex xs12>
-        <v-img :src="imgSrc" width="100%" height="250px" contain></v-img>
+        <v-img class="userGuideTourImage" :src="imgSrc" width="100%" height="250px"></v-img>
       </v-flex>
     </v-layout>
     <v-divider light></v-divider>
@@ -10,7 +10,7 @@
       <div v-if="translateflag">
         <div class="headline mb-2">{{name}}</div>
         <div class="mb-2"><b>{{title}}</b></div>
-        <div class="mb-2"><b>{{region}}</b></div>
+        <div class="mb-2"><b>{{region[0]}}, {{region[1]}}</b></div>
         <div class="mb-2 cutfourline">{{content}}</div>
       </div>
       <div v-else>
@@ -36,8 +36,9 @@
         <v-rating
           v-model="rating"
           color="yellow accent-4"
+          empty-icon="$vuetify.icons.ratingFull"
+          half-icon="$vuetify.icons.ratingFull"
           dense
-          half-increments
           hover
           size="18"
         ></v-rating>
@@ -56,7 +57,7 @@ export default {
     name: {type: String},
     region: {type: String},
     content: {type: String},
-    imgSrc: {type: String}
+    imgSrc: {type: String},
 	},
 	data() {
 		return {
@@ -79,12 +80,12 @@ export default {
   },
   methods: {
     async translate() {
-      console.log(this._props)
+      // console.log(this._props)
 
       try {
         for (var gkey in this._props) {
-          console.log(gkey)
-          console.log(this._props[gkey])
+          // console.log(gkey)
+          // console.log(this._props[gkey])
           const taxios = await axios.create({
             baseURL: "https://translation.googleapis.com"
           });
@@ -98,7 +99,7 @@ export default {
           })
           ;
           this.translatedText[gkey] = getTranslate.data.data.translations[0].translatedText
-          console.log(getTranslate)
+          // console.log(getTranslate)
         }
       } catch (err) {
       }
@@ -113,5 +114,9 @@ export default {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
+  }
+
+  .userGuideTourImage:hover {
+    cursor: pointer;
   }
 </style>
