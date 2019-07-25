@@ -16,7 +16,8 @@ const User = new Schema({
     languages: [String],
     intro: String,
     UsedGuides: [{ type: Schema.Types.ObjectId, ref: 'guide'}],
-    UsedGuideServices: [{ type: Schema.Types.ObjectId, ref: 'guideservice'}]
+    UsedGuideServices: [{ type: Schema.Types.ObjectId, ref: 'guideservice'}],
+    likeGuideServices: [{ type: Schema.Types.ObjectId, ref: 'guideservice'}]
     // admin: { type: Boolean, default: false }
 })
 
