@@ -19,11 +19,11 @@ const Tag = new Schema({
 //   }).exec()
 // }
 //
-// Tag.statics.findByUserObId = function(user){
-//   return this.findOne({
-//     user
-//   }).exec()
-// }
+Tag.statics.findOneByTagGSId = function(tag,id){
+  return this.findOne({
+    tag,id
+  }).exec()
+}
 //
 // Tag.statics.findByGS = function(GS){
 //   return this.findOne({

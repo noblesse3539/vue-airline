@@ -47,3 +47,21 @@ exports.deleteReview = (req,res)=>{
     }
   })
 }
+
+exports.updateReview=(req,res)=>{
+    Review.findOne({guideservice:req.params.id,title:req.params.title,content:req.params.content}, (err,review) => {
+        if (review) {
+              console.log(review)
+              let id=review._id
+              Review.update({ _id: id }, { $set: req.body }, function(err, output){
+                  if(err) res.status(500).json({ error: 'database failure' });
+                  console.log(output);
+                  if(!output.n) return res.status(404).json({ error: 'review not found' });
+                  res.json( { message: 'reivew updated' } );
+              })
+          if(err) res.status(500).json({err})
+        }
+        if(err) res.status(500).json({err})
+      })
+
+  }

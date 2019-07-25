@@ -45,7 +45,7 @@ exports.userDelete = (req, res) => {
             message: 'yue are not an admin'
         })
     }
-    
+
     User.remove({ username: req.params.username}, function(err, output) {
         if(err) return res.status(500).json({ error: 'database failure'})
 

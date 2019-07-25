@@ -24,28 +24,16 @@ router.use('/user', authMiddleware)
 router.use('/user', user)
 
 // Guide
-router.use('/guide', guide)
-// router.use('/createGuide',guide)
-// router.use('/deleteGuide',guide)
-// router.use('/updateGuide',guide)
-// router.use('/findGuideByUserObId',guide)
+router.use('/guide',guide)
 
 // GuideService
-router.use('/createGuideService',guideservice)
-router.use('/deleteGuideService',guideservice)
-router.use('/updateGuideService',guideservice)
-router.use('/findGSByGuideIdTitle',guideservice)
+router.use('/guideservice',guideservice)
 
+// Review
+router.use('/review',review)
 
-router.use('/findReview',guideservice)
-router.use('/createReview',review)
-router.use('/deleteReview',review)
-
-router.use('/createTag',tag)
-router.use('/deleteTag',tag)
-router.use('/findGSByTag',tag)
-router.use('/deleteTag',tag)
-
+//Tag
+router.use('/tag',tag)
 
 router.use('/airport', airport)
 
