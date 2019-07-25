@@ -53,8 +53,8 @@
     
     <!-- 이용했던 가이드 -->
     <h2 style="margin-top: 48px; margin-bottom: 24px;">내가 이용했던 여행 가이드</h2>
-    <GuideList :load-more="true"></GuideList>
-
+    <GuideList :load-more="true" :userGuideServices="userGuideServices"></GuideList>
+    
     <!-- 내가 이용했던 가이드 상품 -->
     <h2 style="margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
 
