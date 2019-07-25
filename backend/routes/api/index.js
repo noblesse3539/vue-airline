@@ -22,10 +22,11 @@ router.use('/user', authMiddleware)
 router.use('/user', user)
 
 // Guide
-router.use('/createGuide',guide)
-router.use('/deleteGuide',guide)
-router.use('/updateGuide',guide)
-router.use('/findGuideByUserObId',guide)
+router.use('/guide', guide)
+// router.use('/createGuide',guide)
+// router.use('/deleteGuide',guide)
+// router.use('/updateGuide',guide)
+// router.use('/findGuideByUserObId',guide)
 
 // GuideService
 router.use('/createGuideService',guideservice)
