@@ -28,9 +28,12 @@ export default {
   },
   mounted() {
     this.checkUserLoginStatus()
+    // console.log(this.getUserId)
   },
   computed: {
-
+    ...mapGetters({
+      getUserId : state => state.User.getUserId
+    })
   },
   methods: {
     checkUserLoginStatus: function() {
@@ -44,6 +47,8 @@ export default {
         .then( res => {
           if (res.status == 200) {
             this.$store.commit("setIsLoggedIn")
+            // console.log()
+            this.$sotre.commit("setUserId(res.data.info._id)")
           }
         })
         .catch( err => {
