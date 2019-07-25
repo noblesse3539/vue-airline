@@ -11,14 +11,50 @@
         ></v-select>
       </v-flex> -->
       <v-layout wrap>
-        <v-flex style="width:200px; display: inline-block" mx-0>
-          <v-container fluid>
+        <v-flex style="width: 200px;" mx-0>
+          <!-- 경유별 검색 체크박스 -->
+          <div class="container" style="width: 220px;">
             경유
-            <p>{{ selected }}</p>
             <v-checkbox v-model="selected" label="직항" value="0" @change="onCheckboxChange"></v-checkbox>
             <v-checkbox v-model="selected" label="1회 경유" value="1" @change="onCheckboxChange"></v-checkbox>
             <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="onCheckboxChange"></v-checkbox>
-          </v-container>
+          </div>
+          <!-- 시간대별 검색 슬라이더 -->
+          <div class="container" style="width: 220px; padding: 0px;">
+            <span style="display: block; text-align: center;">가는 날 출발시간</span>
+            <span>{{outboundDepartStartTime}} - </span>
+            <span>{{outboundDepartEndTime}}</span>
+            <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="outrange" @change="onChange($event)">
+              <template>
+                <v-text-field v-model="outrange[0]"  class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
+              </template>
+              <template>
+                <v-text-field v-model="outrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
+              </template>
+              <template v-slot:thumb-label="props">
+                &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+                <!-- <span>&nbsp&nbsp&nbsp{{ season(props.value) }}</span>
+                <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
+              </template>
+            </v-range-slider>
+
+            <span style="display: block; text-align: center;">오는 날 출발시간</span>
+            <span>{{inboundDepartStartTime}} - </span>
+            <span>{{inboundDepartEndTime}}</span>
+            <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
+              <template>
+                <v-text-field v-model="inrange[0]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
+              </template>
+              <template>
+                <v-text-field v-model="inrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
+              </template>
+              <template v-slot:thumb-label="props">
+                &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+              </template>
+            </v-range-slider>
+          </div>
         </v-flex>
         <!-- 항공권 리스트 -->
         <v-flex style="width: 700px">
@@ -27,20 +63,12 @@
             <div class="text-xs-right">
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    v-on="on"
-                  >
+                  <v-btn color="primary" dark v-on="on">
                     정렬 기준
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-tile
-                    v-for="(sortType, index) in sortTypes"
-                    :key="index"
-                    @click="getFlightsbyOptional(1, index)"
-                  >
+                  <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(1, index)">
                     <v-list-tile-title>{{ sortType }}</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -95,6 +123,11 @@ export default {
       pageIndex: {type: Number, default: 0},
       pageSize: {type: Number, default: 10},
       error: {type: Boolean, default: false},
+      outboundDepartStartTime: {type: String, default: '오전 12:00'},
+      outboundDepartEndTime: {type: String, default: '오후 11:59'},
+      inboundDepartStartTime: {type: String, default: '오전 12:00'},
+      inboundDepartEndTime: {type: String, default: '오후 11:59'},
+      optionTypeIndex: {type: Number, default: 0},
     },
     components: {
       Flight
@@ -102,8 +135,16 @@ export default {
     data: function() {
         return {
           inboundDate: '',
-          selected: [],
+          selected: ['0', '1', '2'],
           flights: [],
+          outrange: [0, 1440],
+          inrange: [0, 1440],
+          timeOptions: [
+            '00%3A00',
+            '23%3A59',
+            '00%3A00',
+            '23%3A59',
+          ],
           sortTypes: [
             '최저가순',
             '최단여행시간순',
@@ -121,14 +162,14 @@ export default {
     },
     mounted() {
         // window.addEventListener('load', this.getFlights)
-        this.getFlights(0, 0, 0)
-        this.$nextTick(() => {
-          this.getFlights(1, 0);
-      });
+      //   this.getFlights(0, 0, 0)
+      //   this.$nextTick(() => {
+      //     this.getFlights(1, 0, 0);
+      // });
+      this.getFlights(1, 0, 0)
     },
     methods: {
         getFlights: function(moreflag, optionTypeIndex, s =  0, checkbox = false){
-
             console.log("실행")
             // console.log(this.$route.params)
             // console.log(this.flights)
@@ -147,17 +188,17 @@ export default {
                             'locale': 'en-US',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            // 'originPlace': 'ICN-sky',
-                            // 'destinationPlace': 'PEK-sky',
-                            // 'outboundDate': '2019-07-25',
-                            // 'adults': '1',
-                            'originPlace': this.$route.params.departure + '-sky',
-                            'destinationPlace': this.$route.params.destination + '-sky',
-                            'outboundDate': this.$route.params.leavingDate,
-                            'adults': this.$route.params.adults,
+                            'originPlace': 'ICN-sky',
+                            'destinationPlace': 'PEK-sky',
+                            'outboundDate': '2019-07-26',
+                            'adults': '1',
+                            // 'originPlace': this.$route.params.departure + '-sky',
+                            // 'destinationPlace': this.$route.params.destination + '-sky',
+                            // 'outboundDate': this.$route.params.leavingDate,
+                            // 'adults': this.$route.params.adults,
                         }
-            let inboundDate = this.$route.params.comingDate
-            // let inboundDate = '2019-07-30'
+            // let inboundDate = this.$route.params.comingDate
+            let inboundDate = '2019-07-30'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
             }
@@ -188,10 +229,11 @@ export default {
                 .then( sessionKey => {
                     const optionUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/'
                     let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
+                    let timeOption = '&outboundDepartStartTime=' + this.timeOptions[0] + '&outboundDepartEndTime=' + this.timeOptions[1] + '&inboundDepartStartTime=' + this.timeOptions[2] + '&inboundDepartEndTime=' + this.timeOptions[3]
                     //console.log(sessionKey)
                     this.$http({
                         method: 'GET',
-                        url   : optionUrl + sessionKey + option,
+                        url   : optionUrl + sessionKey + option + timeOption,
                         headers: {
                         'X-RapidAPI-Host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
                         'X-RapidAPI-Key' : '25703e8168mshcbae189ae6af368p1fcb8djsnead03bdc43f6',
@@ -310,44 +352,7 @@ export default {
                           }
                         }
 
-                        // 체크박스
-                        let a
-                        // console.log(typeof InNumofStop)
-                        // console.log(typeof this.selected[0])
-                        if (checkbox) {
-                          if ((InNumofStop in this.selected) || (OutNumofStop in this.selected) || ('2' in this.selected && Number(InNumofStop) > 1) || ('2' in this.selected && Number(OutNumofStop) > 1)) {
-                            console.log(this.selected)
-                            console.log(InNumofStop in this.selected)
-                            console.log(OutNumofStop in this.selected)
-                            console.log(OutNumofStop)
-                            console.log('2' in this.selected && Number(InNumofStop))
-                            console.log('2' in this.selected && Number(OutNumofStop) > 1)
-                            a = 1
-                          } else {
-                            flight = {'OriginAirportCode': OriginAirportCode,
-                                      'DestinationAirportCode': DestinationAirportCode,
-                                      'CurrencySymbol': CurrencySymbol,
-                                      'InDepartureTime': InDepartureTime,
-                                      'InArrivalTime': InArrivalTime,
-                                      'InCarrierImageUrl': InCarrierImageUrl,
-                                      'InDay': InDay,
-                                      'InDuration': InDuration,
-                                      'InNumofStop': InNumofStop,
-                                      'OutDepartureTime': OutDepartureTime,
-                                      'OutArrivalTime': OutArrivalTime,
-                                      'OutCarrierImageUrl': OutCarrierImageUrl,
-                                      'OutDay': OutDay,
-                                      'OutDuration': OutDuration,
-                                      'OutNumofStop': OutNumofStop,
-                                      'Options': Options,
-                                      'NumofOptions': NumofOptions,
-                                      'LowestPrice': LowestPrice,
-                                      'LowestDeeplinkUrl': LowestDeeplinkUrl,
-                                      'LowestAgentsImageUrl': LowestAgentsImageUrl,
-                                     }
-                            this.flights.push(flight)
-                          }
-                        } else {
+                        if ((this.selected.indexOf(InNumofStop) != -1) || (this.selected.indexOf(OutNumofStop) != -1) || (this.selected.indexOf('2') != -1 && Number(InNumofStop) > 1) || (this.selected.indexOf('2') != -1 && Number(OutNumofStop) > 1)) {
                           flight = {'OriginAirportCode': OriginAirportCode,
                                     'DestinationAirportCode': DestinationAirportCode,
                                     'CurrencySymbol': CurrencySymbol,
@@ -371,8 +376,6 @@ export default {
                                    }
                           this.flights.push(flight)
                         }
-
-
                       }
                       console.log(this.flights)
                 })
@@ -438,33 +441,68 @@ export default {
         getFlightsbyOptional: function (flag, optionType) {
           this.flights = []
           this.limits = 10
+          this.optionTypeIndex = optionType
           this.getFlights(flag, optionType);
         },
-        changedValue: function (value) {
-          this.flights = []
-          this.getFlights(1, this.sortTypes.indexOf(value), 0)
-        },
+        // changedValue: function (value) {
+        //   this.flights = []
+        //   this.getFlights(1, this.sortTypes.indexOf(value), 0)
+        // },
         onCheckboxChange : function () {
           console.log(this.selected)
           this.flights = []
-          this.getFlights(1, 0, 0, true)
-          // console.log(this.selected)
-          // console.log(this.flights)
-          //
-          // let Sortedflights = []
-          // for (let i=0; i<this.flights.length; i++) {
-          //   for (let j=0; j<this.selected.length; j++) {
-          //     if (this.flights[i].InNumofStop == this.selected[j] || this.flights[i].OutNumofStop == this.selected[j] || ("2" in this.selected && this.flights[i].InNumofStop > 1) || ("2" in this.selected && this.flights[i].InNumofStop > 1)) {
-          //       Sortedflights.push(this.flights[i])
-          //       break;
-          //     }
-          //   }
-          // }
-          // this.flights = Sortedflights
+          this.getFlights(1, 0, 0)
+        },
+        onChange(value) {
+          // this.$store.dispatch('handler', value)
+          this.timeOptions[0] = this.timeTransferforApi(this.outrange[0])
+          this.timeOptions[1] = this.timeTransferforApi(this.outrange[1])
+          this.timeOptions[2] = this.timeTransferforApi(this.inrange[0])
+          this.timeOptions[3] = this.timeTransferforApi(this.inrange[1])
+          this.outboundDepartStartTime = this.timeTransferforSlider(this.outrange[0])
+          this.outboundDepartEndTime = this.timeTransferforSlider(this.outrange[1])
+          this.inboundDepartStartTime = this.timeTransferforSlider(this.inrange[0])
+          this.inboundDepartEndTime = this.timeTransferforSlider(this.inrange[1])
+          this.flights = []
+          this.getFlights(1, this.optionTypeIndex, 0)
+        },
+        timeTransferforSlider : function (time) {
+          let hour, minute, result
+          hour = parseInt(parseInt(time)/60)
+          minute = parseInt(time)%60
+
+          if (hour < 13) {
+            if (minute == 0) {
+              return "오전 " + hour + ":00"
+            } else {
+              return "오전 " + hour + ":30"
+            }
+          } else {
+            hour = hour - 12
+            if (minute == 0) {
+              return "오후 " + hour + ":00"
+            } else {
+              return "오후 " + hour + ":30"
+            }
+          }
+        },
+        timeTransferforApi : function (time) {
+          let hour = parseInt(parseInt(time)/60)
+          let minute = parseInt(time)%60
+          if (hour < 10) hour = "0" + hour
+          if (minute == 0) minute = "00"
+          return hour + "%3A" + minute
+        },
+        thumbLabelHour (val) {
+          return this.timeTransferforSlider(val).split(' ')[0]
+        },
+        thumbLabelMinute (val) {
+          return this.timeTransferforSlider(val).split(' ')[1]
         },
     },
 }
 </script>
+
 <style>
   .wrapper252 {
     display: grid;
