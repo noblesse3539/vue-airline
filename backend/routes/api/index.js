@@ -5,6 +5,8 @@ const user = require('./user')
 const superUser = require('./superUser')
 const superAuth = require('./superAuth')
 const airport = require('./airport')
+const city = require('./city')
+const nation = require('./nation')
 
 const guide =require('./guide')
 const guideservice = require('./guideservice')
@@ -47,5 +49,7 @@ router.use('/deleteTag',tag)
 
 router.use('/airport', airport)
 
+router.use('/city', city)
+router.use('/nation', nation)
 
 module.exports = router

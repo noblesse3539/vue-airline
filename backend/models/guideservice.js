@@ -20,7 +20,8 @@ const GuideService = new Schema({
   desc:String,
   detail:String,
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-  tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }]
+  tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+  likeUsers:[{ type:Schema.Types.ObjectId, ref: 'User'}]
 })
 
 GuideService.statics.updateByTitle = function(guide,title,title,mainImg,nation,city,fromDate,toDate,duration,cost,minTrav,maxTrav,desc,detail,reviewList){
