@@ -61,14 +61,15 @@
           <div v-if="!error" style="display: inline-block">
             <!-- 정렬메뉴바 -->
             <div class="text-xs-right">
+              <span>정렬 기준 : </span>
               <v-menu offset-y>
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark v-on="on">
-                    정렬 기준
+                    {{ thisSortType }}
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(1, index)">
+                  <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
                     <v-list-tile-title>{{ sortType }}</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
@@ -128,6 +129,7 @@ export default {
       inboundDepartStartTime: {type: String, default: '오전 12:00'},
       inboundDepartEndTime: {type: String, default: '오후 11:59'},
       optionTypeIndex: {type: Number, default: 0},
+      thisSortType: {type: String, default: '최저가순'},
     },
     components: {
       Flight
@@ -438,11 +440,12 @@ export default {
         loadMoreFlightList: function () {
           this.limits += 10
         },
-        getFlightsbyOptional: function (flag, optionType) {
+        getFlightsbyOptional: function (sortType, sortTypeIndex) {
           this.flights = []
           this.limits = 10
-          this.optionTypeIndex = optionType
-          this.getFlights(flag, optionType);
+          this.thisSortType = sortType
+          this.optionTypeIndex = sortTypeIndex
+          this.getFlights(1, sortTypeIndex);
         },
         // changedValue: function (value) {
         //   this.flights = []
@@ -502,6 +505,7 @@ export default {
     },
 }
 </script>
+
 
 <style>
   .wrapper252 {
