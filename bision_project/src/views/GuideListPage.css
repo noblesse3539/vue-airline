@@ -222,8 +222,11 @@
 }
 
 .result-body-card-title {
+    display: flex;
+    justify-content: space-between;
     margin: 0;
     font-size: 1.25rem;
+    margin-bottom: 10px;
 }
 
 .result-body-card-content {
@@ -254,7 +257,8 @@
 
 .result-body-card-imgbox {
     width: 40%;
-    /* height: 100% !important; */
+    max-height: 220px !important;
+    min-height: 22px !important;
     /* background: black; */
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -436,4 +440,35 @@
 
 .result-body__search-by-period-body li {
     height: 100% !important;
+}
+
+.result-body-card-bottom-price {
+    vertical-align: bottom;
+    display: flex;
+    align-items: center !important;
+    /* justify-content: flex-end !important; */
+}
+
+.currency {
+    display: inline-block;
+    font-size: 1rem;
+    line-height: 1;
+    margin-right: 5px;
+}
+
+.cost {
+    display: inline-block;
+    font-weight: 1000;
+}
+
+.guide-list-page-like-btn {
+    position: absolute;
+    z-index: 5000;
+    right: 0;
+    margin-right: 30px;
+
+}
+
+.guide-list-page-like-btn:hover {
+    color: red;
 }

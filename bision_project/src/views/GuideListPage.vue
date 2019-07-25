@@ -86,41 +86,44 @@
                 <div class="result-body__result-show">
                     <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과
                 </div>
+
+                <!-- 가이드 상품 검색 결과 -->
                 <div class="result-body__result-list"
-                    v-for=" (guideServce, idx) in 10"
+                    v-for=" (service, idx) in guideServiceList"
                     :key = idx
                 >
-
-                    <!-- 가이드 상품 검색 결과 -->
                     <div class="result-body-card">
                         <div class="result-body-card-imgbox">
-                            <img src="https://image.kkday.com/v2/image/get/h_650%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_9182/20160711072229_bNjCD/jpg" 
+                            <img :src="service.image" 
                                 alt="guide-tour-image"
                                 class="result-body-card-img"
                                 >
                         </div>
                         <div class="result-body-card-content">
                             <h1 class="result-body-card-title">
-                                타이틀
+                                {{service.title.slice(0, 20)}} ...
+                                <i class="far fa-heart guide-list-page-like-btn"></i>
+                                <i class="fas fa-heart "></i>
                             </h1>
                             <p class="result-body-card-detail">
-                                Pellentesque habitant morbi tristique 
-                                senectus et netus et malesuada fames ac turpis egestas. 
-                                Vestibulum tortor quam, feugiat vitae, ultricies eget.
+                                {{service.detail.slice(0, 120)}} ...
                             </p>
                             <p class="result-body-card-city">
-                                <i class="fas fa-map-marker-alt"></i> city
+                                <i class="fas fa-map-marker-alt"></i> {{service.city[0]}} · {{service.city[1]}}
                             </p>
                             <div class="result-body-card-bottom">
                                 <p>
                                     <v-rating v-model="guideRating" size="5" dense></v-rating> 
                                 </p>
-                                <p class="result-body-card-bottom-price">KRW price</p>
+                                <p class="result-body-card-bottom-price">
+                                    <span class="currency">KRW</span> 
+                                    <span class="cost" style="color: rgb(34,139,34); font-size: 1.74rem;">{{service.cost}}</span>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <!-- 가이드 상품 검색 결과 끝 -->
                 </div>
+                <!-- 가이드 상품 검색 결과 끝 -->
                 <div class="result_boddy__pagination">
                     <v-pagination
                         v-model="page"
@@ -137,19 +140,24 @@
 
 <script>
 import './GuideListPage.css'
+import JSSoup from 'jssoup'
 
 export default {
     name: 'GuideListPage',
     components: {
 
     },
+    mounted() {
+        this.getServiceAll()
+    },
     data() {
         return {
-            guideServiceList: [],
             
             // 가이드 상품 리스트 관련
             page: 1,
             guideRating: 4,
+            guideServiceList: [],
+            
 
             // 가이드 언어별 검색
             langs: [
@@ -186,14 +194,22 @@ export default {
             }
         },
         getServiceAll : function() {
-            this.$http.get()
+            this.$http.get("/api/guideservice/findGSALL")
                 .then( res => {
-
+                    
+                    res.data.forEach( eachService => {
+                        let parsedDetail = new JSSoup(eachService.detail).text                        
+                        const temp = {}
+                        temp.title      = eachService.desc
+                        temp.detail     = parsedDetail
+                        temp.image      = eachService.mainImg
+                        temp.duration   = eachService.duration
+                        temp.cost       = eachService.cost
+                        temp.city       = eachService.city_kor
+                        this.guideServiceList.push(temp)
+                    })
                 })
         },
-    },
-    monuted: {
-        
     },
 }
 </script>

@@ -11,6 +11,7 @@ import FlightListPage from './views/FlightListPage'
 import FlightDetailPage from './views/FlightDetailPage'
 import VuexTutorial from './views/VuexTutorial'
 import GuideListPage from './views/GuideListPage'
+import GuideServiceDetailPage from './views/GuideServiceDetailPage'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
             path: '/guideListPage',
             name: 'GuideListPage',
             component: GuideListPage,
+        },
+        {
+            path: '/guideServiceDetailPage',
+            name: 'GuideServiceDetailPage',
+            component: GuideServiceDetailPage,
         },
         {
             path: '/login',
