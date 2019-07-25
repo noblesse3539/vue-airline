@@ -1,6 +1,10 @@
 const GuideService = require('../../../models/guideservice')
+const Tag = require('../../../models/tag')
+const Review = require('../../../models/review')
+const User = require('../../../models/user')
 
 exports.findReview = (req, res) => {
+  console.log('findReview');
     GuideService.findOne({ _id : req.params.id })
       .populate('reviews')
       .then((result) => {
@@ -46,6 +50,35 @@ exports.updateGuideService = (req, res) => {
       })
 }
 
+exports.findGSAll=(req,res)=>{
+  GuideService.find()
+  .populate({path:'tags',model:Tag})
+  .populate({path:'reviews',model:Review})
+  .populate({path:'user',model:User,select:'-password'})
+  .then((result) => {
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(500).json({ error:error });
+  });
+}
+
+exports.SearchGS=(req,res)=>{
+  const keyword = req.params.keyword
+  console.log(keyword);
+  GuideService.find()
+  .or([{city_eng: { $regex: '.*' + keyword + '.*' }},
+      {city_kor: { $regex: '.*' + keyword + '.*' }},
+      {nation_eng: { $regex: '.*' + keyword + '.*' }},
+      {nation_kor: { $regex: '.*' + keyword + '.*' }}])
+  .then(
+      guideservices => {
+          console.log(guideservices);
+          res.json({guideservices})
+      }
+  )
+  // res.json({message:'message'})
+}
 
 exports.findGSById=(req,res)=>{
   console.log(req.params);
@@ -64,7 +97,7 @@ exports.findGSByUserObIdTitle = (req,res)=>{
           message: error.message
       })
   }
-
+  console.log('findGSByUserObIdTitle');
   GuideService.findGSByUserObIdTitle(req.params.userObId,req.params.title)
   .then(
       guideservice => {
@@ -77,10 +110,30 @@ exports.findGSByUserObIdTitle = (req,res)=>{
 
 exports.createGuideService = (req,res) =>{
   console.log(req.body);
+  tagsName=req.body.tags;
+  req.body.tags=[];
+  console.log(tagsName);
+  console.log(req.body.tags);
   var GS=new GuideService(req.body);
-
+  let guideserviceId=GS._id
   GS.save(err => {
-    if (err) return res.status(500).send(err);
-    return res.status(200).send(GS);
+    for (var i = 0; i < tagsName.length; i++) {
+      const tag = new Tag({tag:tagsName[i]})
+      tag.guideservice=GS._id
+      console.log(tag);
+      tag.save()
+        .then((result) => {
+          GuideService.findOne({_id:guideserviceId}, (err, guideservice) => {
+            console.log(tag);
+              if(err) res.status(500).json({err})
+              if (guideservice) {
+                  guideservice.tags.push(tag);
+                  guideservice.save();
+              }
+          });
+        })
+    }
+    if (err) res.status(500).send(err);
+    res.json(GS);
   })
 }
