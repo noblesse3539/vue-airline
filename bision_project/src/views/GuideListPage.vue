@@ -86,10 +86,10 @@
                 <div class="result-body__result-show">
                     <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과
                 </div>
-
+                
                 <!-- 가이드 상품 검색 결과 -->
                 <div class="result-body__result-list"
-                    v-for=" (service, idx) in guideServiceList"
+                    v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
                     :key = idx
                 >
                     <div class="result-body-card">
@@ -102,8 +102,8 @@
                         <div class="result-body-card-content">
                             <h1 class="result-body-card-title">
                                 {{service.title.slice(0, 20)}} ...
-                                <i class="far fa-heart guide-list-page-like-btn"></i>
-                                <i class="fas fa-heart "></i>
+                                <i @click="serviceLike(service.guideId)" class="far fa-heart guide-list-page-like-btn"></i>
+                                <i class="fas fa-heart guide-list-page-like-btn-active" id="fas-`${idx}`"></i>
                             </h1>
                             <p class="result-body-card-detail">
                                 {{service.detail.slice(0, 120)}} ...
@@ -127,9 +127,8 @@
                 <div class="result_boddy__pagination">
                     <v-pagination
                         v-model="page"
-                        :length="6"
+                        :length="5"
                         color="rgb(34,139,34)"
-
                         >
                     </v-pagination>
                 </div>
@@ -157,7 +156,8 @@ export default {
             page: 1,
             guideRating: 4,
             guideServiceList: [],
-            
+
+            // 가이드 상품 좋아요 관련
 
             // 가이드 언어별 검색
             langs: [
@@ -196,7 +196,7 @@ export default {
         getServiceAll : function() {
             this.$http.get("/api/guideservice/findGSALL")
                 .then( res => {
-                    
+                    console.log(res.data)
                     res.data.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text                        
                         const temp = {}
@@ -206,9 +206,15 @@ export default {
                         temp.duration   = eachService.duration
                         temp.cost       = eachService.cost
                         temp.city       = eachService.city_kor
+                        temp.guideId    = eachService.user ? eachService.user._id : '' 
                         this.guideServiceList.push(temp)
                     })
                 })
+        },
+
+        // 좋아요 POST 요청
+        serviceLike : function(guideId) {
+            console.log(guideId)
         },
     },
 }

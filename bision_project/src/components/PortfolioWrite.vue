@@ -282,7 +282,7 @@ export default {
     },
     closePW(){
       if(this.validate){
-        this.$http.post('/api/createGuideService', this.tourProgram)
+        this.$http.post('/api/guideservice/create', this.tourProgram)
           .then( res => {
             console.log(res.status)
           })
