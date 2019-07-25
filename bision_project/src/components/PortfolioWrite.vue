@@ -102,31 +102,27 @@
                 <h2>환불 가능 기간 설정</h2>
               </v-flex>
               <v-flex xs12 md3 align-self-center>
-                <v-switch color="success" v-model="tourProgram.refund.refund100" :label="`환불 ${tourProgram.refund.refund100? '가능':'불가'}`"></v-switch>
+                <v-switch color="#41b883" v-model="tourProgram.refund.refund100" :label="`환불 ${tourProgram.refund.refund100? '가능':'불가'}`"></v-switch>
               </v-flex>
               <v-flex xs12 md9>
                   <v-container>
                     <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >100% 환불 : {{tourProgram.cost}}원</v-chip>
-                    <v-text-field :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
+                    <v-text-field class="refund-text" :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
                     <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund100"
                     always-dirty color="red" track-color="grey"></v-slider>
                   </v-container>
                   <v-container>
                     <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
-                    <v-text-field :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
+                    <v-text-field class="refund-text" :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                    <!-- <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund50"
-                     always-dirty color="red" track-color="grey" :rules="refund_rule2"></v-slider> -->
                      <v-slider :disabled="!tourProgram.refund.refund100" min="0" :max="tourProgram.refund.refund100" v-model="tourProgram.refund.refund50"
                       always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund100/365) *100}%`"></v-slider>
                   </v-container>
                   <v-container>
                     <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불 : {{tourProgram.cost*0.3}}원</v-chip>
-                    <v-text-field suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
+                    <v-text-field class="refund-text" suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                    <!-- <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund30"
-                      always-dirty color="red" track-color="grey" :rules="refund_rule3" ></v-slider> -->
                       <v-slider :disabled="!tourProgram.refund.refund50" min="0" :max="tourProgram.refund.refund50" v-model="tourProgram.refund.refund30"
                        always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund50/365) *100}%`"></v-slider>
                   </v-container>
@@ -134,40 +130,12 @@
 
               <!-- Tags -->
               <v-flex xs12>
-                <h2>태그 추가(아직안대여..)</h2>
+                <h2>태그 추가</h2>
               </v-flex>
               <v-flex xs12>
-                <v-combobox v-model="tourProgram.tags" :filter="filter" :hide-no-data="!search" :items="items"
-                            :search-input.sync="search"  hide-selected label="태그를 추가해주세요"
-                            multiple small-chips solo >
-                  <template v-slot:no-data>
-                    <v-list-tile>
-                      <span class="subheading">추가</span>
-                      <v-chip :color="`green lighten-3`" label>{{ search }}</v-chip>
-                    </v-list-tile>
-                  </template>
-                  <template v-slot:selection="{ item, parent, selected }">
-                    <v-chip v-if="item === Object(item)" :color="`green lighten-3`" :selected="selected" label>
-                      <span class="pr-2">{{ item.text }}</span>
-                      <v-icon small @click="parent.selectItem(item)">close</v-icon>
-                    </v-chip>
-                  </template>
-                  <template v-slot:item="{ index, item }">
-                    <v-list-tile-content>
-                      <v-text-field v-if="editing === item" v-model="editing.text" autofocus flat
-                        background-color="transparent" hide-details solo @keyup.enter="edit(index, item)"></v-text-field>
-                      <v-chip v-else :color="`green lighten-3`" dark label>
-                        {{ item.text }}
-                      </v-chip>
-                    </v-list-tile-content>
-                    <v-spacer></v-spacer>
-                    <v-list-tile-action @click.stop>
-                      <v-btn icon @click.stop.prevent="edit(index, item)">
-                        <v-icon>{{ editing !== item ? 'edit' : 'check' }}</v-icon>
-                      </v-btn>
-                    </v-list-tile-action>
-                  </template>
-                </v-combobox>
+                <multiselect v-model="tourProgram.tags" tag-placeholder="새로운 태그 추가하기" placeholder="새로운 태그를 추가하세요"
+                             :options="dbTags" :multiple="true" :taggable="true" @keyup.enter="tag" @tag="addTag"
+                             selectLabel="태그 추가하기" selectedLabel="태그 삭제하기" deselectLabel="태그 삭제하기"></multiselect>
               </v-flex>
 
               <!-- 상세 정보 Editor -->
@@ -197,9 +165,11 @@
 
 
 <script>
+import './PortfolioWrite.css'
 import UploadImg from '@/components/UploadImg'
 import UploadImgList from '@/components/UploadImgList'
 import { VueEditor } from "vue2-editor"
+import Multiselect from 'vue-multiselect'
 // import Vue from 'vue'
 // import vuenationRegionSelect from 'vue-nation-region-select'
 // Vue.use(vuenationRegionSelect)
@@ -212,37 +182,14 @@ export default {
     title: String,
   },
   components:{
+    Multiselect,
     UploadImg,
     UploadImgList,
   },
   data (){
     return{
-      // refund_rule1:[v => this.tourProgram.refund.refund50 < v  || '환불 기간을 확인해주세요.'],
-      // refund_rule2:[v => (this.tourProgram.refund.refund30 < v && v < this.tourProgram.refund.refund100) || '환불 기간을 확인해주세요.'],
-      // refund_rule3:[v => ( v && v < this.tourProgram.refund.refund50 ) || '환불 기간을 확인해주세요.'],
-      activator: null,
-      attach: null,
-      editing: null,
-      index: -1,
-      items: [
-        { header: '선택하거나 추가해주세요.' },
-        {
-          text: '액티비티',
-        },
-        {
-          text: '공연관람',
-        },
-        {
-          text: '쇼핑',
-        },
-        {
-          text: '문화체험',
-        }
-      ],
-      menu: false,
-      x: 0,
-      search: null,
-      y: 0,
+      dbTags:['액티비티', '공연관람'],
+      showTags:[],
       checkText:'',
       check : false,
       validate: false,
@@ -270,48 +217,15 @@ export default {
         minTrav:'',
         maxTrav: '',
         desc:'',
-        tags: ['시티투어'],
+        tags: [],
         detail:''
       }
     }
   },
-  watch: {
-   tourProgram: function(val, prev) {
-     if (val.length === prev.length) return
-
-     this.tourProgram.tags = val.map(v => {
-       if (typeof v === 'string') {
-         v = {
-           text: v,
-         }
-         this.items.push(v)
-        }
-        return v
-      })
-    }
-  },
   methods : {
-    edit (index, item) {
-      if (!this.editing) {
-        this.editing = item
-        this.index = index
-      } else {
-        this.editing = null
-        this.index = -1
-      }
-    },
-    filter (item, queryText, itemText) {
-      if (item.header) return false
-
-      const hasValue = val => val != null ? val : ''
-
-      const text = hasValue(itemText)
-      const query = hasValue(queryText)
-
-      return text.toString()
-        .toLowerCase()
-        .indexOf(query.toString().toLowerCase()) > -1
-
+    addTag(newTag) {
+      this.dbTags.push(newTag)
+      this.tourProgram.tags.push(newTag)
     },
     getMain(value) {
       if(value){
@@ -373,10 +287,10 @@ export default {
             console.log(res.status)
           })
       }
-      this.$http.post('/api/createGuideService', this.tourProgram)
-        .then( res => {
-          console.log(res.status)
-        })
+      // this.$http.post('/api/createGuideService', this.tourProgram)
+      //   .then( res => {
+      //     console.log(res.status)
+      //   })
       const navBarZIndex = document.querySelector('#navbox')
       const footerZIndex = document.querySelector('#footer')
       navBarZIndex.style.zIndex = 1000;
@@ -388,20 +302,5 @@ export default {
 </script>
 
 <style>
-.imgUpdate:hover {
-  cursor:pointer;
-}
-.ql-container {
-    min-height: 700px;
-}
-.refund-act {
-  background-color: white !important;
-  color: lightcoral !important;
-  border: 1.5px solid lightcoral !important;
-}
-.refund-dis {
-  background-color: white !important;
-  color: lightgrey !important;
-  border: 1.5px solid lightgrey !important;
-}
+
 </style>

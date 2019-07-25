@@ -98,7 +98,7 @@
         <!-- Portfolio tab item -->
         <v-tab-item key="Portfolio">
           <v-btn  @click="showPW" color="white">여행 상품 등록</v-btn>
-          <PortfolioWrite v-if="isPWVisible" title="지난 기록 작성" @close="closePW"></PortfolioWrite>
+          <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
 
           <!-- portfolio list -->
         <v-container fluid grid-list-md mx-2>

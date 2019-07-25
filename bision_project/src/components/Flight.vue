@@ -123,7 +123,9 @@
             {{CurrencySymbol}}&nbsp{{LowestPrice}}
           </div>
           <div class="center">
-            <v-btn :href="LowestDeeplinkUrl" target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <v-btn @click="goToDetail()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <!-- <v-btn @click="goToDetail()" target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn> -->
+            <v-btn href='LowestDeeplinkUrl' target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
           </div>
         </div>
       </div>
@@ -158,6 +160,32 @@ export default {
     data: function() {
         return {
         }
+    },
+    methods: {
+      // goToDetail: function() {
+      //   const params = {}
+      //     params.CurrencySymbol= this.CurrencySymbol,
+      //     params.InDepartureTime = this.InDepartureTime,
+      //     params.InArrivalTime= this.InArrivalTime,
+      //     params.InCarrierImageUrl= this.InCarrierImageUrl,
+      //     params.InDuration= this.InDuration,
+      //     params.InDay= this.InDay,
+      //     params.InNumofStop= this.InNumofStop,
+      //     params.OutDepartureTime= this.OutDepartureTime,
+      //     params.OutArrivalTime= this.OutArrivalTime,
+      //     params.OutCarrierImageUrl= this.OutCarrierImageUrl,
+      //     params.OutDuration= this.OutDuration,
+      //     params.OutDay= this.OutDay,
+      //     params.OutNumofStop= this.OutNumofStop,
+      //     params.NumofOptions= this.NumofOptions,
+      //     params.LowestPrice= this.LowestPrice,
+      //     params.LowestDeeplinkUrl= this.LowestDeeplinkUrl,
+      //     params.LowestAgentsImageUrl= this.LowestAgentsImageUrl,
+      //     params.OriginAirportCode= this.OriginAirportCode,
+      //     params.DestinationAirportCode= this.DestinationAirportCode,
+      //
+      //     this.$router.push({name: "FlightDetailPage", params: params})
+      // }
     }
   }
 </script>

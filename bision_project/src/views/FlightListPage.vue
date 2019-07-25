@@ -142,7 +142,7 @@ export default {
             }
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
-                            'country': 'US',
+                            'country': 'KW',
                             'currency': 'USD',
                             'locale': 'en-US',
                             // 'originPlace': 'ICN-sky',
