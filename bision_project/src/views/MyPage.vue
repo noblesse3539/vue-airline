@@ -1,5 +1,5 @@
 <template>
-  <div class="container mypage-container">
+  <div class="mypage-container">
     <router-link to="/" > 홈으로 가기</router-link>
     
     <!-- 프로필 섹션 -->

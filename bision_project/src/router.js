@@ -12,6 +12,7 @@ import FlightDetailPage from './views/FlightDetailPage'
 import VuexTutorial from './views/VuexTutorial'
 import GuideListPage from './views/GuideListPage'
 import GuideServiceDetailPage from './views/GuideServiceDetailPage'
+import GuideSearch from './views/GuideSearch'
 
 Vue.use(Router)
 
@@ -26,6 +27,12 @@ export default new Router({
             path: '/',
             name: 'Home',
             component: Home
+        },
+        {
+            path: '/guidesearch',
+            name: 'GuideSearch',
+            component: GuideSearch,
+            props: true,
         },
         {   // 1주차 프로젝트 요구사항 보존을 위한 경로입니다.
             path: '/pandora',
@@ -46,11 +53,13 @@ export default new Router({
             path: '/guideListPage',
             name: 'GuideListPage',
             component: GuideListPage,
+            props: true,
         },
         {
             path: '/guideServiceDetailPage',
             name: 'GuideServiceDetailPage',
             component: GuideServiceDetailPage,
+            props: true,
         },
         {
             path: '/login',

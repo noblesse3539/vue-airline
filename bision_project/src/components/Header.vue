@@ -7,7 +7,7 @@
             <div class="nav-left-toggle">
                 <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
                     <span class="airline-reservation-text">항공권</span></router-link>
-                <router-link to="/" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
+                <router-link to="/guidesearch" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
                     <span class="airline-reservation-text">가이드</span></router-link>
             </div>
         </div>
