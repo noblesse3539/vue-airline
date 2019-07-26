@@ -124,8 +124,6 @@
           <div class="center">
             <v-btn @click="showFD()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
             <FlightDetail v-if="isFDVisible" :flight="this._props" @close="closeFD"></FlightDetail>
-            <!-- <v-btn @click="goToDetail()" target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn> -->
-            <!-- <v-btn href='LowestDeeplinkUrl' target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn> -->
           </div>
         </div>
       </div>

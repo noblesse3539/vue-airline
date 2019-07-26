@@ -5,7 +5,6 @@ import Alerter from './modules/alerter'
 import Admin from './modules/admin'
 import Header from './modules/header'
 import User from './modules/user'
-import Flights from './modules/flights'
 
 // import createLogger from '../../../src/plugins/logger'
 
@@ -19,7 +18,6 @@ export default new Vuex.Store({
     Admin,
     Header,
     User,
-    Flights
   },
   strict: debug,
   // plugins: debug ? [createLogger()] : []
