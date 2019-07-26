@@ -26,6 +26,7 @@ Vue.use(Vuetify, {
 })
 Vue.use(VueAwesomeSwiper, /* { default global options } */)
 
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 Vue.prototype.$http = axios
 Vue.prototype.$getToken = (cookieName) => {
 	const cookie = document.cookie.match('(^|;) ?' + cookieName + '=([^;]*)(;|$)')
