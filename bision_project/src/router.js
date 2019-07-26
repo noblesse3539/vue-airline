@@ -12,6 +12,9 @@ import FlightDetailPage from './views/FlightDetailPage'
 import VuexTutorial from './views/VuexTutorial'
 import GuideListPage from './views/GuideListPage'
 import GuideServiceDetailPage from './views/GuideServiceDetailPage'
+import PayApproval from './views/kakaopay/PayApproval'
+import payCancel from './views/kakaopay/payCancel'
+import PayFail from './views/kakaopay/PayFail'
 
 Vue.use(Router)
 
@@ -83,6 +86,21 @@ export default new Router({
             path: '/vuex',
             name: 'Vuex',
             component: VuexTutorial
+        },
+        {
+            path: '/payapproval',
+            name: 'PayApproval',
+            component: PayApproval
+        },
+        {
+            path: '/paycancel',
+            name: 'payCancel',
+            component: payCancel
+        },
+        {
+            path: '/payfail',
+            name: 'PayFail',
+            component: PayFail
         },
     ]
 })
