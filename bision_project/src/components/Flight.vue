@@ -33,7 +33,8 @@
                 </div>
                 <div style="display: flex; justify-content: center">
                   <span v-if="OutNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
-                  <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유</span>
+                  <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유&nbsp</span>
+                  <span v-for="(stop, index) in OutStopCodes">{{ stops(stop, index) }}</span>
                 </div>
               </div>
             </div>
@@ -88,7 +89,8 @@
                 </div>
                 <div style="display: flex; justify-content: center">
                   <span v-if="InNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
-                  <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유</span>
+                  <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유&nbsp</span>
+                  <span v-for="(stop, index) in InStopCodes">{{ stops(stop, index) }}</span>
                 </div>
               </div>
             </div>
@@ -122,10 +124,19 @@
             {{CurrencySymbol}}&nbsp{{LowestPrice}}
           </div>
           <div class="center">
-            <v-btn @click="goToDetail()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
-            <!-- <v-btn @click="goToDetail()" target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn> -->
-            <v-btn href='LowestDeeplinkUrl' target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <v-btn :href="LowestDeeplinkUrl" target="_blank" depressed color="#45CE30" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
           </div>
+          <!-- 모달 -->
+          <!-- <div>
+            <button @click="handleClickButton">Toggle Modal</button>
+            <app-my-modal
+              title="This is modal"
+              :visible.sync="visible">
+              <div>
+                This is modal body
+              </div>
+            </app-my-modal>
+          </div> -->
         </div>
       </div>
     </div>
@@ -143,12 +154,14 @@ export default {
       InDuration: {type: String},
       InDay: {type: Boolean},
       InNumofStop: {type: String},
+      InStopCodes: {type: Array},
       OutDepartureTime: {type: String},
       OutArrivalTime: {type: String},
       OutCarrierImageUrl: {type: String},
       OutDuration: {type: String},
       OutDay: {type: Boolean},
       OutNumofStop: {type: String},
+      OutStopCodes: {type: Array},
       NumofOptions: {type: Number},
       LowestPrice: {type: String},
       LowestDeeplinkUrl: {type: String},
@@ -158,35 +171,22 @@ export default {
     },
     data: function() {
         return {
+          visible: false
         }
     },
     methods: {
-      // goToDetail: function() {
-      //   const params = {}
-      //     params.CurrencySymbol= this.CurrencySymbol,
-      //     params.InDepartureTime = this.InDepartureTime,
-      //     params.InArrivalTime= this.InArrivalTime,
-      //     params.InCarrierImageUrl= this.InCarrierImageUrl,
-      //     params.InDuration= this.InDuration,
-      //     params.InDay= this.InDay,
-      //     params.InNumofStop= this.InNumofStop,
-      //     params.OutDepartureTime= this.OutDepartureTime,
-      //     params.OutArrivalTime= this.OutArrivalTime,
-      //     params.OutCarrierImageUrl= this.OutCarrierImageUrl,
-      //     params.OutDuration= this.OutDuration,
-      //     params.OutDay= this.OutDay,
-      //     params.OutNumofStop= this.OutNumofStop,
-      //     params.NumofOptions= this.NumofOptions,
-      //     params.LowestPrice= this.LowestPrice,
-      //     params.LowestDeeplinkUrl= this.LowestDeeplinkUrl,
-      //     params.LowestAgentsImageUrl= this.LowestAgentsImageUrl,
-      //     params.OriginAirportCode= this.OriginAirportCode,
-      //     params.DestinationAirportCode= this.DestinationAirportCode,
-      //
-      //     this.$router.push({name: "FlightDetailPage", params: params})
-      // }
-    }
+      stops : function (stop, index) {
+        if (parseInt(index)%2 == 1) {
+          return " ," + stop.toString()
+        } else {
+          return stop
+        }
+      }
+    // handleClickButton(){
+    //   this.visible = !this.visible
+    // }
   }
+}
 </script>
 <style>
   .wrapper {
@@ -199,7 +199,7 @@ export default {
   }
   .wrapperfour {
     display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 24% 24% 28% 24%;
   }
   .center {
     display: flex;
