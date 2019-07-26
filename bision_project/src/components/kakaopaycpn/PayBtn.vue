@@ -9,7 +9,7 @@
 
 <script>
 import payIcon from '../../assets/kakaopay/kakaopay/payment_icon_yellow_large.png'
-import kakaosecret from '../../../kakaosecret'
+
 export default {
     name: "PayBtn",
     components: {
