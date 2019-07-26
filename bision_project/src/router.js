@@ -8,7 +8,6 @@ import GuideMyPage from './views/GuideMyPage'
 import MyPage from './views/MyPage'
 import Admin from './views/Admin'
 import FlightListPage from './views/FlightListPage'
-import FlightDetailPage from './views/FlightDetailPage'
 import VuexTutorial from './views/VuexTutorial'
 import GuideListPage from './views/GuideListPage'
 import GuideServiceDetailPage from './views/GuideServiceDetailPage'
@@ -66,12 +65,6 @@ export default new Router({
             path: '/flightlist',
             name: 'FlightListPage',
             component: FlightListPage,
-            props: true,
-        },
-        {
-            path: '/flightDetail',
-            name: 'FlightDetailPage',
-            component: FlightDetailPage,
             props: true,
         },
         {

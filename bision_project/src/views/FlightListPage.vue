@@ -117,6 +117,7 @@
 <script>
 import qs from 'qs'
 import Flight from '../components/Flight'
+
 export default {
     name: 'FlightList',
     props: {
@@ -132,7 +133,7 @@ export default {
       thisSortType: {type: String, default: '최저가순'},
     },
     components: {
-      Flight
+      Flight,
     },
     data: function() {
         return {

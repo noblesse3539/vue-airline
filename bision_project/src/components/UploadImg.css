@@ -1,0 +1,9 @@
+.addImg:hover{
+  cursor: pointer;
+}
+.main {
+  height: 390px;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
