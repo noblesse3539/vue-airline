@@ -7,11 +7,11 @@ const superAuth = require('./superAuth')
 const airport = require('./airport')
 const city = require('./city')
 const nation = require('./nation')
-
 const guide =require('./guide')
 const guideservice = require('./guideservice')
 const review = require('./review')
 const tag=require('./tag')
+const kakaopay = require('./kakaopay')
 
 // SuperUser
 router.use('/superauth', superAuth)
@@ -40,4 +40,5 @@ router.use('/airport', airport)
 router.use('/city', city)
 router.use('/nation', nation)
 
+router.use('/kakaopay', kakaopay)
 module.exports = router
