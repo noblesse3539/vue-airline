@@ -4,11 +4,11 @@
             <div class="result-roof-background">
                 <h1 style="margin: 0; margin-right: 20px; color: #f7f7f7;
                     text-shadow: 1px 2px 3px rgba(0,0,0,.2);">
-                    한국
+                    {{country_kor}}
                 </h1>
                 <h2 style="margin: 0; color: white;
                     text-shadow: 1px 2px 3px rgba(0,0,0,.2);">
-                    제주도
+                    {{city_kor}}
                 </h2>
             </div>
         </section>
@@ -91,6 +91,7 @@
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
                     :key = idx
+                    @click="goToDetail(idx)"
                 >
                     <div class="result-body-card">
                         <div class="result-body-card-imgbox">
@@ -127,7 +128,7 @@
                 <div class="result_boddy__pagination">
                     <v-pagination
                         v-model="page"
-                        :length="5"
+                        :length="guideServiceList.length % 10 == 0 ? guideServiceList.length / 10 : guideServiceList.length / 10 + 1"
                         color="rgb(34,139,34)"
                         >
                     </v-pagination>
@@ -140,18 +141,24 @@
 <script>
 import './GuideListPage.css'
 import JSSoup from 'jssoup'
+import GuideServiceDetailPage from './GuideServiceDetailPage'
 
 export default {
     name: 'GuideListPage',
     components: {
-
+        GuideServiceDetailPage,
     },
     mounted() {
-        this.getServiceAll()
-    },
+        // this.getServiceAll()
+        this.getServiceByKeyword()
+    },     
     data() {
         return {
             
+            // 나라 및 도시
+            country_kor: this.$route.params.nation_kor || "",
+            city_kor: this.$route.params.city_kor || "",
+
             // 가이드 상품 리스트 관련
             page: 1,
             guideRating: 4,
@@ -193,15 +200,39 @@ export default {
                 this.vInputDisabled = false
             }
         },
+        getServiceByKeyword: function() {
+
+            const keyword = this.city_kor || this.nation_kor 
+            
+            this.$http.get(`/api/guideservice/search/${keyword}`)
+            .then( res=> {
+                // console.log(res.data)
+                res.data.guideservices.forEach( eachService => {
+                        let parsedDetail = new JSSoup(eachService.detail).text                        
+                        const temp = {}
+                        temp.title      = eachService.desc
+                        temp.detail     = parsedDetail
+                        temp.rawDetail  = eachService.detail
+                        temp.image      = eachService.mainImg
+                        temp.duration   = eachService.duration
+                        temp.cost       = eachService.cost
+                        temp.city       = eachService.city_kor
+                        temp.serviceId  = eachService._id
+                        temp.guideId    = eachService.user ? eachService.user._id : '' 
+                        this.guideServiceList.push(temp)
+                    })
+            })
+        },
         getServiceAll : function() {
             this.$http.get("/api/guideservice/findGSALL")
                 .then( res => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     res.data.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text                        
                         const temp = {}
                         temp.title      = eachService.desc
                         temp.detail     = parsedDetail
+                        temp.rawDetail  = eachService.detail
                         temp.image      = eachService.mainImg
                         temp.duration   = eachService.duration
                         temp.cost       = eachService.cost
@@ -214,7 +245,15 @@ export default {
 
         // 좋아요 POST 요청
         serviceLike : function(guideId) {
-            console.log(guideId)
+            // console.log(guideId)
+        },
+        goToDetail: function(serviceIdx) {
+            
+            const params = this.guideServiceList[serviceIdx]
+            const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
+
+            this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
+            // {name: "GuideListPage", params: params}
         },
     },
 }
