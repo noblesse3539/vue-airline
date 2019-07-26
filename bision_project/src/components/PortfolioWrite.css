@@ -469,11 +469,11 @@ fieldset[disabled] .multiselect {
   left: 1px;
 }
 
-@keyframes spinning {
+/* @keyframes spinning {
   from {
     transform: rotate(0);
   }
   to {
     transform: rotate(2turn);
-  }
-}
+  } */
+/* } */

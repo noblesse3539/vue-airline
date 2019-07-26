@@ -124,7 +124,8 @@
             {{CurrencySymbol}}&nbsp{{LowestPrice}}
           </div>
           <div class="center">
-            <v-btn :href="LowestDeeplinkUrl" target="_blank" depressed color="#45CE30" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <v-btn @click="showFD()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <FlightDetail v-if="isFDVisible" :flight="this._props" @close="closeFD"></FlightDetail>
           </div>
           <!-- 모달 -->
           <!-- <div>
@@ -143,6 +144,7 @@
   </div>
 </template>
 <script>
+import FlightDetail from '@/components/FlightDetail'
 import qs from 'qs'
 export default {
     name: 'Flight',
@@ -169,7 +171,10 @@ export default {
       OriginAirportCode: {type: String},
       DestinationAirportCode: {type: String},
     },
-    data: function() {
+    components: {
+      FlightDetail
+    },
+    data() {
         return {
           visible: false
         }
