@@ -1,0 +1,113 @@
+
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Bision API
+# during dev, should point to your local machine
+host: localhost:3000
+# basePath prefixes all resource paths
+basePath: /api
+tags:
+- name: airport
+- name: city
+- name: nation
+- name: guideservice
+- name: tags
+- name: review
+- name: guide
+- name: superuser
+- name: user
+
+
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /guide/findByUserObId/{user}:
+    get:
+      tags:
+      - guide
+      summary: Returns a guide
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: userObId
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: object
+            properties:
+              _id:
+                type: string
+              user:
+                type: string
+              city_eng:
+                type: string
+              city_kor:
+                type: string
+              language_eng:
+                type: array
+              language_kor:
+                type: array
+              nation_kor:
+                type: string
+              nation_eng:
+                type: string
+              starRating:
+                type: integer
+              starRatingList:
+                type: array
+        # responses may fall through to errors
+
+  /auth/register:
+    post:
+      tags:
+      - user
+      summary: Creates a new user.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            required:
+              - username, password, email
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+              email:
+                type: string
+      responses:
+        200:
+          description: Created
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

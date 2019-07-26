@@ -10,7 +10,7 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const sampleRouter = require('./routes/sample')
 const bodyParser = require('body-parser')
-const winston = require("winston"), 
+const winston = require("winston"),
     expressWinston = require('express-winston')
 
 /* =======================
@@ -49,13 +49,26 @@ app.set('jwt-secret', config.secret)
 // vue router와 연동
 app.use(require('connect-history-api-fallback')())
 
-
+app.use(function (req, res, next) {
+// Website you wish to allow to connect
+res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+// Request methods you wish to allow
+res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+// Request headers you wish to allow
+res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+// Set to true if you need the website to include cookies in the requests sent
+// to the API (e.g. in case you use sessions)
+res.setHeader('Access-Control-Allow-Credentials', true);
+// Pass to next layer of middleware
+next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 db()
+
 
 app.use(morgan('dev'))
 app.use(express.json())
@@ -72,6 +85,8 @@ app.use('/api', require('./routes/api'))
 app.use(function(req, res, next) {
   next(createError(404))
 })
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
