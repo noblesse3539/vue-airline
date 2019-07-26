@@ -1,9 +1,10 @@
 <template>
-    <div class="pay-btn">
-        <img 
+    <div class="pay-btn" v-on:click="payment">
+        결제하기
+        <!-- <img 
             src="../../assets/kakaopay/kakaopay/payment_icon_yellow_large.png"
             v-on:click="payment"
-        />
+        /> -->
     </div>
 </template>
 
@@ -42,6 +43,6 @@ export default {
 </script>
 <style>
     .pay-btn {
-
+        text-align: center;
     }
 </style>
