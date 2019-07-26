@@ -1,14 +1,16 @@
 <template>
     <div class="GS-detail-page">
-        <div class="GS-travel-route">{{thisPostInfo.city_kor[0]}} > {{thisPostInfo.city_kor[1]}}</div>
+        <div class="GS-travel-route" >
+            {{city_kor[0]}} > {{city_kor[1]}}
+        </div>
         <div class="GS-hero">
         </div>
         <section class="GS-body-1">
             <div class="GS-body-left">
                 <div class="GS-guide-detail-content">
                     <div class="GS-guide-detail-title">
-                        <div style="margin-right: 10px;">
-                            {{thisPostInfo.title}}
+                        <div style="margin-right: 10px;" >
+                            {{title}}
                         </div>
                         <i class="far fa-heart"></i>
                         <!-- <i class="fas fa-heart guide-list-page-like-btn-active"></i> -->
@@ -26,8 +28,8 @@
                     </div>
                     <div class="GS-guide-detail-description">
                         <div class="GS-guide-detail-simple-description">
-                            <span>
-                                {{thisPostInfo.desc}}
+                            <span >
+                                {{desc}}
                             </span>
                         </div>
                         <div class="GS-guide-detail-best-review">
@@ -63,7 +65,9 @@
                 <div class="GS-payment-box">
                     <div class="GS-payment-price">KRW <span style="font-size: 3rem;">10,000</span></div>
                     <div class="GS-payment-choose-option">
-                        <button class="GS-payment-decision-btn">결제하기</button>
+                        <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo"> 
+                            <!-- <button class="GS-payment-decision-btn" @click="payment">결제하기</button> -->
+                        </PayBtn>
                     </div>
                     <div class="GS-payment-detail-info">
                         <div class="GS-payment-detail-info-each">
@@ -95,7 +99,7 @@
         </section>
 
         <!-- 상품 소개 -->
-        <section v-html="guideServiceUserWrote" class="GS-body-3">
+        <section class="GS-body-3">
 
         </section>
     </div>
@@ -103,20 +107,38 @@
 
 <script>
 import './GuideServiceDetailPage.css'
+import PayBtn from '../components/kakaopaycpn/PayBtn'
 
 export default {
     name: "GuideServiceDetailPage",
+    components: {
+        PayBtn,
+    },
     created() {
     },
     mounted() {
-        window.addEventListener('scroll', this.dragDownSideBar)
         this.getServiceInformation()
+        window.addEventListener('scroll', this.dragDownSideBar)
     },
     data() {
         return {
             isSideBarSticky : false,
-            guideServiceUserWrote: this.thisPostInfo.rawDetail || '',
+            // guideServiceUserWrote: this.thisPostInfo.rawDetail || '',
             thisPostInfo: {},
+            dataReady: false,
+
+            title: '',
+            city_kor: ['', ''],
+            desc: '',
+            mainImg: '',
+
+            serviceInfo : {
+                'itemName': '베이징상품',
+                'quantity': 1,
+                'totalAmount': 300000,
+                'taxFreeAmount': 3000,
+            },
+
         }
     },
     methods: {
@@ -137,7 +159,7 @@ export default {
         },
         setHero: function() {
             const hero = document.querySelector(".GS-hero")
-            hero.style.background = `url(${this.thisPostInfo.mainImg})` 
+            hero.style.background = `url(${this.mainImg})` 
             hero.style.backgroundRepeat = "no-repeat"  
             hero.style.backgroundSize = "cover"
             hero.style.backgroundPosition = "50%"
@@ -152,18 +174,22 @@ export default {
                     // this.thisPostInfo.duration = res.data.duration
                     // this.thisPostInfo.rawDetail = res.data.detail
                     // this.thisPostInfo.desc = res.data.desc
-                    this.thisPostInfo = res.data
+                    console.log(res.data)
+                    return res.data
                 })
-                // .then(() => {
-                //     this.setHero()
-                // })
-                // .catch( err => {
-                //     console.log(err)
-                // })
+                .then( (data) => {
+                    // this.setHero()
+                    console.log(data)
+                    this.title = data.title
+                    this.city_kor = data.city_kor
+                    this.desc = data.desc
+                    this.mainImg = data.mainImg
+                    this.setHero()
+                    console.log(this.title)
+                })
         },
     },
     computed: {
-
     },
 }   
 </script>
