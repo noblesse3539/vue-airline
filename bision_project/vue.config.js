@@ -1,5 +1,4 @@
 const path = require('path')
-
 module.exports = {
     outputDir: path.resolve(__dirname, "../backend/public/"),
     devServer: { 
@@ -10,7 +9,7 @@ module.exports = {
                 pathRewrite: { 
                     '^/api': ''
                 }
-            }
-      }
+            },
+        },
     }
 }
