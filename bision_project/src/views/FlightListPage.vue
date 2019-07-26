@@ -84,7 +84,6 @@
             <!-- here put a spinner or whatever you want to do when request is on proccess -->
         </v-flex>
 
-
         <v-flex style="width: 700px" v-if="!loading">
           <div v-if="!error" style="display: inline-block">
             <!-- 정렬메뉴바 -->
@@ -243,17 +242,17 @@ export default {
                             'locale': 'ko-KR',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            'originPlace': 'ICN-sky',
-                            'destinationPlace': 'PEK-sky',
-                            'outboundDate': '2019-07-27',
-                            'adults': '1',
-                            // 'originPlace': this.$route.params.departure + '-sky',
-                            // 'destinationPlace': this.$route.params.destination + '-sky',
-                            // 'outboundDate': this.$route.params.leavingDate,
-                            // 'adults': this.$route.params.adults,
+                            // 'originPlace': 'ICN-sky',
+                            // 'destinationPlace': 'PEK-sky',
+                            // 'outboundDate': '2019-07-27',
+                            // 'adults': '1',
+                            'originPlace': this.$route.params.departure + '-sky',
+                            'destinationPlace': this.$route.params.destination + '-sky',
+                            'outboundDate': this.$route.params.leavingDate,
+                            'adults': this.$route.params.adults,
                         }
-            // let inboundDate = this.$route.params.comingDate
-            let inboundDate = '2019-07-30'
+            let inboundDate = this.$route.params.comingDate
+            // let inboundDate = '2019-07-30'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
             }
