@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import './UploadImgList.css'
 export default {
   name: 'UploadImg',
   props : {
@@ -63,10 +64,3 @@ export default {
 
 }
 </script>
-
-<style>
-.addImg:hover{
-  cursor: pointer;
-
-}
-</style>

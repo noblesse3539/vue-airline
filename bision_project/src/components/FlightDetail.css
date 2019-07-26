@@ -1,0 +1,105 @@
+#FlightDetail {
+  z-index:1000;
+  background-color: white;
+  top:0; right:0; bottom:0; left:0;
+  position: fixed;
+  overflow: auto;
+  margin-bottom: 40px;
+}
+.FlightDetail__dialog{
+  height:100%;
+  width:100%;
+  position: absolute;
+  background: #fff;
+}
+.FlightDetail__header {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  font-weight: bold;
+  line-height: 1.29;
+  padding: 16px 25px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  /* border-bottom: solid 2px lightgrey; */
+}
+.FlightDetail__body {
+  margin: 0 auto;
+  padding: 30px;
+  width:1000px;
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-gap: 30px;
+
+}
+.FlightDetail__body .ticket {
+  border: solid 1px rgb(197, 249, 179);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px 0 0 0;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-gap:15px;
+  align-items: center;
+}
+.ticket .departure {
+  text-align: right;
+}
+.ticket .departure p {
+  color: grey;
+  font-size: 25px;
+}
+.ticket .time p{
+  margin: 0;
+  text-align:center;
+  font-size: 13px;
+}
+.ticket .arrival {
+  text-align: left;
+}
+.ticket .arrival p{
+  color:grey;
+  font-size: 25px;
+}
+
+.fly {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  grid-gap: 5px;
+  align-items: center;
+}
+.fly hr {
+   max-width: 100% !important;
+   height: 2px;
+   weight: 100px !important;
+   border: 0;
+   text-align: center;
+   background-color: grey;
+   -webkit-animation-name: animated-width;
+   /* -webkit-animation-iteration-count: infinite; */
+   -webkit-animation-direction: alternate;
+   -webkit-animation-duration: 2.0s;
+   -webkit-animation-timing-function: ease-out;
+}
+@-webkit-keyframes animated-width {
+   from {
+      width: 0%;
+   }
+   to {
+      width: 100%;
+   }
+}
+.moreDetail{
+  padding: 20px;
+  border: dashed 1px rgb(197, 249, 179);
+  border-radius: 10px;
+}
+.moreDetail .timeInfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 20px 0;
+
+}

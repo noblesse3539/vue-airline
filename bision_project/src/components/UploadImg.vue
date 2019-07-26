@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import './UploadImg.css'
+
 export default {
   name: 'UploadImg',
   props : {
@@ -67,16 +69,3 @@ export default {
 
 }
 </script>
-
-<style>
-
-.addImg:hover{
-  cursor: pointer;
-}
-.main {
-  height: 390px;
-  width: 100%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-</style>
