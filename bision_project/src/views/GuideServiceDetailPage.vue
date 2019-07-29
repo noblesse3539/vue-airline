@@ -1,6 +1,11 @@
 <template>
   <div class="GS-detail-page">
-    <div class="GS-travel-route">{{city_kor[1]}} in {{nation_kor}}</div>
+    <div class="GS-travel-route">
+      <p>
+        {{city_kor[1]}} in {{nation_kor}}
+      </p>
+      <img :src="nationFlag"/>
+    </div>
     <div class="GS-hero"></div>
     <section class="GS-body-1">
       <div class="GS-body-left">
@@ -66,10 +71,11 @@
             KRW
             <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
           </div>
-          <div class="GS-payment-choose-option animated flipInY delay-0.5s">
-            <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
-              <!-- <button class="GS-payment-decision-btn" @click="payment">결제하기</button> -->
-            </PayBtn>
+          <div class="GS-payment-choose-option">
+              <button class="GS-payment-decision-btn" @click="payment" v-if="isPaymentReady">결제하기</button>
+              <button class="GS-payment-decision-btn" @click="$ref.toReserve.click()" v-else>예약하기</button>
+            <!-- <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
+            </PayBtn> -->
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -99,7 +105,7 @@
     </section>
     <!-- 상품 결제 전 옵션 고르기-->
     <section class="GS-body-2">
-      <div class="GS-body-2-left">
+      <div class="GS-body-2-left" ref="toReserve">
         <h3 class="GS-body-2-left-title" style="font-size: 2rem; margin-bottom: 15px;">옵션 선택하기</h3>
         <div class="result-body__search-by-date GS-body__search-by-date">
           <span class="result-body__search-by-date-icon">
@@ -267,7 +273,8 @@ export default {
       desc: "",
       mainImg: "",
       servieOptions: [],
-
+      nationFlag: '',
+ 
       // 결제 관련 정보
       serviceInfo: {
         itemName: "베이징상품",
@@ -277,6 +284,7 @@ export default {
       },
     
       isLoadMore: false,
+      isPaymentReady: false,
     };
   },
   methods: {
@@ -325,7 +333,10 @@ export default {
           this.mainImg = data.mainImg;
           this.reviews = data.reviews;
           this.setHero();
-        });
+        })
+        .then( () => {
+          this.getNationFlag()
+        })
     },
     loadReviewMore: function() {
       const loadReiveMoreBtn = document.querySelector(
@@ -352,14 +363,25 @@ export default {
       const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
       const toSHow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
       const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
+      const payBtn = document.querySelector('.GS-payment-choose-option')
 
-      console.log(optionDetailToOpen)
+      payBtn.classList.add('animated')
+      payBtn.classList.add('flipInX')
+      // payBtn.classList.add('delay-0.1s')
+
+      console.log(toDrawBorder)
+      toDrawBorder.classList.add('option-selected')
       toHide.style.display = "none"
       toShow.style.display = "block"
-      toDrawBorder.style.border = "5px solid black;"
-      
+      this.isPaymentReady = true
 
     },
+    getNationFlag() {
+      this.$http.get(`/api/nation/search/${this.nation_kor}`)
+        .then( res => {
+            this.nationFlag = res.data.nations[3].flagImgUrl
+        })
+    },  
   },
   computed: {}
 };
