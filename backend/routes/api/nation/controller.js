@@ -1,18 +1,60 @@
 const Airport = require('../../../models/airport')
+const Nation = require('../../../models/nation')
+const nations = require('./parseNationCode.json')
 
 exports.nationList = (req, res) => {
-    Airport.find({})
-    .select('nation_eng nation_kor')
-    .then( async (nations) => {
-        let nations_eng =  []
-        let nations_kor = []
-        await nations.forEach( nation => {
-            nations_eng.push(nation.nation_eng)
-            nations_kor.push(nation.nation_kor)
-        })
-        nations_eng = [...new Set(nations_eng)]
-        nations_kor = [...new Set(nations_kor)]
-
-        res.json({nations_eng, nations_kor})
+    Nation.find({})
+    .then( nations => {
+        res.json({nations})
     })
+    .catch(err => {
+        res.send({error:err})
+    })
+}
+
+exports.nationSearch = (req, res) => {
+    const keyword = req.params.keyword
+    Nation.find() 
+    .or([{nation_eng: { $regex: '.*' + keyword + '.*' }},
+        {nation_kor: { $regex: '.*' + keyword + '.*' }},
+        {code2: { $regex: '.*' + keyword + '.*' }},])
+    .then( nations => {
+        res.json({nations})
+    })
+    .catch( err=> {
+        res.send({error:err})
+    })
+
+
+}
+exports.createNations = (req, res) => {
+    Nation.create(nations)
+    .catch( err=> {
+        console.log(err)
+    })
+
+
+    res.json({'얍얍':'얍얍얍'})
+}
+
+exports.updateNations = (req, res) => {
+    Nation.find({})
+    .then( nations => {
+        nations.map( nation => {
+            const flagImgUrl = `https://www.countryflags.io/${nation.code2}/flat/64.png`
+            Nation.updateOne({_id:nation._id}, {flagImgUrl:flagImgUrl})
+            .catch(err => {
+                console.log(err)
+            })
+        })
+    })
+    .then( () => {
+        res.json({'얍얍':'얍얍얍'})
+    })
+    .catch( err=> {
+        console.log(err)
+    })
+
+
+    
 }

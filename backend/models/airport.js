@@ -10,6 +10,7 @@ const Airport = new Schema({
     city_eng : { type: String },
     city_kor : { type: String },
     code : { type: String, required: true, unique: true },
+    nation: { type: Schema.Types.ObjectId, ref: 'Nation'},
 })
 
 Airport.statics.create = function( name_eng, name_kor, nation_eng, nation_kor, city_eng, city_kor, code) {
