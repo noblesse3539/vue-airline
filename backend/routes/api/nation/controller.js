@@ -12,19 +12,17 @@ exports.nationList = (req, res) => {
     })
 }
 
-exports.nationSearch = (req, res) => {
+exports.nationSearch = async (req, res) => {
     const keyword = req.params.keyword
-    Nation.find() 
-    .or([{nation_eng: { $regex: '.*' + keyword + '.*' }},
-        {nation_kor: { $regex: '.*' + keyword + '.*' }},
-        {code2: { $regex: '.*' + keyword + '.*' }},])
-    .then( nations => {
-        res.json({nations})
-    })
-    .catch( err=> {
-        res.send({error:err})
-    })
-
+    const nations = await Nation.find() 
+                            .or([{nation_eng: { $regex: '.*' + keyword + '.*' }},
+                                {nation_kor: { $regex: '.*' + keyword + '.*' }},
+                                {code2: { $regex: '.*' + keyword + '.*' }},])
+    const nation = await Nation.findOne()
+                            .or([{nation_eng: keyword},
+                                {nation_kor: keyword},
+                                {code2: keyword},])
+    res.json({'nation': nation, 'nations':nations})
 
 }
 exports.createNations = (req, res) => {
