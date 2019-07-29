@@ -1,6 +1,11 @@
 <template>
   <div class="GS-detail-page">
-    <div class="GS-travel-route">{{city_kor[1]}} in {{nation_kor}}</div>
+    <div class="GS-travel-route">
+      <p>
+        {{city_kor[1]}} in {{nation_kor}}
+      </p>
+      <img :src="nationFlag" width="60" height="60" v-if="nationFlag"/>
+    </div>
     <div class="GS-hero"></div>
     <section class="GS-body-1">
       <div class="GS-body-left">
@@ -66,10 +71,13 @@
             KRW
             <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
           </div>
-          <div class="GS-payment-choose-option animated flipInY delay-0.5s">
-            <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
-              <!-- <button class="GS-payment-decision-btn" @click="payment">결제하기</button> -->
-            </PayBtn>
+          <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
+              <button class="GS-payment-decision-btn">결제하기</button>
+            <!-- <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
+            </PayBtn> -->
+          </div>
+          <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
+            <button class="GS-payment-decision-btn">예약하기</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -99,7 +107,7 @@
     </section>
     <!-- 상품 결제 전 옵션 고르기-->
     <section class="GS-body-2">
-      <div class="GS-body-2-left">
+      <div class="GS-body-2-left" >
         <h3 class="GS-body-2-left-title" style="font-size: 2rem; margin-bottom: 15px;">옵션 선택하기</h3>
         <div class="result-body__search-by-date GS-body__search-by-date">
           <span class="result-body__search-by-date-icon">
@@ -133,7 +141,8 @@
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-detail-loadmore  
-                        GS-individual-option-detail-loadmore-1">
+                        GS-individual-option-detail-loadmore-1"
+                        style="display: none">
               <div class="num-of-customers" style="min-width: 200px;">
                 <div class="num-of-customers__increaseBtn">
                   <v-btn
@@ -267,7 +276,8 @@ export default {
       desc: "",
       mainImg: "",
       servieOptions: [],
-
+      nationFlag: '',
+ 
       // 결제 관련 정보
       serviceInfo: {
         itemName: "베이징상품",
@@ -277,6 +287,7 @@ export default {
       },
     
       isLoadMore: false,
+      isPaymentReady: false,
     };
   },
   methods: {
@@ -316,7 +327,7 @@ export default {
         })
         .then(data => {
           // this.setHero()
-          console.log(data);
+          // console.log(data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -325,7 +336,10 @@ export default {
           this.mainImg = data.mainImg;
           this.reviews = data.reviews;
           this.setHero();
-        });
+        })
+        .then( () => {
+          this.getNationFlag()
+        })
     },
     loadReviewMore: function() {
       const loadReiveMoreBtn = document.querySelector(
@@ -334,7 +348,7 @@ export default {
       const loadReviewMoreBtn2 = document.querySelector(
         ".GS-service-review-userReview-expand"
       );
-      console.log(loadReiveMoreBtn);
+      // console.log(loadReiveMoreBtn);
 
       if (this.isLoadMore == true) {
         loadReviewMoreBtn2.classList.add("GS-service-reivew-userReview");
@@ -350,16 +364,46 @@ export default {
     },
     openOptionSelectingModal(optionDetailToOpen) {
       const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
-      const toSHow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
+      const toShow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
       const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
+      const payBtn = document.querySelector('.GS-payment-choose-option')
+    
+      payBtn.classList.add('animated')
+      payBtn.classList.add('flipInX')
+      payBtn.classList.add('delay-0.1s')
 
-      console.log(optionDetailToOpen)
+      // console.log(toDrawBorder)
+      this.setPaymentReady()
+      toDrawBorder.classList.add('option-selected')
       toHide.style.display = "none"
-      toShow.style.display = "block"
-      toDrawBorder.style.border = "5px solid black;"
+      toShow.style.display = "flex"
       
+    },
+    setPaymentReady() {
+
+      this.isPaymentReady = true
+      document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
+      document.querySelector('.GS-payment-choose-option-pay').style.display = "block"
 
     },
+    getNationFlag() {
+      this.$http.get(`/api/nation/search/${this.nation_kor}`)
+        .then( res => {
+            // console.log(res)
+
+            if (res.data.nation) {
+              this.nationFlag = res.data.nation.flagImgUrl
+            } else {
+
+              if (res.data.nations == null || res.data.nations.length == 0) {
+                  this.nationFlag = "https://images-na.ssl-images-amazon.com/images/I/6148ajkxLLL._SL1000_.jpg"
+                  return
+                }
+              this.nationFlag = res.data.nations[0].flagImgUrl
+            }
+
+        })
+    },  
   },
   computed: {}
 };
