@@ -1,9 +1,9 @@
 <template>
     <div id="navbox" v-if="getIsHeaderOpen">
         <div class="nav-left"><form action="" method="get"></form>
-                <router-link to="/" class="nav-left-title">
+                <a href="/" exact class="nav-left-title">
                     BisionTour
-                </router-link>
+                </a>
             <div class="nav-left-toggle">
                 <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
                     <span class="airline-reservation-text">항공권</span></router-link>

@@ -71,13 +71,13 @@
             KRW
             <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
           </div>
-          <div class="GS-payment-choose-option GS-payment-choose-option-pay" v-if="isPaymentReady == true">
-              <button class="GS-payment-decision-btn" @click="payment">결제하기</button>
+          <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
+              <button class="GS-payment-decision-btn">결제하기</button>
             <!-- <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button class="GS-payment-decision-btn" @click="goToElement">예약하기</button>
+            <button class="GS-payment-decision-btn">예약하기</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -141,7 +141,8 @@
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-detail-loadmore  
-                        GS-individual-option-detail-loadmore-1">
+                        GS-individual-option-detail-loadmore-1"
+                        style="display: none">
               <div class="num-of-customers" style="min-width: 200px;">
                 <div class="num-of-customers__increaseBtn">
                   <v-btn
@@ -363,26 +364,26 @@ export default {
     },
     openOptionSelectingModal(optionDetailToOpen) {
       const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
-      const toSHow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
+      const toShow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
       const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
       const payBtn = document.querySelector('.GS-payment-choose-option')
     
-      // payBtn.classList.add('animated')
-      // payBtn.classList.add('flipInX')
-      // payBtn.classList.add('delay-0.1s')
+      payBtn.classList.add('animated')
+      payBtn.classList.add('flipInX')
+      payBtn.classList.add('delay-0.1s')
 
       // console.log(toDrawBorder)
       this.setPaymentReady()
       toDrawBorder.classList.add('option-selected')
       toHide.style.display = "none"
-      toShow.style.display = "block"
+      toShow.style.display = "flex"
       
     },
     setPaymentReady() {
 
       this.isPaymentReady = true
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
-      // document.querySelector('.GS-payment-decision-btn-pay').style.display = "block"
+      document.querySelector('.GS-payment-choose-option-pay').style.display = "block"
 
     },
     getNationFlag() {

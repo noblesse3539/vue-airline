@@ -251,7 +251,7 @@ export default {
             
             const params = this.guideServiceList[serviceIdx]
             const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
-
+            
             this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
             // {name: "GuideListPage", params: params}
         },

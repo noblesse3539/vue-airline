@@ -3,7 +3,7 @@
     <Header></Header>
     <v-content>
       <v-app>
-				<router-view/>
+        <router-view></router-view>
       </v-app>
 		</v-content>
     <Footer style="z-index: 2000 !important;"></Footer>
