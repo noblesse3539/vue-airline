@@ -19,6 +19,7 @@ const GuideService = new Schema({
   totalTrav:Number, // 추가 됨.
   desc:String,
   detail:String,
+  options:[{type:Schema.Types.ObjectId, ref:'Option'}],
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   tags:[{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   refund:[{
