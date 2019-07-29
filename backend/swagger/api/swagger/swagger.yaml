@@ -1,0 +1,846 @@
+
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Bision API
+# during dev, should point to your local machine
+host: localhost:3000
+# basePath prefixes all resource paths
+basePath: /
+tags:
+- name: Airport
+- name: City
+- name: Nation
+- name: GuideService
+- name: Tags
+- name: Review
+- name: Guide
+- name: Superuser
+- name: User
+
+
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+
+############################
+#         Airport          #
+############################
+  /api/airport/list:
+    get:
+      tags:
+      - Airport
+      summary: 전체 공항 데이터를 반환합니다.
+      responses:
+        200:
+          description: 전체 공항 데이터를 반환합니다.
+          schema:
+            $ref: '#/definitions/Airport'
+
+  /api/airport/search/{keyword}:
+    get:
+      tags:
+      - Airport
+      summary: 공항 검색 데이터를 반환합니다.
+      parameters:
+        - in: path
+          name: keyword
+          type: string
+          required: true
+          description: userObId
+      responses:
+        200:
+          description: 나라,도시,공항,공항코드명에 키워드가 들어간 모든 공항을 반환합니다.
+          schema:
+            $ref: '#/definitions/Airport'
+
+  /api/airport/register:
+    post:
+      tags:
+      - Airport
+      summary: 공항 데이터 하나를 생성합니다.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: airport
+          description: name_eng, name_kor, code는 필수항목입니다.
+          required: true
+          schema:
+            $ref: '#/definitions/Airport'
+      responses:
+        200:
+          description: 공항 데이터 하나 생성
+
+############################
+#           User           #
+############################
+  /api/user/list:
+    get:
+      tags:
+      - User
+      summary: admin 로그인 시에만 전체 유저 데이터를 반환합니다.
+      responses:
+        200:
+          description: 전체 유저 데이터 반환
+          schema:
+            $ref: '#/definitions/User'
+
+  /api/user/mypage:
+    get:
+      tags:
+      - User
+      summary: 로그인 시에만 유저가 이용했던 가이드서비스가 포함된 유저 데이터를 반환합니다.
+      responses:
+        200:
+          description: 가이드서비스가 포함된 유저 데이터 반환
+          schema:
+            $ref: '#/definitions/User'
+
+  /api/auth/register:
+    post:
+      tags:
+      - User
+      summary: 유저 데이터 하나를 생성합니다.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          required: true
+          description: username, password, email은 필수항목입니다
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: 유저 데이터 하나 생성
+          schema:
+            $ref: '#/definitions/User'
+
+  /api/user/{username}/usedguideservices/{guideServiceId}:
+    post:
+      tags:
+      - User
+      summary: 유저가 이용한 가이드서비스를 생성합니다.
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username
+        - in: path
+          name: guideServiceId
+          type: string
+          required: true
+          description: 유저가 이용한 GuideServiceId
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: 유저가 이용한 가이드서비스 하나 생성
+    delete:
+      tags:
+      - User
+      summary: 유저가 이용한 가이드서비스를 삭제합니다.
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username
+        - in: path
+          name: guideServiceId
+          type: string
+          required: true
+          description: 삭제할 GuideServiceId
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: 유저가 이용했던 가이드서비스 하나 삭제
+
+  /api/user/{username}:
+    delete:
+      tags:
+      - User
+      summary: admin 로그인 시에만 유저 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username
+      responses:
+        200:
+          description: admin 로그인 시에만 유저 데이터 하나 삭제
+          schema:
+            $ref: '#/definitions/User'
+    put:
+      tags:
+      - User
+      summary: 유저 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: userObId
+        - in: body
+          name: user
+          required: true
+          description: 수정될 유저 데이터
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: 유저 데이터 하나 수정
+          schema:
+            $ref: '#/definitions/User'
+
+############################
+#          Guide           #
+############################
+  /api/guide/findByUserObId/{user}:
+    get:
+      tags:
+      - Guide
+      summary: 가이드 데이터 하나를 반환합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: userObId
+      responses:
+        200:
+          description: 가이드 데이터 하나 반환
+          schema:
+            $ref: '#/definitions/Guide'
+
+  /api/guide/create:
+    post:
+      tags:
+      - Guide
+      summary: 가이드 데이터 하나를 생성합니다.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          required: true
+          description: user(userObId)은 필수항목입니다
+          schema:
+            $ref: '#/definitions/Guide'
+      responses:
+        200:
+          description: 가이드 데이터 하나 생성
+          schema:
+            $ref: '#/definitions/Guide'
+
+  /api/guide/delete/{user}:
+    delete:
+      tags:
+      - Guide
+      summary: 가이드 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: userObId
+      responses:
+        200:
+          description: 가이드 데이터 하나 삭제
+          schema:
+            $ref: '#/definitions/Guide'
+
+  /api/guide/update/{user}:
+    put:
+      tags:
+      - Guide
+      summary: 가이드 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: userObId
+        - in: body
+          name: guide
+          required: true
+          description: 수정될 가이드 데이터
+          schema:
+            $ref: '#/definitions/Guide'
+      responses:
+        200:
+          description: 가이드 데이터 하나 수정
+          schema:
+            $ref: '#/definitions/Guide'
+
+############################
+#        GuideService      #
+############################
+  /api/guideservice/findGSById/{id}:
+    get:
+      tags:
+      - GuideService
+      summary: 가이드서비스 데이터 하나를 반환합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+      responses:
+        200:
+          description: 가이드서비스 데이터 하나 반환
+          schema:
+            $ref: '#/definitions/GuideService'
+
+  /api/guideservice/findGSByGuideIdTitle/{user}/{title}:
+    get:
+      tags:
+      - GuideService
+      summary: 가이드서비스 데이터 하나를 반환합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: UserObId
+        - in: path
+          name: title
+          type: string
+          required: true
+          description: title
+      responses:
+        200:
+          description: 가이드서비스 데이터 하나 반환
+          schema:
+            $ref: '#/definitions/GuideService'
+
+  /api/guideservice/findGSAll:
+    get:
+      tags:
+      - GuideService
+      summary: 전체 가이드서비스 데이터를 반환합니다.
+      responses:
+        200:
+          description: 전체 가이드서비스 데이터 반환
+          schema:
+            $ref: '#/definitions/GuideService'
+
+  /api/guideservice/search/{keyword}:
+    get:
+      tags:
+      - GuideService
+      summary: 가이드서비스 검색 데이터를 반환합니다.
+      parameters:
+        - in: path
+          name: keyword
+          type: string
+          required: true
+          description: 나라,도시로 검색
+      responses:
+        200:
+          description: 나라,도시 키워드가 들어간 모든 가이드서비스를 반환합니다.
+          schema:
+            $ref: '#/definitions/GuideService'
+
+  /api/guideservice/create:
+    post:
+      tags:
+      - GuideService
+      summary: 가이드서비스 데이터 하나를 생성합니다.
+      parameters:
+        - in: body
+          name: guideservice
+          required: true
+          description: guideservice
+          schema:
+            $ref: '#/definitions/GuideService'
+      responses:
+        200:
+          description: 가이드서비스 데이터 하나 생성
+
+  /api/guideservice/{guideServiceId}/{userId}:
+    post:
+      tags:
+      - GuideService
+      summary: 유저 및 가이드서비스 좋아요 추가/삭제
+      parameters:
+        - in: path
+          name: guideServiceId
+          type: string
+          required: true
+          description: guideServiceObId
+        - in: path
+          name: userId
+          type: string
+          required: true
+          description: userObId
+      responses:
+        200:
+          description: 유저 및 가이드서비스 좋아요 추가/삭제
+
+  /api/guideservice/delete/{user}/{title}:
+    delete:
+      tags:
+      - GuideService
+      summary: 가이드서비스 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: UserObId
+        - in: path
+          name: title
+          type: string
+          required: true
+          description: title
+      responses:
+        200:
+          description: 가이드서비스 데이터 하나 삭제
+          schema:
+            $ref: '#/definitions/GuideService'
+
+  /api/guideservice/update/{user}/{title}:
+    put:
+      tags:
+      - GuideService
+      summary: 가이드서비스 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: UserObId
+        - in: path
+          name: title
+          type: string
+          required: true
+          description: title
+        - in: body
+          name: guideservice
+          required: true
+          description: 수정될 가이드서비스 데이터
+          schema:
+            $ref: '#/definitions/GuideService'
+      responses:
+        200:
+          description: 가이드서비스 데이터 하나 수정
+          schema:
+            $ref: '#/definitions/GuideService'
+
+############################
+#          Review          #
+############################
+  /api/guideservice/findReview/{id}:
+    get:
+      tags:
+      - Review
+      summary: 특정 가이드서비스의 리뷰들을 반환합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+      responses:
+        200:
+          description: 특정 가이드서비스의 리뷰들을 반환합니다.
+
+  /api/review/create/{id}:
+    post:
+      tags:
+      - Review
+      summary: 리뷰 데이터 하나를 생성합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: body
+          name: review
+          required: true
+          description: review
+          schema:
+            $ref: '#/definitions/Review'
+      responses:
+        200:
+          description: 리뷰 데이터 하나 생성
+
+  /api/review/delete/{id}/{username}/{title}:
+    delete:
+      tags:
+      - Review
+      summary: 리뷰 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username
+        - in: path
+          name: title
+          type: string
+          required: true
+          description: title
+      responses:
+        200:
+          description: 리뷰 데이터 하나 삭제
+
+  /api/review/update/{id}/{username}/{title}:
+    put:
+      tags:
+      - Review
+      summary: 리뷰 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username
+        - in: path
+          name: title
+          type: string
+          required: true
+          description: title
+        - in: body
+          name: review
+          required: true
+          description: review
+          schema:
+            $ref: '#/definitions/Review'
+      responses:
+        200:
+          description: 리뷰 데이터 하나 수정
+
+############################
+#            tag           #
+############################
+  /api/tag/findGSByTag/{tag}:
+    get:
+      tags:
+      - Tag
+      summary: 해당 태그를 가지고 있는 모든 가이드서비스를 반환합니다.
+      parameters:
+        - in: path
+          name: tag
+          type: string
+          required: true
+          description: tag
+      responses:
+        200:
+          description: 해당 태그를 가지고 있는 모든 가이드서비스를 반환
+
+  /api/tag/create/{id}:
+    post:
+      tags:
+      - Tag
+      summary: 특정 가이드서비스에 태그 데이터 하나를 생성합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: body
+          name: tag
+          required: true
+          description: tag 한개씩만 입력
+          schema:
+            $ref: '#/definitions/TagCreate'
+      responses:
+        200:
+          description: 특정 가이드서비스에 태그 데이터 하나를 생성
+
+  /api/tag/delete/{id}/{tag}:
+    delete:
+      tags:
+      - Tag
+      summary: 특정 가이드서비스에 태그 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: path
+          name: tag
+          type: string
+          required: true
+          description: tag
+      responses:
+        200:
+          description: 특정 가이드서비스에 태그 데이터 하나를 삭제
+
+  /api/tag/update/{id}/{tag}:
+    put:
+      tags:
+      - Tag
+      summary: 특정 가이드서비스에 태그 데이터 하나를 생성합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: path
+          name: tag
+          type: string
+          required: true
+          description: tag
+        - in: body
+          name: Tag
+          required: true
+          description: tag 한개씩만 입력
+          schema:
+            $ref: '#/definitions/Tag'
+      responses:
+        200:
+          description: 특정 가이드서비스에 태그 데이터 하나를 수정
+############################
+#         SuperUser        #
+############################
+  /api/superuser/list:
+    get:
+      tags:
+      - SuperUser
+      summary: admin 로그인 시에만 전체 슈퍼유저를 반환합니다.
+      responses:
+        200:
+          description: admin 로그인 시에만 전체 슈퍼유저를 반환
+          schema:
+            $ref: '#/definitions/SuperUser'
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+#############################################################################
+# complex objects have schema definitions
+definitions:
+############################
+#           Guide          #
+############################
+  Guide:
+    properties:
+      user:
+        type: string
+      city_eng:
+        type: string
+      city_kor:
+        type: string
+      language_eng:
+        type: array
+        items:
+          type: string
+      language_kor:
+        type: array
+        items:
+          type: string
+      nation_kor:
+        type: string
+      nation_eng:
+        type: string
+      starRating:
+        type: integer
+      starRatingList:
+        type: array
+        items:
+          $ref: '#/definitions/starRatingList'
+
+  starRatingList:
+    properties:
+      userId:
+        type: string
+      starRating:
+        type: integer
+############################
+#           User           #
+############################
+  User:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      email:
+        type: string
+      profileImg:
+        type: string
+      registeredAt:
+        type: string
+        format: date-time
+      firstName:
+        type: string
+      lastName:
+        type: string
+      age:
+        type: integer
+      gender:
+        type: string
+      languages:
+        type: string
+      intro:
+        type: string
+      UsedGuides:
+        type: array
+        items:
+          $ref: '#/definitions/ObId'
+      UsedGuideServices:
+        type: array
+        items:
+          $ref: '#/definitions/ObId'
+      likeGuideServices:
+        type: array
+        items:
+          $ref: '#/definitions/ObId'
+
+  SuperUser:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      email:
+        type: string
+      admin:
+        type: boolean
+        default: false
+############################
+#        GuideService      #
+############################
+  GuideService:
+    properties:
+      user:
+        $ref: '#/definitions/ObId'
+      title:
+        type: string
+      mainImg:
+        type: string
+      nation_kor:
+        type: string
+      nation_eng:
+        type: string
+      city_kor:
+        type: array
+        items:
+          type: string
+      city_eng:
+        type: array
+        items:
+          type: string
+      fromDate:
+        type: string
+      toDate:
+        type: string
+      duration:
+        type: string
+      cost:
+        type: integer
+      minTrav:
+        type: integer
+      maxTrav:
+        type: integer
+      totalTrav:
+        type: integer
+      desc:
+        type: string
+      detail:
+        type: string
+      reviews:
+        type: array
+        items:
+          $ref: '#/definitions/ObId'
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/ObId'
+      refund:
+        type: array
+        items:
+          $ref: '#/definitions/Refund'
+
+  Refund:
+    properties:
+      refund100:
+        type: integer
+      refund50:
+        type: integer
+      refund30:
+        type: integer
+
+  Review:
+    properties:
+      guideservice:
+        $ref: '#/definitions/ObId'
+      title:
+        type: string
+      content:
+        type: string
+      username:
+        type: string
+      rating:
+        type: integer
+
+  Tag:
+    properties:
+      tag:
+        type: string
+      guideservice:
+        type: string
+############################
+#          Airport         #
+############################
+  Airport:
+    required:
+    - name_eng
+    - name_kor
+    - code
+    properties:
+      _id:
+        type: string
+      name_eng:
+        type: string
+      name_kor:
+        type: string
+      nation_eng:
+        type: string
+      nation_kor:
+        type: string
+      city_eng:
+        type: string
+      city_kor:
+        type: string
+      code:
+        type: string
+
+  TagCreate:
+    properties:
+      tag:
+        type: string
+
+  ObId:
+    properties:
+      _id:
+        type: string

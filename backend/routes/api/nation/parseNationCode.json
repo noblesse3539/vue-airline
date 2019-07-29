@@ -1,0 +1,1723 @@
+[
+    {
+        "nation_kor": "가나",
+        "nation_num": 288,
+        "code3": "GHA",
+        "code2": "GH",
+        "nation_eng": "Ghana"
+    },
+    {
+        "nation_kor": "가봉",
+        "nation_num": 266,
+        "code3": "GAB",
+        "code2": "GA",
+        "nation_eng": "Gabon"
+    },
+    {
+        "nation_kor": "가이아나",
+        "nation_num": 328,
+        "code3": "GUY",
+        "code2": "GY",
+        "nation_eng": "Guyana"
+    },
+    {
+        "nation_kor": "감비아",
+        "nation_num": 270,
+        "code3": "GMB",
+        "code2": "GM",
+        "nation_eng": "Gambia"
+    },
+    {
+        "nation_kor": "건지섬",
+        "nation_num": 831,
+        "code3": "GGY",
+        "code2": "GG",
+        "nation_eng": "Guernsey"
+    },
+    {
+        "nation_kor": "과들루프",
+        "nation_num": 312,
+        "code3": "GLP",
+        "code2": "GP",
+        "nation_eng": "Guadeloupe"
+    },
+    {
+        "nation_kor": "과테말라",
+        "nation_num": 320,
+        "code3": "GTM",
+        "code2": "GT",
+        "nation_eng": "Guatemala"
+    },
+    {
+        "nation_kor": "괌",
+        "nation_num": 316,
+        "code3": "GUM",
+        "code2": "GU",
+        "nation_eng": "Guam"
+    },
+    {
+        "nation_kor": "그레나다",
+        "nation_num": 308,
+        "code3": "GRD",
+        "code2": "GD",
+        "nation_eng": "Grenada"
+    },
+    {
+        "nation_kor": "그리스",
+        "nation_num": 300,
+        "code3": "GRC",
+        "code2": "GR",
+        "nation_eng": "Greece"
+    },
+    {
+        "nation_kor": "그린란드",
+        "nation_num": 304,
+        "code3": "GRL",
+        "code2": "GL",
+        "nation_eng": "Greenland"
+    },
+    {
+        "nation_kor": "기니",
+        "nation_num": 324,
+        "code3": "GIN",
+        "code2": "GN",
+        "nation_eng": "Guinea"
+    },
+    {
+        "nation_kor": "기니비사우",
+        "nation_num": 624,
+        "code3": "GNB",
+        "code2": "GW",
+        "nation_eng": "Guinea-Bissau"
+    },
+    {
+        "nation_kor": "나미비아",
+        "nation_num": 516,
+        "code3": "NAM",
+        "code2": "NA",
+        "nation_eng": "Namibia"
+    },
+    {
+        "nation_kor": "나우루",
+        "nation_num": 520,
+        "code3": "NRU",
+        "code2": "NR",
+        "nation_eng": "Nauru"
+    },
+    {
+        "nation_kor": "나이지리아",
+        "nation_num": 566,
+        "code3": "NGA",
+        "code2": "NG",
+        "nation_eng": "Nigeria"
+    },
+    {
+        "nation_kor": "남극",
+        "nation_num": 10,
+        "code3": "ATA",
+        "code2": "AQ",
+        "nation_eng": "Antarctica"
+    },
+    {
+        "nation_kor": "남수단",
+        "nation_num": 728,
+        "code3": "SSD",
+        "code2": "SS",
+        "nation_eng": "South Sudan"
+    },
+    {
+        "nation_kor": "남아프리카 공화국",
+        "nation_num": 710,
+        "code3": "ZAF",
+        "code2": "ZA",
+        "nation_eng": "South Africa"
+    },
+    {
+        "nation_kor": "네덜란드",
+        "nation_num": 528,
+        "code3": "NLD",
+        "code2": "NL",
+        "nation_eng": "Netherlands"
+    },
+    {
+        "nation_kor": "네덜란드령 안틸레스",
+        "nation_num": 530,
+        "code3": "ANT",
+        "code2": "AN"
+    },
+    {
+        "nation_kor": "네팔",
+        "nation_num": 524,
+        "code3": "NPL",
+        "code2": "NP",
+        "nation_eng": "Nepal"
+    },
+    {
+        "nation_kor": "노르웨이",
+        "nation_num": 578,
+        "code3": "NOR",
+        "code2": "NO",
+        "nation_eng": "Norway"
+    },
+    {
+        "nation_kor": "노퍽 섬",
+        "nation_num": 574,
+        "code3": "NFK",
+        "code2": "NF",
+        "nation_eng": "Norfolk Island"
+    },
+    {
+        "nation_kor": "누벨칼레도니",
+        "nation_num": 540,
+        "code3": "NCL",
+        "code2": "NC",
+        "nation_eng": "New Caledonia"
+    },
+    {
+        "nation_kor": "뉴질랜드",
+        "nation_num": 554,
+        "code3": "NZL",
+        "code2": "NZ",
+        "nation_eng": "New Zealand"
+    },
+    {
+        "nation_kor": "니우에",
+        "nation_num": 570,
+        "code3": "NIU",
+        "code2": "NU",
+        "nation_eng": "Niue"
+    },
+    {
+        "nation_kor": "니제르",
+        "nation_num": 562,
+        "code3": "NER",
+        "code2": "NE",
+        "nation_eng": "Niger"
+    },
+    {
+        "nation_kor": "니카라과",
+        "nation_num": 558,
+        "code3": "NIC",
+        "code2": "NI",
+        "nation_eng": "Nicaragua"
+    },
+    {
+        "nation_kor": "대한민국",
+        "nation_num": 410,
+        "code3": "KOR",
+        "code2": "KR",
+        "nation_eng": "Korea, Republic of"
+    },
+    {
+        "nation_kor": "덴마크",
+        "nation_num": 208,
+        "code3": "DNK",
+        "code2": "DK",
+        "nation_eng": "Denmark"
+    },
+    {
+        "nation_kor": "도미니카 공화국",
+        "nation_num": 214,
+        "code3": "DOM",
+        "code2": "DO",
+        "nation_eng": "Dominican Republic"
+    },
+    {
+        "nation_kor": "도미니카 연방",
+        "nation_num": 212,
+        "code3": "DMA",
+        "code2": "DM",
+        "nation_eng": "Dominica"
+    },
+    {
+        "nation_kor": "독일",
+        "nation_num": 276,
+        "code3": "DEU",
+        "code2": "DE",
+        "nation_eng": "Germany"
+    },
+    {
+        "nation_kor": "동티모르",
+        "nation_num": 626,
+        "code3": "TLS",
+        "code2": "TL",
+        "nation_eng": "Timor-Leste"
+    },
+    {
+        "nation_kor": "라오스",
+        "nation_num": 418,
+        "code3": "LAO",
+        "code2": "LA",
+        "nation_eng": "Lao People's Democratic Republic"
+    },
+    {
+        "nation_kor": "라이베리아",
+        "nation_num": 430,
+        "code3": "LBR",
+        "code2": "LR",
+        "nation_eng": "Liberia"
+    },
+    {
+        "nation_kor": "라트비아",
+        "nation_num": 428,
+        "code3": "LVA",
+        "code2": "LV",
+        "nation_eng": "Latvia"
+    },
+    {
+        "nation_kor": "러시아",
+        "nation_num": 643,
+        "code3": "RUS",
+        "code2": "RU",
+        "nation_eng": "Russian Federation"
+    },
+    {
+        "nation_kor": "레바논",
+        "nation_num": 422,
+        "code3": "LBN",
+        "code2": "LB",
+        "nation_eng": "Lebanon"
+    },
+    {
+        "nation_kor": "레소토",
+        "nation_num": 426,
+        "code3": "LSO",
+        "code2": "LS",
+        "nation_eng": "Lesotho"
+    },
+    {
+        "nation_kor": "레위니옹",
+        "nation_num": 638,
+        "code3": "REU",
+        "code2": "RE",
+        "nation_eng": "R챕union"
+    },
+    {
+        "nation_kor": "루마니아",
+        "nation_num": 642,
+        "code3": "ROU",
+        "code2": "RO",
+        "nation_eng": "Romania"
+    },
+    {
+        "nation_kor": "룩셈부르크",
+        "nation_num": 442,
+        "code3": "LUX",
+        "code2": "LU",
+        "nation_eng": "Luxembourg"
+    },
+    {
+        "nation_kor": "르완다",
+        "nation_num": 646,
+        "code3": "RWA",
+        "code2": "RW",
+        "nation_eng": "Rwanda"
+    },
+    {
+        "nation_kor": "리비아",
+        "nation_num": 434,
+        "code3": "LBY",
+        "code2": "LY",
+        "nation_eng": "Libya"
+    },
+    {
+        "nation_kor": "리투아니아",
+        "nation_num": 440,
+        "code3": "LTU",
+        "code2": "LT",
+        "nation_eng": "Lithuania"
+    },
+    {
+        "nation_kor": "리히텐슈타인",
+        "nation_num": 438,
+        "code3": "LIE",
+        "code2": "LI",
+        "nation_eng": "Liechtenstein"
+    },
+    {
+        "nation_kor": "마다가스카르",
+        "nation_num": 450,
+        "code3": "MDG",
+        "code2": "MG",
+        "nation_eng": "Madagascar"
+    },
+    {
+        "nation_kor": "마르티니크",
+        "nation_num": 474,
+        "code3": "MTQ",
+        "code2": "MQ",
+        "nation_eng": "Martinique"
+    },
+    {
+        "nation_kor": "마셜 제도",
+        "nation_num": 584,
+        "code3": "MHL",
+        "code2": "MH",
+        "nation_eng": "Marshall Islands"
+    },
+    {
+        "nation_kor": "마요트",
+        "nation_num": 175,
+        "code3": "MYT",
+        "code2": "YT",
+        "nation_eng": "Mayotte"
+    },
+    {
+        "nation_kor": "마카오",
+        "nation_num": 446,
+        "code3": "MAC",
+        "code2": "MO",
+        "nation_eng": "Macao"
+    },
+    {
+        "nation_kor": "북마케도니아",
+        "nation_num": 807,
+        "code3": "MKD",
+        "code2": "MK",
+        "nation_eng": "Macedonia, the Former Yugoslav Republic of"
+    },
+    {
+        "nation_kor": "말라위",
+        "nation_num": 454,
+        "code3": "MWI",
+        "code2": "MW",
+        "nation_eng": "Malawi"
+    },
+    {
+        "nation_kor": "말레이시아",
+        "nation_num": 458,
+        "code3": "MYS",
+        "code2": "MY",
+        "nation_eng": "Malaysia"
+    },
+    {
+        "nation_kor": "말리",
+        "nation_num": 466,
+        "code3": "MLI",
+        "code2": "ML",
+        "nation_eng": "Mali"
+    },
+    {
+        "nation_kor": "맨섬",
+        "nation_num": 833,
+        "code3": "IMN",
+        "code2": "IM",
+        "nation_eng": "Isle of Man"
+    },
+    {
+        "nation_kor": "멕시코",
+        "nation_num": 484,
+        "code3": "MEX",
+        "code2": "MX",
+        "nation_eng": "Mexico"
+    },
+    {
+        "nation_kor": "모나코",
+        "nation_num": 492,
+        "code3": "MCO",
+        "code2": "MC",
+        "nation_eng": "Monaco"
+    },
+    {
+        "nation_kor": "모로코",
+        "nation_num": 504,
+        "code3": "MAR",
+        "code2": "MA",
+        "nation_eng": "Morocco"
+    },
+    {
+        "nation_kor": "모리셔스",
+        "nation_num": 480,
+        "code3": "MUS",
+        "code2": "MU",
+        "nation_eng": "Mauritius"
+    },
+    {
+        "nation_kor": "모리타니",
+        "nation_num": 478,
+        "code3": "MRT",
+        "code2": "MR",
+        "nation_eng": "Mauritania"
+    },
+    {
+        "nation_kor": "모잠비크",
+        "nation_num": 508,
+        "code3": "MOZ",
+        "code2": "MZ",
+        "nation_eng": "Mozambique"
+    },
+    {
+        "nation_kor": "몬테네그로",
+        "nation_num": 499,
+        "code3": "MNE",
+        "code2": "ME",
+        "nation_eng": "Montenegro"
+    },
+    {
+        "nation_kor": "몬트세랫",
+        "nation_num": 500,
+        "code3": "MSR",
+        "code2": "MS",
+        "nation_eng": "Montserrat"
+    },
+    {
+        "nation_kor": "몰도바",
+        "nation_num": 498,
+        "code3": "MDA",
+        "code2": "MD",
+        "nation_eng": "Moldova, Republic of"
+    },
+    {
+        "nation_kor": "몰디브",
+        "nation_num": 462,
+        "code3": "MDV",
+        "code2": "MV",
+        "nation_eng": "Maldives"
+    },
+    {
+        "nation_kor": "몰타",
+        "nation_num": 470,
+        "code3": "MLT",
+        "code2": "MT",
+        "nation_eng": "Malta"
+    },
+    {
+        "nation_kor": "몽골",
+        "nation_num": 496,
+        "code3": "MNG",
+        "code2": "MN",
+        "nation_eng": "Mongolia"
+    },
+    {
+        "nation_kor": "미국",
+        "nation_num": 840,
+        "code3": "USA",
+        "code2": "US",
+        "nation_eng": "United States"
+    },
+    {
+        "nation_kor": "미국령 군소 제도",
+        "nation_num": 581,
+        "code3": "UMI",
+        "code2": "UM",
+        "nation_eng": "United States Minor Outlying Islands"
+    },
+    {
+        "nation_kor": "미국령 버진아일랜드",
+        "nation_num": 850,
+        "code3": "VIR",
+        "code2": "VI",
+        "nation_eng": "Virgin Islands, U.S."
+    },
+    {
+        "nation_kor": "미얀마",
+        "nation_num": 104,
+        "code3": "MMR",
+        "code2": "MM",
+        "nation_eng": "Myanmar"
+    },
+    {
+        "nation_kor": "미크로네시아 연방",
+        "nation_num": 583,
+        "code3": "FSM",
+        "code2": "FM",
+        "nation_eng": "Micronesia, Federated States of"
+    },
+    {
+        "nation_kor": "바누아투",
+        "nation_num": 548,
+        "code3": "VUT",
+        "code2": "VU",
+        "nation_eng": "Vanuatu"
+    },
+    {
+        "nation_kor": "바레인",
+        "nation_num": 48,
+        "code3": "BHR",
+        "code2": "BH",
+        "nation_eng": "Bahrain"
+    },
+    {
+        "nation_kor": "바베이도스",
+        "nation_num": 52,
+        "code3": "BRB",
+        "code2": "BB",
+        "nation_eng": "Barbados"
+    },
+    {
+        "nation_kor": "바티칸 시국",
+        "nation_num": 336,
+        "code3": "VAT",
+        "code2": "VA",
+        "nation_eng": "Holy See (Vatican City State)"
+    },
+    {
+        "nation_kor": "바하마",
+        "nation_num": 44,
+        "code3": "BHS",
+        "code2": "BS",
+        "nation_eng": "Bahamas"
+    },
+    {
+        "nation_kor": "방글라데시",
+        "nation_num": 50,
+        "code3": "BGD",
+        "code2": "BD",
+        "nation_eng": "Bangladesh"
+    },
+    {
+        "nation_kor": "버뮤다",
+        "nation_num": 60,
+        "code3": "BMU",
+        "code2": "BM",
+        "nation_eng": "Bermuda"
+    },
+    {
+        "nation_kor": "베냉",
+        "nation_num": 204,
+        "code3": "BEN",
+        "code2": "BJ",
+        "nation_eng": "Benin"
+    },
+    {
+        "nation_kor": "베네수엘라",
+        "nation_num": 862,
+        "code3": "VEN",
+        "code2": "VE",
+        "nation_eng": "Venezuela, Bolivarian Republic of"
+    },
+    {
+        "nation_kor": "베트남",
+        "nation_num": 704,
+        "code3": "VNM",
+        "code2": "VN",
+        "nation_eng": "Viet Nam"
+    },
+    {
+        "nation_kor": "벨기에",
+        "nation_num": 56,
+        "code3": "BEL",
+        "code2": "BE",
+        "nation_eng": "Belgium"
+    },
+    {
+        "nation_kor": "벨라루스",
+        "nation_num": 112,
+        "code3": "BLR",
+        "code2": "BY",
+        "nation_eng": "Belarus"
+    },
+    {
+        "nation_kor": "벨리즈",
+        "nation_num": 84,
+        "code3": "BLZ",
+        "code2": "BZ",
+        "nation_eng": "Belize"
+    },
+    {
+        "nation_kor": "보스니아 헤르체고비나",
+        "nation_num": 70,
+        "code3": "BIH",
+        "code2": "BA",
+        "nation_eng": "Bosnia and Herzegovina"
+    },
+    {
+        "nation_kor": "보츠와나",
+        "nation_num": 72,
+        "code3": "BWA",
+        "code2": "BW",
+        "nation_eng": "Botswana"
+    },
+    {
+        "nation_kor": "볼리비아",
+        "nation_num": 68,
+        "code3": "BOL",
+        "code2": "BO",
+        "nation_eng": "Bolivia, Plurinational State of"
+    },
+    {
+        "nation_kor": "부룬디",
+        "nation_num": 108,
+        "code3": "BDI",
+        "code2": "BI",
+        "nation_eng": "Burundi"
+    },
+    {
+        "nation_kor": "부르키나파소",
+        "nation_num": 854,
+        "code3": "BFA",
+        "code2": "BF",
+        "nation_eng": "Burkina Faso"
+    },
+    {
+        "nation_kor": "부베 섬",
+        "nation_num": 74,
+        "code3": "BVT",
+        "code2": "BV",
+        "nation_eng": "Bouvet Island"
+    },
+    {
+        "nation_kor": "부탄",
+        "nation_num": 64,
+        "code3": "BTN",
+        "code2": "BT",
+        "nation_eng": "Bhutan"
+    },
+    {
+        "nation_kor": "북마리아나 제도",
+        "nation_num": 580,
+        "code3": "MNP",
+        "code2": "MP",
+        "nation_eng": "Northern Mariana Islands"
+    },
+    {
+        "nation_kor": "불가리아",
+        "nation_num": 100,
+        "code3": "BGR",
+        "code2": "BG",
+        "nation_eng": "Bulgaria"
+    },
+    {
+        "nation_kor": "브라질",
+        "nation_num": 76,
+        "code3": "BRA",
+        "code2": "BR",
+        "nation_eng": "Brazil"
+    },
+    {
+        "nation_kor": "브루나이",
+        "nation_num": 96,
+        "code3": "BRN",
+        "code2": "BN",
+        "nation_eng": "Brunei Darussalam"
+    },
+    {
+        "nation_kor": "사모아",
+        "nation_num": 882,
+        "code3": "WSM",
+        "code2": "WS",
+        "nation_eng": "Samoa"
+    },
+    {
+        "nation_kor": "사우디아라비아",
+        "nation_num": 682,
+        "code3": "SAU",
+        "code2": "SA",
+        "nation_eng": "Saudi Arabia"
+    },
+    {
+        "nation_kor": "사우스조지아 사우스샌드위치 제도",
+        "nation_num": 239,
+        "code3": "SGS",
+        "code2": "GS",
+        "nation_eng": "South Georgia and the South Sandwich Islands"
+    },
+    {
+        "nation_kor": "산마리노",
+        "nation_num": 674,
+        "code3": "SMR",
+        "code2": "SM",
+        "nation_eng": "San Marino"
+    },
+    {
+        "nation_kor": "상투메 프린시페",
+        "nation_num": 678,
+        "code3": "STP",
+        "code2": "ST",
+        "nation_eng": "Sao Tome and Principe"
+    },
+    {
+        "nation_kor": "생피에르 미클롱",
+        "nation_num": 666,
+        "code3": "SPM",
+        "code2": "PM",
+        "nation_eng": "Saint Pierre and Miquelon"
+    },
+    {
+        "nation_kor": "서사하라",
+        "nation_num": 732,
+        "code3": "ESH",
+        "code2": "EH",
+        "nation_eng": "Western Sahara"
+    },
+    {
+        "nation_kor": "세네갈",
+        "nation_num": 686,
+        "code3": "SEN",
+        "code2": "SN",
+        "nation_eng": "Senegal"
+    },
+    {
+        "nation_kor": "세르비아",
+        "nation_num": 688,
+        "code3": "SRB",
+        "code2": "RS",
+        "nation_eng": "Serbia"
+    },
+    {
+        "nation_kor": "세이셸",
+        "nation_num": 690,
+        "code3": "SYC",
+        "code2": "SC",
+        "nation_eng": "Seychelles"
+    },
+    {
+        "nation_kor": "세인트루시아",
+        "nation_num": 662,
+        "code3": "LCA",
+        "code2": "LC",
+        "nation_eng": "Saint Lucia"
+    },
+    {
+        "nation_kor": "세인트빈센트 그레나딘",
+        "nation_num": 670,
+        "code3": "VCT",
+        "code2": "VC",
+        "nation_eng": "Saint Vincent and the Grenadines"
+    },
+    {
+        "nation_kor": "세인트키츠 네비스",
+        "nation_num": 659,
+        "code3": "KNA",
+        "code2": "KN",
+        "nation_eng": "Saint Kitts and Nevis"
+    },
+    {
+        "nation_kor": "세인트헬레나",
+        "nation_num": 654,
+        "code3": "SHN",
+        "code2": "SH",
+        "nation_eng": "Saint Helena, Ascension and Tristan da Cunha"
+    },
+    {
+        "nation_kor": "소말리아",
+        "nation_num": 706,
+        "code3": "SOM",
+        "code2": "SO",
+        "nation_eng": "Somalia"
+    },
+    {
+        "nation_kor": "솔로몬 제도",
+        "nation_num": 90,
+        "code3": "SLB",
+        "code2": "SB",
+        "nation_eng": "Solomon Islands"
+    },
+    {
+        "nation_kor": "수단",
+        "nation_num": 729,
+        "code3": "SDN",
+        "code2": "SD",
+        "nation_eng": "Sudan"
+    },
+    {
+        "nation_kor": "수리남",
+        "nation_num": 740,
+        "code3": "SUR",
+        "code2": "SR",
+        "nation_eng": "Suriname"
+    },
+    {
+        "nation_kor": "스리랑카",
+        "nation_num": 144,
+        "code3": "LKA",
+        "code2": "LK",
+        "nation_eng": "Sri Lanka"
+    },
+    {
+        "nation_kor": "스발바르 얀마옌",
+        "nation_num": 744,
+        "code3": "SJM",
+        "code2": "SJ",
+        "nation_eng": "Svalbard and Jan Mayen"
+    },
+    {
+        "nation_kor": "스웨덴",
+        "nation_num": 752,
+        "code3": "SWE",
+        "code2": "SE",
+        "nation_eng": "Sweden"
+    },
+    {
+        "nation_kor": "스위스",
+        "nation_num": 756,
+        "code3": "CHE",
+        "code2": "CH",
+        "nation_eng": "Switzerland"
+    },
+    {
+        "nation_kor": "스페인",
+        "nation_num": 724,
+        "code3": "ESP",
+        "code2": "ES",
+        "nation_eng": "Spain"
+    },
+    {
+        "nation_kor": "슬로바키아",
+        "nation_num": 703,
+        "code3": "SVK",
+        "code2": "SK",
+        "nation_eng": "Slovakia"
+    },
+    {
+        "nation_kor": "슬로베니아",
+        "nation_num": 705,
+        "code3": "SVN",
+        "code2": "SI",
+        "nation_eng": "Slovenia"
+    },
+    {
+        "nation_kor": "시리아",
+        "nation_num": 760,
+        "code3": "SYR",
+        "code2": "SY",
+        "nation_eng": "Syrian Arab Republic"
+    },
+    {
+        "nation_kor": "시에라리온",
+        "nation_num": 694,
+        "code3": "SLE",
+        "code2": "SL",
+        "nation_eng": "Sierra Leone"
+    },
+    {
+        "nation_kor": "신트마르턴",
+        "nation_num": 534,
+        "code3": "SXM",
+        "code2": "SX",
+        "nation_eng": "Sint Maarten (Dutch part)"
+    },
+    {
+        "nation_kor": "싱가포르",
+        "nation_num": 702,
+        "code3": "SGP",
+        "code2": "SG",
+        "nation_eng": "Singapore"
+    },
+    {
+        "nation_kor": "아랍에미리트",
+        "nation_num": 784,
+        "code3": "ARE",
+        "code2": "AE",
+        "nation_eng": "United Arab Emirates"
+    },
+    {
+        "nation_kor": "아루바",
+        "nation_num": 533,
+        "code3": "ABW",
+        "code2": "AW",
+        "nation_eng": "Aruba"
+    },
+    {
+        "nation_kor": "아르메니아",
+        "nation_num": 51,
+        "code3": "ARM",
+        "code2": "AM",
+        "nation_eng": "Armenia"
+    },
+    {
+        "nation_kor": "아르헨티나",
+        "nation_num": 32,
+        "code3": "ARG",
+        "code2": "AR",
+        "nation_eng": "Argentina"
+    },
+    {
+        "nation_kor": "아메리칸사모아",
+        "nation_num": 16,
+        "code3": "ASM",
+        "code2": "AS",
+        "nation_eng": "American Samoa"
+    },
+    {
+        "nation_kor": "아이슬란드",
+        "nation_num": 352,
+        "code3": "ISL",
+        "code2": "IS",
+        "nation_eng": "Iceland"
+    },
+    {
+        "nation_kor": "아이티",
+        "nation_num": 332,
+        "code3": "HTI",
+        "code2": "HT",
+        "nation_eng": "Haiti"
+    },
+    {
+        "nation_kor": "아일랜드",
+        "nation_num": 372,
+        "code3": "IRL",
+        "code2": "IE",
+        "nation_eng": "Ireland"
+    },
+    {
+        "nation_kor": "아제르바이잔",
+        "nation_num": 31,
+        "code3": "AZE",
+        "code2": "AZ",
+        "nation_eng": "Azerbaijan"
+    },
+    {
+        "nation_kor": "아프가니스탄",
+        "nation_num": 4,
+        "code3": "AFG",
+        "code2": "AF",
+        "nation_eng": "Afghanistan"
+    },
+    {
+        "nation_kor": "안도라",
+        "nation_num": 20,
+        "code3": "AND",
+        "code2": "AD",
+        "nation_eng": "Andorra"
+    },
+    {
+        "nation_kor": "알바니아",
+        "nation_num": 8,
+        "code3": "ALB",
+        "code2": "AL",
+        "nation_eng": "Albania"
+    },
+    {
+        "nation_kor": "알제리",
+        "nation_num": 12,
+        "code3": "DZA",
+        "code2": "DZ",
+        "nation_eng": "Algeria"
+    },
+    {
+        "nation_kor": "앙골라",
+        "nation_num": 24,
+        "code3": "AGO",
+        "code2": "AO",
+        "nation_eng": "Angola"
+    },
+    {
+        "nation_kor": "앤티가 바부다",
+        "nation_num": 28,
+        "code3": "ATG",
+        "code2": "AG",
+        "nation_eng": "Antigua and Barbuda"
+    },
+    {
+        "nation_kor": "앵귈라",
+        "nation_num": 660,
+        "code3": "AIA",
+        "code2": "AI",
+        "nation_eng": "Anguilla"
+    },
+    {
+        "nation_kor": "에리트레아",
+        "nation_num": 232,
+        "code3": "ERI",
+        "code2": "ER",
+        "nation_eng": "Eritrea"
+    },
+    {
+        "nation_kor": "에스와티니",
+        "nation_num": 748,
+        "code3": "SWZ",
+        "code2": "SZ",
+        "nation_eng": "Swaziland"
+    },
+    {
+        "nation_kor": "에스토니아",
+        "nation_num": 233,
+        "code3": "EST",
+        "code2": "EE",
+        "nation_eng": "Estonia"
+    },
+    {
+        "nation_kor": "에콰도르",
+        "nation_num": 218,
+        "code3": "ECU",
+        "code2": "EC",
+        "nation_eng": "Ecuador"
+    },
+    {
+        "nation_kor": "에티오피아",
+        "nation_num": 231,
+        "code3": "ETH",
+        "code2": "ET",
+        "nation_eng": "Ethiopia"
+    },
+    {
+        "nation_kor": "엘살바도르",
+        "nation_num": 222,
+        "code3": "SLV",
+        "code2": "SV",
+        "nation_eng": "El Salvador"
+    },
+    {
+        "nation_kor": "영국",
+        "nation_num": 826,
+        "code3": "GBR",
+        "code2": "GB",
+        "nation_eng": "United Kingdom"
+    },
+    {
+        "nation_kor": "영국령 버진아일랜드",
+        "nation_num": 92,
+        "code3": "VGB",
+        "code2": "VG",
+        "nation_eng": "Virgin Islands, British"
+    },
+    {
+        "nation_kor": "영국령 인도양 지역",
+        "nation_num": 86,
+        "code3": "IOT",
+        "code2": "IO",
+        "nation_eng": "British Indian Ocean Territory"
+    },
+    {
+        "nation_kor": "예멘",
+        "nation_num": 887,
+        "code3": "YEM",
+        "code2": "YE",
+        "nation_eng": "Yemen"
+    },
+    {
+        "nation_kor": "오만",
+        "nation_num": 512,
+        "code3": "OMN",
+        "code2": "OM",
+        "nation_eng": "Oman"
+    },
+    {
+        "nation_kor": "오스트레일리아",
+        "nation_num": 36,
+        "code3": "AUS",
+        "code2": "AU",
+        "nation_eng": "Australia"
+    },
+    {
+        "nation_kor": "오스트리아",
+        "nation_num": 40,
+        "code3": "AUT",
+        "code2": "AT",
+        "nation_eng": "Austria"
+    },
+    {
+        "nation_kor": "온두라스",
+        "nation_num": 340,
+        "code3": "HND",
+        "code2": "HN",
+        "nation_eng": "Honduras"
+    },
+    {
+        "nation_kor": "올란드 제도",
+        "nation_num": 248,
+        "code3": "ALA",
+        "code2": "AX",
+        "nation_eng": "Aland Islands"
+    },
+    {
+        "nation_kor": "요르단",
+        "nation_num": 400,
+        "code3": "JOR",
+        "code2": "JO",
+        "nation_eng": "Jordan"
+    },
+    {
+        "nation_kor": "우간다",
+        "nation_num": 800,
+        "code3": "UGA",
+        "code2": "UG",
+        "nation_eng": "Uganda"
+    },
+    {
+        "nation_kor": "우루과이",
+        "nation_num": 858,
+        "code3": "URY",
+        "code2": "UY",
+        "nation_eng": "Uruguay"
+    },
+    {
+        "nation_kor": "우즈베키스탄",
+        "nation_num": 860,
+        "code3": "UZB",
+        "code2": "UZ",
+        "nation_eng": "Uzbekistan"
+    },
+    {
+        "nation_kor": "우크라이나",
+        "nation_num": 804,
+        "code3": "UKR",
+        "code2": "UA",
+        "nation_eng": "Ukraine"
+    },
+    {
+        "nation_kor": "왈리스 퓌튀나",
+        "nation_num": 876,
+        "code3": "WLF",
+        "code2": "WF",
+        "nation_eng": "Wallis and Futuna"
+    },
+    {
+        "nation_kor": "이라크",
+        "nation_num": 368,
+        "code3": "IRQ",
+        "code2": "IQ",
+        "nation_eng": "Iraq"
+    },
+    {
+        "nation_kor": "이란",
+        "nation_num": 364,
+        "code3": "IRN",
+        "code2": "IR",
+        "nation_eng": "Iran, Islamic Republic of"
+    },
+    {
+        "nation_kor": "이스라엘",
+        "nation_num": 376,
+        "code3": "ISR",
+        "code2": "IL",
+        "nation_eng": "Israel"
+    },
+    {
+        "nation_kor": "이집트",
+        "nation_num": 818,
+        "code3": "EGY",
+        "code2": "EG",
+        "nation_eng": "Egypt"
+    },
+    {
+        "nation_kor": "이탈리아",
+        "nation_num": 380,
+        "code3": "ITA",
+        "code2": "IT",
+        "nation_eng": "Italy"
+    },
+    {
+        "nation_kor": "인도",
+        "nation_num": 356,
+        "code3": "IND",
+        "code2": "IN",
+        "nation_eng": "India"
+    },
+    {
+        "nation_kor": "인도네시아",
+        "nation_num": 360,
+        "code3": "IDN",
+        "code2": "ID",
+        "nation_eng": "Indonesia"
+    },
+    {
+        "nation_kor": "일본",
+        "nation_num": 392,
+        "code3": "JPN",
+        "code2": "JP",
+        "nation_eng": "Japan"
+    },
+    {
+        "nation_kor": "자메이카",
+        "nation_num": 388,
+        "code3": "JAM",
+        "code2": "JM",
+        "nation_eng": "Jamaica"
+    },
+    {
+        "nation_kor": "잠비아",
+        "nation_num": 894,
+        "code3": "ZMB",
+        "code2": "ZM",
+        "nation_eng": "Zambia"
+    },
+    {
+        "nation_kor": "저지섬",
+        "nation_num": 832,
+        "code3": "JEY",
+        "code2": "JE",
+        "nation_eng": "Jersey"
+    },
+    {
+        "nation_kor": "적도 기니",
+        "nation_num": 226,
+        "code3": "GNQ",
+        "code2": "GQ",
+        "nation_eng": "Equatorial Guinea"
+    },
+    {
+        "nation_kor": "조선민주주의인민공화국",
+        "nation_num": 408,
+        "code3": "PRK",
+        "code2": "KP",
+        "nation_eng": "Korea, Democratic People's Republic of"
+    },
+    {
+        "nation_kor": "조지아",
+        "nation_num": 268,
+        "code3": "GEO",
+        "code2": "GE",
+        "nation_eng": "Georgia"
+    },
+    {
+        "nation_kor": "중국",
+        "nation_num": 156,
+        "code3": "CHN",
+        "code2": "CN",
+        "nation_eng": "China"
+    },
+    {
+        "nation_kor": "중앙아프리카 공화국",
+        "nation_num": 140,
+        "code3": "CAF",
+        "code2": "CF",
+        "nation_eng": "Central African Republic"
+    },
+    {
+        "nation_kor": "지부티",
+        "nation_num": 262,
+        "code3": "DJI",
+        "code2": "DJ",
+        "nation_eng": "Djibouti"
+    },
+    {
+        "nation_kor": "지브롤터",
+        "nation_num": 292,
+        "code3": "GIB",
+        "code2": "GI",
+        "nation_eng": "Gibraltar"
+    },
+    {
+        "nation_kor": "짐바브웨",
+        "nation_num": 716,
+        "code3": "ZWE",
+        "code2": "ZW",
+        "nation_eng": "Zimbabwe"
+    },
+    {
+        "nation_kor": "차드",
+        "nation_num": 148,
+        "code3": "TCD",
+        "code2": "TD",
+        "nation_eng": "Chad"
+    },
+    {
+        "nation_kor": "체코",
+        "nation_num": 203,
+        "code3": "CZE",
+        "code2": "CZ",
+        "nation_eng": "Czech Republic"
+    },
+    {
+        "nation_kor": "칠레",
+        "nation_num": 152,
+        "code3": "CHL",
+        "code2": "CL",
+        "nation_eng": "Chile"
+    },
+    {
+        "nation_kor": "카메룬",
+        "nation_num": 120,
+        "code3": "CMR",
+        "code2": "CM",
+        "nation_eng": "Cameroon"
+    },
+    {
+        "nation_kor": "카보베르데",
+        "nation_num": 132,
+        "code3": "CPV",
+        "code2": "CV",
+        "nation_eng": "Cape Verde"
+    },
+    {
+        "nation_kor": "카자흐스탄",
+        "nation_num": 398,
+        "code3": "KAZ",
+        "code2": "KZ",
+        "nation_eng": "Kazakhstan"
+    },
+    {
+        "nation_kor": "카타르",
+        "nation_num": 634,
+        "code3": "QAT",
+        "code2": "QA",
+        "nation_eng": "Qatar"
+    },
+    {
+        "nation_kor": "캄보디아",
+        "nation_num": 116,
+        "code3": "KHM",
+        "code2": "KH",
+        "nation_eng": "Cambodia"
+    },
+    {
+        "nation_kor": "캐나다",
+        "nation_num": 124,
+        "code3": "CAN",
+        "code2": "CA",
+        "nation_eng": "Canada"
+    },
+    {
+        "nation_kor": "케냐",
+        "nation_num": 404,
+        "code3": "KEN",
+        "code2": "KE",
+        "nation_eng": "Kenya"
+    },
+    {
+        "nation_kor": "케이맨 제도",
+        "nation_num": 136,
+        "code3": "CYM",
+        "code2": "KY",
+        "nation_eng": "Cayman Islands"
+    },
+    {
+        "nation_kor": "코모로",
+        "nation_num": 174,
+        "code3": "COM",
+        "code2": "KM",
+        "nation_eng": "Comoros"
+    },
+    {
+        "nation_kor": "코스타리카",
+        "nation_num": 188,
+        "code3": "CRI",
+        "code2": "CR",
+        "nation_eng": "Costa Rica"
+    },
+    {
+        "nation_kor": "코코스 제도",
+        "nation_num": 166,
+        "code3": "CCK",
+        "code2": "CC",
+        "nation_eng": "Cocos (Keeling) Islands"
+    },
+    {
+        "nation_kor": "코트디부아르",
+        "nation_num": 384,
+        "code3": "CIV",
+        "code2": "CI",
+        "nation_eng": "Cote d'Ivoire"
+    },
+    {
+        "nation_kor": "콜롬비아",
+        "nation_num": 170,
+        "code3": "COL",
+        "code2": "CO",
+        "nation_eng": "Colombia"
+    },
+    {
+        "nation_kor": "콩고 공화국",
+        "nation_num": 178,
+        "code3": "COG",
+        "code2": "CG",
+        "nation_eng": "Congo"
+    },
+    {
+        "nation_kor": "콩고 민주 공화국",
+        "nation_num": 180,
+        "code3": "COD",
+        "code2": "CD",
+        "nation_eng": "Congo, the Democratic Republic of the"
+    },
+    {
+        "nation_kor": "쿠바",
+        "nation_num": 192,
+        "code3": "CUB",
+        "code2": "CU",
+        "nation_eng": "Cuba"
+    },
+    {
+        "nation_kor": "쿠웨이트",
+        "nation_num": 414,
+        "code3": "KWT",
+        "code2": "KW",
+        "nation_eng": "Kuwait"
+    },
+    {
+        "nation_kor": "쿡 제도",
+        "nation_num": 184,
+        "code3": "COK",
+        "code2": "CK",
+        "nation_eng": "Cook Islands"
+    },
+    {
+        "nation_kor": "크로아티아",
+        "nation_num": 191,
+        "code3": "HRV",
+        "code2": "HR",
+        "nation_eng": "Croatia"
+    },
+    {
+        "nation_kor": "크리스마스 섬",
+        "nation_num": 162,
+        "code3": "CXR",
+        "code2": "CX",
+        "nation_eng": "Christmas Island"
+    },
+    {
+        "nation_kor": "키르기스스탄",
+        "nation_num": 417,
+        "code3": "KGZ",
+        "code2": "KG",
+        "nation_eng": "Kyrgyzstan"
+    },
+    {
+        "nation_kor": "키리바시",
+        "nation_num": 296,
+        "code3": "KIR",
+        "code2": "KI",
+        "nation_eng": "Kiribati"
+    },
+    {
+        "nation_kor": "키프로스",
+        "nation_num": 196,
+        "code3": "CYP",
+        "code2": "CY",
+        "nation_eng": "Cyprus"
+    },
+    {
+        "nation_kor": "타이완",
+        "nation_num": 158,
+        "code3": "TWN",
+        "code2": "TW",
+        "nation_eng": "Taiwan, Province of China"
+    },
+    {
+        "nation_kor": "타지키스탄",
+        "nation_num": 762,
+        "code3": "TJK",
+        "code2": "TJ",
+        "nation_eng": "Tajikistan"
+    },
+    {
+        "nation_kor": "탄자니아",
+        "nation_num": 834,
+        "code3": "TZA",
+        "code2": "TZ",
+        "nation_eng": "Tanzania, United Republic of"
+    },
+    {
+        "nation_kor": "태국",
+        "nation_num": 764,
+        "code3": "THA",
+        "code2": "TH",
+        "nation_eng": "Thailand"
+    },
+    {
+        "nation_kor": "터크스 케이커스 제도",
+        "nation_num": 796,
+        "code3": "TCA",
+        "code2": "TC",
+        "nation_eng": "Turks and Caicos Islands"
+    },
+    {
+        "nation_kor": "터키",
+        "nation_num": 792,
+        "code3": "TUR",
+        "code2": "TR",
+        "nation_eng": "Turkey"
+    },
+    {
+        "nation_kor": "토고",
+        "nation_num": 768,
+        "code3": "TGO",
+        "code2": "TG",
+        "nation_eng": "Togo"
+    },
+    {
+        "nation_kor": "토켈라우",
+        "nation_num": 772,
+        "code3": "TKL",
+        "code2": "TK",
+        "nation_eng": "Tokelau"
+    },
+    {
+        "nation_kor": "통가",
+        "nation_num": 776,
+        "code3": "TON",
+        "code2": "TO",
+        "nation_eng": "Tonga"
+    },
+    {
+        "nation_kor": "투르크메니스탄",
+        "nation_num": 795,
+        "code3": "TKM",
+        "code2": "TM",
+        "nation_eng": "Turkmenistan"
+    },
+    {
+        "nation_kor": "투발루",
+        "nation_num": 798,
+        "code3": "TUV",
+        "code2": "TV",
+        "nation_eng": "Tuvalu"
+    },
+    {
+        "nation_kor": "튀니지",
+        "nation_num": 788,
+        "code3": "TUN",
+        "code2": "TN",
+        "nation_eng": "Tunisia"
+    },
+    {
+        "nation_kor": "트리니다드 토바고",
+        "nation_num": 780,
+        "code3": "TTO",
+        "code2": "TT",
+        "nation_eng": "Trinidad and Tobago"
+    },
+    {
+        "nation_kor": "파나마",
+        "nation_num": 591,
+        "code3": "PAN",
+        "code2": "PA",
+        "nation_eng": "Panama"
+    },
+    {
+        "nation_kor": "파라과이",
+        "nation_num": 600,
+        "code3": "PRY",
+        "code2": "PY",
+        "nation_eng": "Paraguay"
+    },
+    {
+        "nation_kor": "파키스탄",
+        "nation_num": 586,
+        "code3": "PAK",
+        "code2": "PK",
+        "nation_eng": "Pakistan"
+    },
+    {
+        "nation_kor": "파푸아뉴기니",
+        "nation_num": 598,
+        "code3": "PNG",
+        "code2": "PG",
+        "nation_eng": "Papua New Guinea"
+    },
+    {
+        "nation_kor": "팔라우",
+        "nation_num": 585,
+        "code3": "PLW",
+        "code2": "PW",
+        "nation_eng": "Palau"
+    },
+    {
+        "nation_kor": "팔레스타인",
+        "nation_num": 275,
+        "code3": "PSE",
+        "code2": "PS",
+        "nation_eng": "Palestine, State of"
+    },
+    {
+        "nation_kor": "페로 제도",
+        "nation_num": 234,
+        "code3": "FRO",
+        "code2": "FO",
+        "nation_eng": "Faroe Islands"
+    },
+    {
+        "nation_kor": "페루",
+        "nation_num": 604,
+        "code3": "PER",
+        "code2": "PE",
+        "nation_eng": "Peru"
+    },
+    {
+        "nation_kor": "포르투갈",
+        "nation_num": 620,
+        "code3": "PRT",
+        "code2": "PT",
+        "nation_eng": "Portugal"
+    },
+    {
+        "nation_kor": "포클랜드 제도",
+        "nation_num": 238,
+        "code3": "FLK",
+        "code2": "FK",
+        "nation_eng": "Falkland Islands (Malvinas)"
+    },
+    {
+        "nation_kor": "폴란드",
+        "nation_num": 616,
+        "code3": "POL",
+        "code2": "PL",
+        "nation_eng": "Poland"
+    },
+    {
+        "nation_kor": "푸에르토리코",
+        "nation_num": 630,
+        "code3": "PRI",
+        "code2": "PR",
+        "nation_eng": "Puerto Rico"
+    },
+    {
+        "nation_kor": "프랑스",
+        "nation_num": 250,
+        "code3": "FRA",
+        "code2": "FR",
+        "nation_eng": "France"
+    },
+    {
+        "nation_kor": "프랑스령 기아나",
+        "nation_num": 254,
+        "code3": "GUF",
+        "code2": "GF",
+        "nation_eng": "French Guiana"
+    },
+    {
+        "nation_kor": "프랑스령 남방 및 남극",
+        "nation_num": 260,
+        "code3": "ATF",
+        "code2": "TF",
+        "nation_eng": "French Southern Territories"
+    },
+    {
+        "nation_kor": "프랑스령 폴리네시아",
+        "nation_num": 258,
+        "code3": "PYF",
+        "code2": "PF",
+        "nation_eng": "French Polynesia"
+    },
+    {
+        "nation_kor": "피지",
+        "nation_num": 242,
+        "code3": "FJI",
+        "code2": "FJ",
+        "nation_eng": "Fiji"
+    },
+    {
+        "nation_kor": "핀란드",
+        "nation_num": 246,
+        "code3": "FIN",
+        "code2": "FI",
+        "nation_eng": "Finland"
+    },
+    {
+        "nation_kor": "필리핀",
+        "nation_num": 608,
+        "code3": "PHL",
+        "code2": "PH",
+        "nation_eng": "Philippines"
+    },
+    {
+        "nation_kor": "핏케언 제도",
+        "nation_num": 612,
+        "code3": "PCN",
+        "code2": "PN",
+        "nation_eng": "Pitcairn"
+    },
+    {
+        "nation_kor": "허드 맥도널드 제도",
+        "nation_num": 334,
+        "code3": "HMD",
+        "code2": "HM",
+        "nation_eng": "Heard Island and McDonald Islands"
+    },
+    {
+        "nation_kor": "헝가리",
+        "nation_num": 348,
+        "code3": "HUN",
+        "code2": "HU",
+        "nation_eng": "Hungary"
+    },
+    {
+        "nation_kor": "홍콩",
+        "nation_num": 344,
+        "code3": "HKG",
+        "code2": "HK",
+        "nation_eng": "Hong Kong"
+    }
+]

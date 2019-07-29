@@ -176,17 +176,24 @@ export default {
     },
     data() {
         return {
-          visible: false
+          visible: false,
+          isFDVisible: false,
         }
     },
     methods: {
+      showFD() {
+        this.isFDVisible = true
+      },
+      closeFD() {
+        this.isFDVisible = false
+      },
       stops : function (stop, index) {
         if (parseInt(index)%2 == 1) {
           return " ," + stop.toString()
         } else {
           return stop
         }
-      }
+      },
     // handleClickButton(){
     //   this.visible = !this.visible
     // }
