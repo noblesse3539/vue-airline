@@ -86,39 +86,28 @@
               <!-- here put a spinner or whatever you want to do when request is on proccess -->
           </v-flex>
 
-        <v-flex v-if="loading" style="width=100px; display: flex; align-items: center; ">
-          <div class="" >
-            <!-- <img src="http://cfile221.uf.daum.net/image/256A5E4C579AD7AB18555D" alt=""> -->
-            <!-- <img src="https://t1.daumcdn.net/liveboard/emoticon/kakaofriends/v3/mujiandconspecial/emot_019_x3.gif" alt=  ""> -->
-            <img src="https://4.bp.blogspot.com/-pnYVXlTcmG0/WFN6xh3pGQI/AAAAAAAACKY/lRtxZ-YDD-MbQ0Mox3xz60KwMRiwZnNLgCLcB/s200/0002.gif" alt="">
-          </div>
-          <!-- <img src="https://thumbs.gfycat.com/HotGrizzledAsianporcupine-size_restricted.gif" alt=""> -->
-          <span style="font-size: 20px;"><b>검색 결과를 불러오는중&nbsp&nbsp</b></span>
-          <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
-            <!-- here put a spinner or whatever you want to do when request is on proccess -->
-        </v-flex>
-
-        <v-flex style="width: 700px" v-if="!loading">
-          <div v-if="!error" style="display: inline-block">
-            <!-- 정렬메뉴바 -->
-            <div style="display: flex; justify-content: space-between">
-              <div class="container" style="display: flex; align-items: center ">
-                <div style="font-size: 18px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div>
-              </div>
-              <div class="">
-                <span>정렬 기준 : </span>
-                <v-menu offset-y >
-                  <template v-slot:activator="{ on }" >
-                    <v-btn color="#45CE30" dark v-on="on">
-                      {{ thisSortType }}
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
-                      <v-list-tile-title>{{ sortType }}</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu>
+          <v-flex style="width: 700px" v-if="!loading">
+            <div v-if="!error" style="display: inline-block">
+              <!-- 정렬메뉴바 -->
+              <div style="display: flex; justify-content: space-between">
+                <div class="container" style="display: flex; align-items: center ">
+                  <div style="font-size: 18px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div>
+                </div>
+                <div class="">
+                  <span>정렬 기준 : </span>
+                  <v-menu offset-y >
+                    <template v-slot:activator="{ on }" >
+                      <v-btn color="#45CE30" dark v-on="on">
+                        {{ thisSortType }}
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
+                        <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                </div>
               </div>
 
               <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 700px;">
