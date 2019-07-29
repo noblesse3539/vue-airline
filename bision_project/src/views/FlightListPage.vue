@@ -1,7 +1,8 @@
 <template>
     <div class="Api">
       <!-- 헤더 공백 -->
-      <div style="height:110px; width:100%;"></div>
+      <div style="height: 110px; width: 100%;"></div>
+      <div sytle="height: 100px; width: 100%; background-color: #45CE30; color: #45CE30;">gd</div>
       <!-- <v-flex xs2 d-flex v-if="!error">
         <v-select
           :items="sortTypes"
@@ -10,8 +11,9 @@
           label="정렬기준"
         ></v-select>
       </v-flex> -->
-      <v-layout wrap>
-        <v-flex style="width: 200px;" mx-0>
+      <!-- display: grid; grid-template-columns: 25% 50% 25%; -->
+      <div class="maingrid_a maingrid_b" style="">
+        <div style="margin: 0;" m-0 class="container sidegrid_a">
           <!-- 경유별 검색 체크박스 -->
           <div class="container" style="width: 220px;">
             경유
@@ -68,82 +70,86 @@
               </template>
             </v-slider>
           </div>
-        </v-flex>
+        </div>
         <!-- 항공권 리스트 -->
 
-
-        <v-flex v-if="loading" style="width=100px; display: flex; align-items: center; ">
-          <div class="" >
-            <!-- <img src="http://cfile221.uf.daum.net/image/256A5E4C579AD7AB18555D" alt=""> -->
-            <!-- <img src="https://t1.daumcdn.net/liveboard/emoticon/kakaofriends/v3/mujiandconspecial/emot_019_x3.gif" alt=  ""> -->
-            <img src="https://4.bp.blogspot.com/-pnYVXlTcmG0/WFN6xh3pGQI/AAAAAAAACKY/lRtxZ-YDD-MbQ0Mox3xz60KwMRiwZnNLgCLcB/s200/0002.gif" alt="">
-          </div>
-          <!-- <img src="https://thumbs.gfycat.com/HotGrizzledAsianporcupine-size_restricted.gif" alt=""> -->
-          <span style="font-size: 20px;"><b>검색 결과를 불러오는중&nbsp&nbsp</b></span>
-          <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
-            <!-- here put a spinner or whatever you want to do when request is on proccess -->
-        </v-flex>
-
-
-        <v-flex style="width: 700px" v-if="!loading">
-          <div v-if="!error" style="display: inline-block">
-            <!-- 정렬메뉴바 -->
-            <div style="display: flex; justify-content: space-between">
-              <div class="container" style="display: flex; align-items: center ">
-                <div style="font-size: 18px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div>
-              </div>
-              <div class="">
-                <span>정렬 기준 : </span>
-                <v-menu offset-y >
-                  <template v-slot:activator="{ on }" >
-                    <v-btn color="#45CE30" dark v-on="on">
-                      {{ thisSortType }}
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
-                      <v-list-tile-title>{{ sortType }}</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu>
-              </div>
+        <div class="container">
+          <v-flex v-if="loading" style="width=100px; display: flex; align-items: center; ">
+            <div class="" >
+              <!-- <img src="http://cfile221.uf.daum.net/image/256A5E4C579AD7AB18555D" alt=""> -->
+              <!-- <img src="https://t1.daumcdn.net/liveboard/emoticon/kakaofriends/v3/mujiandconspecial/emot_019_x3.gif" alt=  ""> -->
+              <img src="https://4.bp.blogspot.com/-pnYVXlTcmG0/WFN6xh3pGQI/AAAAAAAACKY/lRtxZ-YDD-MbQ0Mox3xz60KwMRiwZnNLgCLcB/s200/0002.gif" alt="">
             </div>
+            <!-- <img src="https://thumbs.gfycat.com/HotGrizzledAsianporcupine-size_restricted.gif" alt=""> -->
+            <span style="font-size: 20px;"><b>검색 결과를 불러오는중&nbsp&nbsp</b></span>
+            <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
+              <!-- here put a spinner or whatever you want to do when request is on proccess -->
+          </v-flex>
 
-            <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 700px;">
-              <Flight class="ma-3"
-                :CurrencySymbol="flights[i - 1].CurrencySymbol"
-                :InDepartureTime="flights[i - 1].InDepartureTime"
-                :InArrivalTime="flights[i - 1].InArrivalTime"
-                :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
-                :InDuration="flights[i - 1].InDuration"
-                :InDay="flights[i - 1].InDay"
-                :InNumofStop="flights[i - 1].InNumofStop"
-                :InStopCodes="flights[i - 1].InStopCodes"
-                :OutDepartureTime="flights[i - 1].OutDepartureTime"
-                :OutArrivalTime="flights[i - 1].OutArrivalTime"
-                :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
-                :OutDuration="flights[i - 1].OutDuration"
-                :OutDay="flights[i - 1].OutDay"
-                :OutNumofStop="flights[i - 1].OutNumofStop"
-                :OutStopCodes="flights[i - 1].OutStopCodes"
-                :NumofOptions="flights[i - 1].NumofOptions"
-                :LowestPrice="flights[i - 1].LowestPrice"
-                :LowestDeeplinkUrl="flights[i - 1].LowestDeeplinkUrl"
-                :LowestAgentsImageUrl="flights[i - 1].LowestAgentsImageUrl"
-                :OriginAirportCode="flights[i - 1].OriginAirportCode"
-                :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
-              ></Flight>
-            </v-layout>
+          <v-flex style="width: 700px" v-if="!loading">
+            <div v-if="!error" style="display: inline-block">
+              <!-- 정렬메뉴바 -->
+              <div style="display: flex; justify-content: space-between">
+                <div class="container" style="display: flex; align-items: center ">
+                  <div style="font-size: 18px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div>
+                </div>
+                <div class="">
+                  <span>정렬 기준 : </span>
+                  <v-menu offset-y >
+                    <template v-slot:activator="{ on }" >
+                      <v-btn color="#45CE30" dark v-on="on">
+                        {{ thisSortType }}
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
+                        <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                </div>
+              </div>
+
+              <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 700px;">
+                <Flight class="ma-3"
+                  :CurrencySymbol="flights[i - 1].CurrencySymbol"
+                  :InDepartureTime="flights[i - 1].InDepartureTime"
+                  :InArrivalTime="flights[i - 1].InArrivalTime"
+                  :InCarrierImageUrl="flights[i - 1].InCarrierImageUrl"
+                  :InDuration="flights[i - 1].InDuration"
+                  :InDay="flights[i - 1].InDay"
+                  :Instops="flights[i - 1].Instops"
+                  :InNumofStop="flights[i - 1].InNumofStop"
+                  :InSegments="flights[i - 1].InSegments"
+                  :OutDepartureTime="flights[i - 1].OutDepartureTime"
+                  :OutArrivalTime="flights[i - 1].OutArrivalTime"
+                  :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
+                  :OutDuration="flights[i - 1].OutDuration"
+                  :OutDay="flights[i - 1].OutDay"
+                  :Outstops="flights[i - 1].Outstops"
+                  :OutNumofStop="flights[i - 1].OutNumofStop"
+                  :OutSegments="flights[i - 1].OutSegments"
+                  :NumofOptions="flights[i - 1].NumofOptions"
+                  :LowestPrice="flights[i - 1].LowestPrice"
+                  :LowestDeeplinkUrl="flights[i - 1].LowestDeeplinkUrl"
+                  :LowestAgentsImageUrl="flights[i - 1].LowestAgentsImageUrl"
+                  :OriginAirportCode="flights[i - 1].OriginAirportCode"
+                  :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
+                ></Flight>
+              </v-layout>
+            </div>
+          </v-flex>
+          <div style="display: flex; justify-content: center;">
+              <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
           </div>
-        </v-flex>
-      </v-layout>
-      <div style="">
+        </div>
+        <div class="sidegrid_a sidegrid_b" style="height: 100px; width: 100% background-color: yellow;">
 
+        </div>
       </div>
 
-      <div style="display: flex; justify-content: center;">
-          <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
-      </div>
+
+
 
       <v-alert v-if="error" :value="true" type="warning">결과가 존재하지 않습니다.</v-alert>
       <!-- 푸터 공백 -->
@@ -238,14 +244,14 @@ export default {
             }
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
-                            'country': 'KW',
+                            'country': 'US',
                             'currency': 'USD',
-                            'locale': 'ko-KR',
+                            'locale': 'en-US',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            'originPlace': 'ICN-sky',
-                            'destinationPlace': 'PEK-sky',
-                            'outboundDate': '2019-07-27',
+                            'originPlace': 'SFO-sky',
+                            'destinationPlace': 'LHR-sky',
+                            'outboundDate': '2019-09-01',
                             'adults': '1',
                             // 'originPlace': this.$route.params.departure + '-sky',
                             // 'destinationPlace': this.$route.params.destination + '-sky',
@@ -253,7 +259,7 @@ export default {
                             // 'adults': this.$route.params.adults,
                         }
             // let inboundDate = this.$route.params.comingDate
-            let inboundDate = '2019-07-30'
+            let inboundDate = '2019-09-10'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
             }
@@ -307,14 +313,16 @@ export default {
                       // 출발, 도착 공항이름
                       let Originflag = false
                       let Destinationflag = false
-                      let OriginAirportCode, DestinationAirportCode
+                      let OriginAirportCode, DestinationAirportCode, OriginAirportName, DestinationAirportName
                       for (let j=0; j<res.data.Places.length; j++) {
                         if (Originflag == false && res.data.Places[j].Id == res.data.Query.OriginPlace) {
                           OriginAirportCode = res.data.Places[j].Code
+                          OriginAirportName = res.data.Places[j].Name
                           Originflag == true
                         }
                         if (Destinationflag == false && res.data.Places[j].Id == res.data.Query.DestinationPlace) {
                           DestinationAirportCode = res.data.Places[j].Code
+                          DestinationAirportName = res.data.Places[j].Name
                           Destinationflag == true
                         }
                         if (Originflag == true && Destinationflag == true) {
@@ -328,8 +336,8 @@ export default {
                       // 가격, 에이전트연결 url
                       let OutboundLegId, InboundLegId
                       for (let j=0; j<res.data.Itineraries.length; j++) {
-                        if (moreflag && j< 10)
-                          continue;
+                        // if (moreflag && j< 10)
+                        //   continue;
 
                         let Options = []
                         let option, AgentsCode, AgentsImageUrl
@@ -365,7 +373,7 @@ export default {
                         // 출발 시간, 도착시간 (왕복), 날짜 변화, 걸리는 시간
                         let Inflag = false
                         let Outflag = false
-                        let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay, OutNumofStop, OutStopCodes
+                        let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay, OutNumofStop, OutStopCodes, OutSegmentsId
                         // let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
                         let InDepartureTime = ''
                         let InArrivalTime = ''
@@ -374,6 +382,7 @@ export default {
                         let InDay = ''
                         let InNumofStop = ''
                         let InStopCodes = []
+                        let InSegmentsId
                         for (let k=0; k<res.data.Legs.length; k++) {
                           if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
                             OutDepartureTime = this.timeTransfer(res.data.Legs[k].Departure)
@@ -383,6 +392,7 @@ export default {
                             OutDuration = res.data.Legs[k].Duration
                             OutNumofStop = res.data.Legs[k].Stops.length
                             OutStopCodes = res.data.Legs[k].Stops
+                            OutSegmentsId = res.data.Legs[k].SegmentIds
                             Outflag = false
                           }
                           if (inboundDate != "" && Inflag == false && res.data.Legs[k].Id == InboundLegId) {
@@ -393,6 +403,7 @@ export default {
                             InDuration = res.data.Legs[k].Duration
                             InNumofStop = res.data.Legs[k].Stops.length
                             InStopCodes = res.data.Legs[k].Stops
+                            InSegmentsId = res.data.Legs[k].SegmentIds
                             Inflag = true
                           }
                           if (Inflag == true && Outflag == true) {
@@ -421,43 +432,154 @@ export default {
                         OutDuration = this.durationTransfer(OutDuration)
                         InDuration = this.durationTransfer(InDuration)
 
-                        // 경유지 정보
+                        // 경유지 정보(추가)
+                        let stop
+                        let Instops = []
                         for (let k=0; k<InStopCodes.length; k++) {
                           for (let l=0; l<res.data.Places.length; l++) {
                             if (InStopCodes[k] == res.data.Places[l].Id) {
-                              InStopCodes[k] = res.data.Places[l].Code
+                              stop = {
+                                'code': res.data.Places[l].Code,
+                                'name': res.data.Places[l].Name,
+                              }
                               break;
                             }
                           }
+                          Instops.push(stop)
                         }
+                        let Outstops = []
                         for (let k=0; k<OutStopCodes.length; k++) {
                           for (let l=0; l<res.data.Places.length; l++) {
                             if (OutStopCodes[k] == res.data.Places[l].Id) {
-                              OutStopCodes[k] = res.data.Places[l].Code
+                              stop = {
+                                'code': res.data.Places[l].Code,
+                                'name': res.data.Places[l].Name,
+                              }
                               break;
                             }
                           }
+                          Outstops.push(stop)
                         }
-                        // console.log(InStopCodes)
+
+                        // 경유시 항공 정보(추가)
+                        let segment
+                        let OutSegments = []
+                        let OriginStation = []
+                        let DestinationStation = []
+                        let DepartureDateTime, ArrivalDateTime, Carrier, OperatingCarrier, Duration, FlightNumber
+                        Originflag, Destinationflag = false
+                        for (let k=0; k<OutSegmentsId.length; k++) {
+                          // 공항 코드, 공항 이름
+                          for (let j=0; j<res.data.Places.length; j++) {
+                            if (Originflag == false && res.data.Places[j].Id == res.data.Segments[OutSegmentsId[k]].OriginStation) {
+                              OriginStation.push({'AirportCode': res.data.Places[j].Code, 'AirportName': res.data.Places[j].Name,})
+                              Originflag == true
+                            }
+                            if (Destinationflag == false && res.data.Places[j].Id == res.data.Segments[OutSegmentsId[k]].DestinationStation) {
+                              DestinationStation.push({'AirportCode': res.data.Places[j].Code, 'AirportName': res.data.Places[j].Name,})
+                              Destinationflag == true
+                            }
+                            if (Originflag == true && Destinationflag == true) {
+                              break;
+                            }
+                          }
+                          // 항공기
+                          let Carrier = []
+                          let OperatingCarrier = []
+                          for (let j=0; j<res.data.Carriers.length; j++) {
+                            if (res.data.Carriers[j].Id == res.data.Segments[k].Carrier) {
+                              Carrier.push({'Code': res.data.Carriers[j].Code,
+                                            'Name': res.data.Carriers[j].Name,
+                                            'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                            }
+                            if (res.data.Carriers[k].Id == OperatingCarrier) {
+                              OperatingCarrier.push({'Code': res.data.Carriers[j].Code,
+                                                     'Name': res.data.Carriers[j].Name,
+                                                     'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                            }
+                          }
+                          segment = {
+                            'OriginStation': OriginStation,
+                            'DestinationStation': DestinationStation,
+                            'DepartureDateTime': res.data.Segments[k].DepartureDateTime,
+                            'ArrivalDateTime': res.data.Segments[k].ArrivalDateTime,
+                            'Carrier': Carrier,
+                            'OperatingCarrier': OperatingCarrier,
+                            'Duration': res.data.Segments[k].Duration,
+                            'FlightNumber': res.data.Segments[k].FlightNumber,
+                          }
+                          OutSegments.push(segment)
+                        }
+
+                        let InSegments = []
+                        OriginStation = []
+                        DestinationStation = []
+                        Originflag, Destinationflag = false
+                        for (let k=0; k<InSegmentsId.length; k++) {
+                          for (let j=0; j<res.data.Places.length; j++) {
+                            if (Originflag == false && res.data.Places[j].Id == res.data.Segments[InSegmentsId[k]].OriginStation) {
+                              OriginStation.push({'AirportCode': res.data.Places[j].Code, 'AirportName': res.data.Places[j].Name,})
+                              Originflag == true
+                            }
+                            if (Destinationflag == false && res.data.Places[j].Id == res.data.Segments[InSegmentsId[k]].DestinationStation) {
+                              DestinationStation.push({'AirportCode': res.data.Places[j].Code, 'AirportName': res.data.Places[j].Name,})
+                              Destinationflag == true
+                            }
+                            if (Originflag == true && Destinationflag == true) {
+                              break;
+                            }
+                          }
+                          // 항공기
+                          Carrier = []
+                          OperatingCarrier = []
+                          for (let j=0; j<res.data.Carriers.length; j++) {
+                            if (res.data.Carriers[j].Id == res.data.Segments[k].Carrier) {
+                              Carrier.push({'Code': res.data.Carriers[j].Code,
+                                            'Name': res.data.Carriers[j].Name,
+                                            'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                            }
+                            if (res.data.Carriers[k].Id == OperatingCarrier) {
+                              OperatingCarrier.push({'Code': res.data.Carriers[j].Code,
+                                                     'Name': res.data.Carriers[j].Name,
+                                                     'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                            }
+                          }
+                          segment = {
+                            'OriginStation': OriginStation,
+                            'DestinationStation': DestinationStation,
+                            'DepartureDateTime': res.data.Segments[k].DepartureDateTime,
+                            'ArrivalDateTime': res.data.Segments[k].ArrivalDateTime,
+                            'Carrier': Carrier,
+                            'OperatingCarrier': OperatingCarrier,
+                            'Duration': res.data.Segments[k].Duration,
+                            'FlightNumber': res.data.Segments[k].FlightNumber,
+                          }
+                          InSegments.push(segment)
+                        }
+
 
                         if ((this.selected.indexOf(InNumofStop) != -1) || (this.selected.indexOf(OutNumofStop) != -1) || (this.selected.indexOf('2') != -1 && Number(InNumofStop) > 1) || (this.selected.indexOf('2') != -1 && Number(OutNumofStop) > 1)) {
                           flight = {'OriginAirportCode': OriginAirportCode,
+                                    'OriginAirportName' : OriginAirportName,
                                     'DestinationAirportCode': DestinationAirportCode,
+                                    'DestinationAirportName': DestinationAirportName,
                                     'CurrencySymbol': CurrencySymbol,
                                     'InDepartureTime': InDepartureTime,
                                     'InArrivalTime': InArrivalTime,
                                     'InCarrierImageUrl': InCarrierImageUrl,
                                     'InDay': InDay,
                                     'InDuration': InDuration,
+                                    'Instops': Instops,
                                     'InNumofStop': InNumofStop,
-                                    'InStopCodes': InStopCodes,
+                                    'InSegments': InSegments,
                                     'OutDepartureTime': OutDepartureTime,
                                     'OutArrivalTime': OutArrivalTime,
                                     'OutCarrierImageUrl': OutCarrierImageUrl,
                                     'OutDay': OutDay,
                                     'OutDuration': OutDuration,
+                                    'Outstops': Outstops,
                                     'OutNumofStop': OutNumofStop,
-                                    'OutStopCodes': OutStopCodes,
+                                    'OutSegments': OutSegments,
                                     'Options': Options,
                                     'NumofOptions': NumofOptions,
                                     'LowestPrice': LowestPrice,
@@ -632,8 +754,43 @@ export default {
 
 
 <style>
-  .wrapper252 {
+  /* .wrapper252 {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+  } */
+
+  @media (max-width: 780px) {
+    .maingrid_a {
+      display: grid;
+      grid-template-columns: 0% 100% 0%;
+    }
+    .sidegrid_a {
+      display: none;
+    }
+  },
+  @media (min-width: 781px) and (max-width: 1050px) {
+  .maingrid_b {
+    display: grid;
+    grid-template-columns: 25% 75% 0%;
+  }
+  .sidegrid_b {
+    display: none;
+  }
+  },
+  @media (min-width: 1051px) and (max-width: 1200px) {
+  .maingrid_c {
     display: grid;
     grid-template-columns: 25% 50% 25%;
   }
+  },
+  @media (min-width: 781px) {
+  .maingrid_d {
+    display: grid;
+    grid-template-columns: 20% 55% 25%;
+  }
+  }
+
+
+
+
 </style>
