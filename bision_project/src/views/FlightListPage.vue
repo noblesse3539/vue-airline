@@ -2,7 +2,23 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div sytle="height: 100px; width: 100%; background-color: #45CE30; color: #45CE30;">gd</div>
+      <div style="height: 100px; width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%; display:grid; grid-template-columns: 50% 40%">
+        <div class="">
+          <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
+            인천(ICN) - 다낭(DAD)
+            <!-- {{flights[0].OriginAirportName}} -->
+            {{this.$route.params.departure}}
+          </div>
+          <div class="container" style="height: 50%; padding-top: 4px;">
+            1성인 | 일반석
+          </div>
+        </div>
+
+        <div></div>
+        <div class="">
+
+        </div>
+      </div>
       <!-- <v-flex xs2 d-flex v-if="!error">
         <v-select
           :items="sortTypes"
@@ -12,8 +28,8 @@
         ></v-select>
       </v-flex> -->
       <!-- display: grid; grid-template-columns: 25% 50% 25%; -->
-      <div class="maingrid_a maingrid_b" style="">
-        <div style="margin: 0;" m-0 class="container sidegrid_a">
+      <div class="maingrid-a maingrid-b maingrid-c" style="">
+        <div style="margin: 0;" m-0 class="container sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
           <div class="container" style="width: 220px;">
             경유
@@ -244,9 +260,9 @@ export default {
             }
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
-                            'country': 'US',
+                            'country': 'KW',
                             'currency': 'USD',
-                            'locale': 'en-US',
+                            'locale': 'ko-KR',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
                             'originPlace': 'SFO-sky',
@@ -759,36 +775,36 @@ export default {
     grid-template-columns: 25% 50% 25%;
   } */
 
-  @media (max-width: 780px) {
-    .maingrid_a {
+  @media (max-width: 980px) {
+    .maingrid-a {
       display: grid;
-      grid-template-columns: 0% 100% 0%;
+      grid-template-columns: 100%;
     }
-    .sidegrid_a {
+    .sidegrid-a {
       display: none;
     }
-  },
-  @media (min-width: 781px) and (max-width: 1050px) {
-  .maingrid_b {
-    display: grid;
-    grid-template-columns: 25% 75% 0%;
   }
-  .sidegrid_b {
+  @media only screen and (max-width: 1200px) {
+  .maingrid-b {
+    display: grid;
+    grid-template-columns: 25% 75%;
+  }
+  .sidegrid-b {
     display: none;
   }
-  },
-  @media (min-width: 1051px) and (max-width: 1200px) {
-  .maingrid_c {
+  }
+  @media only screen and (min-width: 1200px) {
+  .maingrid-c {
     display: grid;
     grid-template-columns: 25% 50% 25%;
   }
-  },
-  @media (min-width: 781px) {
-  .maingrid_d {
+  }
+  /* @media (min-width: 781px) {
+  .maingrid-d {
     display: grid;
     grid-template-columns: 20% 55% 25%;
   }
-  }
+  } */
 
 
 
