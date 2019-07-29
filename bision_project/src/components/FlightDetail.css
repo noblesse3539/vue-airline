@@ -24,14 +24,28 @@
   justify-content: space-between;
   /* border-bottom: solid 2px lightgrey; */
 }
-.FlightDetail__body {
-  margin: 0 auto;
-  padding: 30px;
-  width:1000px;
-  display: grid;
-  grid-template-columns: 70% 30%;
-  grid-gap: 30px;
+/* 모바일 사이즈 */
 
+.FlightDetail__body {
+  width: 100%;
+  margin: auto;
+  padding: 30px;
+}
+/* 태블릿 사이즈 */
+@media (min-width: 768px) {
+  .FlightDetail__body {
+    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 58% 38%;
+    grid-gap: 4%;
+  }
+}
+/* 데스크탑 사이즈 */
+@media (min-width: 1024px){
+  .FlightDetail__body {
+    width: 85%;
+    grid-template-columns: 68% 28%;
+  }
 }
 .FlightDetail__body .ticket {
   border: solid 1px rgb(197, 249, 179);
@@ -44,6 +58,7 @@
   grid-gap:15px;
   align-items: center;
 }
+
 .ticket .departure {
   text-align: right;
 }
@@ -101,5 +116,49 @@
   flex-wrap: wrap;
   align-items: center;
   margin: 20px 0;
+}
+.costInfo {
+  margin: 3rem 0;
+}
 
+.readBeforeBooking {
+  cursor: pointer;
+  color: #35c235;
+  display: flex;
+  justify-content: space-between;
+}
+.readBeforeBooking__Toggle {
+  font-size: 0.75rem;
+  margin:1rem;
+}
+.book {
+  position: relative;
+}
+.book :hover * {
+  color: white;
+}
+.book:hover .overlay{
+  height:100%;
+}
+
+.bookLink h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+.bookLink {
+  padding: 0 1rem;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+}
+.overlay{
+  width: 100%;
+  height: 0;
+  position: absolute;
+  background-color:  #35c235;
+  border-radius: 10px;
+  opacity: 0.2;
+  z-index: 10;
+  cursor: pointer;
 }
