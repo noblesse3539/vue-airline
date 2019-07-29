@@ -8,7 +8,7 @@
         </header>
         <div class="FlightDetail__body">
           <div class="flightinfo">
-            
+
             <!-- 가는 비행기 -->
             <h3>가는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
             <div class="ticket" @click="isInVisible = !isInVisible" @mouseover="inArrow = true" @mouseleave = "inArrow = false">
@@ -32,7 +32,7 @@
             </div>
 
             <!-- 더보기 -->
-            <div v-if="isInVisible" class="moreDetail">
+            <div v-if="isInVisible && flight.InNumofStop == 0" class="moreDetail">
               <div>
                 <i style="color: grey; margin-left:5rem;" class="fas fa-plane-departure"></i> !항공편명
               </div>
@@ -50,6 +50,7 @@
               </div>
               <div>도착: !도착날짜 | 여행 기간: {{flight.InDuration}}</div>
             </div>
+            <div v-if="isInVisible && flight.InNumofStop != 0" class="moreDetail">경유있음</div>
 
             <!-- 오는 비행기 -->
             <h3 style="margin-top: 25px;">오는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
@@ -72,7 +73,7 @@
               <v-icon class="arrow" v-if="isOutVisible" color="#35c235" large>fa-chevron-up</v-icon>
               <v-icon class="arrow" v-if="!isOutVisible" :color="`${outArrow? '#35c235':'grey'}`" large>fa-chevron-down</v-icon>
             </div>
-            <div v-if="isOutVisible" class="moreDetail">
+            <div v-if="isOutVisible && flight.OutNumofStop == 0" class="moreDetail">
               <div>
                   <i style="color: grey; margin-left:5rem;" class="fas fa-plane-arrival"></i> !항공편명
               </div>
@@ -90,6 +91,8 @@
               </div>
               <div>도착: !도착날짜 | 여행 기간: {{flight.OutDuration}}</div>
             </div>
+            <div v-if="isOutVisible && flight.OutNumofStop !=0" class="moreDetail stop">경유있음</div>
+            <div>{{flight}}</div>
           </div>
 
           <div class="secondSection">
@@ -143,10 +146,9 @@ export default {
   props: {
     flight: Object,
   },
+
   data () {
     return{
-      inVia: 0,
-      outVia: 0,
       rbbArrow : false,
       inArrow: false,
       outArrow: false,
