@@ -23,6 +23,14 @@ const config = require('./config')
     EXPRESS CONFIGURATION
 ==========================*/
 const app = express()
+
+/* =======================
+    SOCKET.IO CONFIGURATION
+==========================*/
+const server = require('http').createServer(app)
+app.io = require('socket.io')(server)
+
+
 const db = require('./db.js')
 
 // logging
@@ -47,7 +55,7 @@ app.set('jwt-secret', config.secret)
 
 
 // vue router와 연동
-app.use(require('connect-history-api-fallback')())
+// app.use(require('connect-history-api-fallback')())
 
 app.use(function (req, res, next) {
 // Website you wish to allow to connect
@@ -98,5 +106,17 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 })
+
+app.io.on('connection', function ( socket) {
+  socket.on('new_notification', function(data) {
+    console.log(data.title, data.message)
+    app.io.sockets.emit('show_notification', {
+      title: data.title,
+      message: data.message,
+    })
+  })
+
+})
+app.io.origins('*:*')
 
 module.exports = app
