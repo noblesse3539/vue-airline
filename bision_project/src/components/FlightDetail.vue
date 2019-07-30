@@ -10,7 +10,7 @@
           <div class="flightinfo">
 
             <!-- 가는 비행기 -->
-            <h3>가는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
+            <h3>가는날 출발시간<span style="color:grey"> {{getDate(0, flight.OutSegments)}}</span></h3>
             <div class="ticket" @click="isOutVisible = !isOutVisible" @mouseover="outArrow = true" @mouseleave = "outArrow = false">
               <img height="40px" :src="flight.OutCarrierImageUrl" alt="">
               <div class="departure">
@@ -32,9 +32,39 @@
             </div>
 
             <!-- 더보기 -->
-            <div v-if="isOutVisible && flight.OutNumofStop == 0" class="moreDetail">
+            <div v-if="isOutVisible" class="moreDetail">
               <div>
-                <i style="color: grey; margin-left:5rem;" class="fas fa-plane-departure"></i> !항공편명
+                <div v-for="(plane, index) in flight.OutSegments">
+                  <div v-if="index">
+                    <!-- <h2>{{flight.OutSegments[index].DepartureDateTime}} {{flight.OutSegments[index-1].ArrivalDateTime}}</h2> -->
+                    <h2>{{getWaiting(flight.OutSegments[index].DepartureDateTime, flight.OutSegments[index-1].ArrivalDateTime)}}</h2>
+                  </div>
+                  <div>
+                    <img :src="plane.OperatingCarrier[0].ImageUrl" width="50px" alt="">
+                    {{plane.OperatingCarrier[0].Name}} {{plane.OperatingCarrier[0].Code}}{{plane.FlightNumber}}
+                    <!-- {{`${plane.OperatingCarrier[0].Code != plane.Carrier[0].Code ? '| '+plane.Carrier[0].Name+'에서 운항':''}`}} -->
+                    <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" >| {{plane.Carrier[0].Name}}에서 운항</span>
+                  </div>
+                  <div>
+                    {{parseInt(plane.Duration/60)}}시간 <span v-if="plane.Duration%60">{{plane.Duration%60}}분</span>
+                  </div>
+                  <img src="../assets/line.png" width="50px" alt="">
+                  <div>
+                    <div>
+                      <p>{{dateTimeToTime(plane.DepartureDateTime)}}</p>
+                      <p>{{plane.OriginStation[0].AirportCode}} {{plane.OriginStation[0].AirportName}}</p>
+                    </div>
+                    <div>
+                      <p>{{dateTimeToTime(plane.ArrivalDateTime)}}</p>
+                      <p>{{plane.DestinationStation[0].AirportCode}} {{plane.DestinationStation[0].AirportName}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div><b>도착 : </b> {{getDate(flight.OutNumofStop, flight.OutSegments)}} <b>| 여행 기간 : </b>{{flight.OutDuration}}</div>
+              </div>
+            </div>
+              <!-- <div>
+                <img src="../assets/out.png" width="50px" alt="outImg"> !항공편명
               </div>
               <div class="timeInfo">
                 <div>{{flight.OutDuration}}</div>
@@ -51,7 +81,7 @@
               </div>
               <div>도착: !도착날짜 | 여행 기간: {{flight.OutDuration}}</div>
             </div>
-            <div v-if="isOutVisible && flight.OutNumofStop != 0" class="moreDetail">경유있음</div>
+            <div v-if="isOutVisible && flight.OutNumofStop != 0" class="moreDetail">경유있음</div> -->
 
             <!-- 오는 비행기 -->
             <h3 style="margin-top: 25px;">오는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
@@ -157,6 +187,41 @@ export default {
       outArrow: false,
       isInVisible: false,
       isOutVisible: false,
+      inDepartureDate: '',
+      inArrivalDate: '',
+      outDepartureDate: '',
+      inDepartureDate: ''
+
+    }
+  },
+  methods : {
+    dateTimeToTime (v) {
+      let h = parseInt(v.substr(11, 2))
+      if(h > 12)  {
+        h -= 12
+        return '오후 ' + h + v.substr(13, 3)
+      }
+      return '오전 ' + h + v.substr(13, 3)
+    },
+    getWaiting (departure, arrival, final) {
+      let h = parseInt(departure.substr(11, 2) - arrival.substr(11, 2))
+      let m = parseInt(departure.substr(14, 2) - arrival.substr(14, 2))
+      if (m < 0) {
+        h -= 1
+        m += 60
+      }
+      if (h < 0) {
+        h += 60
+      }
+      if(!h) return m + '분'
+      return h + '시간 ' + m + '분'
+    },
+    getDate(i, segments){
+      let v
+      i = parseInt(i)
+      if(i) v = segments[i].ArrivalDateTime
+      else v = segments[0].DepartureDateTime
+      return v.substr(0, 4) + '년 ' + parseInt(v.substr(5, 2)) + '월 ' + parseInt(v.substr(8, 2)) + '일'
     }
   },
 }
