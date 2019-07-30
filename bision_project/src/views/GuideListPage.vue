@@ -206,7 +206,7 @@ export default {
             
             this.$http.get(`/api/guideservice/search/${keyword}`)
             .then( res=> {
-                // console.log(res.data)
+                console.log(res.data)
                 res.data.guideservices.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text                        
                         const temp = {}

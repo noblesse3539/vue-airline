@@ -15,6 +15,7 @@ import GuideSearch from './views/GuideSearch'
 import PayApproval from './views/kakaopay/PayApproval'
 import payCancel from './views/kakaopay/payCancel'
 import PayFail from './views/kakaopay/PayFail'
+import GuideServicePayment from './views/GuideServicePayment'
 
 Vue.use(Router)
 
@@ -88,6 +89,12 @@ export default new Router({
             path: '/vuex',
             name: 'Vuex',
             component: VuexTutorial
+        },
+        {
+            path: '/guideservicepayment',
+            name: 'GuideServicPayment',
+            component: GuideServicePayment,
+            props: true
         },
         {
             path: '/payapproval',

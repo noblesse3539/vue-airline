@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const crypto = require('crypto')
 const config = require('../config')
+const User = require('./user')
 
 const Guide = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User'},
@@ -36,7 +37,9 @@ Guide.statics.updateByUserObId = function(user,nation_kor,nation_eng,city_kor,ci
 Guide.statics.findByUserObId = function(user){
   return this.findOne({
     user
-  }).exec()
+  })
+  .populate({path: 'user', model:User,select: '-password'})
+  .exec()
 }
 
 

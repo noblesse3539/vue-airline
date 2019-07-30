@@ -1,6 +1,7 @@
 const state = {
     isLoggedIn: false,
     userId : '',
+    userName: '',
 }
 
 const getters = {
@@ -9,6 +10,12 @@ const getters = {
     },
     getUserId : state => {
         return state.userId
+    },
+    getUserInfo: state => {
+        return {
+            userId : state.userId,
+            userName : state.userName
+        }
     }
 }
 
@@ -16,8 +23,9 @@ const mutations = {
     setIsLoggedIn(state) {
         state.isLoggedIn = true
     },
-    setUserId(state, userId) {
-        state.userId = userId
+    setUserInfo(state, userInfo) {
+        state.userId = userInfo.userId
+        state.userName = userInfo.userName
     },
 }
 

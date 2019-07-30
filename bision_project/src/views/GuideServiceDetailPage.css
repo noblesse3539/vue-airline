@@ -79,7 +79,6 @@
     border-radius: 6px;
     border: 1px solid #eee;
     cursor: pointer;
-
     /* 지우세요 나중에 */
     /* background: silver; */
 }
@@ -87,7 +86,7 @@
 .GS-body-1 {
     display: block;
     padding-bottom: 40px;
-    height: 70vh !important ;
+    height: 70vh !important;
     margin-bottom: 100px !important;
     width: 75%;
     margin-left: 12.5%;
@@ -143,7 +142,6 @@
     width: 66%;
 }
 
-
 .GS-payment-box {
     /* width: 438px; */
     /* height: 55vh; */
@@ -184,7 +182,7 @@
     /* width: inherit; */
     border-radius: 10px;
     -webkit-box-shadow: 0 8px 6px -6px light;
-	-moz-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
     box-shadow: 0 8px 6px -10px black;
     border: 2px solid #EBEBEB;
     float: left;
@@ -201,6 +199,8 @@
     font-size: 2rem;
     font-weight: 700;
     padding: 8px;
+    padding-left: 0;
+    padding-bottom: 0;
 }
 
 .GS-guide-detail-option {
@@ -243,12 +243,11 @@
 }
 
 .GS-guide-detail-best-review-user-img {
-    width: 100px !important;
-    height: 100px !important;
+    width: 50px !important;
+    height: 50px !important;
     background-position: center top !important;
     background-size: cover !important;
     border-radius: 50%;
-
 }
 
 .GS-guide-detail-best-review-right {
@@ -274,7 +273,7 @@
     margin-left: 20px;
 }
 
-.userinfo-used-this-service > p {
+.userinfo-used-this-service>p {
     margin: 0 !important;
     margin-left: 20px !important;
 }
@@ -319,8 +318,7 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     background: linear-gradient(to right, #1CD8D2 0%, #93EDC7 51%, #1CD8D2 100%, #77A1D3 100%);
-    box-shadow: 0 3px 8px rgba(0,0,0,.3);
-    
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
 }
 
 .GS-payment-decision-btn:hover {
@@ -334,9 +332,8 @@
 
 .GS-payment-decision-btn:active {
     /* top: 3px; */
-    box-shadow: 0 3px 0 rgba(0,0,0,.3);
+    box-shadow: 0 3px 0 rgba(0, 0, 0, .3);
 }
-
 
 .GS-payment-choose-option:hover .GS-payment-decision-btn:hover {
     opacity: 0.8;
@@ -351,7 +348,7 @@
     border-bottom: 1.5px solid #EBEBEB;
 }
 
-.GS-payment-detail-info > div:first-child {
+.GS-payment-detail-info>div:first-child {
     color: black;
 }
 
@@ -370,7 +367,6 @@
     width: 100%;
     height: 100%;
     padding: 20px;
-
 }
 
 .GS-payment-current-info-each {
@@ -417,7 +413,6 @@
 }
 
 .GS-individual-option-selectBtn {
-    
     width: 100px;
     height: 100%;
     background: white;
@@ -473,7 +468,6 @@
 
 .GS-service-review-box {
     padding: 20px;
-
 }
 
 .GS-service-review-score {
@@ -483,7 +477,7 @@
     padding: 8px 10px;
     float: left;
     margin-right: 15px;
-    font-family: Arial Rounded MT Bold,Arial Rounded MT,sans-serif;
+    font-family: Arial Rounded MT Bold, Arial Rounded MT, sans-serif;
     background: -webkit-gradient(linear, left top, right top, from(#1CD8D2), color-stop(51%, #93EDC7), color-stop(100%, #1CD8D2), to(#77A1D3));
     background: linear-gradient(to bottom, #1CD8D2 0%, #93EDC7 51%, #1CD8D2 100%, #77A1D3 100%);
 }
@@ -551,7 +545,7 @@
 }
 
 .GS-service-review-top-userInfo {
-    display: flex; 
+    display: flex;
 }
 
 .Gs-service-review-top-option {
@@ -576,7 +570,7 @@
     font-family: 'Nanum Gothic', sans-serif;
 }
 
-.GS-service-reivew-userReview > p {
+.GS-service-reivew-userReview>p {
     display: inline-block;
     max-height: 50px !important;
     overflow: hidden;
@@ -584,7 +578,7 @@
     padding-bottom: 5px;
 }
 
-.GS-service-reivew-userReview > p::after {
+.GS-service-reivew-userReview>p::after {
     content: 'Readc THIS!!!!!!!!!!!!!';
     /* absolute: */
 }
@@ -647,7 +641,6 @@
 .num-of-customers {
     display: flex;
     align-items: center;
-
 }
 
 .option-selected {
@@ -656,5 +649,32 @@
     border-width: 5px !important;
     border: solid;
     /* background: red !important; */
-    box-shadow: 0 5px 20px rgba(0,0,0,.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+}
+
+.GS-guide-detail-guideDetail {
+    /* margin-top: 50px; */
+    margin-bottom: 20px;
+    display: flex;
+    font-weight: 700;
+    font-size: 2.25rem;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.GS-guide-detail-guideImg {
+    width: 100px;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.GS-guide-detail-guideImg:hover, .GS-guide-detail-guideName:hover {
+    cursor: pointer;
+}
+
+.GS-guide-detail-guideImg-image {
+    border-radius: 50%;
+    width: 100%;
+    height: auto;
 }
