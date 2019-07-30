@@ -540,12 +540,12 @@ export default {
                           segment = {
                             'OriginStation': OriginStation,
                             'DestinationStation': DestinationStation,
-                            'DepartureDateTime': res.data.Segments[k].DepartureDateTime,
-                            'ArrivalDateTime': res.data.Segments[k].ArrivalDateTime,
+                            'DepartureDateTime': res.data.Segments[OutSegmentsId[k]].DepartureDateTime,
+                            'ArrivalDateTime': res.data.Segments[OutSegmentsId[k]].ArrivalDateTime,
                             'Carrier': Carrier,
                             'OperatingCarrier': OperatingCarrier,
-                            'Duration': res.data.Segments[k].Duration,
-                            'FlightNumber': res.data.Segments[k].FlightNumber,
+                            'Duration': res.data.Segments[OutSegmentsId[k]].Duration,
+                            'FlightNumber': res.data.Segments[OutSegmentsId[k]].FlightNumber,
                           }
                           OutSegments.push(segment)
                         }
@@ -599,12 +599,12 @@ export default {
                           segment = {
                             'OriginStation': OriginStation,
                             'DestinationStation': DestinationStation,
-                            'DepartureDateTime': res.data.Segments[k].DepartureDateTime,
-                            'ArrivalDateTime': res.data.Segments[k].ArrivalDateTime,
+                            'DepartureDateTime': res.data.Segments[InSegmentsId[k]].DepartureDateTime,
+                            'ArrivalDateTime': res.data.Segments[InSegmentsId[k]].ArrivalDateTime,
                             'Carrier': Carrier,
                             'OperatingCarrier': OperatingCarrier,
-                            'Duration': res.data.Segments[k].Duration,
-                            'FlightNumber': res.data.Segments[k].FlightNumber,
+                            'Duration': res.data.Segments[InSegmentsId[k]].Duration,
+                            'FlightNumber': res.data.Segments[InSegmentsId[k]].FlightNumber,
                           }
                           InSegments.push(segment)
                         }
