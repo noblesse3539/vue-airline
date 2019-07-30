@@ -10,11 +10,26 @@
     <section class="GS-body-1">
       <div class="GS-body-left">
         <div class="GS-guide-detail-content">
+          
+          <!-- 가이드 유저 정보 -->
+          <div class="GS-guide-detail-guideDetail">
+            <div class="GS-guide-detail-guideImg" v-if="guideInfo.guideImg" @click="goToGuideDetail">
+              <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!">
+            </div>
+            <div class="GS-guide-detail-guideName">
+              <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
+              <span @click="goToGuideDetail" style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
+            </div>
+          </div>
+
           <div class="GS-guide-detail-title">
             <div style="margin-right: 10px;">{{title}}</div>
+
+            <!-- 좋아요 기능 추후 구현 -->
             <i class="far fa-heart"></i>
             <!-- <i class="fas fa-heart guide-list-page-like-btn-active"></i> -->
           </div>
+
           <div class="GS-guide-detail-option">
             <div class="GS-guide-duration GS-guide-detail-icon">
               <i class="far fa-clock"></i>
@@ -72,12 +87,12 @@
             <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
-              <button class="GS-payment-decision-btn">결제하기</button>
+              <button class="GS-payment-decision-btn" @click="goToPayment">결제하기</button>
             <!-- <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button class="GS-payment-decision-btn">예약하기</button>
+            <button class="GS-payment-decision-btn" >예약하기</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -269,7 +284,7 @@ export default {
       // guideServiceUserWrote: this.thisPostInfo.rawDetail || '',
       thisPostInfo: {},
       dataReady: false,
-    
+
       // 검색창에서 넘어오는 정보
       title: "",
       city_kor: ["", ""],
@@ -277,13 +292,22 @@ export default {
       mainImg: "",
       servieOptions: [],
       nationFlag: '',
- 
+
       // 결제 관련 정보
       serviceInfo: {
         itemName: "베이징상품",
         quantity: 1,
         totalAmount: 10000,
-        taxFreeAmount: 3000
+        taxFreeAmount: 3000,
+        date: '',
+        people: '',
+      },
+
+      // 가이드 관련 정보
+      guideInfo : {
+        guideName : '',
+        starRatingList: [],
+        guideImg: '',
       },
     
       isLoadMore: false,
@@ -291,6 +315,12 @@ export default {
     };
   },
   methods: {
+    goToGuideDetail: function() {
+      this.$router.push({ path: 'GuideMyPage', query: {a : 1}})
+    },
+    goToPayment: function() {
+      this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
+    },
     dragDownSideBar: function() {
       const scrollY = window.scrollY;
       const sideBar = document.body.querySelector(".GS-payment-box");
@@ -327,7 +357,7 @@ export default {
         })
         .then(data => {
           // this.setHero()
-          // console.log(data);
+          console.log(data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -335,10 +365,30 @@ export default {
           this.detail = data.detail;
           this.mainImg = data.mainImg;
           this.reviews = data.reviews;
+
+          this.serviceInfo.title = data.title
+          this.serviceInfo.city_kor = data.city_kor
+          this.serviceInfo.nation_kor = data.nation_kor
+          this.serviceInfo.mainImg = data.mainImg
+          this.serviceInfo.options = data.options
           this.setHero();
+
+          return data.user
         })
-        .then( () => {
+        .then( (guideId) => {
           this.getNationFlag()
+
+          // 가이드 정보 가져오기
+          const baseUrl = `/api/guide/findByUserObid/${guideId}`
+          this.$http.get(baseUrl)
+            .then( res => {
+              console.log(res)
+              this.guideInfo.guideName = res.data.guide.user.username
+              this.guideInfo.starRatingList = res.data.guide.starRatingList
+              this.guideInfo.guideImg = res.data.guide.user.profileImg || ''
+
+            })
+
         })
     },
     loadReviewMore: function() {
@@ -369,8 +419,8 @@ export default {
       const payBtn = document.querySelector('.GS-payment-choose-option')
     
       payBtn.classList.add('animated')
-      payBtn.classList.add('flipInX')
-      payBtn.classList.add('delay-0.1s')
+      payBtn.classList.add('flash')
+      // payBtn.classList.add('delay-0.1s')
 
       // console.log(toDrawBorder)
       this.setPaymentReady()

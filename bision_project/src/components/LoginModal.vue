@@ -23,7 +23,7 @@
               <div class="form-register" :class="{ 'active': active == 'register' }" id="form-register">
                 <div class="error-message" v-text="registerError"></div>
                 <div class="welcomeImg"></div>
-                <input type="text" name="name" placeholder="이메일 입력" v-model="registerName" @keyup.enter="submit('register', $event)">
+                <input type="email" name="name" placeholder="이메일 입력" v-model="registerName" @keyup.enter="submit('register', $event)">
                 <!-- <input type="email" name="email" placeholder="Email" v-model="registerEmail" @keyup.enter="submit('register', $event)"> -->
                 <input type="password" name="password" placeholder="비밀번호 입력" v-model="registerPassword" @keyup.enter="submit('register', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'register' }" @click="submit('register', $event)" v-model="registerSubmit" id="registerSubmit">
@@ -31,7 +31,7 @@
               </div>
               <div class="form-login" :class="{ 'active': active == 'login' }" id="form-login">
                 <div class="error-message" v-text="loginError"></div>
-                <input type="text" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
+                <input type="email" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
                 <input type="password" name="password" placeholder="비밀번호 입력" v-model="loginPassword" @keyup.enter="submit('login', $event)">
                 
                 <!-- 로그인 제출 버튼 -->

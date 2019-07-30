@@ -47,8 +47,10 @@ export default {
         .then( res => {
           if (res.status == 200) {
             this.$store.commit("setIsLoggedIn")
-            // console.log()
-            this.$sotre.commit("setUserId(res.data.info._id)")
+            this.$store.commit('setUserInfo', {
+                                  userId: res.data.info._id, 
+                                  userName: res.data.info.username,
+                                  })
           }
         })
         .catch( err => {
