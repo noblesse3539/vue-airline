@@ -2,22 +2,28 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="height: 100px; width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%; display:grid; grid-template-columns: 50% 40%">
+      <div style="height: 100px; width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%; display:grid; grid-template-columns: 45% 45% 10%">
         <div class="">
           <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
-            인천(ICN) - 다낭(DAD)
-            <!-- {{flights[0].OriginAirportName}} -->
-            {{this.$route.params.departure}}
+            인천({{this.$route.params.departure}}) - 다낭({{this.$route.params.destination}})
+
           </div>
           <div class="container" style="height: 50%; padding-top: 4px;">
-            1성인 | 일반석
+            {{this.$route.params.adults}} 성인 <span v-if="this.$route.params.children">{{this.$route.params.children}} 아동</span> <span v-if="this.$route.params.infants">{{this.$route.params.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.params.cabinClass"></span><span v-else>없음</span>
           </div>
         </div>
 
-        <div></div>
-        <div class="">
-
+        <div style="font-size: 15px; padding-top: 4%;">
+          <div style="width: 50%; display: inline-block;">
+            <div>가는 날</div>
+            <div>{{this.$route.params.leavingDate}}</div>
+          </div>
+          <div style="width: 50%; display: inline-block;">
+            <div>오는 날</div>
+            <div>{{this.$route.params.comingDate}}</div>
+          </div>
         </div>
+
       </div>
       <!-- <v-flex xs2 d-flex v-if="!error">
         <v-select
@@ -31,15 +37,22 @@
       <div class="maingrid-a maingrid-b maingrid-c" style="">
         <div style="margin: 0;" m-0 class="container sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
-          <div class="container" style="width: 220px;">
-            경유
+          <div class="container" style="width: 220px; margin-left: 7%;">
+            <div style="font-size: 25px !important; color: #45CE30;">
+              경유
+            </div>
+            <hr style="width: 220px">
             <v-checkbox v-model="selected" label="직항" value="0" @change="onCheckboxChange"></v-checkbox>
             <v-checkbox v-model="selected" label="1회 경유" value="1" @change="onCheckboxChange"></v-checkbox>
             <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="onCheckboxChange"></v-checkbox>
           </div>
           <!-- 시간대별 검색 슬라이더 -->
-          <div class="container" style="width: 220px; padding: 0px;">
-            <span style="display: block; text-align: center;">가는 날 출발시간</span>
+          <div class="container" style="width: 220px; padding: 0px; margin-left: 10%;">
+            <div style="font-size: 25px; color: #45CE30;">
+              시간대별 검색
+            </div>
+            <hr style="width: 220px; margin-bottom: 20px;">
+            <span style="display: block; font-size: 17px;">가는 날 출발시간</span>
             <span>{{outboundDepartStartTime}} - </span>
             <span>{{outboundDepartEndTime}}</span>
             <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="outrange" @change="onChange($event)">
@@ -57,7 +70,7 @@
               </template>
             </v-range-slider>
 
-            <span style="display: block; text-align: center;">오는 날 출발시간</span>
+            <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
             <span>{{inboundDepartStartTime}} - </span>
             <span>{{inboundDepartEndTime}}</span>
             <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
@@ -73,7 +86,7 @@
               </template>
             </v-range-slider>
 
-            <span style="display: block; text-align: center;">총 소요시간</span>
+            <span style="display: block; font-size: 17px;">총 소요시간</span>
             <span>{{transferedMinDuration}} - </span>
             <span>{{transferedDuration}}</span>
             <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="onChangeDuration($event)">
@@ -163,9 +176,6 @@
 
         </div>
       </div>
-
-
-
 
       <v-alert v-if="error" :value="true" type="warning">결과가 존재하지 않습니다.</v-alert>
       <!-- 푸터 공백 -->
@@ -260,22 +270,22 @@ export default {
             }
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
-                            'country': 'KW',
+                            'country': 'US',
                             'currency': 'USD',
                             'locale': 'ko-KR',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            'originPlace': 'SFO-sky',
-                            'destinationPlace': 'LHR-sky',
-                            'outboundDate': '2019-09-01',
-                            'adults': '1',
-                            // 'originPlace': this.$route.params.departure + '-sky',
-                            // 'destinationPlace': this.$route.params.destination + '-sky',
-                            // 'outboundDate': this.$route.params.leavingDate,
-                            // 'adults': this.$route.params.adults,
+                            // 'originPlace': 'SFO-sky',
+                            // 'destinationPlace': 'LHR-sky',
+                            // 'outboundDate': '2019-09-01',
+                            // 'adults': '1',
+                            'originPlace': this.$route.params.departure + '-sky',
+                            'destinationPlace': this.$route.params.destination + '-sky',
+                            'outboundDate': this.$route.params.leavingDate,
+                            'adults': this.$route.params.adults,
                         }
-            // let inboundDate = this.$route.params.comingDate
-            let inboundDate = '2019-09-10'
+            let inboundDate = this.$route.params.comingDate
+            // let inboundDate = '2019-09-10'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
             }
@@ -480,12 +490,14 @@ export default {
                         // 경유시 항공 정보(추가)
                         let segment
                         let OutSegments = []
-                        let OriginStation = []
-                        let DestinationStation = []
-                        let DepartureDateTime, ArrivalDateTime, Carrier, OperatingCarrier, Duration, FlightNumber
-                        Originflag, Destinationflag = false
+                        let OriginStation, DestinationStation
+                        let DepartureDateTime, ArrivalDateTime, Carrier, OperatingCarrier, Duration, FlightNumber, Carrierflag, Opcarrierflag
+                        // Originflag, Destinationflag = false
                         for (let k=0; k<OutSegmentsId.length; k++) {
                           // 공항 코드, 공항 이름
+                          OriginStation = []
+                          DestinationStation = []
+                          Originflag, Destinationflag = false
                           for (let j=0; j<res.data.Places.length; j++) {
                             if (Originflag == false && res.data.Places[j].Id == res.data.Segments[OutSegmentsId[k]].OriginStation) {
                               OriginStation.push({'AirportCode': res.data.Places[j].Code, 'AirportName': res.data.Places[j].Name,})
@@ -500,18 +512,29 @@ export default {
                             }
                           }
                           // 항공기
-                          let Carrier = []
-                          let OperatingCarrier = []
+                          Carrier = []
+                          OperatingCarrier = []
+                          Carrierflag = false
+                          Opcarrierflag = false
                           for (let j=0; j<res.data.Carriers.length; j++) {
-                            if (res.data.Carriers[j].Id == res.data.Segments[k].Carrier) {
+                            if (Carrierflag == false && res.data.Carriers[j].Id == res.data.Segments[OutSegmentsId[k]].Carrier) {
+                              // console.log("캐리어 있음")
                               Carrier.push({'Code': res.data.Carriers[j].Code,
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                              Carrierflag = true
                             }
-                            if (res.data.Carriers[k].Id == OperatingCarrier) {
-                              OperatingCarrier.push({'Code': res.data.Carriers[j].Code,
-                                                     'Name': res.data.Carriers[j].Name,
-                                                     'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                            if (Opcarrierflag == false && res.data.Carriers[j].Id == res.data.Segments[OutSegmentsId[k]].OperatingCarrier) {
+                              // console.log("캐리어 있음")
+                              OperatingCarrier.push({
+                                            // 'Num': res.data.Segments[OutSegmentsId[k]].OperatingCarrier,
+                                            'Code': res.data.Carriers[j].Code,
+                                            'Name': res.data.Carriers[j].Name,
+                                            'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                              Opcarrierflag = true
+                            }
+                            if (Carrierflag == true && Opcarrierflag == true) {
+                              break;
                             }
                           }
                           segment = {
@@ -528,10 +551,12 @@ export default {
                         }
 
                         let InSegments = []
-                        OriginStation = []
-                        DestinationStation = []
-                        Originflag, Destinationflag = false
+                        // Originflag, Destinationflag = false
                         for (let k=0; k<InSegmentsId.length; k++) {
+                          OriginStation = []
+                          DestinationStation = []
+                          Originflag = false
+                          Destinationflag = false
                           for (let j=0; j<res.data.Places.length; j++) {
                             if (Originflag == false && res.data.Places[j].Id == res.data.Segments[InSegmentsId[k]].OriginStation) {
                               OriginStation.push({'AirportCode': res.data.Places[j].Code, 'AirportName': res.data.Places[j].Name,})
@@ -548,16 +573,27 @@ export default {
                           // 항공기
                           Carrier = []
                           OperatingCarrier = []
+                          Carrierflag = false
+                          Opcarrierflag = false
                           for (let j=0; j<res.data.Carriers.length; j++) {
-                            if (res.data.Carriers[j].Id == res.data.Segments[k].Carrier) {
+                            if (Carrierflag == false && res.data.Carriers[j].Id == res.data.Segments[InSegmentsId[k]].Carrier) {
+                              // console.log("캐리어 있음")
                               Carrier.push({'Code': res.data.Carriers[j].Code,
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                              Carrierflag = true
                             }
-                            if (res.data.Carriers[k].Id == OperatingCarrier) {
-                              OperatingCarrier.push({'Code': res.data.Carriers[j].Code,
-                                                     'Name': res.data.Carriers[j].Name,
-                                                     'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                            if (Opcarrierflag == false && res.data.Carriers[j].Id == res.data.Segments[InSegmentsId[k]].OperatingCarrier) {
+                              // console.log("캐리어 있음")
+                              OperatingCarrier.push({
+                                            // 'Num': res.data.Segments[OutSegmentsId[k]].OperatingCarrier,
+                                            'Code': res.data.Carriers[j].Code,
+                                            'Name': res.data.Carriers[j].Name,
+                                            'ImageUrl': res.data.Carriers[j].ImageUrl,})
+                              Opcarrierflag = true
+                            }
+                            if (Carrierflag == true && Opcarrierflag == true) {
+                              break;
                             }
                           }
                           segment = {

@@ -26,7 +26,7 @@
                 </div>
                 <!-- 비행기 슝 -->
                 <div class="center container" style="display: grid; grid-template-columns: 80% 20%; padding: 0px;">
-                  <hr class="animated-width"/>
+                  <hr class="animated-width" style="max-width: 100px;"/>
                   <div style="padding-left: 5px;">
                     <i class="fas fa-plane"></i>
                   </div>
@@ -82,7 +82,7 @@
                 </div>
                 <!-- 비행기 슝 -->
                 <div class="center container" style=" display: grid; grid-template-columns: 80% 20%; padding: 0px;">
-                  <hr class="animated-width"/>
+                  <hr class="animated-width" style="max-width: 100px;"/>
                   <div style="padding-left: 5px;">
                     <i class="fas fa-plane"></i>
                   </div>
@@ -230,9 +230,9 @@ export default {
       width: 100%;
    }
 }
-hr {
+/* hr {
   max-width: 100px !important;
-}
+} */
 hr.animated-width {
    height: 3px;
    weight: 100px !important;
