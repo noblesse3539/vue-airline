@@ -3,6 +3,8 @@ const router = express.Router()
 const axios = require('axios')
 const kakaosecret = require('../../../kakaosecret')
 const qs = require('qs')
+const kakaoPush = require('../../../utils/kakao/push')
+const controller = require('./controller')
 router.post('/', (req, res) => {
     const data = {
         'approval_url'      : kakaosecret.approval_url,
@@ -30,6 +32,8 @@ router.post('/', (req, res) => {
         res.json({error: '잘못된 요청입니다.'})
     })
 } )
+
+router.post('/sendemail', controller.sendEmail)
 
 
 
