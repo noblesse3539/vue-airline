@@ -11,54 +11,11 @@
 
             <!-- 가는 비행기 -->
             <h3>가는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
-            <div class="ticket" @click="isInVisible = !isInVisible" @mouseover="inArrow = true" @mouseleave = "inArrow = false">
-              <img height="40px" :src="flight.InCarrierImageUrl" alt="">
-              <div class="departure">
-                <h2>{{flight.InDepartureTime}}</h2>
-                <p>{{flight.OriginAirportCode}}</p>
-              </div>
-              <div class="time">
-                <p>{{flight.InDuration}}</p>
-                <div class="fly"><hr><v-icon color="#35c235" small>fas fa-plane</v-icon></div>
-                <p v-if="flight.InNumofStop == 0">직항</p>
-                <p v-else>{{flight.InNumofStop}}회 경유</p>
-              </div>
-              <div class="arrival">
-                <h2>{{flight.InArrivalTime}}</h2>
-                <p>{{flight.DestinationAirportCode}}</p>
-              </div>
-              <v-icon class="arrow" v-if="isInVisible" color="#35c235" large>fa-chevron-up</v-icon>
-              <v-icon class="arrow" v-if="!isInVisible" :color="`${inArrow? '#35c235':'grey'}`" large>fa-chevron-down</v-icon>
-            </div>
-
-            <!-- 더보기 -->
-            <div v-if="isInVisible && flight.InNumofStop == 0" class="moreDetail">
-              <div>
-                <i style="color: grey; margin-left:5rem;" class="fas fa-plane-departure"></i> !항공편명
-              </div>
-              <div class="timeInfo">
-                <div>{{flight.InDuration}}</div>
-                <img src="" alt="">
-                <div>
-                  {{flight.InDepartureTime}}<br>
-                  {{flight.InArrivalTime}}
-                </div>
-                <div>
-                  {{flight.OriginAirportCode}} !출발공항명<br>
-                  {{flight.DestinationAirportCode}} !도착공항명
-                </div>
-              </div>
-              <div>도착: !도착날짜 | 여행 기간: {{flight.InDuration}}</div>
-            </div>
-            <div v-if="isInVisible && flight.InNumofStop != 0" class="moreDetail">경유있음</div>
-
-            <!-- 오는 비행기 -->
-            <h3 style="margin-top: 25px;">오는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
-            <div class="ticket" @click="isOutVisible = !isOutVisible"  @mouseover="outArrow = true" @mouseleave = "outArrow = false">
+            <div class="ticket" @click="isOutVisible = !isOutVisible" @mouseover="outArrow = true" @mouseleave = "outArrow = false">
               <img height="40px" :src="flight.OutCarrierImageUrl" alt="">
               <div class="departure">
                 <h2>{{flight.OutDepartureTime}}</h2>
-                <p>{{flight.DestinationAirportCode}}</p>
+                <p>{{flight.OriginAirportCode}}</p>
               </div>
               <div class="time">
                 <p>{{flight.OutDuration}}</p>
@@ -68,30 +25,74 @@
               </div>
               <div class="arrival">
                 <h2>{{flight.OutArrivalTime}}</h2>
-                <p>{{flight.OriginAirportCode}}</p>
+                <p>{{flight.DestinationAirportCode}}</p>
               </div>
               <v-icon class="arrow" v-if="isOutVisible" color="#35c235" large>fa-chevron-up</v-icon>
               <v-icon class="arrow" v-if="!isOutVisible" :color="`${outArrow? '#35c235':'grey'}`" large>fa-chevron-down</v-icon>
             </div>
+
+            <!-- 더보기 -->
             <div v-if="isOutVisible && flight.OutNumofStop == 0" class="moreDetail">
               <div>
-                  <i style="color: grey; margin-left:5rem;" class="fas fa-plane-arrival"></i> !항공편명
+                <i style="color: grey; margin-left:5rem;" class="fas fa-plane-departure"></i> !항공편명
               </div>
               <div class="timeInfo">
                 <div>{{flight.OutDuration}}</div>
+
                 <img src="" alt="">
                 <div>
                   {{flight.OutDepartureTime}}<br>
                   {{flight.OutArrivalTime}}
                 </div>
                 <div>
-                  {{flight.DestinationAirportCode}} !출발공항명<br>
-                  {{flight.OriginAirportCode}} !도착공항명
+                  {{flight.OriginAirportCode}} !출발공항명<br>
+                  {{flight.DestinationAirportCode}} !도착공항명
                 </div>
               </div>
               <div>도착: !도착날짜 | 여행 기간: {{flight.OutDuration}}</div>
             </div>
-            <div v-if="isOutVisible && flight.OutNumofStop !=0" class="moreDetail stop">경유있음</div>
+            <div v-if="isOutVisible && flight.OutNumofStop != 0" class="moreDetail">경유있음</div>
+
+            <!-- 오는 비행기 -->
+            <h3 style="margin-top: 25px;">오는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
+            <div class="ticket" @click="isInVisible = !isInVisible"  @mouseover="inArrow = true" @mouseleave = "inArrow = false">
+              <img height="40px" :src="flight.InCarrierImageUrl" alt="">
+              <div class="departure">
+                <h2>{{flight.InDepartureTime}}</h2>
+                <p>{{flight.DestinationAirportCode}}</p>
+              </div>
+              <div class="time">
+                <p>{{flight.InDuration}}</p>
+                <div class="fly"><hr><v-icon color="#35c235" small>fas fa-plane</v-icon></div>
+                <p v-if="flight.InNumofStop == 0">직항</p>
+                <p v-else>{{flight.InNumofStop}}회 경유</p>
+              </div>
+              <div class="arrival">
+                <h2>{{flight.InArrivalTime}}</h2>
+                <p>{{flight.OriginAirportCode}}</p>
+              </div>
+              <v-icon class="arrow" v-if="isInVisible" color="#35c235" large>fa-chevron-up</v-icon>
+              <v-icon class="arrow" v-if="!isInVisible" :color="`${inArrow? '#35c235':'grey'}`" large>fa-chevron-down</v-icon>
+            </div>
+            <div v-if="isInVisible && flight.InNumofStop == 0" class="moreDetail">
+              <div>
+                  <i style="color: grey; margin-left:5rem;" class="fas fa-plane-arrival"></i> !항공편명
+              </div>
+              <div class="timeInfo">
+                <div>{{flight.InDuration}}</div>
+                <img src="" alt="">
+                <div>
+                  {{flight.InDepartureTime}}<br>
+                  {{flight.InArrivalTime}}
+                </div>
+                <div>
+                  {{flight.DestinationAirportCode}} !출발공항명<br>
+                  {{flight.OriginAirportCode}} !도착공항명
+                </div>
+              </div>
+              <div>도착: !도착날짜 | 여행 기간: {{flight.InDuration}}</div>
+            </div>
+            <div v-if="isInVisible && flight.InNumofStop !=0" class="moreDetail stop">경유있음</div>
             <div>{{flight}}</div>
           </div>
 
