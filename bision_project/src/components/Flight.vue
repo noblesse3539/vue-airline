@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="border-radius: 20px; background-color: white; padding: 0px;">
+  <div class="container" style="border-radius: 20px; background-color: white;">
     <div class="wrapper">
       <div>
         <div style="height: 50%">
@@ -46,7 +46,7 @@
                     <v-badge right>
                       <span>{{OutArrivalTime}}</span>
                       <template v-slot:badge v-if="OutDay">
-                        <span>+1</span>
+                        <span>+{{OutDay}}</span>
                       </template>
                     </v-badge>
                     <!-- {{OutArrivalTime}} -->
@@ -101,7 +101,7 @@
                     <v-badge right>
                       <span>{{InArrivalTime}}</span>
                       <template v-slot:badge v-if="InDay">
-                        <span>+1</span>
+                        <span>+{{InDay}}</span>
                       </template>
                     </v-badge>
                     <!-- {{OutArrivalTime}} -->
@@ -154,7 +154,7 @@ export default {
       InArrivalTime: {type: String},
       InCarrierImageUrl: {type: String},
       InDuration: {type: String},
-      InDay: {type: Boolean},
+      InDay: {type: String},
       InNumofStop: {type: String},
       Instops: {type: Array},
       InSegments: {type: Array},
@@ -162,7 +162,7 @@ export default {
       OutArrivalTime: {type: String},
       OutCarrierImageUrl: {type: String},
       OutDuration: {type: String},
-      OutDay: {type: Boolean},
+      OutDay: {type: String},
       OutNumofStop: {type: String},
       Outstops: {type: Array},
       OutSegments: {type: Array},
