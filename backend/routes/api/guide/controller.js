@@ -1,4 +1,5 @@
 const Guide = require('../../../models/guide')
+const User = require('../../../models/user')
 
 exports.createGuide = (req,res) =>{
   console.log(req.body);

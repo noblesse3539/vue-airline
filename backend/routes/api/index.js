@@ -35,6 +35,10 @@ router.use('/review',review)
 //Tag
 router.use('/tag',tag)
 
+//Option
+router.use('/option',option)
+router.use('/paidOption',paidOption)
+
 router.use('/airport', airport)
 
 router.use('/city', city)

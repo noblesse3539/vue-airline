@@ -15,6 +15,7 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
+              <h2>제목 입력</h2>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
                 v-model="tourProgram.title" label="제목을 입력해주세요." solo></v-text-field>
@@ -97,37 +98,6 @@
                 <v-textarea label="상품 요약*" auto-grow solo v-model="tourProgram.desc" color="blue"></v-textarea>
               </v-flex>
 
-              <!-- 환불 정책 -->
-              <v-flex xs12>
-                <h2>환불 가능 기간 설정</h2>
-              </v-flex>
-              <v-flex xs12 md3 align-self-center>
-                <v-switch color="#41b883" v-model="tourProgram.refund.refund100" :label="`환불 ${tourProgram.refund.refund100? '가능':'불가'}`"></v-switch>
-              </v-flex>
-              <v-flex xs12 md9>
-                  <v-container>
-                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >100% 환불 : {{tourProgram.cost}}원</v-chip>
-                    <v-text-field class="refund-text" :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
-                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund100"
-                    always-dirty color="red" track-color="grey"></v-slider>
-                  </v-container>
-                  <v-container>
-                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
-                    <v-text-field class="refund-text" :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
-                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                     <v-slider :disabled="!tourProgram.refund.refund100" min="0" :max="tourProgram.refund.refund100" v-model="tourProgram.refund.refund50"
-                      always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund100/365) *100}%`"></v-slider>
-                  </v-container>
-                  <v-container>
-                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불 : {{tourProgram.cost*0.3}}원</v-chip>
-                    <v-text-field class="refund-text" suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
-                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
-                      <v-slider :disabled="!tourProgram.refund.refund50" min="0" :max="tourProgram.refund.refund50" v-model="tourProgram.refund.refund30"
-                       always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund50/365) *100}%`"></v-slider>
-                  </v-container>
-              </v-flex>
-
               <!-- Tags -->
               <v-flex xs12>
                 <h2>태그 추가</h2>
@@ -145,6 +115,131 @@
               <v-flex>
                 <vue-editor useCustomImageHandler @imageAdded="handleImageAdded" v-model="tourProgram.detail"> </vue-editor>
               </v-flex>
+
+              <!-- 환불 정책 -->
+              <v-flex xs12>
+                <h2>환불 가능 기간 설정</h2>
+              </v-flex>
+              <v-flex xs12 sm3 md3 align-self-center>
+                <v-switch color="#41b883" v-model="tourProgram.refund.refund100" :label="`환불 ${tourProgram.refund.refund100? '가능':'불가'}`"></v-switch>
+              </v-flex>
+              <v-flex xs12 sm9 md9>
+                  <v-container style="height:150px;">
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >100% 환불 : {{tourProgram.cost}}원</v-chip>
+                    <v-text-field class="refund-text" :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
+                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
+                    <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund100"
+                    always-dirty color="red" track-color="grey"></v-slider>
+                  </v-container>
+                  <v-container style="height:150px;">
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
+                    <v-text-field class="refund-text" :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
+                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
+                     <v-slider :disabled="!tourProgram.refund.refund100" min="0" :max="tourProgram.refund.refund100" v-model="tourProgram.refund.refund50"
+                      always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund100/365) *100}%`"></v-slider>
+                  </v-container>
+                  <v-container style="height:170px;">
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불 : {{tourProgram.cost*0.3}}원</v-chip>
+                    <v-text-field class="refund-text" suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
+                                  :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
+                      <v-slider :disabled="!tourProgram.refund.refund50" min="0" :max="tourProgram.refund.refund50" v-model="tourProgram.refund.refund30"
+                       always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund50/365) *100}%`"></v-slider>
+                  </v-container>
+              </v-flex>
+
+              <!-- ================================================================================================================ -->
+              <v-flex xs12 d-flex>
+                <h2>결제 옵션 추가(다수 가능)</h2>
+              </v-flex>
+              <v-flex xs12 d-flex>
+                <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
+                v-model="option.title" label="결제 옵션의 제목을 입력해주세요. 예) 4인 1실|3월~6월(비수기)|투어(점심포함)" solo></v-text-field>
+              </v-flex>
+              <!-- 시작날짜 -->
+              <v-flex xs12 sm6>
+                <v-menu ref="optionFromMenu" v-model="optionFromMenu" :close-on-content-click="false"
+                        :nudge-right="40" :return-value.sync="option.fromDate" lazy transition="scale-transition"
+                        min-width="290px" offset-y full-width>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field color="blue" v-model="option.fromDate" label="시작 날짜*" :value="option.fromDate" prepend-icon="event" readonly v-on="on"></v-text-field>
+                  </template>
+                  <v-date-picker :max="option.toDate" v-model="option.fromDate" no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="blue" @click="optionFromMenu = false">Cancel</v-btn>
+                    <v-btn flat color="blue" @click="$refs.optionFromMenu.save(option.fromDate)">OK</v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </v-flex>
+              <!-- 종료날짜 -->
+              <v-flex xs12 sm6>
+                <v-menu ref="optionToMenu" v-model="optionToMenu" :close-on-content-click="false"
+                        :nudge-right="40" :return-value.sync="option.toDate" lazy transition="scale-transition"
+                        min-width="290px" offset-y full-width>
+                  <template v-slot:activator="{ on }">
+                    <v-text-field color="blue" v-model="option.toDate" :value="option.toDate" label="종료 날짜*" prepend-icon="event" readonly v-on="on"></v-text-field>
+                  </template>
+                  <v-date-picker :min="option.fromDate" v-model="option.toDate" no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn flat color="blue" @click="optionToMenu = false">Cancel</v-btn>
+                    <v-btn flat color="blue" @click="$refs.optionToMenu.save(option.toDate)">OK</v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </v-flex>
+              <!-- 요일 선택 -->
+              <v-flex xs12 sm6 d-flex>
+                <v-select prepend-icon="map" label="요일 선택(다수 가능)*" v-model="option.dayOfWeek" :items="dayOfWeek" attach small-chips multiple></v-select>
+              </v-flex>
+              <!-- 시간대 선택 -->
+              <v-flex xs12 sm6 d-flex>
+                <v-select prepend-icon="map" label="시간대 선택(다수 가능)*" v-model="option.times" :items="times" attach small-chips multiple></v-select>
+              </v-flex>
+
+              <!-- 인원 -->
+              <v-flex xs6>
+                <v-text-field prepend-icon="far fa-user" suffix="명" v-model.number="option.refPeople.num" label="최소 인원*"
+                              clearable clear-icon="clear" type="number" color="blue"></v-text-field>
+              </v-flex>
+              <!-- 기준 선택 -->
+              <v-flex xs6 d-flex>
+                <v-select prepend-icon="map" label="기준 선택*" v-model="option.refPeople.opt" :items="refPeopleOpt" attach small-chips multiple></v-select>
+              </v-flex>
+              <!-- 서비스 종료 최대 인원 -->
+              <v-flex xs6>
+                <v-text-field prepend-icon="fa-users" suffix="명" v-model.number="option.maxPeople" label="서비스 종료 최대 인원*"
+                              clearable clear-icon="clear" type="number" color="blue"></v-text-field>
+              </v-flex>
+
+              <!-- 인원 구분 -->
+              <v-flex xs6 d-flex>
+                <v-select prepend-icon="map" label="인원 구분 선택*" v-model="peopleTypeOpt" :items="peopleType" attach small-chips multiple></v-select>
+              </v-flex>
+
+              <!-- 상세설명 -->
+              <v-flex xs12 sm9 d-flex>
+                <v-text-field height="50px" style="font-weight:bold; font-size: 2rem;"
+                v-model="desc" label="상세 설명 추가 예) 최소 2인이상|점심 불포함" solo></v-text-field>
+              </v-flex>
+
+              <v-flex xs12 sm3 d-flex>
+                <div style="text-align:center">
+                  <v-btn @click="OptionDescAdd">상세 설명 추가</v-btn>
+                </div>
+              </v-flex>
+
+              <v-flex xs12>
+                <v-card>
+                  <ul>
+                    <li style="font-weight:bold;font-size:1.5rem;" v-for="(item,index) in option.desc">
+                      {{item}}
+                      <v-btn @click="OptionDescDelete(index)">삭제</v-btn>
+                    </li>
+                  </ul>
+                </v-card>
+              </v-flex>
+
+              <div style="margin:auto">
+                <v-btn color="light-blue" class="white--text">결제 옵션 추가</v-btn>
+              </div>
             </v-layout>
           </v-container>
       </v-card-text>
@@ -196,9 +291,24 @@ export default {
       tempMain:'https:\/\/i.imgur.com\/9ge6Osc.jpg',
       nation: ['대한민국'],
       city: ['서울', '부산', '대전'],
+      dayOfWeek:['월','화','수','목','금','토','일'],
+      times:[
+        '00:00','00:15','00:30','00:45','01:00','01:15','01:30','01:45','02:00','02:15','02:30','02:45','03:00','03:15','03:30','03:45',
+        '04:00','04:15','04:30','04:45','05:00','05:15','05:30','05:45','06:00','06:15','06:30','06:45','07:00','07:15','07:30','07:45',
+        '08:00','08:15','08:30','08:45','09:00','09:15','09:30','09:45','10:00','10:15','10:30','10:45','11:00','11:15','11:30','11:45',
+        '12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45','14:00','14:15','14:30','14:45','15:00','15:15','15:30','15:45',
+        '16:00','16:15','16:30','16:45','17:00','17:15','17:30','17:45','18:00','18:15','18:30','18:45','19:00','19:15','19:30','19:45',
+        '20:00','20:15','20:30','20:45','21:00','21:15','21:30','21:45','22:00','22:15','22:30','22:45','23:00','23:15','23:30','23:45'
+      ],
+      refPeopleOpt:['More','Multiple'],
+      peopleType:['없음','유아','아동','성인','고령자'],
+      peopleTypeOpt:[],
+      desc:'',
       dialog: true,
       fromMenu: false,
       toMenu: false,
+      optionFromMenu: false,
+      optionToMenu: false,
       complete: false,
       tourProgram:{
         title:'',
@@ -219,7 +329,47 @@ export default {
         desc:'',
         tags: [],
         detail:''
-      }
+      },
+      option:{
+          guideservice: '',
+          title: '',
+          fromDate: '',
+          toDate: '',
+          dayOfWeek:[],
+          times: [],
+          desc: [],
+          refPeople: {
+            num: '',
+            opt: ''
+          },
+          senior: {
+            cost: 0,
+            minAge: 0,
+            maxAge: 0,
+            use: false
+          },
+          adult: {
+            cost: 0,
+            minAge: 0,
+            maxAge: 0,
+            use: false
+          },
+          child: {
+            cost: 0,
+            minAge: 0,
+            maxAge: 0,
+            use: false
+          },
+          infant: {
+            cost: 0,
+            minAge: 0,
+            maxAge: 0,
+            use: false
+          },
+          costType: '',
+          maxPeople: ''
+    },
+      options:[],
     }
   },
   methods : {
@@ -261,6 +411,8 @@ export default {
     },
     checkSave(){
       console.log(this.tourProgram)
+      console.log(this.option)
+      console.log(this.peopleTypeOpt);
       for(var item in this.tourProgram){
         if(item != "tags" && !this.tourProgram[item]) {
           console.log(this.tourProgram[item])
@@ -297,6 +449,12 @@ export default {
       footerZIndex.style.zIndex = 1000;
       this.$emit('close', false);
     },
+    OptionDescAdd(){
+      this.option.desc.push(this.desc)
+    },
+    OptionDescDelete(index){
+      this.option.desc.splice(index,1)
+    }
   }
 }
 </script>
