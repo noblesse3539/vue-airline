@@ -12,7 +12,7 @@ const guideservice = require('./guideservice')
 const review = require('./review')
 const tag=require('./tag')
 const kakaopay = require('./kakaopay')
-
+const paymentstore = require('./paymentstore')
 // SuperUser
 router.use('/superauth', superAuth)
 router.use('/superuser', authMiddleware)
@@ -41,4 +41,6 @@ router.use('/city', city)
 router.use('/nation', nation)
 
 router.use('/kakaopay', kakaopay)
+
+router.use('/paymentstore', paymentstore)
 module.exports = router

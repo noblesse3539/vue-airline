@@ -33,7 +33,7 @@
                 <div class="error-message" v-text="loginError"></div>
                 <input type="email" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
                 <input type="password" name="password" placeholder="비밀번호 입력" v-model="loginPassword" @keyup.enter="submit('login', $event)">
-                
+                <GoogleSignInBtn></GoogleSignInBtn>
                 <!-- 로그인 제출 버튼 -->
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
                 
@@ -65,6 +65,7 @@
 import './LoginModal.css'
 import facebookLogin from 'facebook-login-vuejs';
 import { mapGetters, mapState } from 'vuex'
+import GoogleSignInBtn from '../components/googleOAuth/SignInBtn'
 
 var modal_submit_register = '회원가입';
 var modal_submit_password = 'Reset Password';
@@ -73,7 +74,8 @@ var modal_submit_login = '로그인';
 export default {
   name: 'LoginModal',
   components:{
-    facebookLogin
+    facebookLogin,
+    GoogleSignInBtn,
   },
   methods: {
     goToPage: function(url) {

@@ -6,6 +6,9 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
+const passport = require('passport')
+const session =require('express-session')
+const cors = require('cors')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const sampleRouter = require('./routes/sample')
@@ -24,6 +27,8 @@ const config = require('./config')
 ==========================*/
 const app = express()
 
+
+app.use(cors())
 /* =======================
     SOCKET.IO CONFIGURATION
 ==========================*/
@@ -52,6 +57,20 @@ app.use(bodyParser.json())
 
 // set the secret ket variable for jwt
 app.set('jwt-secret', config.secret)
+
+
+/* =======================
+    PASSPORT CONFIGURATION
+==========================*/
+app.use( session({ 
+  secret: config.GoogleOAuth2Credentials.client_secret,
+  resave: false,
+  saveUninitialized: true,
+  cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) },
+}))
+require('./utils/passport')(passport)
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 // vue router와 연동
