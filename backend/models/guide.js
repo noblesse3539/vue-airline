@@ -5,7 +5,12 @@ const config = require('../config')
 const User = require('./user')
 
 const Guide = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User'},
+    id: {type: String, unique: true},
+    nickname: String,
+    profileImageUrl: String,
+    email: {type: String, unique: true},
+
+    // user: { type: Schema.Types.ObjectId, ref: 'User'},
     nation_eng:String,
     nation_kor:String,
     city_eng:String,
@@ -24,7 +29,7 @@ Guide.statics.deleteByUserObId = function(user){
 
 Guide.statics.updateByUserObId = function(user,nation_kor,nation_eng,city_kor,city_eng,language_kor,language_eng){
   return this.findOneAndUpdate({
-    user,
+    // user,
     nation_kor,
     nation_eng,
     city_kor,
@@ -42,5 +47,16 @@ Guide.statics.findByUserObId = function(user){
   .exec()
 }
 
-
+Guide.statics.findOrCreate = function(condition, callback) {
+  const {id, nickname, profileImageUrl} = condition
+  this.findOneAndUpdate({id: id}, {nickname: nickname, profileImageUrl: profileImageUrl}, (err, user) => {
+      if (user) {
+          return callback(err, user)
+      } else {
+          this.create(condition, (err, user) => {
+              return callback(err, user)
+          })
+      } 
+  })
+}
 module.exports = mongoose.model('Guide',Guide)
