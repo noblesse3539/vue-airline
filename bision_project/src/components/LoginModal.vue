@@ -122,7 +122,7 @@ export default {
           .then( res => {
             if(res.status == 200) {
               let d = new Date()
-              d.setTime(d.getTime() + (1000*60*60)) // 1시간 유효
+              d.setTime(d.getTime() + (1000*60*60*3)) // 1시간 유효
               let expires = "expires=" + d.toUTCString()
               document.cookie = "BisionToken=" + res.data.token + ';expires=' + expires
 
