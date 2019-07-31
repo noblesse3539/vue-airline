@@ -194,16 +194,15 @@ export default {
     getWaiting (departure, arrival, final, i) {
       let h = parseInt(departure.substr(11, 2) - arrival.substr(11, 2))
       let m = parseInt(departure.substr(14, 2) - arrival.substr(14, 2))
-      let wt
       if (m < 0) {
         h -= 1
         m += 60
       }
       if (h < 0)  h += 24
 
-      if(!h) wt =  m + '분'
-      else wt =  h + '시간 ' + m + '분'
-      return wt
+      if(!h) return  m + '분'
+      else if (!m) return h + '시간'
+      else return  h + '시간 ' + m + '분'
     },
     getDate(i, segments){
       let v
