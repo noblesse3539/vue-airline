@@ -208,8 +208,12 @@ export default {
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'}
       ],
-
+      
+      
     }
+  },
+  mounted() {
+
   },
 }
 </script>

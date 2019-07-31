@@ -92,7 +92,7 @@
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button class="GS-payment-decision-btn" >예약하기</button>
+            <button class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -124,11 +124,14 @@
     <section class="GS-body-2">
       <div class="GS-body-2-left" >
         <h3 class="GS-body-2-left-title" style="font-size: 2rem; margin-bottom: 15px;">옵션 선택하기</h3>
-        <div class="result-body__search-by-date GS-body__search-by-date">
-          <span class="result-body__search-by-date-icon">
+        <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
+          <span class="result-body__search-by-date-icon" >
             <i class="far fa-calendar-check"></i>
           </span>
           <input placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
+          <div v-if="isCalenderOpen" class="GS-date-picker">
+            <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+          </div>
         </div>
         <div class="GS-option-box">
           <!-- 각 상품에 대한 옵션 리스트 v-for로 출력할 것 -->
@@ -158,10 +161,23 @@
             <div class="GS-individual-option-detail-loadmore  
                         GS-individual-option-detail-loadmore-1"
                         style="display: none">
+              <div class="GS-individual-option-detail-option-select">
+                  <v-select
+                    v-model="select"
+                    :items="items"
+                    item-text="state"
+                    item-value="abbr"
+                    label="시간대 선택"
+                    persistent-hint
+                    return-object
+                    single-line
+                  >
+                  </v-select>
+              </div>
               <div class="num-of-customers" style="min-width: 200px;">
                 <div class="num-of-customers__increaseBtn">
                   <v-btn
-                    @click="increaseAdults"
+                    @click="decreasePeople"
                     fab
                     dark
                     color="rgba(47, 230, 62, 1)"
@@ -171,9 +187,9 @@
                     <v-icon dark>remove</v-icon>
                   </v-btn>
                 </div>
-                <div class="num-of-customers-count">1</div>
+                <div class="num-of-customers-count"> {{serviceInfo.people}} </div>
                 <div class="num-of-customers__decreaseBtn">
-                  <v-btn @click="increaseAdults" fab dark color="rgba(47, 230, 62, 1)" small>
+                  <v-btn @click="increasePeople" fab dark color="rgba(47, 230, 62, 1)" small>
                     <v-icon dark>add</v-icon>
                   </v-btn>
                 </div>
@@ -277,6 +293,10 @@ export default {
   mounted() {
     this.getServiceInformation();
     window.addEventListener("scroll", this.dragDownSideBar);
+    window.addEventListener('click', this.hideElements)
+  },
+  destroyed() {
+    // window.addEventListener('click', this.hideElements())
   },
   data() {
     return {
@@ -295,28 +315,68 @@ export default {
 
       // 결제 관련 정보
       serviceInfo: {
+        people: 1,
+        unitPrice: 1000,
         itemName: "베이징상품",
         quantity: 1,
-        totalAmount: 10000,
         taxFreeAmount: 3000,
         date: '',
-        people: '',
+        get totalAmount() {
+          return this.people * this.unitPrice
+        },
       },
+
 
       // 가이드 관련 정보
       guideInfo : {
         guideName : '',
         starRatingList: [],
         guideImg: '',
+        guideId: '',
       },
-    
+
+      // 달력 관련 변수
+      isCalenderOpen: false,
+
       isLoadMore: false,
       isPaymentReady: false,
     };
   },
   methods: {
+
+    decreasePeople: function() {
+      // console.log(this.serviceInfo.people)
+      this.serviceInfo.people -= 1
+    },
+    increasePeople: function() {
+      this.serviceInfo.people += 1
+    },
+
+    hideElements: function(e) {
+      
+      if (e.target.classList[0] != 'result-body__search-by-date-input'
+          && e.target.classList[0] != 'result-body__search-by-date') {
+        this.isCalenderOpen = false
+      }
+
+    },
+    openCalender: function() {
+
+      if (this.isCalenderOpen == true) {
+        this.isCalenderOpen = false
+      } else {
+        this.isCalenderOpen = true
+      }
+
+    },
+    goToChooseOptions: function() {
+      
+      const chosingOptions = document.querySelector(".user-comment")
+      chosingOptions.scrollIntoView({behavior : 'smooth'})
+
+    },
     goToGuideDetail: function() {
-      this.$router.push({ path: 'GuideMyPage', query: {a : 1}})
+      this.$router.push({ path: 'GuideMyPage', query: {guideId : this.guideInfo.guideId}})
     },
     goToPayment: function() {
       this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
@@ -357,7 +417,7 @@ export default {
         })
         .then(data => {
           // this.setHero()
-          console.log(data);
+          // console.log(data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -386,6 +446,7 @@ export default {
               this.guideInfo.guideName = res.data.guide.user.username
               this.guideInfo.starRatingList = res.data.guide.starRatingList
               this.guideInfo.guideImg = res.data.guide.user.profileImg || ''
+              this.guideInfo.guideId  = res.data.guide._id
 
             })
 

@@ -99,7 +99,7 @@ export default {
         },
         close(e){
           // this.modal=false
-          console.log(e.target.classList[0])
+        //   console.log(e.target.classList[0])
           // const loginWrapper = document.querySelector('.LoginModal-wrapper')
           // const loginBtn     = document.querySelector('.loginBtn')
           if (this.modal == true && (e.target.classList[0] === 'LoginModal-wrapper' || e.target.classList[0] === 'closeBtn' )) {

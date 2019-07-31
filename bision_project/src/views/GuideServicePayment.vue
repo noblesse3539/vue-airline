@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import './GuideServicePayment.css'
 import PayBtn from "../components/kakaopaycpn/PayBtn";
 
@@ -53,10 +54,18 @@ export default {
     mounted() {
         this.closeHeader()
         this.serviceInfo = this.$route.query
+        this.setServiceInfo(this.serviceInfo)
+        console.log(this.getServiceInfo)
     },
     destroyed() {
         this.openHeader()
     },
+    computed: {
+        ...mapState({
+            getServiceInfo: state => state.Guideservice.serviceInfo
+        }),
+    },
+
     methods: {
         closeHeader() {
             this.$store.commit("closeHeader")
@@ -64,6 +73,10 @@ export default {
         openHeader() {
             this.$store.commit("openHeader")
         },
+        setServiceInfo(serviceInfo) {
+            this.$store.commit("setServiceInfo", {serviceInfo})
+        },
+        
     },
 }
 </script>

@@ -5,6 +5,7 @@ import Alerter from './modules/alerter'
 import Admin from './modules/admin'
 import Header from './modules/header'
 import User from './modules/user'
+import Guideservice from './modules/guideservice'
 
 // import createLogger from '../../../src/plugins/logger'
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     Admin,
     Header,
     User,
+    Guideservice,
   },
   strict: debug,
   // plugins: debug ? [createLogger()] : []
