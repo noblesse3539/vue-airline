@@ -73,10 +73,12 @@
                     <ul class="result-body__search-by-period-body">
                         <li v-for="(period, idx) in periodList" :key="idx">
                             <v-checkbox
+                                v-model="duration"
                                 class="v-input-custom"
                                 color="success"
-                                :label="period[0]" :value="period[2]"
+                                :label="period[0]" :value="idx"
                                 :disabled="vInputDisabled"
+                                @change="durationCheckbox"
                             >
                             </v-checkbox>
                         </li>
@@ -94,7 +96,8 @@
                     :key = idx
                     @click="goToDetail(idx)"
                 >
-                    <div class="result-body-card">                        
+                    <div class="result-body-card">
+                        {{service.duration}}
                         <div class="result-body-card-imgbox">
                             <img :src="service.image"
                                 alt="guide-tour-image"
@@ -179,7 +182,7 @@ export default {
             vInputDisabled: false,
             allLang: true,
 
-            // 상품 각겨별 검색
+            // 상품 가격별 검색
             minPrice: 1000000000,
             maxPrice: 0,
             price: [8350, 700000],
@@ -191,6 +194,7 @@ export default {
                             ['1일 ~ 2일', 172800], // 1일 ~ 2일
                             ['2일 이상', 172801]     // 2일 이상
                         ],
+            duration: [],
         }
     },
     methods: {
@@ -275,6 +279,44 @@ export default {
         updateResult : function () {
 
         },
+        durationCheckbox : function () {
+          console.log(this.duration)
+          this.guideServiceList = []
+          for (let i=0; i<this.fixedguideServiceList.length; i++) {
+            for(let j=0; j<this.duration.length; j++) {
+              if (this.duration[j] == 0) {
+                if (this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
+                  this.guideServiceList.push(this.fixedguideServiceList[i])
+                }
+              } else if (this.duration[j] == 1) {
+                if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
+                  this.guideServiceList.push(this.fixedguideServiceList[i])
+                }
+              } else if (this.duration[j] == 2) {
+                if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
+                  this.guideServiceList.push(this.fixedguideServiceList[i])
+                }
+              } else if (this.duration[j] == 3) {
+                if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
+                  this.guideServiceList.push(this.fixedguideServiceList[i])
+                }
+              }
+            }
+          }
+          console.log("듀레이션!!")
+          console.log(this.duration)
+        },
+        durationTransfer : function (duration) {
+          console.log(duration)
+          if (duration.indexOf('박') != -1) {
+            console.log(parseInt(duration.slice(duration.indexOf('박') + 1, duration.indexOf('일'))))
+            console.log(parseInt(duration.slice(duration.indexOf('박') + 1, duration.indexOf('일'))) * 86400)
+            return parseInt(duration.slice(duration.indexOf('박') + 1, duration.indexOf('일'))) * 86400
+          } else {
+            console.log(parseInt(duration.slice(0, duration.indexOf('시'))) * 3600)
+            return parseInt(duration.slice(0, duration.indexOf('시'))) * 3600
+          }
+        }
     },
 }
 </script>
