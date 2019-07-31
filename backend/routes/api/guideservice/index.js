@@ -2,6 +2,7 @@ const router = require('express').Router()
 const controller = require('./controller')
 
 router.get('/findReview/:id',controller.findReview)
+router.get('/findOption/:id',controller.findOption)
 router.get('/findGSById/:id',controller.findGSById)
 router.get('/findGSByGuideIdTitle/:user/:title',controller.findGSByUserObIdTitle)
 router.get('/findGSAll',controller.findGSAll)

@@ -12,6 +12,8 @@ const guide =require('./guide')
 const guideservice = require('./guideservice')
 const review = require('./review')
 const tag=require('./tag')
+const option=require('./option')
+const paidOption=require('./paidOption')
 
 // SuperUser
 router.use('/superauth', superAuth)
@@ -34,6 +36,10 @@ router.use('/review',review)
 
 //Tag
 router.use('/tag',tag)
+
+//Option
+router.use('/option',option)
+router.use('/paidOption',paidOption)
 
 router.use('/airport', airport)
 

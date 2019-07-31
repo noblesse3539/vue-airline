@@ -2,11 +2,26 @@ const GuideService = require('../../../models/guideservice')
 const Tag = require('../../../models/tag')
 const Review = require('../../../models/review')
 const User = require('../../../models/user')
+const Option = require('../../../models/user')
 
 exports.findReview = (req, res) => {
   console.log('findReview');
     GuideService.findOne({ _id : req.params.id })
       .populate('reviews')
+      .select('reviews')
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
+};
+
+exports.findOption = (req, res) => {
+  console.log('findOption');
+    GuideService.findOne({ _id : req.params.id })
+      .populate('options')
+      .select('options')
       .then((result) => {
         res.json(result);
       })
@@ -114,6 +129,10 @@ exports.createGuideService = (req,res) =>{
   req.body.tags=[];
   console.log(tagsName);
   console.log(req.body.tags);
+  options=req.body.options;
+  req.body.options=[];
+  console.log(options);
+  console.log(req.body.options);
   var GS=new GuideService(req.body);
   let guideserviceId=GS._id
   GS.save(err => {
@@ -128,6 +147,22 @@ exports.createGuideService = (req,res) =>{
               if(err) res.status(500).json({err})
               if (guideservice) {
                   guideservice.tags.push(tag);
+                  guideservice.save();
+              }
+          });
+        })
+    }
+    for (var i = 0; i < options.length; i++) {
+      const option = new Option(options[i])
+      option.guideservice=GS._id
+      console.log(option);
+      option.save()
+        .then((result) => {
+          GuideService.findOne({_id:guideserviceId}, (err, guideservice) => {
+            console.log(option);
+              if(err) res.status(500).json({err})
+              if (guideservice) {
+                  guideservice.options.push(option);
                   guideservice.save();
               }
           });

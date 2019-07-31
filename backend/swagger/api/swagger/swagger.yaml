@@ -17,7 +17,8 @@ tags:
 - name: Guide
 - name: Superuser
 - name: User
-
+- name: Option
+- name: paidOption
 
 
 schemes:
@@ -43,7 +44,9 @@ paths:
         200:
           description: 전체 공항 데이터를 반환합니다.
           schema:
-            $ref: '#/definitions/Airport'
+            type: array
+            items:
+              $ref: '#/definitions/Airport'
 
   /api/airport/search/{keyword}:
     get:
@@ -60,7 +63,9 @@ paths:
         200:
           description: 나라,도시,공항,공항코드명에 키워드가 들어간 모든 공항을 반환합니다.
           schema:
-            $ref: '#/definitions/Airport'
+            type: array
+            items:
+              $ref: '#/definitions/Airport'
 
   /api/airport/register:
     post:
@@ -92,7 +97,9 @@ paths:
         200:
           description: 전체 유저 데이터 반환
           schema:
-            $ref: '#/definitions/User'
+            type: array
+            items:
+              $ref: '#/definitions/User'
 
   /api/user/mypage:
     get:
@@ -336,7 +343,9 @@ paths:
         200:
           description: 전체 가이드서비스 데이터 반환
           schema:
-            $ref: '#/definitions/GuideService'
+            type: array
+            items:
+              $ref: '#/definitions/GuideService'
 
   /api/guideservice/search/{keyword}:
     get:
@@ -353,7 +362,9 @@ paths:
         200:
           description: 나라,도시 키워드가 들어간 모든 가이드서비스를 반환합니다.
           schema:
-            $ref: '#/definitions/GuideService'
+            type: array
+            items:
+              $ref: '#/definitions/GuideService'
 
   /api/guideservice/create:
     post:
@@ -634,6 +645,199 @@ paths:
           schema:
             $ref: '#/definitions/SuperUser'
 
+############################
+#          Option          #
+############################
+  /api/guideservice/findOption/{id}:
+    get:
+      tags:
+      - Option
+      summary: 가이드서비스의 옵션들을 반환합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: GuideServiceObId
+      responses:
+        200:
+          description: 가이드서비스의 옵션들을 반환합니다.
+          schema:
+            $ref: '#/definitions/Option'
+
+  /api/option/create/{gs}:
+    post:
+      tags:
+      - Option
+      summary: 가이드서비스에 옵션 데이터 하나를 생성합니다.
+      parameters:
+        - in: path
+          name: gs
+          type: string
+          required: true
+          description: GuideServiceObId
+        - in: body
+          name: option
+          required: true
+          description: param에 존재하는 guideservice는 입력할 필요없음.
+          schema:
+            $ref: '#/definitions/Option'
+      responses:
+        200:
+          description: 가이드서비스에 옵션 데이터 하나를 생성합니다.
+          schema:
+            $ref: '#/definitions/Option'
+
+  /api/option/delete/{id}:
+    delete:
+      tags:
+      - Option
+      summary: 가이드서비스에 옵션 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: OptionObId
+      responses:
+        200:
+          description: 가이드서비스에 옵션 데이터 하나를 삭제합니다.
+          schema:
+            $ref: '#/definitions/Option'
+
+  /api/option/update/{id}:
+    put:
+      tags:
+      - Option
+      summary: 옵션 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: OptionObId
+        - in: body
+          name: option
+          required: true
+          description: option
+          schema:
+            $ref: '#/definitions/Option'
+      responses:
+        200:
+          description: 옵션 데이터 하나를 수정합니다.
+          schema:
+            $ref: '#/definitions/Option'
+
+############################
+#         PaidOption       #
+############################
+  /api/paidOption/findPaidOptionByUser/{user}:
+    get:
+      tags:
+      - PaidOption
+      summary: 유저가 결제한 옵션들을 반환합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: UserObId
+      responses:
+        200:
+          description: 유저가 결제한 옵션들을 반환
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Option'
+
+  /api/paidOption/findPaidOptionById/{id}:
+    get:
+      tags:
+      - PaidOption
+      summary: 결제한 옵션 하나를 반환합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: PaidOptionObId
+      responses:
+        200:
+          description: 결제한 옵션 하나를 반환
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Option'
+
+  /api/paidOption/create/{option}/{user}:
+    post:
+      tags:
+      - PaidOption
+      summary: 결제한 옵션 데이터 하나를 생성합니다.
+      parameters:
+        - in: path
+          name: option
+          type: string
+          required: true
+          description: OptionObId
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: userObId
+        - in: body
+          name: paidOption
+          required: true
+          description: param에 존재하는 guideservice,user는 입력할 필요없음.
+          schema:
+            $ref: '#/definitions/PaidOption'
+      responses:
+        200:
+          description: 결제한 옵션 데이터 하나 생성.
+          schema:
+            $ref: '#/definitions/PaidOption'
+
+  /api/paidOption/delete/{id}:
+    delete:
+      tags:
+      - PaidOption
+      summary: 결제한 옵션 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: PaidOptionObId
+      responses:
+        200:
+          description: 결제한 옵션 데이터 하나 삭제
+          schema:
+            $ref: '#/definitions/PaidOption'
+
+  /api/paidOption/update/{id}:
+    put:
+      tags:
+      - PaidOption
+      summary: 결제한 옵션 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: PaidOptionObId
+        - in: body
+          name: option
+          required: true
+          description: paidOption
+          schema:
+            $ref: '#/definitions/PaidOption'
+      responses:
+        200:
+          description: 결제한 옵션 데이터 하나 수정
+          schema:
+            $ref: '#/definitions/PaidOption'
+
+
   /swagger:
     x-swagger-pipe: swagger_raw
 #############################################################################
@@ -780,6 +984,10 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Refund'
+      options:
+        type: array
+        items:
+          type: string
 
   Refund:
     properties:
@@ -810,6 +1018,70 @@ definitions:
       guideservice:
         type: string
 ############################
+#          Option          #
+############################
+  Option:
+    properties:
+      guideservice:
+        type: string
+      title:
+        type: string
+      fromDate:
+        type: string
+      toDate:
+        type: string
+      dayOfWeek:
+        type: array
+        items:
+          type: string
+      times:
+        type: array
+        items:
+          type: string
+      desc:
+        type: array
+        items:
+          type: string
+      refPeople:
+        $ref: '#/definitions/RefPeople'
+      senior:
+        $ref: '#/definitions/People'
+      adult:
+        $ref: '#/definitions/People'
+      child:
+        $ref: '#/definitions/People'
+      infant:
+        $ref: '#/definitions/People'
+      costType:
+        type: string
+      maxPeople:
+        type: integer
+
+  PaidOption:
+    properties:
+      option:
+        type: string
+      user:
+        type: string
+      fromDate:
+        type: string
+      senior:
+        $ref: '#/definitions/PaidPeople'
+      adult:
+        $ref: '#/definitions/PaidPeople'
+      child:
+        $ref: '#/definitions/PaidPeople'
+      infant:
+        $ref: '#/definitions/PaidPeople'
+      totalPeopleNumber:
+        type: integer
+      totalPrice:
+        type: integer
+      state:
+        type: string
+        default: todo
+
+############################
 #          Airport         #
 ############################
   Airport:
@@ -818,8 +1090,6 @@ definitions:
     - name_kor
     - code
     properties:
-      _id:
-        type: string
       name_eng:
         type: string
       name_kor:
@@ -844,3 +1114,29 @@ definitions:
     properties:
       _id:
         type: string
+
+  RefPeople:
+    properties:
+      num:
+        type: integer
+      opt:
+        type: string
+  #
+  People:
+    properties:
+      cost:
+        type: integer
+      minAge:
+        type: integer
+      maxAge:
+        type: integer
+      use:
+        type: boolean
+        default: false
+
+  PaidPeople:
+    properties:
+      num:
+        type: integer
+      costOfPerson:
+        type: integer
