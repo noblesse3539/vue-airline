@@ -5,6 +5,7 @@ import Alerter from './modules/alerter'
 import Admin from './modules/admin'
 import Header from './modules/header'
 import User from './modules/user'
+import Guideservice from './modules/guideservice'
 
 // import createLogger from '../../../src/plugins/logger'
 
@@ -17,13 +18,14 @@ export default new Vuex.Store({
     Alerter,
     Admin,
     Header,
-    User
+    User,
+    Guideservice,
   },
   strict: debug,
   // plugins: debug ? [createLogger()] : []
 })
 
-// -------------------------------------------------------------------- 
+// --------------------------------------------------------------------
 // 이 아래부터는 Vuex의 기본 구조 설명을 위한 예제 코드입니다.
 // --------------------------------------------------------------------
 

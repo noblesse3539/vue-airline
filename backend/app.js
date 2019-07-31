@@ -6,6 +6,9 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
+const passport = require('passport')
+const session =require('express-session')
+const cors = require('cors')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const sampleRouter = require('./routes/sample')
@@ -23,6 +26,16 @@ const config = require('./config')
     EXPRESS CONFIGURATION
 ==========================*/
 const app = express()
+
+
+app.use(cors())
+/* =======================
+    SOCKET.IO CONFIGURATION
+==========================*/
+const server = require('http').createServer(app)
+app.io = require('socket.io')(server)
+
+
 const db = require('./db.js')
 
 // logging
@@ -46,8 +59,22 @@ app.use(bodyParser.json())
 app.set('jwt-secret', config.secret)
 
 
+/* =======================
+    PASSPORT CONFIGURATION
+==========================*/
+app.use( session({ 
+  secret: config.GoogleOAuth2Credentials.client_secret,
+  resave: false,
+  saveUninitialized: true,
+  cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) },
+}))
+require('./utils/passport')(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 // vue router와 연동
-app.use(require('connect-history-api-fallback')())
+// app.use(require('connect-history-api-fallback')())
 
 app.use(function (req, res, next) {
 // Website you wish to allow to connect
@@ -98,5 +125,17 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 })
+
+app.io.on('connection', function ( socket) {
+  socket.on('new_notification', function(data) {
+    console.log(data.title, data.message)
+    app.io.sockets.emit('show_notification', {
+      title: data.title,
+      message: data.message,
+    })
+  })
+
+})
+app.io.origins('*:*')
 
 module.exports = app

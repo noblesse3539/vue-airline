@@ -3,53 +3,67 @@
     <Header></Header>
     <v-content>
       <v-app>
-				<router-view/>
+        <router-view></router-view>
       </v-app>
-		</v-content>
+    </v-content>
     <Footer style="z-index: 2000 !important;"></Footer>
   </div>
 </template>
 
 <script type="application/javascript" src="http://ipinfo.io/?format=jsonp&callback=getIP"></script>
 <script>
-import { mapGetters, mapState } from 'vuex'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import './App.css'
+import { mapGetters, mapState } from "vuex";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import "./App.css";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Header,
     Footer
   },
-  created() {
-
-  },
+  created() {},
   mounted() {
-    this.checkUserLoginStatus()
+    this.checkUserLoginStatus();
+
+    let params = new URL(document.location).searchParams;
+    let token = params.get("token");
+    if (token) {
+      let d = new Date();
+      d.setTime(d.getTime() + 1000 * 60 * 60 * 3); // 1시간 유효
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = "BisionToken=" + token + ";expires=" + expires;
+    }
+    // console.log(this.getUserId)
   },
   computed: {
-
+    ...mapGetters({
+      getUserId: state => state.User.getUserId
+    })
   },
   methods: {
     checkUserLoginStatus: function() {
-
-      const token= this.$getToken('BisionToken')
+      const token = this.$getToken("BisionToken");
       const config = {
-            'headers': {'x-access-token': token}
-      }
+        headers: { "x-access-token": token }
+      };
 
-      this.$http.get('/api/auth/check', config)
-        .then( res => {
+      this.$http
+        .get("/api/auth/check", config)
+        .then(res => {
           if (res.status == 200) {
-            this.$store.commit("setIsLoggedIn")
+            this.$store.commit("setIsLoggedIn");
+            this.$store.commit("setUserInfo", {
+              userId: res.data.info._id,
+              userName: res.data.info.username
+            });
           }
         })
-        .catch( err => {
-          console.log(err)
-        })
-    },
-  },
-}
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
+};
 </script>

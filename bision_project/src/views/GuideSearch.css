@@ -1,0 +1,184 @@
+@media only screen and (min-width: 900px) {
+    .guide-search-submit {
+        font-size: 1.25rem !important;
+    }
+    /* .guide-search-hero {
+        height: 500px !important;
+    }
+    .guide-search-userinput {
+        height: 500px !important;
+    }
+    .guide-search-section {
+        height: 500px !important;
+    } */
+    
+}
+
+.GS-travel-route {
+    font-size: 1.47rem;
+    color: rgb(34,50,34);
+}
+
+.guide-search {
+    
+    height: 100% !important;
+    margin-top: 110px;
+    /* overflow: scroll !important; */
+    /* margin-bottom: 110px; */
+}
+
+.guide-search-section {
+    /* width: 100%;
+    height: 600px;
+    background: grey;
+    overflow: auto !important; */
+
+    width: 100%;
+    height: 600px;
+    position: relative;
+}
+
+.guide-search-hero {
+    /* font-family: 'Oswald', sans-serif; */
+    position: absolute;
+    width: 100%;
+    height: 600px;
+    background:
+        linear-gradient(
+            right,
+            rgba(0, 0, 0, 0), 
+            rgba(0, 0, 0, 0.3)
+        ),
+        url("https://www.essence.com/wp-content/uploads/2019/06/GettyImages-1012124606-1920x1080.jpg") no-repeat;
+    background-position: 50% 20%;
+    background-size: cover;
+}
+
+.guide-search-userinput {
+    /* position: relative; */
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* padding-top: 200px; */
+    align-items: center;
+    margin-top: -64px;
+}
+
+.guide-search-userinput input {
+    font-weight: 700;
+
+}
+
+.guide-search-userinput-quote {
+    font-family: 'Oswald', sans-serif !important;
+    letter-spacing: 3px;
+    width: 75%;
+    text-align: left;
+    font-size: 7rem;
+    font-weight: 1000;
+    color: white;
+    text-transform: uppercase;
+    background: linear-gradient(to right, white 0%, #35c235 30% );
+    -webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.guide-search-userinput > input {
+    padding: 0 !important;
+    padding: 17.4px !important;
+    font-size: 1.25rem !important;
+    background: white;
+    width: 75%;
+    height: 74px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 8px 6px -6px light;
+	-moz-box-shadow: 0 8px 6px -6px black;
+	box-shadow: 0 8px 6px -10px black;
+}
+
+.guide-search-userinput > input::placeholder {
+    /* color: black; */
+    font-weight: 1000;
+    font-size: 1.5rem;
+}
+
+.guide-search-userinput > input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3DDAD7;
+}
+
+.guide-search-submit {
+    position: absolute;
+    right: 0;
+    top: 450px;
+    margin-right: 12.5%;
+    /* padding: 17.4px; */
+    width: 12%;
+    height: 64px;
+    display: block;
+    border-radius: 10px;
+    font-size: 1.74rem;
+    font-weight: 1000;
+    background: #35c235;
+    color: white;
+    -webkit-box-shadow: 0 8px 6px -6px light;
+	-moz-box-shadow: 0 8px 6px -6px black;
+	box-shadow: 0 8px 6px -10px black;
+}
+
+.guide-search-submit:hover {
+    /* background: rgba(53, 194, 53, 0.5); */
+    opacity: 0.7;
+    transition: 0.25s;
+
+}
+
+.guide-search-result-wrapper {
+    width: 75% !important;
+    /* z-index: 6000 !important; */
+    /* position: relative; */
+    /* overflow: auto; */
+    /* overflow: hidden; */
+}
+
+.guide-search-triangle-box {
+    width: 75% !important;
+    /* margin: 0 !important;
+    margin-left: 10% !important; */
+}
+
+.guide-search-triangle {
+    margin: 0 !important;
+    margin-left: 10% !important;
+}
+
+.guide-search-list {
+    width: 30%;
+    /* height: 100%; */
+    /* overflow: hidden; */
+}
+
+.guide-search-result-each {
+    width: 100%;
+    height: 47px;
+    margin: 0;
+    padding-left: 15px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 2px solid #EBEBEB;
+}
+
+.guide-search-result-each:hover {
+    background: rgba(192, 190, 190, 0.774);
+    cursor: pointer;
+}
+
+.is-active-guide {
+    background: rgba(192, 190, 190, 0.774);
+}

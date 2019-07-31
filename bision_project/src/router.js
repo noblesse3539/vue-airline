@@ -8,9 +8,14 @@ import GuideMyPage from './views/GuideMyPage'
 import MyPage from './views/MyPage'
 import Admin from './views/Admin'
 import FlightListPage from './views/FlightListPage'
-import FlightDetailPage from './views/FlightDetailPage'
 import VuexTutorial from './views/VuexTutorial'
 import GuideListPage from './views/GuideListPage'
+import GuideServiceDetailPage from './views/GuideServiceDetailPage'
+import GuideSearch from './views/GuideSearch'
+import PayApproval from './views/kakaopay/PayApproval'
+import payCancel from './views/kakaopay/payCancel'
+import PayFail from './views/kakaopay/PayFail'
+import GuideServicePayment from './views/GuideServicePayment'
 
 Vue.use(Router)
 
@@ -26,6 +31,12 @@ export default new Router({
             name: 'Home',
             component: Home
         },
+        {
+            path: '/guidesearch',
+            name: 'GuideSearch',
+            component: GuideSearch,
+            props: true,
+        },
         {   // 1주차 프로젝트 요구사항 보존을 위한 경로입니다.
             path: '/pandora',
             name: 'Pandora',
@@ -39,12 +50,20 @@ export default new Router({
         {
             path: '/guidemypage',
             name: 'GuideMyPage',
-            component: GuideMyPage
+            component: GuideMyPage,
+            props: true 
         },
         {
             path: '/guideListPage',
             name: 'GuideListPage',
             component: GuideListPage,
+            props: true,
+        },
+        {
+            path: '/guideServiceDetailPage',
+            name: 'GuideServiceDetailPage',
+            component: GuideServiceDetailPage,
+            props: true,
         },
         {
             path: '/login',
@@ -63,12 +82,6 @@ export default new Router({
             props: true,
         },
         {
-            path: '/flightDetail',
-            name: 'FlightDetailPage',
-            component: FlightDetailPage,
-            props: true,
-        },
-        {
             path: '/admin',
             name: 'Admin',
             component: Admin
@@ -77,6 +90,27 @@ export default new Router({
             path: '/vuex',
             name: 'Vuex',
             component: VuexTutorial
+        },
+        {
+            path: '/guideservicepayment',
+            name: 'GuideServicPayment',
+            component: GuideServicePayment,
+            props: true
+        },
+        {
+            path: '/payapproval',
+            name: 'PayApproval',
+            component: PayApproval
+        },
+        {
+            path: '/paycancel',
+            name: 'payCancel',
+            component: payCancel
+        },
+        {
+            path: '/payfail',
+            name: 'PayFail',
+            component: PayFail
         },
     ]
 })

@@ -144,7 +144,7 @@
 import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
-
+import './GuideMyPage.css'
 export default {
   name: 'GuideMypage',
   components:{
@@ -208,27 +208,17 @@ export default {
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'}
       ],
-
+      
+      
     }
+  },
+  mounted() {
+
   },
 }
 </script>
 
 <style>
-  .guidepage {
-    margin-top: 110px;
-    margin-bottom: 40px;
-  }
-  .profileImg:hover {
-    cursor: pointer;
-  }
-  .v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: .5;
-  position: absolute;
-  width: 100%;
-}
+
 
 </style>

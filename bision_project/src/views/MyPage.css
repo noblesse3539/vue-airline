@@ -211,6 +211,8 @@
     margin-bottom: 10rem !important;
     position: relative !important;
     z-index: 1 !important;
+    margin-left: 12.5% !important;
+    margin-right: 12.5% !important;
 }
 
 .swiper-pagination, .swiper-scrollbar {

@@ -7,19 +7,29 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>bision_project</title>
     <link href='https://fonts.googleapis.com/css?family=Material+Icons' rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.15.2/gitgraph.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but bision_project doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+
+
+    <script src = "/socket.io/socket.io.js"></script>
+    
     <!-- built files will be auto injected -->
     <script src="https://kit.fontawesome.com/e5ee5dc746.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.15.2/gitgraph.min.js"></script>
     <script src="https://unpkg.com/marked@0.3.6"></script>
     <script src="https://unpkg.com/lodash@4.16.0"></script>
-  
+    <script type='text/javascript'>  
+       Kakao.init('227edca76c689f0ee262156a326a27bb');
+    </script>
   </body>
 </html>

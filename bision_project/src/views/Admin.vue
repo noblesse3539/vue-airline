@@ -69,7 +69,7 @@ export default {
       
     },
     mounted () {
-      this.check ()
+      this.check()
     },
     computed: {
       color () {

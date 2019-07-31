@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="border-radius: 20px; background-color: white; padding: 0px;">
+  <div class="container" style="border-radius: 20px; background-color: white;">
     <div class="wrapper">
       <div>
         <div style="height: 50%">
@@ -26,14 +26,15 @@
                 </div>
                 <!-- 비행기 슝 -->
                 <div class="center container" style="display: grid; grid-template-columns: 80% 20%; padding: 0px;">
-                  <hr class="animated-width"/>
+                  <hr class="animated-width" style="max-width: 100px;"/>
                   <div style="padding-left: 5px;">
                     <i class="fas fa-plane"></i>
                   </div>
                 </div>
                 <div style="display: flex; justify-content: center">
                   <span v-if="OutNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
-                  <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유</span>
+                  <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유&nbsp</span>
+                  <span v-for="(stop, index) in OutStopCodes">{{ stops(stop, index) }}</span>
                 </div>
               </div>
             </div>
@@ -45,7 +46,7 @@
                     <v-badge right>
                       <span>{{OutArrivalTime}}</span>
                       <template v-slot:badge v-if="OutDay">
-                        <span>+1</span>
+                        <span>+{{OutDay}}</span>
                       </template>
                     </v-badge>
                     <!-- {{OutArrivalTime}} -->
@@ -81,14 +82,15 @@
                 </div>
                 <!-- 비행기 슝 -->
                 <div class="center container" style=" display: grid; grid-template-columns: 80% 20%; padding: 0px;">
-                  <hr class="animated-width"/>
+                  <hr class="animated-width" style="max-width: 100px;"/>
                   <div style="padding-left: 5px;">
                     <i class="fas fa-plane"></i>
                   </div>
                 </div>
                 <div style="display: flex; justify-content: center">
                   <span v-if="InNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
-                  <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유</span>
+                  <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유&nbsp</span>
+                  <span v-for="(stop, index) in InStopCodes">{{ stops(stop, index) }}</span>
                 </div>
               </div>
             </div>
@@ -99,7 +101,7 @@
                     <v-badge right>
                       <span>{{InArrivalTime}}</span>
                       <template v-slot:badge v-if="InDay">
-                        <span>+1</span>
+                        <span>+{{InDay}}</span>
                       </template>
                     </v-badge>
                     <!-- {{OutArrivalTime}} -->
@@ -111,7 +113,6 @@
           </div>
         </div>
       </div>
-
       <div class="center">
         <div class="">
           <!-- <div class="center">
@@ -123,16 +124,27 @@
             {{CurrencySymbol}}&nbsp{{LowestPrice}}
           </div>
           <div class="center">
-            <v-btn @click="goToDetail()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
-            <!-- <v-btn @click="goToDetail()" target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn> -->
-            <v-btn href='LowestDeeplinkUrl' target="_blank" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <v-btn @click="showFD()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <FlightDetail v-if="isFDVisible" :flight="this._props" @close="closeFD"></FlightDetail>
           </div>
+          <!-- 모달 -->
+          <!-- <div>
+            <button @click="handleClickButton">Toggle Modal</button>
+            <app-my-modal
+              title="This is modal"
+              :visible.sync="visible">
+              <div>
+                This is modal body
+              </div>
+            </app-my-modal>
+          </div> -->
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import FlightDetail from '@/components/FlightDetail'
 import qs from 'qs'
 export default {
     name: 'Flight',
@@ -142,14 +154,18 @@ export default {
       InArrivalTime: {type: String},
       InCarrierImageUrl: {type: String},
       InDuration: {type: String},
-      InDay: {type: Boolean},
+      InDay: {type: String},
       InNumofStop: {type: String},
+      Instops: {type: Array},
+      InSegments: {type: Array},
       OutDepartureTime: {type: String},
       OutArrivalTime: {type: String},
       OutCarrierImageUrl: {type: String},
       OutDuration: {type: String},
-      OutDay: {type: Boolean},
+      OutDay: {type: String},
       OutNumofStop: {type: String},
+      Outstops: {type: Array},
+      OutSegments: {type: Array},
       NumofOptions: {type: Number},
       LowestPrice: {type: String},
       LowestDeeplinkUrl: {type: String},
@@ -157,37 +173,34 @@ export default {
       OriginAirportCode: {type: String},
       DestinationAirportCode: {type: String},
     },
-    data: function() {
+    components: {
+      FlightDetail
+    },
+    data() {
         return {
+          visible: false,
+          isFDVisible: false,
         }
     },
     methods: {
-      // goToDetail: function() {
-      //   const params = {}
-      //     params.CurrencySymbol= this.CurrencySymbol,
-      //     params.InDepartureTime = this.InDepartureTime,
-      //     params.InArrivalTime= this.InArrivalTime,
-      //     params.InCarrierImageUrl= this.InCarrierImageUrl,
-      //     params.InDuration= this.InDuration,
-      //     params.InDay= this.InDay,
-      //     params.InNumofStop= this.InNumofStop,
-      //     params.OutDepartureTime= this.OutDepartureTime,
-      //     params.OutArrivalTime= this.OutArrivalTime,
-      //     params.OutCarrierImageUrl= this.OutCarrierImageUrl,
-      //     params.OutDuration= this.OutDuration,
-      //     params.OutDay= this.OutDay,
-      //     params.OutNumofStop= this.OutNumofStop,
-      //     params.NumofOptions= this.NumofOptions,
-      //     params.LowestPrice= this.LowestPrice,
-      //     params.LowestDeeplinkUrl= this.LowestDeeplinkUrl,
-      //     params.LowestAgentsImageUrl= this.LowestAgentsImageUrl,
-      //     params.OriginAirportCode= this.OriginAirportCode,
-      //     params.DestinationAirportCode= this.DestinationAirportCode,
-      //
-      //     this.$router.push({name: "FlightDetailPage", params: params})
-      // }
-    }
+      showFD() {
+        this.isFDVisible = true
+      },
+      closeFD() {
+        this.isFDVisible = false
+      },
+      stops : function (stop, index) {
+        if (parseInt(index)%2 == 1) {
+          return " ," + stop.toString()
+        } else {
+          return stop
+        }
+      },
+    // handleClickButton(){
+    //   this.visible = !this.visible
+    // }
   }
+}
 </script>
 <style>
   .wrapper {
@@ -200,7 +213,7 @@ export default {
   }
   .wrapperfour {
     display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 24% 24% 28% 24%;
   }
   .center {
     display: flex;
@@ -217,9 +230,9 @@ export default {
       width: 100%;
    }
 }
-hr {
+/* hr {
   max-width: 100px !important;
-}
+} */
 hr.animated-width {
    height: 3px;
    weight: 100px !important;

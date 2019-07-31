@@ -1,5 +1,5 @@
 const Airport = require('../../../models/airport')
-
+const Nation = require('../../../models/nation')
 /*
     POST /api/airport/register
     {
@@ -47,7 +47,8 @@ exports.register = (req, res) => {
 
 // GET api/airport/list
 exports.listOfAirport = (req, res) => {
-    Airport.find({}).select('name_eng name_kor nation_eng nation_kor city_eng city_kor code')
+    Airport.find({})
+    .populate({path:'nation', model:Nation})
     .then(
         airports => {
             res.json({airports})
@@ -66,10 +67,26 @@ exports.searchAirport = (req, res) => {
         {city_eng: { $regex: '.*' + keyword + '.*' }},
         {city_kor: { $regex: '.*' + keyword + '.*' }},
         {code: keyword}])
-    .select('name_eng name_kor nation_eng nation_kor city_eng city_kor code')
+    .populate({path:'nation', model:Nation})
     .then(
         airports => {
             res.json({airports})
         }
     )
+ }
+
+ exports.nationUpdate = (req, res) => {
+    Nation.find({})
+    .then(nations => {
+        nations.map( async (nation) => {
+            await Airport.updateMany({nation_kor: nation.nation_kor}, {nation: nation._id})
+            await Airport.updateMany({nation_eng: nation.nation_eng}, {nation: nation._id})
+        })
+    })
+    .then( () => {
+        res.json({'얍':'얍얍얍'})
+    })
+    .catch( err => {
+        res.send({error: err})
+    })
  }

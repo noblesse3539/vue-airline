@@ -23,7 +23,7 @@
               <div class="form-register" :class="{ 'active': active == 'register' }" id="form-register">
                 <div class="error-message" v-text="registerError"></div>
                 <div class="welcomeImg"></div>
-                <input type="text" name="name" placeholder="이메일 입력" v-model="registerName" @keyup.enter="submit('register', $event)">
+                <input type="email" name="name" placeholder="이메일 입력" v-model="registerName" @keyup.enter="submit('register', $event)">
                 <!-- <input type="email" name="email" placeholder="Email" v-model="registerEmail" @keyup.enter="submit('register', $event)"> -->
                 <input type="password" name="password" placeholder="비밀번호 입력" v-model="registerPassword" @keyup.enter="submit('register', $event)">
                 <input type="submit" :class="{ 'disabled': submitted == 'register' }" @click="submit('register', $event)" v-model="registerSubmit" id="registerSubmit">
@@ -31,9 +31,9 @@
               </div>
               <div class="form-login" :class="{ 'active': active == 'login' }" id="form-login">
                 <div class="error-message" v-text="loginError"></div>
-                <input type="text" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
+                <input type="email" name="user" placeholder="이메일 입력" v-model="loginUser" @keyup.enter="submit('login', $event)">
                 <input type="password" name="password" placeholder="비밀번호 입력" v-model="loginPassword" @keyup.enter="submit('login', $event)">
-                
+                <GoogleSignInBtn></GoogleSignInBtn>
                 <!-- 로그인 제출 버튼 -->
                 <input type="submit" :class="{ 'disabled': submitted == 'login' }" @click="submit('login', $event)" v-model="loginSubmit" id="loginSubmit">
                 
@@ -65,6 +65,7 @@
 import './LoginModal.css'
 import facebookLogin from 'facebook-login-vuejs';
 import { mapGetters, mapState } from 'vuex'
+import GoogleSignInBtn from '../components/googleOAuth/SignInBtn'
 
 var modal_submit_register = '회원가입';
 var modal_submit_password = 'Reset Password';
@@ -73,7 +74,8 @@ var modal_submit_login = '로그인';
 export default {
   name: 'LoginModal',
   components:{
-    facebookLogin
+    facebookLogin,
+    GoogleSignInBtn,
   },
   methods: {
     goToPage: function(url) {
@@ -120,7 +122,7 @@ export default {
           .then( res => {
             if(res.status == 200) {
               let d = new Date()
-              d.setTime(d.getTime() + (1000*60*60)) // 1시간 유효
+              d.setTime(d.getTime() + (1000*60*60*3)) // 1시간 유효
               let expires = "expires=" + d.toUTCString()
               document.cookie = "BisionToken=" + res.data.token + ';expires=' + expires
 

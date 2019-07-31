@@ -1,13 +1,13 @@
 <template>
     <div id="navbox" v-if="getIsHeaderOpen">
         <div class="nav-left"><form action="" method="get"></form>
-                <router-link to="/" class="nav-left-title">
+                <a href="/" exact class="nav-left-title">
                     BisionTour
-                </router-link>
+                </a>
             <div class="nav-left-toggle">
                 <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
                     <span class="airline-reservation-text">항공권</span></router-link>
-                <router-link to="/" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
+                <router-link to="/guidesearch" class="guide-reservation"><i class="fas fa-suitcase-rolling"></i>
                     <span class="airline-reservation-text">가이드</span></router-link>
             </div>
         </div>
@@ -99,7 +99,7 @@ export default {
         },
         close(e){
           // this.modal=false
-          console.log(e.target.classList[0])
+        //   console.log(e.target.classList[0])
           // const loginWrapper = document.querySelector('.LoginModal-wrapper')
           // const loginBtn     = document.querySelector('.loginBtn')
           if (this.modal == true && (e.target.classList[0] === 'LoginModal-wrapper' || e.target.classList[0] === 'closeBtn' )) {

@@ -152,7 +152,8 @@
                             </label>
                             <div class="flight-search-submit">
                                 <button class="flight-search-submitBtn" type="submit"
-                                    @click="goToUrl()">항공권 검색</button>
+                                    @click="goToUrl()">항공권 검색                       
+                                </button>
                             </div>
                         </div>
                     </div>
