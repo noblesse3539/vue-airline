@@ -17,7 +17,7 @@
         <a id="kakao-link-btn" @click="sendLink()">
             <img src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
         </a>
-        {{this.getServiceInfo}}
+        {{this.serviceInfo}}
     </div>
 </template>
 
@@ -34,30 +34,59 @@ export default {
     data () {
         return {
             serviceInfo : {
-                'itemName': '베이징상품',
-                'quantity': 1,
-                'totalAmount': 300000,
-                'taxFreeAmount': 3000,
             },
+            userId: '',
 
             notification: window.Notification,
         }
     },
     mounted() {
         this.sendPaymentInfo()
-        // this.setNotification()
-        this.$store.subscribe( (mutation, state) => {
-            console.log(state.Guideservice)
-        })
+        this.getTempServiceInfo()
+        // this.updateRealServiceInfo()
+        // this.deleteTempServiceInfo()
     },
     updated() {
     },
     methods: {
-        ...mapGetters({
-            // getServiceInfo: 'getServiceInfo'
-        }),
-        sendPaymentInfo: function() {
+        getTempServiceInfo() {
 
+            const token = this.$getToken("BisionToken");
+            const config = {
+                headers: { "x-access-token": token }
+            };
+
+            this.$http
+                .get("/api/auth/check", config)
+                .then(res => {
+                if (res.status == 200) {
+                    this.userId = res.data.info._id
+                    const baseUrl = "/api/paymentstore/tmp/" + this.userId
+                    this.$http.get(baseUrl)
+                        .then( res => {
+                            this.serviceInfo = res.data.tmpStore.service
+                    })
+                }
+                })
+                .catch(err => {
+                console.log(err);
+                });
+        
+        },
+        updateRealServiceInfo() {
+            const baseUrl = '/api/paymentstore/real/' + this.getUserId
+            this.$http.post(baseUrl, {service: this.serviceInfo})
+        },
+        deleteTempServiceInfo() {
+            const baseUrl = "/api/paymentstore/tmp/" + this.getUserId
+            this.$http.delete(baseUrl)
+                .then( res => {
+                    console.log(res)
+                })
+        },
+
+        sendPaymentInfo: function() {
+            
             const baseUrl = 'api/kakaopay/sendemail'
             const data    = {_id: this.getUserId}
             this.$http.post(baseUrl, data)

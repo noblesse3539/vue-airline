@@ -55,14 +55,16 @@ export default {
         this.closeHeader()
         this.serviceInfo = this.$route.query
         this.setServiceInfo(this.serviceInfo)
-        console.log(this.getServiceInfo)
+        this.addTempServiceInfo()
+        // console.log(this.getServiceInfo)
     },
     destroyed() {
         this.openHeader()
     },
     computed: {
         ...mapState({
-            getServiceInfo: state => state.Guideservice.serviceInfo
+            getServiceInfo: state => state.Guideservice.serviceInfo,
+            getUserId     : state => state.User.userId
         }),
     },
 
@@ -76,7 +78,13 @@ export default {
         setServiceInfo(serviceInfo) {
             this.$store.commit("setServiceInfo", {serviceInfo})
         },
-        
+        addTempServiceInfo(){
+            const baseUrl = '/api/paymentstore/tmp/' + this.getUserId
+            this.$http.post(baseUrl, { service: this.serviceInfo})
+                .then( res => {
+                    // console.log(res)
+                })
+        },
     },
 }
 </script>
