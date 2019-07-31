@@ -23,21 +23,22 @@
             <div>{{this.$route.params.comingDate}}</div>
           </div>
         </div>
-
+        <div style="padding-top: 10px;">
+          <v-btn class="mx-2" fab small color="grey lighten-3">
+            <i class="fas fa-search fa-2x"></i>
+          </v-btn>
+          <div style="font-size: 10px;">
+            다른 조건으로
+          </div>
+          <div style="font-size: 10px;">
+            검색해보세요.
+          </div>
+        </div>
       </div>
-      <!-- <v-flex xs2 d-flex v-if="!error">
-        <v-select
-          :items="sortTypes"
-          solo
-          @change="changedValue"
-          label="정렬기준"
-        ></v-select>
-      </v-flex> -->
-      <!-- display: grid; grid-template-columns: 25% 50% 25%; -->
       <div class="maingrid-a maingrid-b maingrid-c" style="">
         <div style="margin: 0;" m-0 class="container sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
-          <div class="container" style="width: 220px; margin-left: 7%;">
+          <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
             <div style="font-size: 25px !important; color: #45CE30;">
               경유
             </div>
@@ -86,7 +87,11 @@
               </template>
             </v-range-slider>
 
-            <span style="display: block; font-size: 17px;">총 소요시간</span>
+            <div style="font-size: 25px; color: #45CE30;">
+              총 소요시간
+            </div>
+            <hr style="width: 220px; margin-bottom: 20px;">
+            <!-- <span style="display: block; font-size: 17px;">총 소요시간</span> -->
             <span>{{transferedMinDuration}} - </span>
             <span>{{transferedDuration}}</span>
             <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="onChangeDuration($event)">
@@ -98,6 +103,16 @@
                 &nbsp&nbsp&nbsp{{ durationLabelMinute(props.value) }}
               </template>
             </v-slider>
+          </div>
+          <!-- 항공사별 체크 박스 -->
+          <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
+            <div style="font-size: 25px !important; color: #45CE30;">
+              항공사
+            </div>
+            <hr style="width: 220px">
+            <div v-for="i in flightselectedfixed.length" :key="i">
+              <v-checkbox v-model="flightselectedName" :label="flightselectedfixed[i-1]" :value="flightselectedfixed[i-1]" @change="flightCheckboxChange(value)"></v-checkbox>
+            </div>
           </div>
         </div>
         <!-- 항공권 리스트 -->
@@ -118,16 +133,16 @@
           <v-flex style="width: 700px" v-if="!loading">
             <div v-if="!error" style="display: inline-block">
               <!-- 정렬메뉴바 -->
-              <div style="display: flex; justify-content: space-between">
-                <div class="container" style="display: flex; align-items: center ">
-                  <div style="font-size: 18px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div>
-                </div>
-                <div class="">
-                  <span>정렬 기준 : </span>
-                  <v-menu offset-y >
+              <div style="display:grid; grid-template-columns: 70% 10% 20%">
+                <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
+                <div><div style="margin-top: 13px;">정렬 기준 : </div></div>
+                <div>
+                  <v-menu offset-y style="display: inline-block">
                     <template v-slot:activator="{ on }" >
-                      <v-btn color="#45CE30" dark v-on="on">
+                      <v-btn color="#45CE30" dark v-on="on" @click="menuicon=!menuicon">
                         {{ thisSortType }}
+                        <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
+                        <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
                       </v-btn>
                     </template>
                     <v-list>
@@ -138,7 +153,6 @@
                   </v-menu>
                 </div>
               </div>
-
               <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 700px;">
                 <Flight class="ma-3"
                   :CurrencySymbol="flights[i - 1].CurrencySymbol"
@@ -212,12 +226,17 @@ export default {
           loading: false,
           inboundDate: '',
           selected: ['0', '1', '2'],
+          flightselectedfixed: [],
+          flightselectedName: [],
+          flightselectedCodes: '',
+          flightselected: [],
           flights: [],
           flightsResult: [],
           numofFlights: 0,
           outrange: [0, 1440],
           inrange: [0, 1440],
           duration: 0,
+          menuicon: true,
           transferedMinDuration: 0,
           transferedDuration: 0,
           minDuration: 0,
@@ -249,11 +268,11 @@ export default {
       //   this.$nextTick(() => {
       //     this.getFlights(1, 0, 0);
       // });
-      this.getFlights(1, 0, 0)
+      this.getFlights(0, 0, true)
       this.duration = this.maxDuration
     },
     methods: {
-        getFlights: function(moreflag, optionTypeIndex, s =  0){
+        getFlights: function(optionTypeIndex, s =  0, ismount=false){
             this.loading = true
             var minDuration = 10000
             var maxDuration = 0
@@ -261,13 +280,15 @@ export default {
             // console.log(this.$route.params)
             // console.log(this.flights)
             // 처음엔 10개만 불러오고 두번 째에 900개 더 불러옴
-            if (moreflag == 1) {
-              this.pageIndex = 0
-              this.pageSize = 1000
-            } else if (moreflag == 0) {
-              this.pageIndex = 0
-              this.pageSize = 10
-            }
+            // if (moreflag == 1) {
+            //   this.pageIndex = 0
+            //   this.pageSize = 1000
+            // } else if (moreflag == 0) {
+            //   this.pageIndex = 0
+            //   this.pageSize = 10
+            // }
+            this.pageIndex = 0
+            this.pageSize = 1000
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
                             'country': 'US',
@@ -275,17 +296,17 @@ export default {
                             'locale': 'ko-KR',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            // 'originPlace': 'SFO-sky',
-                            // 'destinationPlace': 'LHR-sky',
-                            // 'outboundDate': '2019-09-01',
-                            // 'adults': '1',
-                            'originPlace': this.$route.params.departure + '-sky',
-                            'destinationPlace': this.$route.params.destination + '-sky',
-                            'outboundDate': this.$route.params.leavingDate,
-                            'adults': this.$route.params.adults,
+                            'originPlace': 'SFO-sky',
+                            'destinationPlace': 'LHR-sky',
+                            'outboundDate': '2019-09-01',
+                            'adults': '1',
+                            // 'originPlace': this.$route.params.departure + '-sky',
+                            // 'destinationPlace': this.$route.params.destination + '-sky',
+                            // 'outboundDate': this.$route.params.leavingDate,
+                            // 'adults': this.$route.params.adults,
                         }
-            let inboundDate = this.$route.params.comingDate
-            // let inboundDate = '2019-09-10'
+            // let inboundDate = this.$route.params.comingDate
+            let inboundDate = '2019-09-10'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
             }
@@ -318,15 +339,20 @@ export default {
                     // let option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
                     if (optionTypeIndex < 4) {
                       var option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[optionTypeIndex].text
-
                     } else {
                       var option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[0].text
+                    }
+                    // 항공기 체크박스 분기
+                    if (this.flightselectedCodes) {
+                      var optionplus = '&includeCarriers=' + this.flightselectedCodes
+                    } else {
+                      var optionplus = ''
                     }
                     let timeOption = '&outboundDepartStartTime=' + this.timeOptions[0] + '&outboundDepartEndTime=' + this.timeOptions[1] + '&inboundDepartStartTime=' + this.timeOptions[2] + '&inboundDepartEndTime=' + this.timeOptions[3]
                     //console.log(sessionKey)
                     this.$http({
                         method: 'GET',
-                        url   : optionUrl + sessionKey + option + timeOption,
+                        url   : optionUrl + sessionKey + option + timeOption + optionplus,
                         headers: {
                         'X-RapidAPI-Host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
                         'X-RapidAPI-Key' : '25703e8168mshcbae189ae6af368p1fcb8djsnead03bdc43f6',
@@ -518,16 +544,21 @@ export default {
                           Opcarrierflag = false
                           for (let j=0; j<res.data.Carriers.length; j++) {
                             if (Carrierflag == false && res.data.Carriers[j].Id == res.data.Segments[OutSegmentsId[k]].Carrier) {
-                              // console.log("캐리어 있음")
                               Carrier.push({'Code': res.data.Carriers[j].Code,
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
                               Carrierflag = true
+                              if (ismount) {
+                                if (this.flightselectedName.indexOf(res.data.Carriers[j].Name) == -1) {
+                                  this.flightselectedfixed.push(res.data.Carriers[j].Name)
+                                  this.flightselectedName.push(res.data.Carriers[j].Name)
+                                  this.flightselected.push({'Name': res.data.Carriers[j].Name,
+                                                            'Code': res.data.Carriers[j].Code})
+                                }
+                              }
                             }
                             if (Opcarrierflag == false && res.data.Carriers[j].Id == res.data.Segments[OutSegmentsId[k]].OperatingCarrier) {
-                              // console.log("캐리어 있음")
                               OperatingCarrier.push({
-                                            // 'Num': res.data.Segments[OutSegmentsId[k]].OperatingCarrier,
                                             'Code': res.data.Carriers[j].Code,
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
@@ -577,16 +608,21 @@ export default {
                           Opcarrierflag = false
                           for (let j=0; j<res.data.Carriers.length; j++) {
                             if (Carrierflag == false && res.data.Carriers[j].Id == res.data.Segments[InSegmentsId[k]].Carrier) {
-                              // console.log("캐리어 있음")
                               Carrier.push({'Code': res.data.Carriers[j].Code,
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
                               Carrierflag = true
+                              if (ismount) {
+                                if (this.flightselectedName.indexOf(res.data.Carriers[j].Name) == -1) {
+                                  this.flightselectedfixed.push(res.data.Carriers[j].Name)
+                                  this.flightselectedName.push(res.data.Carriers[j].Name)
+                                  this.flightselected.push({'Name': res.data.Carriers[j].Name,
+                                                            'Code': res.data.Carriers[j].Code})
+                                }
+                              }
                             }
                             if (Opcarrierflag == false && res.data.Carriers[j].Id == res.data.Segments[InSegmentsId[k]].OperatingCarrier) {
-                              // console.log("캐리어 있음")
                               OperatingCarrier.push({
-                                            // 'Num': res.data.Segments[OutSegmentsId[k]].OperatingCarrier,
                                             'Code': res.data.Carriers[j].Code,
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
@@ -652,8 +688,8 @@ export default {
                     this.loading = false
                     return
                   }
-                  if (this.flights.length == 0 && moreflag == 0) {
-                    return this.getFlights(0, 0, s+1)
+                  if (this.flights.length == 0) {
+                    return this.getFlights(0, s+1)
                   } else {
                     if (optionTypeIndex == 4) {
                       this.flights.sort(function(a, b) {
@@ -683,6 +719,7 @@ export default {
           }
         },
         dayCalculate: function (departureTime, arrivalTime) {
+          
           if (parseInt(departureTime.slice(0,4)) < parseInt(arrivalTime.slice(0,4))) {
             return true
           } else if (parseInt(departureTime.slice(5,7)) < parseInt(arrivalTime.slice(5,7))) {
@@ -725,7 +762,7 @@ export default {
           this.limits = 10
           this.thisSortType = sortType
           this.optionTypeIndex = sortTypeIndex
-          this.getFlights(1, sortTypeIndex);
+          this.getFlights(sortTypeIndex, 0);
         },
         // changedValue: function (value) {
         //   this.flights = []
@@ -734,7 +771,7 @@ export default {
         onCheckboxChange : function () {
           console.log(this.selected)
           this.flights = []
-          this.getFlights(1, 0, 0)
+          this.getFlights(0, 0)
         },
         onChange(value) {
           // this.$store.dispatch('handler', value)
@@ -747,7 +784,7 @@ export default {
           this.inboundDepartStartTime = this.timeTransferforSlider(this.inrange[0])
           this.inboundDepartEndTime = this.timeTransferforSlider(this.inrange[1])
           this.flights = []
-          this.getFlights(1, this.optionTypeIndex, 0)
+          this.getFlights(this.optionTypeIndex, 0)
         },
         timeTransferforSlider : function (time) {
           let hour, minute, result
@@ -793,12 +830,35 @@ export default {
           console.log(this.transferedDuration)
           this.flights = []
           this.flightsResult = []
-          this.getFlights(1, this.optionTypeIndex, 0)
+          this.getFlights(this.optionTypeIndex, 0)
           this.flights = []
           for (let i=0; i<this.flightsResult.length; i++) {
             if (this.flightsResult[i].totalDuration <= this.duration) this.flights.push(this.flightsResult[i])
           }
         },
+        flightCheckboxChange : function (value) {
+          console.log(this.flightselectedName)
+          console.log(this.flightselected)
+          this.flightselectedCodes = ''
+          // console.log(value)
+          for (let i=0; i<this.flightselectedName.length; i++) {
+            for (let j=0; j<this.flightselected.length; j++) {
+              if (this.flightselectedName[i] == this.flightselected[j].Name) {
+                if (this.flightselectedCodes == '') {
+                  this.flightselectedCodes = this.flightselected[j].Code
+                } else {
+                  this.flightselectedCodes += ";"
+                  this.flightselectedCodes += this.flightselected[j].Code
+                }
+                break;
+              }
+            }
+          }
+          this.flights = []
+          this.getFlights(this.optionTypeIndex, 0)
+          console.log(this.flightselectedCodes)
+        },
+
     },
 }
 </script>
