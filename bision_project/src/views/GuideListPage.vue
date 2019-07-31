@@ -47,8 +47,10 @@
                             <v-checkbox
                                 class="v-input-custom"
                                 color="success"
+                                v-model="selected"
                                 :label="lang[0]" :value="lang[1]"
                                 :disabled="vInputDisabled"
+                                @change="languageCheckbox"
                             >
                             </v-checkbox>
                         </li>
@@ -64,7 +66,7 @@
                             :max="maxPrice"
                             thumb-color="white"
                             thumb-size="100"
-                            @change="onChangeDuration($event)"
+                            @change="updateResult($event)"
                         ></v-range-slider>
                     </div>
                 </div>
@@ -78,7 +80,7 @@
                                 color="success"
                                 :label="period[0]" :value="idx"
                                 :disabled="vInputDisabled"
-                                @change="durationCheckbox"
+                                @change="updateResult"
                             >
                             </v-checkbox>
                         </li>
@@ -181,6 +183,7 @@ export default {
                     ],
             vInputDisabled: false,
             allLang: true,
+            selected: [],
 
             // 상품 가격별 검색
             minPrice: 1000000000,
@@ -202,8 +205,10 @@ export default {
 
             if (this.vInputDisabled == false) {
                 this.vInputDisabled = true
+                this.selected = ["KR", "US", "FR", "ES", "JP"]
             } else {
                 this.vInputDisabled = false
+                this.selected = []
             }
         },
         getServiceByKeyword: function() {
@@ -268,54 +273,45 @@ export default {
             // {name: "GuideListPage", params: params}
         },
         // 추가
-        onChangeDuration : function () {
-          this.guideServiceList = []
-          for (let i=0; i<this.fixedguideServiceList.length; i++) {
-            if (this.fixedguideServiceList[i].cost <= this.price[1]) {
-              this.guideServiceList.push(this.fixedguideServiceList[i])
-            }
-          }
-        },
         updateResult : function () {
-
-        },
-        durationCheckbox : function () {
-          console.log(this.duration)
           this.guideServiceList = []
           for (let i=0; i<this.fixedguideServiceList.length; i++) {
             for(let j=0; j<this.duration.length; j++) {
               if (this.duration[j] == 0) {
-                if (this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
+                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
                   this.guideServiceList.push(this.fixedguideServiceList[i])
                 }
               } else if (this.duration[j] == 1) {
-                if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
+                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
                   this.guideServiceList.push(this.fixedguideServiceList[i])
                 }
               } else if (this.duration[j] == 2) {
-                if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
+                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
                   this.guideServiceList.push(this.fixedguideServiceList[i])
                 }
               } else if (this.duration[j] == 3) {
-                if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
+                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
                   this.guideServiceList.push(this.fixedguideServiceList[i])
                 }
               }
             }
           }
-          console.log("듀레이션!!")
-          console.log(this.duration)
         },
         durationTransfer : function (duration) {
-          console.log(duration)
           if (duration.indexOf('박') != -1) {
-            console.log(parseInt(duration.slice(duration.indexOf('박') + 1, duration.indexOf('일'))))
-            console.log(parseInt(duration.slice(duration.indexOf('박') + 1, duration.indexOf('일'))) * 86400)
             return parseInt(duration.slice(duration.indexOf('박') + 1, duration.indexOf('일'))) * 86400
           } else {
-            console.log(parseInt(duration.slice(0, duration.indexOf('시'))) * 3600)
             return parseInt(duration.slice(0, duration.indexOf('시'))) * 3600
           }
+        },
+        languageCheckbox : function () {
+          this.guideServiceList = []
+          console.log(this.selected)
+          // for (let i=0; i<this.fixedguideServiceList.length; i++) {
+          //   if (this.selected.indexOf(this.fixedguideServiceList[i].lang) != -1) {
+          //     this.guideServiceList.push(this.this.fixedguideServiceList[i])
+          //   }
+          // }
         }
     },
 }
