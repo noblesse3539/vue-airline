@@ -33,24 +33,24 @@
                     </div>
                     <ul class="result-body__search-by-lang-body">
                         <li>
-                            <v-checkbox 
+                            <v-checkbox
                                 class="v-input-custom"
                                 color="success"
-                                v-model="selected" 
-                                label="모든 언어" 
+                                v-model="selected"
+                                label="모든 언어"
                                 value="allLang"
                                 @click="disableAllVINput"
                             >
-                            </v-checkbox> 
+                            </v-checkbox>
                         </li>
-                        <li v-for="(lang, idx) in langs" :key=idx>
-                            <v-checkbox 
-                                class="v-input-custom" 
-                                color="success" 
+                        <li v-for="(lang, idx) in langs" :key="idx">
+                            <v-checkbox
+                                class="v-input-custom"
+                                color="success"
                                 :label="lang[0]" :value="lang[1]"
                                 :disabled="vInputDisabled"
                             >
-                            </v-checkbox> 
+                            </v-checkbox>
                         </li>
                     </ul>
                 </div>
@@ -64,20 +64,21 @@
                             :max="maxPrice"
                             thumb-color="white"
                             thumb-size="100"
+                            @change="onChangeDuration($event)"
                         ></v-range-slider>
                     </div>
                 </div>
                 <div class="result-body__search-by-period">
                     <p class="result-body__search-by-period-title">여행 기간</p>
                     <ul class="result-body__search-by-period-body">
-                        <li v-for="(period, idx) in periodList" :key=idx>
-                            <v-checkbox 
-                                class="v-input-custom" 
-                                color="success" 
+                        <li v-for="(period, idx) in periodList" :key="idx">
+                            <v-checkbox
+                                class="v-input-custom"
+                                color="success"
                                 :label="period[0]" :value="period[2]"
                                 :disabled="vInputDisabled"
                             >
-                            </v-checkbox> 
+                            </v-checkbox>
                         </li>
                     </ul>
                 </div>
@@ -86,16 +87,16 @@
                 <div class="result-body__result-show">
                     <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과
                 </div>
-                
+
                 <!-- 가이드 상품 검색 결과 -->
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
                     :key = idx
                     @click="goToDetail(idx)"
                 >
-                    <div class="result-body-card">
+                    <div class="result-body-card">                        
                         <div class="result-body-card-imgbox">
-                            <img :src="service.image" 
+                            <img :src="service.image"
                                 alt="guide-tour-image"
                                 class="result-body-card-img"
                                 >
@@ -114,10 +115,10 @@
                             </p>
                             <div class="result-body-card-bottom">
                                 <p>
-                                    <v-rating v-model="guideRating" size="5" dense></v-rating> 
+                                    <v-rating v-model="guideRating" size="5" dense></v-rating>
                                 </p>
                                 <p class="result-body-card-bottom-price">
-                                    <span class="currency">KRW</span> 
+                                    <span class="currency">KRW</span>
                                     <span class="cost" style="color: rgb(34,139,34); font-size: 1.74rem;">{{service.cost}}</span>
                                 </p>
                             </div>
@@ -151,10 +152,10 @@ export default {
     mounted() {
         // this.getServiceAll()
         this.getServiceByKeyword()
-    },     
+    },
     data() {
         return {
-            
+
             // 나라 및 도시
             country_kor: this.$route.params.nation_kor || "",
             city_kor: this.$route.params.city_kor || "",
@@ -163,23 +164,24 @@ export default {
             page: 1,
             guideRating: 4,
             guideServiceList: [],
+            fixedguideServiceList: [],
 
             // 가이드 상품 좋아요 관련
 
             // 가이드 언어별 검색
             langs: [
-                    ["한국어", "KR"], 
-                    ["영어", "US"], 
-                    ["프랑스어", "FR"], 
-                    ["스페인어", "ES"], 
+                    ["한국어", "KR"],
+                    ["영어", "US"],
+                    ["프랑스어", "FR"],
+                    ["스페인어", "ES"],
                     ["일본어", "JP"],
                     ],
             vInputDisabled: false,
             allLang: true,
 
             // 상품 각겨별 검색
-            minPrice: 8350,
-            maxPrice: 700000,
+            minPrice: 1000000000,
+            maxPrice: 0,
             price: [8350, 700000],
 
             // 여행 기간
@@ -202,13 +204,13 @@ export default {
         },
         getServiceByKeyword: function() {
 
-            const keyword = this.city_kor || this.nation_kor 
-            
+            const keyword = this.city_kor || this.nation_kor
+
             this.$http.get(`/api/guideservice/search/${keyword}`)
             .then( res=> {
                 // console.log(res.data)
                 res.data.guideservices.forEach( eachService => {
-                        let parsedDetail = new JSSoup(eachService.detail).text                        
+                        let parsedDetail = new JSSoup(eachService.detail).text
                         const temp = {}
                         temp.title      = eachService.desc
                         temp.detail     = parsedDetail
@@ -218,9 +220,14 @@ export default {
                         temp.cost       = eachService.cost
                         temp.city       = eachService.city_kor
                         temp.serviceId  = eachService._id
-                        temp.guideId    = eachService.user ? eachService.user._id : '' 
+                        temp.guideId    = eachService.user ? eachService.user._id : ''
                         this.guideServiceList.push(temp)
+                        this.fixedguideServiceList.push(temp)
+                        if (temp.cost > this.maxPrice) this.maxPrice = temp.cost
+                        if (temp.cost < this.minPrice) this.minPrice = temp.cost
                     })
+                    this.price[0] = this.minPrice
+                    this.price[1] = this.maxPrice
             })
         },
         getServiceAll : function() {
@@ -228,7 +235,7 @@ export default {
                 .then( res => {
                     // console.log(res.data)
                     res.data.forEach( eachService => {
-                        let parsedDetail = new JSSoup(eachService.detail).text                        
+                        let parsedDetail = new JSSoup(eachService.detail).text
                         const temp = {}
                         temp.title      = eachService.desc
                         temp.detail     = parsedDetail
@@ -237,8 +244,9 @@ export default {
                         temp.duration   = eachService.duration
                         temp.cost       = eachService.cost
                         temp.city       = eachService.city_kor
-                        temp.guideId    = eachService.user ? eachService.user._id : '' 
+                        temp.guideId    = eachService.user ? eachService.user._id : ''
                         this.guideServiceList.push(temp)
+                        this.fixedguideServiceList.push(temp)
                     })
                 })
         },
@@ -248,12 +256,24 @@ export default {
             // console.log(guideId)
         },
         goToDetail: function(serviceIdx) {
-            
+
             const params = this.guideServiceList[serviceIdx]
             const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
-            
+
             this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
             // {name: "GuideListPage", params: params}
+        },
+        // 추가
+        onChangeDuration : function () {
+          this.guideServiceList = []
+          for (let i=0; i<this.fixedguideServiceList.length; i++) {
+            if (this.fixedguideServiceList[i].cost <= this.price[1]) {
+              this.guideServiceList.push(this.fixedguideServiceList[i])
+            }
+          }
+        },
+        updateResult : function () {
+
         },
     },
 }

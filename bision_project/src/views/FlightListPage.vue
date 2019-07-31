@@ -106,7 +106,7 @@
           </div>
           <!-- 항공사별 체크 박스 -->
           <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: #45CE30; padding-bottom: 10px; padding-top: 20px;">
+            <div style="font-size: 25px !important; color: #45CE30; padding-bottom: 10px; padding-top: 15px;">
               <i class="far fa-paper-plane"></i> 항공사
             </div>
             <!-- <hr style="width: 220px"> -->
