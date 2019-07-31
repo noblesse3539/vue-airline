@@ -673,8 +673,25 @@
     cursor: pointer;
 }
 
+.GS-individual-option-detail-option-select {
+    width: 20%;
+}
+
 .GS-guide-detail-guideImg-image {
     border-radius: 50%;
     width: 100%;
     height: auto;
+}
+
+.GS-date-picker {
+    z-index: 500;
+    top: 0 !important;
+    /* left: 0 !important; */
+    /* position: relative; */
+    /* max-width: 100% !important; */
+}
+
+.GS-body__search-by-date {
+    display: flex;
+    justify-content: space-between;
 }

@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getUserId : state => state.User.getUserId
+      getUserId : state => state.User.getUserId,
     })
   },
   methods: {

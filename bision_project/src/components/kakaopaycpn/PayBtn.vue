@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import payIcon from '../../assets/kakaopay/kakaopay/payment_icon_yellow_large.png'
 
 export default {
@@ -22,6 +23,17 @@ export default {
         'totalAmount',
         'taxFreeAmount'
     ],
+    mounted() {
+        
+    },
+    computed: {
+        ...mapState({
+            // getServiceInfo : state => state.Guideservice.serviceInfo
+        }),
+        ...mapGetters({
+            getServiceInfo: 'getServiceInfo',
+        })
+    },
     methods: {
         payment() {
             const paymentURL = '/api/kakaopay'
@@ -33,10 +45,15 @@ export default {
             }
             this.$http.post(paymentURL, data)
                 .then( res => {
-                    console.log(res)
-                    window.location.href = res.data.next_redirect_pc_url
-                })
+                    // console.log(res)
 
+                    console.log(res.data.next_redirect_pc_url)
+                    console.log(this.getServiceInfo)
+                    // window.location.href = res.data.next_redirect_pc_url
+                })
+        },
+        goToNext() {
+            
         },
     }
 }
