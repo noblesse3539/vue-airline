@@ -11,8 +11,13 @@ const guide =require('./guide')
 const guideservice = require('./guideservice')
 const review = require('./review')
 const tag=require('./tag')
+const option=require('./option')
+const paidOption=require('./paidOption')
+
 const kakaopay = require('./kakaopay')
 const paymentstore = require('./paymentstore')
+
+
 // SuperUser
 router.use('/superauth', superAuth)
 router.use('/superuser', authMiddleware)
