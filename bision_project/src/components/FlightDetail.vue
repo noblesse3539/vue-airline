@@ -10,7 +10,7 @@
           <div class="flightinfo">
 
             <!-- 가는 비행기 -->
-            <h3>가는날 출발시간<span style="color:grey"> {{getDate(0, flight.OutSegments)}}</span></h3>
+            <h3 style="font-size:1.3rem;">가는날 출발시간<span style="color:grey; font-size:0.95em;"> &nbsp; {{getDate(0, flight.OutSegments)}}</span></h3>
             <div class="ticket" @click="isOutVisible = !isOutVisible" @mouseover="outArrow = true" @mouseleave = "outArrow = false">
               <img height="40px" :src="flight.OutCarrierImageUrl" alt="">
               <div class="departure">
@@ -31,60 +31,37 @@
               <v-icon class="arrow" v-if="!isOutVisible" :color="`${outArrow? '#35c235':'grey'}`" large>fa-chevron-down</v-icon>
             </div>
 
+
             <!-- 더보기 -->
             <div v-if="isOutVisible" class="moreDetail">
-              <div>
                 <div v-for="(plane, index) in flight.OutSegments">
-                  <div v-if="index">
-                    <!-- <h2>{{flight.OutSegments[index].DepartureDateTime}} {{flight.OutSegments[index-1].ArrivalDateTime}}</h2> -->
-                    <h2>{{getWaiting(flight.OutSegments[index].DepartureDateTime, flight.OutSegments[index-1].ArrivalDateTime)}}</h2>
+                  <div v-if="index" class="waitTimeBox">
+                    <img src="../assets/hourglass (1).png" height="20px"alt=""> &nbsp;
+                    {{getWaiting(flight.OutSegments[index].DepartureDateTime, flight.OutSegments[index-1].ArrivalDateTime)}}
                   </div>
-                  <div>
-                    <img :src="plane.OperatingCarrier[0].ImageUrl" width="50px" alt="">
+                  <div class="planeInfo">
+                    <img :src="getFavicon(plane.OperatingCarrier[0].ImageUrl)" width="30px" alt="">
                     {{plane.OperatingCarrier[0].Name}} {{plane.OperatingCarrier[0].Code}}{{plane.FlightNumber}}
-                    <!-- {{`${plane.OperatingCarrier[0].Code != plane.Carrier[0].Code ? '| '+plane.Carrier[0].Name+'에서 운항':''}`}} -->
                     <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" >| {{plane.Carrier[0].Name}}에서 운항</span>
                   </div>
-                  <div>
-                    {{parseInt(plane.Duration/60)}}시간 <span v-if="plane.Duration%60">{{plane.Duration%60}}분</span>
-                  </div>
-                  <img src="../assets/line.png" width="50px" alt="">
-                  <div>
-                    <div>
-                      <p>{{dateTimeToTime(plane.DepartureDateTime)}}</p>
-                      <p>{{plane.OriginStation[0].AirportCode}} {{plane.OriginStation[0].AirportName}}</p>
-                    </div>
-                    <div>
+                  <div class="detailTimeInfo">
+                    <img src="../assets/line.png" height="100px;" alt="">
+                    <div class="time">
+                      <p>{{dateTimeToTime(plane.DepartureDateTime)}} </p>
+                      <p class="duration">&nbsp;<img src="../assets/passage-of-time.png" height="20px;" alt=""> &nbsp; {{parseInt(plane.Duration/60)}}시간 <span v-if="plane.Duration%60">{{plane.Duration%60}}분</span></p>
                       <p>{{dateTimeToTime(plane.ArrivalDateTime)}}</p>
+                    </div>
+                    <div class="time">
+                      <p>{{plane.OriginStation[0].AirportCode}} {{plane.OriginStation[0].AirportName}}</p>
                       <p>{{plane.DestinationStation[0].AirportCode}} {{plane.DestinationStation[0].AirportName}}</p>
                     </div>
                   </div>
                 </div>
                 <div><b>도착 : </b> {{getDate(flight.OutNumofStop, flight.OutSegments)}} <b>| 여행 기간 : </b>{{flight.OutDuration}}</div>
               </div>
-            </div>
-              <!-- <div>
-                <img src="../assets/out.png" width="50px" alt="outImg"> !항공편명
-              </div>
-              <div class="timeInfo">
-                <div>{{flight.OutDuration}}</div>
-
-                <img src="" alt="">
-                <div>
-                  {{flight.OutDepartureTime}}<br>
-                  {{flight.OutArrivalTime}}
-                </div>
-                <div>
-                  {{flight.OriginAirportCode}} !출발공항명<br>
-                  {{flight.DestinationAirportCode}} !도착공항명
-                </div>
-              </div>
-              <div>도착: !도착날짜 | 여행 기간: {{flight.OutDuration}}</div>
-            </div>
-            <div v-if="isOutVisible && flight.OutNumofStop != 0" class="moreDetail">경유있음</div> -->
 
             <!-- 오는 비행기 -->
-            <h3 style="margin-top: 25px;">오는날 출발시간<span style="color:grey"> !출발날짜</span></h3>
+            <h3 style="margin-top: 2rem; font-size: 1.3rem; ">오는날 출발시간<span style="color:grey; font-size:0.95em;"> &nbsp; {{getDate(0, flight.InSegments)}}</span></h3>
             <div class="ticket" @click="isInVisible = !isInVisible"  @mouseover="inArrow = true" @mouseleave = "inArrow = false">
               <img height="40px" :src="flight.InCarrierImageUrl" alt="">
               <div class="departure">
@@ -104,27 +81,36 @@
               <v-icon class="arrow" v-if="isInVisible" color="#35c235" large>fa-chevron-up</v-icon>
               <v-icon class="arrow" v-if="!isInVisible" :color="`${inArrow? '#35c235':'grey'}`" large>fa-chevron-down</v-icon>
             </div>
-            <div v-if="isInVisible && flight.InNumofStop == 0" class="moreDetail">
-              <div>
-                  <i style="color: grey; margin-left:5rem;" class="fas fa-plane-arrival"></i> !항공편명
-              </div>
-              <div class="timeInfo">
-                <div>{{flight.InDuration}}</div>
-                <img src="" alt="">
-                <div>
-                  {{flight.InDepartureTime}}<br>
-                  {{flight.InArrivalTime}}
+
+            <!-- 오는 상세정보 -->
+            <div v-if="isInVisible" class="moreDetail">
+                <div v-for="(plane, index) in flight.InSegments">
+                  <div v-if="index" class="waitTimeBox">
+                    <img src="../assets/hourglass (1).png" height="20px"alt=""> &nbsp;
+                    {{getWaiting(flight.InSegments[index].DepartureDateTime, flight.InSegments[index-1].ArrivalDateTime)}}
+                  </div>
+                  <div class="planeInfo">
+                    <img :src="getFavicon(plane.OperatingCarrier[0].ImageUrl)" width="30px" alt="">
+                    {{plane.OperatingCarrier[0].Name}} {{plane.OperatingCarrier[0].Code}}{{plane.FlightNumber}}
+                    <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" >| {{plane.Carrier[0].Name}}에서 운항</span>
+                  </div>
+                  <div class="detailTimeInfo">
+                    <img src="../assets/line.png" height="100px;" alt="">
+                    <div class="time">
+                      <p>{{dateTimeToTime(plane.DepartureDateTime)}} </p>
+                      <p class="duration">&nbsp;<img src="../assets/passage-of-time.png" height="20px;" alt=""> &nbsp; {{parseInt(plane.Duration/60)}}시간 <span v-if="plane.Duration%60">{{plane.Duration%60}}분</span></p>
+                      <p>{{dateTimeToTime(plane.ArrivalDateTime)}}</p>
+                    </div>
+                    <div class="time">
+                      <p>{{plane.OriginStation[0].AirportCode}} {{plane.OriginStation[0].AirportName}}</p>
+                      <p>{{plane.DestinationStation[0].AirportCode}} {{plane.DestinationStation[0].AirportName}}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  {{flight.DestinationAirportCode}} !출발공항명<br>
-                  {{flight.OriginAirportCode}} !도착공항명
-                </div>
+                <div><b>도착 : </b> {{getDate(flight.InNumofStop, flight.InSegments)}} <b>| 여행 기간 : </b>{{flight.InDuration}}</div>
               </div>
-              <div>도착: !도착날짜 | 여행 기간: {{flight.InDuration}}</div>
             </div>
-            <div v-if="isInVisible && flight.InNumofStop !=0" class="moreDetail stop">경유있음</div>
-            <div>{{flight}}</div>
-          </div>
+
 
           <div class="secondSection">
              <div class="costInfo">
@@ -138,7 +124,8 @@
                     </div>
                   </div>
                   <div class="readBeforeBooking" @click="isRBBVisible = !isRBBVisible">
-                    <h5>예약전에 확인해주세요.</h5>
+
+                    <h4>예약전에 확인해주세요. </h4>
                     <v-icon v-if="isRBBVisible" color="#35c235" small>fa-chevron-up</v-icon>
                     <v-icon v-if="!isRBBVisible" color="#35c235" small>fa-chevron-down</v-icon>
                   </div>
@@ -201,20 +188,22 @@ export default {
         h -= 12
         return '오후 ' + h + v.substr(13, 3)
       }
+      if(!h) h = 12
       return '오전 ' + h + v.substr(13, 3)
     },
-    getWaiting (departure, arrival, final) {
+    getWaiting (departure, arrival, final, i) {
       let h = parseInt(departure.substr(11, 2) - arrival.substr(11, 2))
       let m = parseInt(departure.substr(14, 2) - arrival.substr(14, 2))
+      let wt
       if (m < 0) {
         h -= 1
         m += 60
       }
-      if (h < 0) {
-        h += 60
-      }
-      if(!h) return m + '분'
-      return h + '시간 ' + m + '분'
+      if (h < 0)  h += 24
+
+      if(!h) wt =  m + '분'
+      else wt =  h + '시간 ' + m + '분'
+      return wt
     },
     getDate(i, segments){
       let v
@@ -222,7 +211,10 @@ export default {
       if(i) v = segments[i].ArrivalDateTime
       else v = segments[0].DepartureDateTime
       return v.substr(0, 4) + '년 ' + parseInt(v.substr(5, 2)) + '월 ' + parseInt(v.substr(8, 2)) + '일'
-    }
+    },
+    getFavicon(url) {
+      return url.replace("nes/","nes/favicon/")
+    },
   },
 }
 </script>

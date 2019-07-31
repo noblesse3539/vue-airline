@@ -106,7 +106,7 @@
    }
 }
 .moreDetail{
-  padding: 20px;
+  padding:30px;
   border: dashed 1px rgb(197, 249, 179);
   border-radius: 10px;
 }
@@ -125,6 +125,7 @@
   color: #35c235;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .readBeforeBooking__Toggle {
   font-size: 0.75rem;
@@ -145,7 +146,7 @@
   font-size: 1.8rem;
 }
 .bookLink {
-  padding: 0 1rem;
+  padding: 1rem 1rem;
   margin: 1rem 0;
   display: flex;
   justify-content: space-between;
@@ -155,9 +156,51 @@
   width: 100%;
   height: 0;
   position: absolute;
-  background-color:  #35c235;
+  background: linear-gradient(#80ffff, #8eff4d);
+  /* background-color:  #35c235; */
   border-radius: 10px;
-  opacity: 0.2;
+  opacity: 0.1;
   z-index: 10;
   cursor: pointer;
+}
+.planeInfo {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 3rem 3rem;
+  font-size: 1.3rem;
+  color:grey;
+
+}
+.planeInfo img {
+    margin-right: 1rem;
+}
+.waitTimeBox {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(#faffff, #fafff7);
+  border-radius: 7px;
+  margin-bottom: 3rem;
+  padding: 1.5rem 3rem;
+  font-size: 1.3rem;
+  color: #e0554e;
+  /* font-weight: ; */
+}
+.detailTimeInfo {
+  font-size: 1.2rem;
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.detailTimeInfo .time {
+  margin-left: 2rem;
+  margin-right: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.detailTimeInfo .duration {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: dimgrey;
 }
