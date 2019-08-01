@@ -14,10 +14,16 @@
         <p><span style="font-weight: 700; text-transform: capitalize;">
             {{getUsername}}</span>님의 메일로 예약하신 가이드 상품에 대한 상세 정보를 발송하였습니다.
         </p>
-        <a id="kakao-link-btn" @click="sendLink()">
-            <img src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
-        </a>
-        {{this.serviceInfo}}
+
+        <div class="sharing-itineraries">
+            <p class="sharing-itineraries-title">
+                친구들에게 일정을 공유해보세요!
+            </p>
+            <a id="kakao-link-btn" @click="sendLink()">
+                <img class="kakao-link-btn-img" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
+            </a>
+        </div>
+        <!-- {{this.serviceInfo}} -->
     </div>
 </template>
 
@@ -36,6 +42,7 @@ export default {
             serviceInfo : {
             },
             userId: '',
+            userName: this.getUsername,
 
             notification: window.Notification,
         }
@@ -61,7 +68,7 @@ export default {
                 .then(res => {
                 if (res.status == 200) {
                     this.userId = res.data.info._id
-                    const baseUrl = "/api/paymentstore/tmp/" + this.userId
+                    const baseUrl = "/api/paymentstore/tmp/" + this.userId  
                     this.$http.get(baseUrl)
                         .then( res => {
                             this.serviceInfo = res.data.tmpStore.service
@@ -111,55 +118,14 @@ export default {
             }
         },
         sendLink() {
-            Kakao.Link.sendDefault({
-                objectType: 'list',
-                headerTitle: 'WEEKLY MAGAZINE',
-                headerLink: {
-                mobileWebUrl: 'https://developers.kakao.com',
-                webUrl: 'https://developers.kakao.com'
-                },
-                contents: [{
-                title: '취미의 특징, 탁구',
-                description: '스포츠',
-                imageUrl: 'http://mud-kage.kakao.co.kr/dn/bDPMIb/btqgeoTRQvd/49BuF1gNo6UXkdbKecx600/kakaolink40_original.png',
-                link: {
-                    mobileWebUrl: 'https://developers.kakao.com',
-                    webUrl: 'https://developers.kakao.com'
+                Kakao.Link.sendCustom({
+                templateId: 17427,
+                templateArgs: {
+                'title': '이빵글의 여행 일정입니다.',
+                'description': '이빵글의 여행 일정입니다.',
+                'imageUrl' : 'https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg',
                 }
-                }, {
-                title: '크림으로 이해하는 커피이야기',
-                description: '음식',
-                imageUrl: 'http://mud-kage.kakao.co.kr/dn/QPeNt/btqgeSfSsCR/0QJIRuWTtkg4cYc57n8H80/kakaolink40_original.png',
-                link: {
-                    mobileWebUrl: 'https://developers.kakao.com',
-                    webUrl: 'https://developers.kakao.com'
-                }
-                }, {
-                title: '감성이 가득한 분위기',
-                description: '사진',
-                imageUrl: 'http://mud-kage.kakao.co.kr/dn/c7MBX4/btqgeRgWhBy/ZMLnndJFAqyUAnqu4sQHS0/kakaolink40_original.png',
-                link: {
-                    mobileWebUrl: 'https://developers.kakao.com',
-                    webUrl: 'https://developers.kakao.com'
-                }
-                }],
-                buttons: [
-                {
-                    title: '웹으로 보기',
-                    link: {
-                    mobileWebUrl: 'https://developers.kakao.com',
-                    webUrl: 'https://developers.kakao.com'
-                    }
-                },
-                {
-                    title: '앱으로 보기',
-                    link: {
-                    mobileWebUrl: 'https://developers.kakao.com',
-                    webUrl: 'https://developers.kakao.com'
-                    }
-                }
-                ]
-            });
+            })
         }
     },
     computed: {
