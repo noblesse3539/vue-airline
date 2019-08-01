@@ -13,8 +13,8 @@
           
           <!-- 가이드 유저 정보 -->
           <div class="GS-guide-detail-guideDetail">
-            <div class="GS-guide-detail-guideImg" v-if="guideInfo.guideImg" @click="goToGuideDetail">
-              <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!">
+            <div class="GS-guide-detail-guideImg"  @click="goToGuideDetail">
+              <img class="GS-guide-detail-guideImg-image" src="https://t1.daumcdn.net/cfile/tistory/999DDE435AB8E9AE31" alt="Our guide's beautiful face!">
             </div>
             <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
