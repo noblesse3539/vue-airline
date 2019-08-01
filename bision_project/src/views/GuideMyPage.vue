@@ -27,7 +27,7 @@
 
       <!-- Introduction -->
       <v-flex xs6>
-        <h2 class="display-1 mb-3">GuideName
+        <h2 class="display-1 mb-3">{{guideName}}
 
           <!-- v-if: 본인일 때 -->
           <v-tooltip right>
@@ -145,6 +145,7 @@ import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
 import './GuideMyPage.css'
+import { mapGetters, mapState } from "vuex";
 export default {
   name: 'GuideMypage',
   components:{
@@ -152,6 +153,7 @@ export default {
     UploadImgModal,
     PortfolioWrite,
   },
+  props: ['guideId'],
   methods: {
     getImgUrl(img){
       return require('../assets/' + img)
@@ -173,6 +175,7 @@ export default {
     },
     doneET(){
       this.intro = this.introTemp;
+      this.updateIntro()
       this.isETVisible = false;
     },
     cancelET(){
@@ -190,10 +193,29 @@ export default {
     },
     closePW(){
       this.isPWVisible = false;
+    },
+    updateIntro() {
+      const guideId = this.getUserId
+      const config = {
+        'intro': this.intro
+      }
+      this.$http.put(`/api/guide/${guideId}`, config)
+        .then( res => {
+          console.log(res.data)
+        })
+    },
+    GuideDataRequest() {
+      this.$http.get(`/api/guide/${this.guideId}`)
+      .then(res => {
+        const guide = res.data.guide
+        if(guide.intro) this.intro = guide.intro
+        this.guideName = guide.nickname
+      })
     }
   },
   data (){
     return{
+      guideName: '',
       rating: 4,
       isIUVisible: false,
       isETVisible: false,
@@ -208,12 +230,15 @@ export default {
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'}
       ],
-      
-      
     }
   },
+  computed: {
+    ...mapState({
+      getUserId: state => state.User.userId
+    })
+  },
   mounted() {
-
+    this.GuideDataRequest()
   },
 }
 </script>

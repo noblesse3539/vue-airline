@@ -48,7 +48,7 @@ export default new Router({
             component: MyPage
         },
         {
-            path: '/guidemypage',
+            path: '/guide/:guideId',
             name: 'GuideMyPage',
             component: GuideMyPage,
             props: true 

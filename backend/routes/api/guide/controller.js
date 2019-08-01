@@ -31,7 +31,7 @@ exports.deleteByUserObId = (req,res) => {
 }
 
 exports.updateByUserObId = (req,res) => {
-  Guide.findOne({user:req.params.user}, (err,guide) => {
+  Guide.findOne({id:req.params.id}, (err, guide) => {
       if (guide) {
             console.log(guide)
             let id=guide._id
@@ -70,5 +70,51 @@ exports.guideList = (req, res) => {
   .populate('user', '-password')
   .then( guides => {
     res.json({guides})
+  })
+}
+
+// google guide 함수들
+exports.updateGuide = (req,res) => {
+  Guide.findOneAndUpdate(
+    {_id: req.params.id}, 
+    { $set: req.body}, 
+    (err, guide) => {
+      if (err) {
+        console.log(err)
+        res.json({success: false, error: err})
+      }
+      res.json({success: true})
+  })
+}
+
+exports.deleteGuide = (req,res) => {
+  Guide.findOneAndDelete(
+    {id: req.params.id},  
+    (err, result) => {
+      if (err) res.status(500).json({error: err})
+      res.status(200).json({success: true})
+  })
+}
+
+exports.getGuide = (req,res) => {
+  Guide.find()
+  .where('_id').equals(req.params.id)
+  .then( guide => {
+    if (!guide) res.status(204).json({message:"가이드를 찾을 수 없습니다."})
+    res.status(200).json({guide: guide[0]})
+  })
+  .catch( err => {
+    console.log(err)
+    res.status(500).json({error: err})
+  })
+}
+
+exports.getGuideList = (req,res) => {
+  Guide.find({})
+  .then( guides => {
+    res.status(200).json({guides})
+  })
+  .catch(err => {
+    res.status(500).json({'error': err})
   })
 }

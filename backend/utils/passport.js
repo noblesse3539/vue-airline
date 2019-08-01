@@ -6,12 +6,10 @@ const Guide = require('../models/guide')
 
 module.exports = (passport) => {
     passport.serializeUser(function(user, done) {
-        console.log('serializeUser 호출')
         done(null, user.id)
     })
       
     passport.deserializeUser(function(id, done) {
-        console.log('deserializeUser 호출')
         User.findOne({id: id}, function(err, user) {
           done(err, user)
         })

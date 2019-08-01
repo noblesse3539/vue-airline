@@ -45,7 +45,7 @@ export default {
     // console.log(this.getUserId)
   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       getUserId: state => state.User.getUserId
     })
   },
