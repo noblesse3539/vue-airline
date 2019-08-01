@@ -162,8 +162,8 @@ export default {
         return {
 
             // 나라 및 도시
-            country_kor: this.$route.params.nation_kor || "",
-            city_kor: this.$route.params.city_kor || "",
+            country_kor: this.$route.query.nation_kor || "",
+            city_kor: this.$route.query.city_kor || "",
 
             // 가이드 상품 리스트 관련
             page: 1,
