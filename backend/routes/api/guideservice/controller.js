@@ -2,7 +2,7 @@ const GuideService = require('../../../models/guideservice')
 const Tag = require('../../../models/tag')
 const Review = require('../../../models/review')
 const User = require('../../../models/user')
-const Option = require('../../../models/user')
+const Option = require('../../../models/option')
 
 exports.findReview = (req, res) => {
   console.log('findReview');
@@ -127,23 +127,18 @@ exports.createGuideService = (req,res) =>{
   console.log(req.body);
   tagsName=req.body.tags;
   req.body.tags=[];
-  console.log(tagsName);
-  console.log(req.body.tags);
   options=req.body.options;
   req.body.options=[];
   console.log(options);
-  console.log(req.body.options);
   var GS=new GuideService(req.body);
   let guideserviceId=GS._id
   GS.save(err => {
     for (var i = 0; i < tagsName.length; i++) {
       const tag = new Tag({tag:tagsName[i]})
       tag.guideservice=GS._id
-      console.log(tag);
       tag.save()
         .then((result) => {
           GuideService.findOne({_id:guideserviceId}, (err, guideservice) => {
-            console.log(tag);
               if(err) res.status(500).json({err})
               if (guideservice) {
                   guideservice.tags.push(tag);
@@ -155,11 +150,9 @@ exports.createGuideService = (req,res) =>{
     for (var i = 0; i < options.length; i++) {
       const option = new Option(options[i])
       option.guideservice=GS._id
-      console.log(option);
       option.save()
         .then((result) => {
           GuideService.findOne({_id:guideserviceId}, (err, guideservice) => {
-            console.log(option);
               if(err) res.status(500).json({err})
               if (guideservice) {
                   guideservice.options.push(option);
