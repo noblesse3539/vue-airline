@@ -10,7 +10,7 @@ router.get('/guide', passport.authenticate('googleGuide', { scope: ['profile', '
 
 router.get(
     '/callback',
-    passport.authenticate('googleUser', { failureRedirect: '/'}),
+    passport.authenticate('googleUser', { failureRedirect: '/', session: false}),
     (req, res) => {
         
         jwt.sign(
@@ -41,7 +41,7 @@ router.get(
 )
 router.get(
     '/callback-guide',
-    passport.authenticate('googleGuide', { failureRedirect: '/'}),
+    passport.authenticate('googleGuide', { failureRedirect: '/', session: false}),
     (req, res) => {
         
         jwt.sign(

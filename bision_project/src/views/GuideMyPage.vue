@@ -145,6 +145,7 @@ import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
 import './GuideMyPage.css'
+import { mapGetters, mapState } from "vuex";
 export default {
   name: 'GuideMypage',
   components:{
@@ -173,6 +174,7 @@ export default {
     },
     doneET(){
       this.intro = this.introTemp;
+      // this.updateIntro()
       this.isETVisible = false;
     },
     cancelET(){
@@ -190,6 +192,10 @@ export default {
     },
     closePW(){
       this.isPWVisible = false;
+    },
+    updateIntro() {
+      // const guideId = 
+      this.$http.put(`/api/guide/${guideId}`)
     }
   },
   data (){
@@ -212,8 +218,13 @@ export default {
       
     }
   },
+  computed: {
+    ...mapGetters({
+      getUserId: state => state.User.getUserId
+    })
+  },
   mounted() {
-
+    console.log(this.getUserId)
   },
 }
 </script>

@@ -17,22 +17,22 @@ router.get('/check', controller.check)
 
 router.use('/google', googleRouter)
 
-router.get('/login', (req,res) => {
-    let redirectUrl = req.query.redirectUrl
+// router.get('/login', (req,res) => {
+//     let redirectUrl = req.query.redirectUrl
     
-    if (redirectUrl) {
-        res.cookie('redirectUrl', redirectUrl, {
-            expires: new Date(Date.now() + (60 * 1000 * 3)),
-            httpOnly: true
-        })
-    }
-    res.end()
-})
+//     if (redirectUrl) {
+//         res.cookie('redirectUrl', redirectUrl, {
+//             expires: new Date(Date.now() + (60 * 1000 * 3)),
+//             httpOnly: true
+//         })
+//     }
+//     res.end()
+// })
 
-router.get('/logout', (req, res) => {
-    req.logOut()
-    res.redirect('/')
-})
+// router.get('/logout', (req, res) => {
+//     req.logOut()
+//     res.redirect('/')
+// })
 
 
 

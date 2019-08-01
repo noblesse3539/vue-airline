@@ -3,14 +3,13 @@ const Schema = mongoose.Schema
 const crypto = require('crypto')
 const config = require('../config')
 const User = require('./user')
-
 const Guide = new Schema({
     id: {type: String, unique: true},
     nickname: String,
     username: String,
     profileImageUrl: String,
     email: {type: String, unique: true},
-
+    intro: String,
     // user: { type: Schema.Types.ObjectId, ref: 'User'},
     nation_eng:String,
     nation_kor:String,

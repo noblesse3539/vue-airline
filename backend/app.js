@@ -13,6 +13,8 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const sampleRouter = require('./routes/sample')
 const bodyParser = require('body-parser')
+const fs = require('fs')
+const rfs = require("rotating-file-stream")
 const winston = require("winston"),
     expressWinston = require('express-winston')
 
@@ -39,18 +41,18 @@ app.io = require('socket.io')(server)
 const db = require('./db.js')
 
 // logging
-app.use(expressWinston.logger({
-  transports: [
-      new winston.transports.Console(),
-      new winston.transports.File({ filename: 'app.log' })
-  ],
-  format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.json()
-  ),
-  meta: true,
-  msg: "HTTP {{req.method}} {{req.url}} {{req.headers['x-forwarded-for'] || req.connection.remoteAddress}} Welcome!",
-}))
+// app.use(expressWinston.logger({
+//   transports: [
+//       new winston.transports.Console(),
+//       new winston.transports.File({ filename: 'app.log' })
+//   ],
+//   format: winston.format.combine(
+//       winston.format.colorize(),
+//       winston.format.json()
+//   ),
+//   meta: true,
+//   msg: "HTTP {{req.method}} {{req.url}} {{req.headers['x-forwarded-for'] || req.connection.remoteAddress}} Welcome!",
+// }))
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -96,8 +98,26 @@ app.set('view engine', 'pug')
 
 db()
 
+/* =======================
+    LOGGING CONFIG
+==========================*/
+const logfileName = () => {
+  const D = new Date()
+  let m = (D.getMonth() + 1).toString()
+  let d = D.getDate().toString()
+  return `${D.getFullYear()}-${m.length === 1? "0"+m: m}-${d.length === 1? "0"+d: d}.log`
+}
 
+const accessLogStream = rfs(logfileName(), {
+  interval: '1d', // rotate daily
+  path: path.join(__dirname, 'log')
+})
+app.use(morgan('combined', { stream: accessLogStream }))
 app.use(morgan('dev'))
+
+
+
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
