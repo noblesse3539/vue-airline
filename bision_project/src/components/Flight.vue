@@ -124,7 +124,7 @@
             {{CurrencySymbol}}&nbsp{{LowestPrice}}
           </div>
           <div class="center">
-            <v-btn @click="showFD()" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
+            <v-btn @click="showFD" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
             <FlightDetail v-if="isFDVisible" :flight="this._props" @close="closeFD"></FlightDetail>
           </div>
           <!-- 모달 -->
@@ -186,9 +186,15 @@ export default {
     },
     methods: {
       showFD() {
+        // var el = document.querySelector("body")
+        // el.style.overflow="hidden !important"
+        document.documentElement.style.overflow='hidden';
+        document.body.scroll="no";
         this.isFDVisible = true
       },
       closeFD() {
+        document.documentElement.style.overflow='scroll';
+        document.body.scroll="yes";
         this.isFDVisible = false
       },
       stops : function (stop, index) {
