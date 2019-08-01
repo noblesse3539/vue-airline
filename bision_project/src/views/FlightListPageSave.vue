@@ -43,9 +43,9 @@
               <i class="fas fa-plane-arrival"></i> 경유
             </div>
             <!-- <hr style="width: 220px"> -->
-            <v-checkbox v-model="selected" label="직항" value="0" @change="onCheckboxChange"></v-checkbox>
-            <v-checkbox v-model="selected" label="1회 경유" value="1" @change="onCheckboxChange"></v-checkbox>
-            <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="onCheckboxChange"></v-checkbox>
+            <v-checkbox v-model="selected" label="직항" value="0" @change="updateResult"></v-checkbox>
+            <v-checkbox v-model="selected" label="1회 경유" value="1" @change="updateResult"></v-checkbox>
+            <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="updateResult"></v-checkbox>
           </div>
           <!-- 시간대별 검색 슬라이더 -->
           <div class="container" style="width: 220px; padding: 0px; margin-left: 10%;">
@@ -94,7 +94,7 @@
             <!-- <span style="display: block; font-size: 17px;">총 소요시간</span> -->
             <span>{{transferedMinDuration}} - </span>
             <span>{{transferedDuration}}</span>
-            <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="onChangeDuration($event)">
+            <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="updateResult($event)">
               <template>
                 <v-text-field v-model="duration" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px"></v-text-field>
               </template>
@@ -111,7 +111,7 @@
             </div>
             <!-- <hr style="width: 220px"> -->
             <div v-for="i in flightselectedfixed.length" :key="i">
-              <v-checkbox v-model="flightselectedName" :label="flightselectedfixed[i-1]" :value="flightselectedfixed[i-1]" @change="flightCheckboxChange(value)"></v-checkbox>
+              <v-checkbox v-model="flightselectedName" :label="flightselectedfixed[i-1]" :value="flightselectedfixed[i-1]" @change="updateResult()"></v-checkbox>
             </div>
           </div>
         </div>
@@ -235,8 +235,18 @@ export default {
           flightselectedName: [],
           flightselectedCodes: '',
           flightselected: [],
+
+          // 정렬에 따른 결과 저장
           flights: [],
-          flightsResult: [],
+          flightsSorted : [
+            [], // SortbyPrice
+            [], // SortbyDuration
+            [], // SortbyOutDeparture
+            [], // SortbyInDeparture
+            [], // SortbyStops
+          ],
+
+
           numofFlights: 0,
           outrange: [0, 1440],
           inrange: [0, 1440],
@@ -268,17 +278,18 @@ export default {
         }
     },
     mounted() {
-        // window.addEventListener('load', this.getFlights)
-      //   this.getFlights(0, 0, 0)
-      //   this.$nextTick(() => {
-      //     this.getFlights(1, 0, 0);
-      // });
-      this.getFlights(0, 0, true)
+      this.getFlights(0, 0)
+      this.getFlights(1, 0)
+      this.getFlights(2, 0)
+      this.getFlights(3, 0)
+      this.getFlights(4, 0)
       this.duration = this.maxDuration
     },
     methods: {
-        getFlights: function(optionTypeIndex, s =  0, ismount=false){
-            this.loading = true
+        getFlights: function(optionTypeIndex, s =  0){
+            if (optionTypeIndex == 0) {
+              this.loading = true
+            }
             var minDuration = 10000
             var maxDuration = 0
             console.log("실행")
@@ -338,17 +349,17 @@ export default {
                     } else {
                       var option = '?pageIndex='+ this.pageIndex + '&pageSize=' + this.pageSize + this.optionType[0].text
                     }
-                    // 항공기 체크박스 분기
-                    if (this.flightselectedCodes) {
-                      var optionplus = '&includeCarriers=' + this.flightselectedCodes
-                    } else {
-                      var optionplus = ''
-                    }
-                    let timeOption = '&outboundDepartStartTime=' + this.timeOptions[0] + '&outboundDepartEndTime=' + this.timeOptions[1] + '&inboundDepartStartTime=' + this.timeOptions[2] + '&inboundDepartEndTime=' + this.timeOptions[3]
+                    // // 항공기 체크박스 분기
+                    // if (this.flightselectedCodes) {
+                    //   var optionplus = '&includeCarriers=' + this.flightselectedCodes
+                    // } else {
+                    //   var optionplus = ''
+                    // }
+                    // let timeOption = '&outboundDepartStartTime=' + this.timeOptions[0] + '&outboundDepartEndTime=' + this.timeOptions[1] + '&inboundDepartStartTime=' + this.timeOptions[2] + '&inboundDepartEndTime=' + this.timeOptions[3]
                     //console.log(sessionKey)
                     this.$http({
                         method: 'GET',
-                        url   : optionUrl + sessionKey + option + timeOption + optionplus,
+                        url   : optionUrl + sessionKey + option,
                         headers: {
                         'X-RapidAPI-Host': 'skyscanner-skyscanner-flight-search-v1.p.rapidapi.com',
                         'X-RapidAPI-Key' : '25703e8168mshcbae189ae6af368p1fcb8djsnead03bdc43f6',
@@ -414,10 +425,6 @@ export default {
                         let LowestDeeplinkUrl = Options[0].DeeplinkUrl
                         let LowestAgentsImageUrl = Options[0].AgentsImageUrl
 
-                        // Price = this.priceTransfer(res.data.Itineraries[j].PricingOptions[0].Price)
-                        // DeeplinkUrl = res.data.Itineraries[j].PricingOptions[0].DeeplinkUrl
-                        // AgentsCode = res.data.Itineraries[j].PricingOptions[0].Agents[0]
-
                         OutboundLegId = res.data.Itineraries[j].OutboundLegId
                         InboundLegId = res.data.Itineraries[j].InboundLegId
 
@@ -425,7 +432,6 @@ export default {
                         let Inflag = false
                         let Outflag = false
                         let OutDepartureTime, OutArrivalTime, OutCarrierId, OutDuration, OutDay, OutNumofStop, OutStopCodes, OutSegmentsId
-                        // let InDepartureTime, InArrivalTime, InCarrierId, InDuration, InDay
                         let InDepartureTime = ''
                         let InArrivalTime = ''
                         let InCarrierId = ''
@@ -434,8 +440,11 @@ export default {
                         let InNumofStop = ''
                         let InStopCodes = []
                         let InSegmentsId
+                        let check = {}
                         for (let k=0; k<res.data.Legs.length; k++) {
                           if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
+                            check.OutDepartureTime = this.transferforCheck(res.data.Legs[k].Departure)
+                            // check.OutArrivalTime = transferforCheck(OutArrivalTime)
                             OutDepartureTime = this.timeTransfer(res.data.Legs[k].Departure)
                             OutArrivalTime = this.timeTransfer(res.data.Legs[k].Arrival)
                             OutDay = this.dayCalculate(res.data.Legs[k].Departure, res.data.Legs[k].Arrival)
@@ -447,6 +456,8 @@ export default {
                             Outflag = false
                           }
                           if (inboundDate != "" && Inflag == false && res.data.Legs[k].Id == InboundLegId) {
+                            check.InDepartureTime = this.transferforCheck(res.data.Legs[k].Departure)
+                            // check.InArrivalTime = transferforCheck(InArrivalTime)
                             InDepartureTime = this.timeTransfer(res.data.Legs[k].Departure)
                             InArrivalTime = this.timeTransfer(res.data.Legs[k].Arrival)
                             InDay = this.dayCalculate(res.data.Legs[k].Departure, res.data.Legs[k].Arrival)
@@ -461,6 +472,7 @@ export default {
                             break;
                           }
                         }
+
                         // 에이전트이미지 url, 항공사이미지 url
                         let flight, OutCarrierImageUrl
                         let InCarrierImageUrl = ''
@@ -547,7 +559,7 @@ export default {
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
                               Carrierflag = true
-                              if (ismount) {
+                              if (optionTypeIndex == 0) {
                                 if (this.flightselectedName.indexOf(res.data.Carriers[j].Name) == -1) {
                                   this.flightselectedfixed.push(res.data.Carriers[j].Name)
                                   this.flightselectedName.push(res.data.Carriers[j].Name)
@@ -611,7 +623,7 @@ export default {
                                             'Name': res.data.Carriers[j].Name,
                                             'ImageUrl': res.data.Carriers[j].ImageUrl,})
                               Carrierflag = true
-                              if (ismount) {
+                              if (optionTypeIndex == 0) {
                                 if (this.flightselectedName.indexOf(res.data.Carriers[j].Name) == -1) {
                                   this.flightselectedfixed.push(res.data.Carriers[j].Name)
                                   this.flightselectedName.push(res.data.Carriers[j].Name)
@@ -645,41 +657,53 @@ export default {
                         }
 
 
-                        if ((this.selected.indexOf(InNumofStop) != -1) || (this.selected.indexOf(OutNumofStop) != -1) || (this.selected.indexOf('2') != -1 && Number(InNumofStop) > 1) || (this.selected.indexOf('2') != -1 && Number(OutNumofStop) > 1)) {
-                          flight = {'OriginAirportCode': OriginAirportCode,
-                                    'OriginAirportName' : OriginAirportName,
-                                    'DestinationAirportCode': DestinationAirportCode,
-                                    'DestinationAirportName': DestinationAirportName,
-                                    'CurrencySymbol': CurrencySymbol,
-                                    'InDepartureTime': InDepartureTime,
-                                    'InArrivalTime': InArrivalTime,
-                                    'InCarrierImageUrl': InCarrierImageUrl,
-                                    'InDay': InDay,
-                                    'InDuration': InDuration,
-                                    'Instops': Instops,
-                                    'InNumofStop': InNumofStop,
-                                    'InSegments': InSegments,
-                                    'OutDepartureTime': OutDepartureTime,
-                                    'OutArrivalTime': OutArrivalTime,
-                                    'OutCarrierImageUrl': OutCarrierImageUrl,
-                                    'OutDay': OutDay,
-                                    'OutDuration': OutDuration,
-                                    'Outstops': Outstops,
-                                    'OutNumofStop': OutNumofStop,
-                                    'OutSegments': OutSegments,
-                                    'Options': Options,
-                                    'NumofOptions': NumofOptions,
-                                    'LowestPrice': LowestPrice,
-                                    'LowestAgentsName': LowestAgentsName,
-                                    'LowestDeeplinkUrl': LowestDeeplinkUrl,
-                                    'LowestAgentsImageUrl': LowestAgentsImageUrl,
-                                    'NumofStops': NumofStops,
-                                    'totalDuration': totalDuration,
-                                   }
-                          this.flights.push(flight)
-                        }
+                        flight = {'OriginAirportCode': OriginAirportCode,
+                                  'OriginAirportName' : OriginAirportName,
+                                  'DestinationAirportCode': DestinationAirportCode,
+                                  'DestinationAirportName': DestinationAirportName,
+                                  'CurrencySymbol': CurrencySymbol,
+                                  'InDepartureTime': InDepartureTime,
+                                  'InArrivalTime': InArrivalTime,
+                                  'InCarrierImageUrl': InCarrierImageUrl,
+                                  'InDay': InDay,
+                                  'InDuration': InDuration,
+                                  'Instops': Instops,
+                                  'InNumofStop': InNumofStop,
+                                  'InSegments': InSegments,
+                                  'OutDepartureTime': OutDepartureTime,
+                                  'OutArrivalTime': OutArrivalTime,
+                                  'OutCarrierImageUrl': OutCarrierImageUrl,
+                                  'OutDay': OutDay,
+                                  'OutDuration': OutDuration,
+                                  'Outstops': Outstops,
+                                  'OutNumofStop': OutNumofStop,
+                                  'OutSegments': OutSegments,
+                                  'Options': Options,
+                                  'NumofOptions': NumofOptions,
+                                  'LowestPrice': LowestPrice,
+                                  'LowestAgentsName': LowestAgentsName,
+                                  'LowestDeeplinkUrl': LowestDeeplinkUrl,
+                                  'LowestAgentsImageUrl': LowestAgentsImageUrl,
+                                  'NumofStops': NumofStops,
+                                  'totalDuration': totalDuration,
+                                  'check': check,
+                                 }
+                          if (optionTypeIndex == 0) {
+                            this.flights.push(flight)
+                            this.flightsSorted[0].push(flight)
+                          } else if (optionTypeIndex == 1){
+                            this.flightsSorted[1].push(flight)
+                          } else if (optionTypeIndex == 2) {
+                            this.flightsSorted[2].push(flight)
+                          } else if (optionTypeIndex == 3) {
+                            this.flightsSorted[3].push(flight)
+                          } else {
+                            this.flightsSorted[4].push(flight)
+                          }
+
                       }
-                      console.log(this.flights)
+                      // console.log(this.flights)
+                      console.log(this.flightsSorted)
                 })
                 .then( () => {
                   // console.log(this.flights.length)
@@ -688,11 +712,11 @@ export default {
                     this.loading = false
                     return
                   }
-                  if (this.flights.length == 0) {
-                    return this.getFlights(0, s+1)
+                  if (this.flightsSorted[optionTypeIndex].length == 0) {
+                    return this.getFlights(optionTypeIndex, s+1)
                   } else {
                     if (optionTypeIndex == 4) {
-                      this.flights.sort(function(a, b) {
+                      this.flightsSorted[4].sort(function(a, b) {
                         return a['NumofStops'] - b['NumofStops'];
                       });
                     }
@@ -700,7 +724,7 @@ export default {
                     this.transferedMinDuration = this.durationTransfer(minDuration)
                     this.maxDuration = maxDuration
                     this.transferedDuration = this.durationTransfer(maxDuration)
-                    this.flightsResult = this.flights
+                    // this.flightsResult = this.flights
                     this.numofFlights = this.flights.length
                     this.loading = false
                     return
@@ -766,31 +790,33 @@ export default {
           this.limits = 10
           this.thisSortType = sortType
           this.optionTypeIndex = sortTypeIndex
-          this.getFlights(sortTypeIndex, 0);
+          // this.getFlights(sortTypeIndex, 0);
+          this.updateResult()
         },
         // changedValue: function (value) {
         //   this.flights = []
         //   this.getFlights(1, this.sortTypes.indexOf(value), 0)
         // },
-        onCheckboxChange : function () {
-          console.log(this.selected)
-          this.flights = []
-          this.getFlights(0, 0)
-        },
+        // onCheckboxChange : function () {
+        //   console.log(this.selected)
+        //   this.flights = []
+        //   this.getFlights(0, 0)
+        // },
+
+        // 2. 출발시간 슬라이더
         onChange(value) {
           // this.$store.dispatch('handler', value)
-          console.log(this.outrange)
           this.timeOptions[0] = this.timeTransferforApi(this.outrange[0])
           this.timeOptions[1] = this.timeTransferforApi(this.outrange[1])
           this.timeOptions[2] = this.timeTransferforApi(this.inrange[0])
           this.timeOptions[3] = this.timeTransferforApi(this.inrange[1])
-          this.outboundDepartStartTime = this.timeTransferforSlider(this.outrange[0])
-          this.outboundDepartEndTime = this.timeTransferforSlider(this.outrange[1])
-          this.inboundDepartStartTime = this.timeTransferforSlider(this.inrange[0])
-          this.inboundDepartEndTime = this.timeTransferforSlider(this.inrange[1])
-          console.log(this.timeOptions)
-          this.flights = []
-          this.getFlights(this.optionTypeIndex, 0)
+          // this.outboundDepartStartTime = this.timeTransferforSlider(this.outrange[0])
+          // this.outboundDepartEndTime = this.timeTransferforSlider(this.outrange[1])
+          // this.inboundDepartStartTime = this.timeTransferforSlider(this.inrange[0])
+          // this.inboundDepartEndTime = this.timeTransferforSlider(this.inrange[1])
+          // this.flights = []
+          // this.getFlights(this.optionTypeIndex, 0)
+          this.updateResult()
         },
         timeTransferforSlider : function (time) {
           let hour, minute, result
@@ -812,13 +838,13 @@ export default {
             }
           }
         },
-        timeTransferforApi : function (time) {
-          let hour = parseInt(parseInt(time)/60)
-          let minute = parseInt(time)%60
-          if (hour < 10) hour = "0" + hour
-          if (minute == 0) minute = "00"
-          return hour + "%3A" + minute
-        },
+        // timeTransferforApi : function (time) {
+        //   let hour = parseInt(parseInt(time)/60)
+        //   let minute = parseInt(time)%60
+        //   if (hour < 10) hour = "0" + hour
+        //   if (minute == 0) minute = "00"
+        //   return hour + "%3A" + minute
+        // },
         thumbLabelHour (val) {
           return this.timeTransferforSlider(val).split(' ')[0]
         },
@@ -831,38 +857,102 @@ export default {
         durationLabelMinute : function (val) {
           return parseInt(val)%60 + "분"
         },
-        onChangeDuration : function (value) {
+        // onChangeDuration : function (value) {
+        //   this.transferedDuration = this.durationTransfer(this.duration)
+        //   // console.log(this.transferedDuration)
+        //   // this.flights = []
+        //   // this.flightsResult = []
+        //   // this.getFlights(this.optionTypeIndex, 0)
+        //   // this.flights = []
+        //   // for (let i=0; i<this.flightsResult.length; i++) {
+        //   //   if (this.flightsResult[i].totalDuration <= this.duration) this.flights.push(this.flightsResult[i])
+        //   // }
+        //   this.updateResult()
+        // },
+        // flightCheckboxChange : function (value) {
+        //   console.log(this.flightselectedName)
+        //   console.log(this.flightselected)
+        //   this.flightselectedCodes = ''
+        //   for (let i=0; i<this.flightselectedName.length; i++) {
+        //     for (let j=0; j<this.flightselected.length; j++) {
+        //       if (this.flightselectedName[i] == this.flightselected[j].Name) {
+        //         if (this.flightselectedCodes == '') {
+        //           this.flightselectedCodes = this.flightselected[j].Code
+        //         } else {
+        //           this.flightselectedCodes += ";"
+        //           this.flightselectedCodes += this.flightselected[j].Code
+        //         }
+        //         break;
+        //       }
+        //     }
+        //   }
+        //   this.flights = []
+        //   this.getFlights(this.optionTypeIndex, 0)
+        //   console.log(this.flightselectedCodes)
+        // },
+
+
+
+
+
+        updateResult : function () {
+          this.flights = []
+          this.limit = 10
+          this.loading = true
           this.transferedDuration = this.durationTransfer(this.duration)
-          console.log(this.transferedDuration)
-          this.flights = []
-          this.flightsResult = []
-          this.getFlights(this.optionTypeIndex, 0)
-          this.flights = []
-          for (let i=0; i<this.flightsResult.length; i++) {
-            if (this.flightsResult[i].totalDuration <= this.duration) this.flights.push(this.flightsResult[i])
-          }
-        },
-        flightCheckboxChange : function (value) {
           console.log(this.flightselectedName)
-          console.log(this.flightselected)
-          this.flightselectedCodes = ''
-          for (let i=0; i<this.flightselectedName.length; i++) {
-            for (let j=0; j<this.flightselected.length; j++) {
-              if (this.flightselectedName[i] == this.flightselected[j].Name) {
-                if (this.flightselectedCodes == '') {
-                  this.flightselectedCodes = this.flightselected[j].Code
-                } else {
-                  this.flightselectedCodes += ";"
-                  this.flightselectedCodes += this.flightselected[j].Code
-                }
-                break;
+          console.log(this.duration)
+          console.log(this.flightsSorted[this.optionTypeIndex])
+          console.log(this.selected)
+          console.log(this.outrange)
+          console.log(this.flightsSorted[this.optionTypeIndex].length)
+          for (let i=0; i<this.flightsSorted[this.optionTypeIndex].length; i++) {
+            // 경유 체크박스
+            console.log(i)
+            console.log(this.flightsSorted[this.optionTypeIndex][i].InNumofStop)
+            if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) != -1)
+                || (this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)
+                || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) > 1)
+                || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
+
+            //   // 총 소요시간
+              if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
+                // console.log("ㅎㅇ")
+            //     // 출발시간
+            //     if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
+            //         && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]
+            //         && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime >= this.inrange[0]
+            //         && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime <= this.inrange[1]) {
+            //       // 항공사 체크박스
+            //       // for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.Carrier[0].Name)
+                  for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
+                    for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
+                      if ((this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1)
+                          || (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier[k].Name) != -1)) {
+                        this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
+                        console.log(this.flightsSorted[this.optionTypeIndex][i])
+                        console.log("ㅎㅇ")
+                      }
+                    }
+                  }
+                  // if ((this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[0].Carrier[0].Name) != -1)
+                  //     || (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].InSegments[0].Carrier[0].Name) != -1)) {
+                  //   this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
+                  //   console.log(this.flightsSorted[this.optionTypeIndex][i])
+                  //   console.log("ㅎㅇ")
+                  // }
+            //     }
               }
             }
           }
-          this.flights = []
-          this.getFlights(this.optionTypeIndex, 0)
-          console.log(this.flightselectedCodes)
+          console.log(this.flights)
+          this.numofFlights = this.flights.length
+          this.loading = false
         },
+
+        transferforCheck : function(time) {
+          return parseInt(time.slice(11, 13)) * 60 + parseInt(time.slice(14, 16))
+        }
 
     },
 }
@@ -896,3 +986,4 @@ export default {
   }
   }
 </style>
+s
