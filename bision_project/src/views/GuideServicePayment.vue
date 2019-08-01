@@ -1,11 +1,17 @@
 <template>
     <div class="GuideServicePayment">
-        <div class="GS-payment-left">
+        <!-- 로그인 시 보여줄 결제 버튼 -->
+        <div class="GS-payment-left" v-if="getIsLoggedIn">
             <h1 class="GS-payment-left-title" style="margin: 0;">결제하기</h1>
             <div class="GS-payment-deco-bar"></div>
             <div class="GS-payment-means">
                 <PayBtn v-bind="serviceInfo" class="kakako-payBtn"></PayBtn>
             </div>
+        </div>
+        <!-- 비로그인 시 띄워줄 로그인 유도 화면 -->
+        <div class="GS-payment-left" v-else>
+            <h1>로그인 후 예약 가능합니다.</h1>
+            <GoogleLoginBtn></GoogleLoginBtn>
         </div>
         <div class="GS-payment-right">
             <div class="GS-payment-GSImage">
@@ -26,11 +32,11 @@
             </div>
             <div class="GS-payment-GSPrice GS-payment-info-toCheck">
                 <h3>인원</h3>
-                {{serviceInfo.people}} {{serviceInfo.totalAmount}}
+                {{serviceInfo.people}} 명
             </div>
             <div class="GS-payment-GSTotalprice GS-payment-info-toCheck">
                 <h3>총 금액</h3>
-                {{serviceInfo.totalAmount}}
+                KRW {{serviceInfo.totalAmount}}
             </div>
         </div>
     </div>
@@ -40,11 +46,13 @@
 import { mapState } from 'vuex'
 import './GuideServicePayment.css'
 import PayBtn from "../components/kakaopaycpn/PayBtn";
+import GoogleLoginBtn from '../components/googleOAuth/SignInBtn'
 
 export default {
     name: 'GuideServicePayment',
     components: {
         PayBtn,
+        GoogleLoginBtn,
     },
     data() {
         return {
@@ -52,11 +60,15 @@ export default {
         }
     },
     mounted() {
+
         this.closeHeader()
         this.serviceInfo = this.$route.query
         this.setServiceInfo(this.serviceInfo)
         this.addTempServiceInfo()
         // console.log(this.getServiceInfo)
+    },
+    updated() {
+        this.closeGuideCheckBtn()
     },
     destroyed() {
         this.openHeader()
@@ -64,11 +76,15 @@ export default {
     computed: {
         ...mapState({
             getServiceInfo: state => state.Guideservice.serviceInfo,
-            getUserId     : state => state.User.userId
+            getUserId     : state => state.User.userId,
+            getIsLoggedIn : state => state.User.isLoggedIn
         }),
     },
-
     methods: {
+        closeGuideCheckBtn() {
+            const guideCheckBtn = document.querySelector(".login-boxbox")
+            guideCheckBtn.style.display = "none"
+        },
         closeHeader() {
             this.$store.commit("closeHeader")
         },
