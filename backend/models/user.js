@@ -9,7 +9,7 @@ const User = new Schema({
     profileImageUrl: String,
     email: {type: String, unique: true},
 
-    // username: String,
+    username: String,
     // password: String,
     profileImg:String, // 일단 모델에만 추가
     registeredAt:{type: Date, default: Date.now}, // 일단 모델에만 추가(회원가입날짜)
@@ -89,6 +89,7 @@ User.methods.deleteUser = function( username ) {
 
 User.statics.findOrCreate = function(condition, callback) {
     const {id, nickname, profileImageUrl} = condition
+    condition = {...condition, username: nickname}
     this.findOneAndUpdate({id: id}, {nickname: nickname, profileImageUrl: profileImageUrl}, (err, user) => {
         if (user) {
             return callback(err, user)

@@ -16,42 +16,51 @@ module.exports = (passport) => {
           done(err, user)
         })
     })
-    passport.use(new GoogleStrategy({
+    passport.use('googleUser', new GoogleStrategy({
         clientID: GoogleOAuth2Credentials.client_id,
         clientSecret: GoogleOAuth2Credentials.client_secret,
-        callbackURL: GoogleOAuth2Credentials.callbackURL ,
+        callbackURL: GoogleOAuth2Credentials.redirect_uris[0] ,
         passReqToCallback   : true 
         },
         function(req, accessToken, refreshToken, profile, done) {
-            console.log('isGuide: ', req.isGuide)
-            console.log(req)
-            console.log('')
-            if (req.isGuide) {
-                Guide.findOrCreate(
-                    { 
-                        id: profile.id,
-                        nickname : profile.displayName,
-                        profileImageUrl : profile.photos[0].value,
-                        email : profile.emails[0].value
-                    },
-                    function (err, user) {
-                        user.token = accessToken
-                        return done(err, user)
-                    }
-                )
-            } else {
-                User.findOrCreate(
-                    { 
-                        id: profile.id,
-                        nickname : profile.displayName,
-                        profileImageUrl : profile.photos[0].value,
-                        email : profile.emails[0].value
-                    },
-                    function (err, user) {
-                        user.token = accessToken
-                        return done(err, user)
-                    }
-                )
-            }
-        }))
+
+            User.findOrCreate(
+                { 
+                    id: profile.id,
+                    nickname : profile.displayName,
+                    profileImageUrl : profile.photos[0].value,
+                    email : profile.emails[0].value
+                },
+                function (err, user) {
+                    user.token = accessToken
+                    return done(err, user)
+                }
+            )
+            
+        }
+    ))
+
+    passport.use('googleGuide', new GoogleStrategy({
+        clientID: GoogleOAuth2Credentials.client_id,
+        clientSecret: GoogleOAuth2Credentials.client_secret,
+        callbackURL: GoogleOAuth2Credentials.redirect_uris[1] ,
+        passReqToCallback   : true 
+        },
+        function(req, accessToken, refreshToken, profile, done) {
+
+            Guide.findOrCreate(
+                { 
+                    id: profile.id,
+                    nickname : profile.displayName,
+                    profileImageUrl : profile.photos[0].value,
+                    email : profile.emails[0].value
+                },
+                function (err, user) {
+                    user.token = accessToken
+                    return done(err, user)
+                }
+            )
+            
+        }
+    ))
 }
