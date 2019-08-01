@@ -7,6 +7,7 @@ const User = require('./user')
 const Guide = new Schema({
     id: {type: String, unique: true},
     nickname: String,
+    username: String,
     profileImageUrl: String,
     email: {type: String, unique: true},
 
@@ -49,6 +50,7 @@ Guide.statics.findByUserObId = function(user){
 
 Guide.statics.findOrCreate = function(condition, callback) {
   const {id, nickname, profileImageUrl} = condition
+  condition = {...condition, username: nickname}
   this.findOneAndUpdate({id: id}, {nickname: nickname, profileImageUrl: profileImageUrl}, (err, user) => {
       if (user) {
           return callback(err, user)
