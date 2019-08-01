@@ -67,3 +67,12 @@
 .login-boxbox {
     margin-left: 20px;
 }
+
+.success--text, .caret-color {
+    color: grey !important;
+    caret-color: grey !important;
+}
+
+.v-input--selection-controls__input > label {
+    font-size: 2rem !important;
+}

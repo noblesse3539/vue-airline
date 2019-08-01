@@ -22,7 +22,7 @@
                 >
                  
                 </span>
-                <router-link to="/mypage" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
+                <router-link :to="{ name : 'GuideMyPage', query : {getuserId} }" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
             </span>
             <span v-if="getIsLoggedIn && getIsGuide == true">
@@ -33,7 +33,8 @@
                 >
   
                 </span>
-                <router-link to="/guidemypage" class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
+                <router-link :to="{ name : 'GuideMyPage', query : {getuserId} }" 
+                                    class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
             </span>
             <router-link v-if="getIsLoggedIn == false" to="/" class="hvr-underline-from-center">
@@ -150,6 +151,7 @@ export default {
         ...mapState({
             getIsHeaderOpen : state => state.Header.isHeaderOpen,
             getIsLoggedIn : state => state.User.isLoggedIn,
+            getuserId : state => state.User.userId,
             getUsername : state => state.User.userName,
             getIsGuide : state => state.User.isGuide,
         })

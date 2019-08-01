@@ -7,7 +7,11 @@
                 <div class="toggle-btn">
                 </div>
             </label> -->
-              <v-switch v-model="isGuide" inset flat success :label="welcomeMessage"></v-switch>
+              <v-switch v-model="isGuide" inset flat :label="welcomeMessage"
+                @click="changeWelcomeMsg"
+                style="color: grey;"
+              >
+              </v-switch>
           </div>
         <a class="google-login-btn" @click="doLogin" href="#">
           <div class="google-login-btn-box">
@@ -32,21 +36,31 @@ export default {
     data() {
         return {
           isGuide: false,
-          welcomeMessage: 'Are you Guide?',
+          welcomeMessage: '가이드이신가요?',
 
           apiLoginUrl: 'http://localhost:3000/api/auth/google/user/',
           apiGuideLoginUrl : "http://localhost:3000/api/auth/google/guide/",
         }
     },
     updated() {
-      if (isGuide) {
-        this.welcomeMessage = "Welcome!"
-      }
     },
     destroyed() {
         this.checkUserLoginStatus()
     },
     methods: {
+      changeWelcomeMsg() {
+
+          const googleLoginBtn = document.querySelector(".google-login-btn-box")
+          if (this.isGuide) {
+            this.welcomeMessage = "가이드 모드 ON"
+
+            googleLoginBtn.style.borderColor = "#8c9eff"
+
+          } else {
+            this.welcomeMessage = '가이드이신가요?'
+            googleLoginBtn.style.borderColor = "#9f9f9f"
+          }
+      },
         doLogin() {
             if (this.isGuide) {
                 window.location.href = this.apiGuideLoginUrl
@@ -103,11 +117,11 @@ export default {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     box-shadow: 0 2px 10px rgba(0,0,0,.5) !important;
-    border: 2px solid #fff;
+    border: 4px solid #fff;
   }
 
   .google-login-btn-box:hover {
-    border: 2px solid #45CE30;
+    border: 4px solid #45CE30;
     color: rgba(0,0,0,.54) !important;
   }
 

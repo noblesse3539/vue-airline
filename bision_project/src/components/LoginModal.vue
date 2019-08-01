@@ -6,7 +6,7 @@
           <div class="LoginModal-container animated zoomIn delay-0.01s">
             <div class="modal-upper">
               <div class="modal-upper-bg">
-                  <span style="font-size: 5em; font-weight: 800;
+                  <span style="font-size: 4.5em; font-weight: 800;
                               text-align: center;
                               width: 100%;
                             ">BISION<br><br><br><br>TOUR</span>

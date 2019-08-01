@@ -146,7 +146,7 @@
 .result-body__search-by-language {
     display: block;
     width: 100%;
-    height: 300px;
+    min-height: 400px;
     background: white;
     margin-bottom: 20px;
     border-top-left-radius: 5px;
@@ -351,7 +351,7 @@
 }
 
 .result-body__search-by-lang-body {
-    height: 80%;
+    /* height: 80%; */
     display: flex;
     flex-direction: column;
     /* align-items: space-around; */
@@ -474,4 +474,12 @@
 
 .guide-list-page-like-btn:hover {
     color: red;
+}
+
+.result-body__search-by-lang-body > li {
+    margin-bottom: 50px !important;
+}
+
+.result-body__search-by-lang-title {
+    margin-bottom: 20px !important;
 }
