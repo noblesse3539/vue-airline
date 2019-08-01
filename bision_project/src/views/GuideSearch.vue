@@ -76,7 +76,7 @@ export default {
             params.nation_kor = this.userChoice.nation_kor // 국가이름
             console.log(params)
 
-            this.$router.push({name: "GuideListPage", params: params})
+            this.$router.push({name: "GuideListPage", params: params, query: params})
 
         },
         hideSearchResult() {
