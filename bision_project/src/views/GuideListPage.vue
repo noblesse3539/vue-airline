@@ -36,10 +36,10 @@
                             <v-checkbox
                                 class="v-input-custom"
                                 color="success"
-                                v-model="selected"
+                                v-model="temp"
                                 label="모든 언어"
                                 value="allLang"
-                                @click="disableAllVINput"
+                                @change="disableAllVINput"
                             >
                             </v-checkbox>
                         </li>
@@ -60,6 +60,7 @@
                     <p class="result-body__search-by-price-title">금액 (KRW)</p>
                     <p class="result-body__search-by-price-price">{{price[0]}} ~ {{price[1]}}</p>
                     <div class="result-body__search-by-price-box">
+                      {{price}}
                         <v-range-slider
                             v-model="price"
                             :min="minPrice"
@@ -79,7 +80,6 @@
                                 class="v-input-custom"
                                 color="success"
                                 :label="period[0]" :value="idx"
-                                :disabled="vInputDisabled"
                                 @change="updateResult"
                             >
                             </v-checkbox>
@@ -182,8 +182,9 @@ export default {
                     ["일본어", "JP"],
                     ],
             vInputDisabled: false,
-            allLang: true,
+            // allLang: true,
             selected: [],
+            temp: [],
 
             // 상품 가격별 검색
             minPrice: 1000000000,
@@ -197,7 +198,7 @@ export default {
                             ['1일 ~ 2일', 172800], // 1일 ~ 2일
                             ['2일 이상', 172801]     // 2일 이상
                         ],
-            duration: [],
+            duration: [0, 1, 2, 3],
         }
     },
     methods: {
@@ -206,9 +207,11 @@ export default {
             if (this.vInputDisabled == false) {
                 this.vInputDisabled = true
                 this.selected = ["KR", "US", "FR", "ES", "JP"]
+                // this.updateResult()
             } else {
                 this.vInputDisabled = false
                 this.selected = []
+                // this.updateResult()
             }
         },
         getServiceByKeyword: function() {

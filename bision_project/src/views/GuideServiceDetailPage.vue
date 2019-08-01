@@ -10,7 +10,7 @@
     <section class="GS-body-1">
       <div class="GS-body-left">
         <div class="GS-guide-detail-content">
-          
+
           <!-- 가이드 유저 정보 -->
           <div class="GS-guide-detail-guideDetail">
             <div class="GS-guide-detail-guideImg" v-if="guideInfo.guideImg" @click="goToGuideDetail">
@@ -33,7 +33,7 @@
           <div class="GS-guide-detail-option">
             <div class="GS-guide-duration GS-guide-detail-icon">
               <i class="far fa-clock"></i>
-              <span style="margin-left: 10px;">소요시간 100 시간</span>
+              <span style="margin-left: 10px;">소요시간 : {{duration}}</span>
             </div>
             <div class="GS-guide-language GS-guide-detail-icon">
               <i class="fas fa-language"></i>
@@ -114,7 +114,7 @@
             </div>
             <div class="GS-payment-current-info-each">
               평점:
-              <v-rating class="serviceRating" v-model="rating" dense size="17.4"></v-rating>
+              <v-rating class="serviceRating" v-model="rating" dense size="17.4" readonly></v-rating>
             </div>
           </div>
         </div>
@@ -129,8 +129,16 @@
             <i class="far fa-calendar-check"></i>
           </span>
           <input placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
-          <div v-if="isCalenderOpen" class="GS-date-picker">
+          <div v-if="isCalenderOpen" class="GS-date-picker" @click="pushLeavingDate()">
             <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap;">
+          <div v-for="i in leavingDates.length" :key="i">
+            <div class="result-body__search-by-date" style="margin-right: 1rem; width: 150px; font-size: 15px; text-align: center; display: grid; grid-template-columns: 80% 20%; border: 1px solid #45CE30; padding-top: 8px;" v-if="leavingDates">
+              {{leavingDates[i-1]}}
+              <i class="fas fa-times" style="color: grey; margin-top: 4px;" @click="deleteLeavingDate(i-1)"></i>
+            </div>
           </div>
         </div>
         <div class="GS-option-box">
@@ -141,12 +149,12 @@
               <div class="GS-individual-option-title">{{title.slice(0, 25)}}...</div>
               <div class="GS-individual-top-price">
                 <span style="font-size: 1rem; margin-right: 5px;">KRW</span>
-                <span>10,000</span>
+                <span>{{cost}}</span>
               </div>
             </div>
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
-              <button 
+              <button
                 class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
                 @click="openOptionSelectingModal(`.GS-individual-option-1`)"
               >
@@ -158,7 +166,7 @@
             <div class="GS-individual-option-detail GS-individual-option-detail-1"></div>
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-            <div class="GS-individual-option-detail-loadmore  
+            <div class="GS-individual-option-detail-loadmore
                         GS-individual-option-detail-loadmore-1"
                         style="display: none">
               <div class="GS-individual-option-detail-option-select">
@@ -197,7 +205,7 @@
               <div class="Gs-individual-price">
                 <p style="margin: 0;">
                   KRW
-                  <span>10,000/ 한 명</span>
+                  <span>{{cost}}/ 한 명</span>
                 </p>
               </div>
             </div>
@@ -220,7 +228,7 @@
           <div class="GS-service-review-score">5.0</div>
           <div class="GS-service-review-score-right">
             <div class="GS-service-review-score-stars">
-              <v-rating v-model="rating" dense size="24.7"></v-rating>
+              <v-rating v-model="rating" dense size="24.7" readonly></v-rating>
             </div>
             <div class="GS-service-review-count">100개의 진심 가득한 후기</div>
           </div>
@@ -241,7 +249,7 @@
               <div class="GS-service-review-top">
                 <div class="GS-service-review-top-userInfo">
                   <div class="GS-service-review-userScore GS-service-review-info">
-                    <v-rating v-model="rating" dense size="14.7"></v-rating>
+                    <v-rating v-model="rating" dense size="14.7" readonly></v-rating>
                   </div>
                   <div class="GS-service-review-userName GS-service-review-info">이빵글</div>
                   <div class="GS-service-review-info">·</div>
@@ -312,16 +320,19 @@ export default {
       mainImg: "",
       servieOptions: [],
       nationFlag: '',
+      duration: '',
+      cost: 0,
 
       // 결제 관련 정보
       serviceInfo: {
         people: 1,
-        unitPrice: 1000,
+        unitPrice: '1000',
         itemName: "베이징상품",
         quantity: 1,
         taxFreeAmount: 3000,
         date: '',
         get totalAmount() {
+
           return this.people * this.unitPrice
         },
       },
@@ -340,6 +351,8 @@ export default {
 
       isLoadMore: false,
       isPaymentReady: false,
+      leavingDate: '',
+      leavingDates: [],
     };
   },
   methods: {
@@ -353,7 +366,7 @@ export default {
     },
 
     hideElements: function(e) {
-      
+
       if (e.target.classList[0] != 'result-body__search-by-date-input'
           && e.target.classList[0] != 'result-body__search-by-date') {
         this.isCalenderOpen = false
@@ -370,7 +383,7 @@ export default {
 
     },
     goToChooseOptions: function() {
-      
+
       const chosingOptions = document.querySelector(".user-comment")
       chosingOptions.scrollIntoView({behavior : 'smooth'})
 
@@ -417,7 +430,7 @@ export default {
         })
         .then(data => {
           // this.setHero()
-          // console.log(data);
+          console.log(data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -425,6 +438,8 @@ export default {
           this.detail = data.detail;
           this.mainImg = data.mainImg;
           this.reviews = data.reviews;
+          this.duration = data.duration;
+          this.cost = data.cost;
 
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
@@ -478,7 +493,7 @@ export default {
       const toShow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
       const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
       const payBtn = document.querySelector('.GS-payment-choose-option')
-    
+
       payBtn.classList.add('animated')
       payBtn.classList.add('flash')
       // payBtn.classList.add('delay-0.1s')
@@ -488,7 +503,7 @@ export default {
       toDrawBorder.classList.add('option-selected')
       toHide.style.display = "none"
       toShow.style.display = "flex"
-      
+
     },
     setPaymentReady() {
 
@@ -514,7 +529,16 @@ export default {
             }
 
         })
-    },  
+    },
+    pushLeavingDate : function () {
+      console.log("추가")
+      if (this.leavingDates.indexOf(this.leavingDate) == -1)
+        this.leavingDates.push(this.leavingDate)
+    },
+    deleteLeavingDate : function (idx) {
+
+      this.leavingDates.splice([idx], 1)
+    }
   },
   computed: {}
 };
