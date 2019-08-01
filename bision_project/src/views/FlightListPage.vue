@@ -178,10 +178,12 @@
                   :OutSegments="flights[i - 1].OutSegments"
                   :NumofOptions="flights[i - 1].NumofOptions"
                   :LowestPrice="flights[i - 1].LowestPrice"
+                  :LowestAgentsName="flights[i - 1].LowestAgentsName"                  
                   :LowestDeeplinkUrl="flights[i - 1].LowestDeeplinkUrl"
                   :LowestAgentsImageUrl="flights[i - 1].LowestAgentsImageUrl"
                   :OriginAirportCode="flights[i - 1].OriginAirportCode"
                   :DestinationAirportCode="flights[i - 1].DestinationAirportCode"
+                  :Options="flights[i - 1].Options"
                 ></Flight>
               </v-layout>
             </div>
@@ -386,17 +388,19 @@ export default {
                         //   continue;
 
                         let Options = []
-                        let option, AgentsCode, AgentsImageUrl
+                        let option, AgentsCode, AgentsImageUrl, AgentsName
                         for (let k=0; k<res.data.Itineraries[j].PricingOptions.length; k++) {
                           AgentsCode = res.data.Itineraries[j].PricingOptions[k].Agents[0]
                           for (let l=0; l<res.data.Agents.length; l++) {
                             if (res.data.Agents[l].Id == AgentsCode) {
                               AgentsImageUrl = res.data.Agents[l].ImageUrl
+                              AgentsName = res.data.Agents[l].Name
                             }
                           }
                           option = {'Price': this.priceTransfer(res.data.Itineraries[j].PricingOptions[k].Price),
                                     'DeeplinkUrl': res.data.Itineraries[j].PricingOptions[k].DeeplinkUrl,
                                     'AgentsImageUrl': AgentsImageUrl,
+                                    'AgentsName': AgentsName
                                     }
                           Options.push(option)
                         }
@@ -406,6 +410,7 @@ export default {
                         })
                         let NumofOptions = Options.length
                         let LowestPrice = Options[0].Price
+                        let LowestAgentsName = Options[0].AgentsName
                         let LowestDeeplinkUrl = Options[0].DeeplinkUrl
                         let LowestAgentsImageUrl = Options[0].AgentsImageUrl
 
@@ -665,6 +670,7 @@ export default {
                                     'Options': Options,
                                     'NumofOptions': NumofOptions,
                                     'LowestPrice': LowestPrice,
+                                    'LowestAgentsName': LowestAgentsName,
                                     'LowestDeeplinkUrl': LowestDeeplinkUrl,
                                     'LowestAgentsImageUrl': LowestAgentsImageUrl,
                                     'NumofStops': NumofStops,

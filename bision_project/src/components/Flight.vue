@@ -168,10 +168,12 @@ export default {
       OutSegments: {type: Array},
       NumofOptions: {type: Number},
       LowestPrice: {type: String},
+      LowestAgentsName: {type: String},
       LowestDeeplinkUrl: {type: String},
       LowestAgentsImageUrl: {type: String},
       OriginAirportCode: {type: String},
       DestinationAirportCode: {type: String},
+      Options: {type: Array},
     },
     components: {
       FlightDetail
