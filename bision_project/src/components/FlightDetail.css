@@ -121,15 +121,16 @@
 }
 
 .readBeforeBooking {
-  cursor: pointer;
   color: #35c235;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 .readBeforeBooking__Toggle {
   font-size: 0.75rem;
-  margin:1rem;
+  padding:1rem;
+  margin-top: 1rem;
+  
+  border-radius: 5px;
 }
 .book {
   position: relative;

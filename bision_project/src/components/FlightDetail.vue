@@ -42,7 +42,7 @@
                   <div class="planeInfo">
                     <img :src="getFavicon(plane.OperatingCarrier[0].ImageUrl)" width="30px" alt="">
                     {{plane.OperatingCarrier[0].Name}} {{plane.OperatingCarrier[0].Code}}{{plane.FlightNumber}}
-                    <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" >| {{plane.Carrier[0].Name}}에서 운항</span>
+                    <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" > &nbsp; | &nbsp; {{plane.Carrier[0].Name}}에서 운항</span>
                   </div>
                   <div class="detailTimeInfo">
                     <img src="../assets/line.png" height="100px;" alt="">
@@ -57,7 +57,7 @@
                     </div>
                   </div>
                 </div>
-                <div><b>도착 : </b> {{getDate(flight.OutNumofStop, flight.OutSegments)}} <b>| 여행 기간 : </b>{{flight.OutDuration}}</div>
+                <div><b>도착 : </b> {{getDate(flight.OutNumofStop, flight.OutSegments)}} <b> &nbsp; | &nbsp; 여행 기간 : </b>{{flight.OutDuration}}</div>
               </div>
 
             <!-- 오는 비행기 -->
@@ -92,7 +92,7 @@
                   <div class="planeInfo">
                     <img :src="getFavicon(plane.OperatingCarrier[0].ImageUrl)" width="30px" alt="">
                     {{plane.OperatingCarrier[0].Name}} {{plane.OperatingCarrier[0].Code}}{{plane.FlightNumber}}
-                    <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" >| {{plane.Carrier[0].Name}}에서 운항</span>
+                    <span v-if="plane.OperatingCarrier[0].Name != plane.Carrier[0].Name" > &nbsp; | &nbsp; {{plane.Carrier[0].Name}}에서 운항</span>
                   </div>
                   <div class="detailTimeInfo">
                     <img src="../assets/line.png" height="100px;" alt="">
@@ -107,7 +107,7 @@
                     </div>
                   </div>
                 </div>
-                <div><b>도착 : </b> {{getDate(flight.InNumofStop, flight.InSegments)}} <b>| 여행 기간 : </b>{{flight.InDuration}}</div>
+                <div><b>도착 : </b> {{getDate(flight.InNumofStop, flight.InSegments)}} <b> &nbsp; | &nbsp; 여행 기간 : </b>{{flight.InDuration}}</div>
               </div>
             </div>
 
@@ -115,7 +115,7 @@
           <div class="secondSection">
              <div class="costInfo">
                   <h2>최저가로 예약하기</h2>
-                  <div class="book">
+                  <div class="book" v-for="(plane, index) in flight.InSegments">
                     <a :href="flight.LowestDeeplinkUrl" target="_blank"><div class="overlay"></div></a>
                     <div class="bookLink">
                       <img width="100px" :src="flight.LowestAgentsImageUrl" alt="">
@@ -123,13 +123,12 @@
                       <h2>{{flight.CurrencySymbol}}{{flight.LowestPrice}}</h2>
                     </div>
                   </div>
-                  <div class="readBeforeBooking" @click="isRBBVisible = !isRBBVisible">
-
-                    <h4>예약전에 확인해주세요. </h4>
-                    <v-icon v-if="isRBBVisible" color="#35c235" small>fa-chevron-up</v-icon>
-                    <v-icon v-if="!isRBBVisible" color="#35c235" small>fa-chevron-down</v-icon>
+                  <div class="readBeforeBooking">
+                    <i class="material-icons">notification_important</i>&nbsp;<h4>예약전에 확인해주세요. </h4>
+                    <!-- <v-icon v-if="isRBBVisible" color="#35c235" small>fa-chevron-up</v-icon>
+                    <v-icon v-if="!isRBBVisible" color="#35c235" small>fa-chevron-down</v-icon> -->
                   </div>
-                  <div class="readBeforeBooking__Toggle" v-show="isRBBVisible">
+                  <div class="readBeforeBooking__Toggle">
                     <p>표시된 요금에는 모든 세금 및 수수료가 포함되어 있으나, 예약 전에 웹사이트에서
                       <b>티켓의 세부정보, 최종 가격, 약관</b>을 반드시 확인하시기
                       바랍니다.
@@ -148,9 +147,7 @@
                         </ul>
                       </div>
              </div>
-             <div class="recommendProducts">
-                가이드 상품 추천 영역
-              </div>
+                {{flight.Options}}
           </div>
         </div>
       </div>
