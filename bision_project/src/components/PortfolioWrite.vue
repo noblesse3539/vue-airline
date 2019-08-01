@@ -201,7 +201,7 @@
               </v-flex>
               <!-- 기준 선택 -->
               <v-flex xs6 d-flex>
-                <v-select prepend-icon="map" label="기준 선택*" v-model="option.refPeople.opt" :items="refPeopleOpt" attach small-chips multiple></v-select>
+                <v-select prepend-icon="map" label="기준 선택*" v-model="option.refPeople.opt" :items="refPeopleOpt" attach small-chips></v-select>
               </v-flex>
               <!-- 서비스 종료 최대 인원 -->
               <v-flex xs6>
@@ -211,8 +211,69 @@
 
               <!-- 인원 구분 -->
               <v-flex xs6 d-flex>
-                <v-select prepend-icon="map" label="인원 구분 선택*" v-model="peopleTypeOpt" :items="peopleType" attach small-chips multiple></v-select>
+                <v-select prepend-icon="fa-users" label="인원 구분 선택*" v-bind:items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
+                </v-select>
               </v-flex>
+
+              <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
+                <v-flex xs3>
+                  <h3 style="text-align:center">유아</h3>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.infant.cost" placeholder="1인당 가격"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.infant.minAge" placeholder="최소 나이 제한"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.infant.maxAge" placeholder="최대 나이 제한"/>
+                </v-flex>
+              </template>
+
+              <template v-if="option.peopleTypeOpt.indexOf('child')!==-1">
+                <v-flex xs3>
+                  <h3 style="text-align:center">아동</h3>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.child.cost" placeholder="1인당 가격"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.child.minAge" placeholder="최소 나이 제한"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.child.maxAge" placeholder="최대 나이 제한"/>
+                </v-flex>
+              </template>
+
+              <template v-if="option.peopleTypeOpt.indexOf('adult')!==-1 || option.peopleTypeOpt.indexOf('none')!==-1">
+                <v-flex xs3>
+                  <h3 style="text-align:center">성인</h3>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.adult.cost" placeholder="1인당 가격"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.adult.minAge" placeholder="최소 나이 제한"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.adult.maxAge" placeholder="최대 나이 제한"/>
+                </v-flex>
+              </template>
+
+              <template xs12 v-if="option.peopleTypeOpt.indexOf('senior')!==-1">
+                <v-flex xs3>
+                  <h3 style="text-align:center">고령자</h3>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.senior.cost" placeholder="1인당 가격"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.senior.minAge" placeholder="최소 나이 제한"/>
+                </v-flex>
+                <v-flex xs3>
+                  <input style="width:120px;font-size:1rem!important" type="number" v-model="option.senior.maxAge" placeholder="최대 나이 제한"/>
+                </v-flex>
+              </template>
 
               <!-- 상세설명 -->
               <v-flex xs12 sm9 d-flex>
@@ -238,8 +299,55 @@
               </v-flex>
 
               <div style="margin:auto">
-                <v-btn color="light-blue" class="white--text">결제 옵션 추가</v-btn>
+                <v-btn @click="OptionAdd()" color="light-blue" class="white--text">결제 옵션 추가</v-btn>
               </div>
+
+
+              <v-flex xs12>
+                <v-card>
+                  <ul>
+                    <li style="font-weight:bold;font-size:1.5rem;" v-for="(item,key) in tourProgram.options">
+                      <div>
+                        title : {{item.title}}<br />
+                        fromDate : {{item.fromDate}}<br />
+                        toDate : {{item.toDate}}<br />
+                        dayOfWeek : {{item.dayOfWeek}}<br />
+                        times : {{item.times}}<br />
+                        desc : {{item.desc}}<br />
+                        num : {{item.refPeople.num}}<br />
+                        opt : {{item.refPeople.opt}}<br />
+                        <div v-if="item.peopleTypeOpt.indexOf('senior')!==-1">
+                          senior :<br />
+                          <span style="padding:20px">cost : {{item.senior.cost}}</span>
+                          <span style="padding:20px">minAge : {{item.senior.minAge}}</span>
+                          <span style="padding:20px">maxAge : {{item.senior.maxAge}}</span>
+                        </div>
+                        <div v-if="item.peopleTypeOpt.indexOf('adult')!==-1">
+                          adult :<br />
+                          <span style="padding:20px">cost : {{item.adult.cost}}</span>
+                          <span style="padding:20px">minAge : {{item.adult.minAge}}</span>
+                          <span style="padding:20px">maxAge : {{item.adult.maxAge}}</span>
+                        </div>
+                        <div v-if="item.peopleTypeOpt.indexOf('child')!==-1">
+                          child :<br />
+                          <span style="padding:20px">cost : {{item.child.cost}}</span>
+                          <span style="padding:20px">minAge : {{item.child.minAge}}</span>
+                          <span style="padding:20px">maxAge : {{item.child.maxAge}}</span>
+                        </div>
+                        <div v-if="item.peopleTypeOpt.indexOf('infant')!==-1">
+                          infant :<br />
+                          <span style="padding:20px">cost : {{item.infant.cost}}</span>
+                          <span style="padding:20px">minAge : {{item.infant.minAge}}</span>
+                          <span style="padding:20px">maxAge : {{item.infant.maxAge}}</span>
+                        </div>
+                        costType : {{item.costType}}<br />
+                        maxPeople : {{item.maxPeople}}
+                      </div>
+                    </li>
+                  </ul>
+                </v-card>
+              </v-flex>
+
             </v-layout>
           </v-container>
       </v-card-text>
@@ -301,8 +409,16 @@ export default {
         '20:00','20:15','20:30','20:45','21:00','21:15','21:30','21:45','22:00','22:15','22:30','22:45','23:00','23:15','23:30','23:45'
       ],
       refPeopleOpt:['More','Multiple'],
-      peopleType:['없음','유아','아동','성인','고령자'],
-      peopleTypeOpt:[],
+      peopleType:[{name_kor:'없음',
+                  name_eng:'none'},
+                  {name_kor:'유아',
+                  name_eng:'infant'},
+                  {name_kor:'아동',
+                  name_eng:'child'},
+                  {name_kor:'성인',
+                  name_eng:'adult'},
+                  {name_kor:'고령자',
+                  name_eng:'senior'}],
       desc:'',
       dialog: true,
       fromMenu: false,
@@ -327,8 +443,9 @@ export default {
         minTrav:'',
         maxTrav: '',
         desc:'',
+        options:[],
         tags: [],
-        detail:''
+        detail:'',
       },
       option:{
           guideservice: '',
@@ -343,33 +460,29 @@ export default {
             opt: ''
           },
           senior: {
-            cost: 0,
-            minAge: 0,
-            maxAge: 0,
-            use: false
+            cost: '',
+            minAge: '',
+            maxAge: ''
           },
           adult: {
-            cost: 0,
-            minAge: 0,
-            maxAge: 0,
-            use: false
+            cost: '',
+            minAge: '',
+            maxAge: ''
           },
           child: {
-            cost: 0,
-            minAge: 0,
-            maxAge: 0,
-            use: false
+            cost: '',
+            minAge: '',
+            maxAge: ''
           },
           infant: {
-            cost: 0,
-            minAge: 0,
-            maxAge: 0,
-            use: false
+            cost: '',
+            minAge: '',
+            maxAge: ''
           },
+          peopleTypeOpt:[],
           costType: '',
           maxPeople: ''
-    },
-      options:[],
+        }
     }
   },
   methods : {
@@ -412,7 +525,7 @@ export default {
     checkSave(){
       console.log(this.tourProgram)
       console.log(this.option)
-      console.log(this.peopleTypeOpt);
+      console.log(this.option.peopleTypeOpt);
       for(var item in this.tourProgram){
         if(item != "tags" && !this.tourProgram[item]) {
           console.log(this.tourProgram[item])
@@ -451,9 +564,44 @@ export default {
     },
     OptionDescAdd(){
       this.option.desc.push(this.desc)
+      this.desc=''
     },
     OptionDescDelete(index){
       this.option.desc.splice(index,1)
+    },
+    OptionAdd(){
+      // const a=new Object(this.option)
+      this.tourProgram.options = [...this.tourProgram.options, JSON.parse(JSON.stringify(this.option))]
+      this.OptionClear()
+
+    },
+    OptionDelete(index){
+      this.tourProgram.options.splice(index,1)
+    },
+    OptionClear(){
+      this.option.title= ''
+      this.option.fromDate= ''
+      this.option.toDate= ''
+      this.option.dayOfWeek=[]
+      this.option.times= []
+      this.option.desc= []
+      this.option.refPeople.num=''
+      this.option.refPeople.opt= ''
+      this.option.senior.cost= ''
+      this.option.senior.minAge= ''
+      this.option.senior.maxAge= ''
+      this.option.adult.cost= ''
+      this.option.adult.minAge= ''
+      this.option.adult.maxAge= ''
+      this.option.child.cost= ''
+      this.option.child.minAge= ''
+      this.option.child.maxAge= ''
+      this.option.infant.cost= ''
+      this.option.infant.minAge= ''
+      this.option.infant.maxAge= ''
+      this.option.costType= ''
+      this.option.maxPeople= ''
+      this.option.peopleTypeOpt= ''
     }
   }
 }
