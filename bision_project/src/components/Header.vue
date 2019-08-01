@@ -12,11 +12,31 @@
             </div>
         </div>
         <div class="nav-right">
-            <span v-if="getIsLoggedIn">
+            <span v-if="getIsLoggedIn && getIsGuide == false">
+                <span style=
+                "color: black;
+                margin-right: 20px; font-family: 
+                'Gothic A1', sans-serif;
+                font-size: 1rem;
+                font-weight: 600;"
+                >
+                 
+                </span>
                 <router-link to="/mypage" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
             </span>
-            <router-link v-else to="/" class="hvr-underline-from-center">
+            <span v-if="getIsLoggedIn && getIsGuide == true">
+                <span style=
+                "color: black; 
+                margin-right: 20px; 
+                font-family: 'Gothic A1', sans-serif;"
+                >
+  
+                </span>
+                <router-link to="/guidemypage" class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
+                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
+            </span>
+            <router-link v-if="getIsLoggedIn == false" to="/" class="hvr-underline-from-center">
                 <span class="loginBtn" @click="open()">로그인 🌴</span>
             </router-link>
             <!-- 로그인 됐을 경우에만 보여줄 것 -->
@@ -130,6 +150,8 @@ export default {
         ...mapState({
             getIsHeaderOpen : state => state.Header.isHeaderOpen,
             getIsLoggedIn : state => state.User.isLoggedIn,
+            getUsername : state => state.User.userName,
+            getIsGuide : state => state.User.isGuide,
         })
     },
 }
