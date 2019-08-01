@@ -23,9 +23,16 @@ export default {
     Header,
     Footer
   },
-  created() {},
+  created() {
+    this.checkUserLoginStatus();
+    window.addEventListener("load", this.checkUserLoginStatus)
+  },
+  udpated() {
+    this.checkUserLoginStatus();
+  },
   mounted() {
     this.checkUserLoginStatus();
+    // window.addEventListener("load", this.checkUserLoginStatus)
 
     let params = new URL(document.location).searchParams;
     let token = params.get("token");
@@ -52,11 +59,13 @@ export default {
       this.$http
         .get("/api/auth/check", config)
         .then(res => {
+          console.log(res.data)
           if (res.status == 200) {
             this.$store.commit("setIsLoggedIn");
             this.$store.commit("setUserInfo", {
               userId: res.data.info._id,
-              userName: res.data.info.username
+              userName: res.data.info.username,
+              isGuideNow: res.data.info.isGuide
             });
           }
         })
