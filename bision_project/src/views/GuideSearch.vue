@@ -96,16 +96,22 @@ export default {
         },
         guideSearchAutocomplete() {
             this.guideSearchOuput = this.locationList.filter( location => {
-                if ( location.name_kor.includes(this.guideSearchInput)
-                    || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
-                    || location.nation_kor.includes(this.guideSearchInput)
-                    || location.city_kor.toLowerCase().includes(this.guideSearchInput)
-                    || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-                    || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-                    ) {
-                    return location
-                }
+                return location.city_kor === this.guideSearchInput
             })
+            if (this.guideSearchOuput.length === 0) {
+                this.guideSearchOuput = this.locationList.filter( location => { 
+                    return (
+                        location.city_kor.toLowerCase().includes(this.guideSearchInput)
+                       || location.name_kor.includes(this.guideSearchInput)
+                       || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
+                       || location.nation_kor.includes(this.guideSearchInput)
+                       || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+                       || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+                    )
+               })
+            
+                
+            }
         },
         saveUserChoiceLocation(nationKor, cityKor) {
 
