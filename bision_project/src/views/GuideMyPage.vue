@@ -27,7 +27,7 @@
 
       <!-- Introduction -->
       <v-flex xs6>
-        <h2 class="display-1 mb-3">GuideName
+        <h2 class="display-1 mb-3">{{guideName}}
 
           <!-- v-if: 본인일 때 -->
           <v-tooltip right>
@@ -153,6 +153,7 @@ export default {
     UploadImgModal,
     PortfolioWrite,
   },
+  props: ['guideId'],
   methods: {
     getImgUrl(img){
       return require('../assets/' + img)
@@ -174,7 +175,7 @@ export default {
     },
     doneET(){
       this.intro = this.introTemp;
-      // this.updateIntro()
+      this.updateIntro()
       this.isETVisible = false;
     },
     cancelET(){
@@ -194,12 +195,27 @@ export default {
       this.isPWVisible = false;
     },
     updateIntro() {
-      // const guideId = 
-      this.$http.put(`/api/guide/${guideId}`)
+      const guideId = this.getUserId
+      const config = {
+        'intro': this.intro
+      }
+      this.$http.put(`/api/guide/${guideId}`, config)
+        .then( res => {
+          console.log(res.data)
+        })
+    },
+    GuideDataRequest() {
+      this.$http.get(`/api/guide/${this.guideId}`)
+      .then(res => {
+        const guide = res.data.guide
+        if(guide.intro) this.intro = guide.intro
+        this.guideName = guide.nickname
+      })
     }
   },
   data (){
     return{
+      guideName: '',
       rating: 4,
       isIUVisible: false,
       isETVisible: false,
@@ -214,17 +230,15 @@ export default {
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'}
       ],
-      
-      
     }
   },
   computed: {
-    ...mapGetters({
-      getUserId: state => state.User.getUserId
+    ...mapState({
+      getUserId: state => state.User.userId
     })
   },
   mounted() {
-    console.log(this.getUserId)
+    this.GuideDataRequest()
   },
 }
 </script>

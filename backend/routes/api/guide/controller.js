@@ -76,7 +76,7 @@ exports.guideList = (req, res) => {
 // google guide 함수들
 exports.updateGuide = (req,res) => {
   Guide.findOneAndUpdate(
-    {id: req.params.id}, 
+    {_id: req.params.id}, 
     { $set: req.body}, 
     (err, guide) => {
       if (err) {
@@ -98,10 +98,10 @@ exports.deleteGuide = (req,res) => {
 
 exports.getGuide = (req,res) => {
   Guide.find()
-  .where('id').equals(req.params.id)
+  .where('_id').equals(req.params.id)
   .then( guide => {
     if (!guide) res.status(204).json({message:"가이드를 찾을 수 없습니다."})
-    res.status(200).json({guide})
+    res.status(200).json({guide: guide[0]})
   })
   .catch( err => {
     console.log(err)
