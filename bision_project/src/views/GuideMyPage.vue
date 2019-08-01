@@ -1,5 +1,5 @@
 <template>
-  <div class="guidepage">
+  <div class="guidepage" v-if="getIsLoggedIn">
     <v-container>
 
     <!-- Profile 영역 -->
@@ -86,7 +86,7 @@
             <!-- vuetify 그대로 긁어왔는데 반쪽이랑 span 안댐 -->
             <span class="grey--text text--lighten-2 caption mr-2"> ({{ this.rating }})</span>
             <v-rating readonly x-large v-model="rating" background-color="grey" color="yellow accent-4" dense half-increments hover size="18"></v-rating>
-
+            
             <!-- 후기 영역 -->
              <v-list three-line>
               <!-- 차 후 후기 넣을것 -->
@@ -234,7 +234,8 @@ export default {
   },
   computed: {
     ...mapState({
-      getUserId: state => state.User.userId
+      getUserId: state => state.User.userId,
+      getIsLoggedIn: state => state.User.isLoggedIn,
     })
   },
   mounted() {
