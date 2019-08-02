@@ -122,6 +122,24 @@ exports.findGSByUserObIdTitle = (req,res)=>{
   .catch(onError)
 }
 
+exports.findGSByGuideObId = (req,res)=>{
+  const onError = (error) => {
+      res.status(403).json({
+          message: error.message
+      })
+  }
+  console.log('findGSByGuideObId');
+  GuideService.find({guide:req.params.guide})
+  .populate('guide')
+  .then(
+      guideservices => {
+          res.json(guideservices)
+      }
+  )
+  .catch(onError)
+}
+
+
 
 exports.createGuideService = (req,res) =>{
   console.log(req.body);

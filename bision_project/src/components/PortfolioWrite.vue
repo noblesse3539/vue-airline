@@ -462,14 +462,11 @@ export default {
         fromDate:'',
         toDate:'',
         duration: '',
-        cost:'',
         refund: {
           refund100: 1,
           refund50: 0,
           refund30: 0
         },
-        minTrav:'',
-        maxTrav: '',
         desc:'',
         options:[],
         tags: [],

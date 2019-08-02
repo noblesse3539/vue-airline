@@ -5,6 +5,9 @@ router.get('/findReview/:id',controller.findReview)
 router.get('/findOption/:id',controller.findOption)
 router.get('/findGSById/:id',controller.findGSById)
 router.get('/findGSByGuideIdTitle/:user/:title',controller.findGSByUserObIdTitle)
+router.get('/findGSByGuideId/:guide',controller.findGSByGuideObId)
+
+
 router.get('/findGSAll',controller.findGSAll)
 router.get('/search/:keyword',controller.SearchGS)
 
