@@ -56,7 +56,7 @@
         <v-btn color="white">회원 탈퇴</v-btn>
       </v-flex>
     </v-layout>
-
+    
     <!-- tab 영역 -->
     <v-sheet color="white">
       <v-tabs  color="white">
@@ -207,11 +207,18 @@ export default {
     GuideDataRequest() {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then(res => {
+        console.log(res.data)
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
         this.guideName = guide.nickname
       })
-    }
+    },
+    getGuideService() {
+      this.$http.get(`/api/guideservice/findGSById/${this.guideId}`)
+        .then( res => {
+          console.log(res)
+        })
+    },
   },
   data (){
     return{
@@ -240,6 +247,7 @@ export default {
   },
   mounted() {
     this.GuideDataRequest()
+    this.getGuideService()
   },
 }
 </script>

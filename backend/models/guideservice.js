@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 const config = require('../config')
 
 const GuideService = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User'},
+  guide: { type: Schema.Types.ObjectId, ref: 'Guide'},
   title:String,
   mainImg:String,
   nation_kor: String,

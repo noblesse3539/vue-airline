@@ -359,6 +359,9 @@
   background-color: RGBA(0, 0, 0, 0.3);
 }
 .RWModalContent {
+  /* display: flex;
+  align-content: space-between; */
+  position: relative;
   border-radius: 10px;
   width: max-content;
   height: 400px;
@@ -378,8 +381,10 @@
   padding: 1rem;
 }
 .RWModalAction {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
   display: flex;
-  justify-content: flex-end;
 }
 .RWModalAction div{
   cursor: pointer;
@@ -387,21 +392,43 @@
   justify-content: center;
   font-weight: bold;
   border-radius: 5px;
-  background-color: rgba(34,250,34, 0.4);
   width: 100px;
   padding: 1rem;
   margin: 1rem;
+
 }
-.RWModalAction div:hover {
-  border: solid 1px blue;
+.RWModalAction .clear {
+  color: Tomato;
+  border: solid 1px Tomato;
+}
+.RWModalAction .clear:hover{
+  background-color: Tomato;
+  color: white;
+}
+.RWModalAction .submit {
+  color: dodgerblue;
+  border: solid 1px dodgerblue;
+}
+.RWModalAction .submit:hover {
+  background-color: dodgerblue;
+  color: white;
 }
 .RWInput {
   width: 500px;
   margin: 1rem 0;
-  height: auto;
+  height: 150px;
   overflow-y: visible;
   font-size: 1rem;
   border: solid 1px lightgrey;
   border-radius: 2px;
   padding: 0.7rem;
+}
+.RWModalBody .rate {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  font-size: 1.2rem;
 }
