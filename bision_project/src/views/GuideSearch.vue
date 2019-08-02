@@ -90,7 +90,7 @@ export default {
                 searchListTri.style.display = "block"
                 searchList.style.display = "block"
             }
-
+            
             this.isOpen = true
             this.guideSearchAutocomplete()
         },

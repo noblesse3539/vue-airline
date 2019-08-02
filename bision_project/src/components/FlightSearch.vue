@@ -242,15 +242,17 @@ export default {
 
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
-            const params = {}
-            params.departure = this.departure // ICN
-            params.destination = this.destination // NRT
-            params.leavingDate = this.leavingDate
-            params.comingDate  = this.comingDate
-            params.flightClass = this.flightClass
-            params.adults = this.adults
+            const query = {}
+            query.departure = this.departure // ICN
+            query.destination = this.destination // NRT
+            query.leavingDate = this.leavingDate
+            query.comingDate  = this.comingDate
+            query.flightClass = this.flightClass
+            query.adults = this.adults
+            query.departureInput = this.departureINput
+            query.destinationInput = this.destinationInput
 
-            this.$router.push({name: "FlightListPage", params: params})
+            this.$router.push({name: "FlightListPage", query: query})
 
         },
         showSearchResult : function(e) {
