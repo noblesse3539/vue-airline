@@ -6,7 +6,7 @@
           <div class="wrapperfour">
             <!-- 항공사이미지 -->
             <div class="container center" style="padding: 10px;">
-              <v-img :src="OutCarrierImageUrl"></v-img>
+              <v-img :src="OutSegments[0].Carrier[0].ImageUrl"></v-img>
             </div>
             <!-- 출발시간, 출발공항 -->
             <div style="font-weight: bold; font-size: 15px;">
@@ -62,7 +62,8 @@
           <div class="wrapperfour">
             <!-- 항공사이미지 -->
             <div class="container center" style="padding: 10px;">
-              <v-img :src="InCarrierImageUrl"></v-img>
+              <!-- <v-img :src="InCarrierImageUrl"></v-img> -->
+              <v-img :src="InSegments[0].Carrier[0].ImageUrl"></v-img>
             </div>
             <!-- 출발시간, 출발공항 -->
             <div style="font-weight: bold; font-size: 15px;">

@@ -8,7 +8,7 @@
             {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
           </div>
           <div class="container" style="height: 50%; padding-top: 4px;">
-            {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.cabinClass"></span><span v-else>없음</span>
+            {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
           </div>
         </div>
 
@@ -310,11 +310,17 @@ export default {
                             'outboundDate': this.$route.query.leavingDate,
                             'adults': this.$route.query.adults,
                         }
-            // let inboundDate = this.$route.query.comingDate
-            let inboundDate = '2019-09-10'
-            if (inboundDate != '') {
-              data['inboundDate'] = inboundDate
-            }
+            // 옵션 데이터
+            let inboundDate = this.$route.query.comingDate
+            // let inboundDate = '2019-09-10'
+            if (inboundDate != '') data['inboundDate'] = inboundDate
+
+            let infants = this.$route.query.infants
+            // let inboundDate = '2019-09-10'
+            if (infants != '') data['infants'] = infants
+
+            data['cabinClass'] = this.$route.query.flightClass
+
 
             this.$http({
                 method: 'POST',
