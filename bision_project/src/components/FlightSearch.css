@@ -369,7 +369,7 @@ input {
 }
 
 .country-name:hover {
-    cursor: pointer;
+    cursor: pointer; 
     background: rgb(211,211,211);
 }
 

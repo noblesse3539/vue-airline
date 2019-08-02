@@ -74,8 +74,7 @@ export default {
             const params = {}
             params.city_kor = this.userChoice.city_kor // 도시이름
             params.nation_kor = this.userChoice.nation_kor // 국가이름
-            console.log(params)
-            
+
             this.$router.push({name: "GuideListPage", params: params, query: params})
 
         },
@@ -95,23 +94,33 @@ export default {
             this.guideSearchAutocomplete()
         },
         guideSearchAutocomplete() {
-            this.guideSearchOuput = this.locationList.filter( location => {
-                return location.city_kor === this.guideSearchInput
-            })
-            if (this.guideSearchOuput.length === 0) {
-                this.guideSearchOuput = this.locationList.filter( location => { 
-                    return (
-                        location.city_kor.toLowerCase().includes(this.guideSearchInput)
-                       || location.name_kor.includes(this.guideSearchInput)
-                       || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
-                       || location.nation_kor.includes(this.guideSearchInput)
-                       || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-                       || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-                    )
-               })
             
-                
-            }
+            this.guideSearchOuput = this.locationList.filter( location => {
+
+                return (
+                    location.city_kor === this.guideSearchInput 
+                    // && this.guideSearchOuput.find(function(output) {
+                    //     return location.city_kor !== output
+                    // })
+                    )
+
+            })
+
+            this.guideSearchOuput.forEach( output => console.log(output))
+
+            // if (this.guideSearchOuput.length === 0) {
+            //     this.guideSearchOuput = this.locationList.filter( location => { 
+            //         return (
+            //             location.city_kor.toLowerCase().includes(this.guideSearchInput)
+            //            || location.name_kor.includes(this.guideSearchInput)
+            //            || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
+            //            || location.nation_kor.includes(this.guideSearchInput)
+            //            || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+            //            || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+            //         )
+            //    }) 
+            // }
+
         },
         saveUserChoiceLocation(nationKor, cityKor) {
 

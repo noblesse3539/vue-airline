@@ -57,7 +57,7 @@
                                     type="text"
                                     v-model="destinationInput"
                                     placeholder="국가, 도시 또는 공항"
-                                    class="right-end-input cancelBorder"
+                                    class="cancelBorder"
                                     @input="destinationInput = $event.target.value"
                                     @keyup="getDestinationOutput"
                                     @keydown.up="onArrowUp('destination')"
@@ -453,6 +453,7 @@ export default {
         },
         DepartureAirportAutoCompleteSearch() {
             this.departureOutput = this.airportList.filter( airport => {
+                
                 if ( airport.name_kor.includes(this.departureInput)
                     || airport.name_eng.toLowerCase().match(this.departureInput.toLowerCase())
                     || airport.nation_kor.includes(this.departureInput)
