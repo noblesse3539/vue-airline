@@ -64,7 +64,7 @@ app.set('jwt-secret', config.secret)
 /* =======================
     PASSPORT CONFIGURATION
 ==========================*/
-app.use( session({ 
+app.use( session({
   secret: config.GoogleOAuth2Credentials.client_secret,
   resave: false,
   saveUninitialized: true,

@@ -1,7 +1,7 @@
 <template>
   <div class="mypage-container">
     <router-link to="/" > 홈으로 가기</router-link>
-    
+
     <!-- 프로필 섹션 -->
     <!-- <h1 class="user-title">&nbsp;&nbsp;&nbsp;회원정보</h1> -->
     <div class="user-profileinfo">
@@ -21,14 +21,14 @@
           <p class="user-description">{{userIntro}}</p>
           <div class="user-line__section-divider"><div class="divider"></div></div>
           <p class="user-langauge">
-            <i class="fas fa-language"></i> 
-              구사 언어: 
+            <i class="fas fa-language"></i>
+              구사 언어:
               <span v-for=" (language, idx) in userLanguage" :key="idx">
                 {{language}}
               </span>
           </p>
         </div>
-        
+
         <!-- 사용자 정보 수정 섹션 -->
         <div class="user-info__modifier" @keydown.enter="updateUserInfo" v-else>
           <div class="user-intro-box">
@@ -37,7 +37,7 @@
           </div>
           <div class="user-language-box">
             <label for="userLanguage">구사 언어</label>
-            <input type="text" id="userLangauge" v-model="userLanguage">  
+            <input type="text" id="userLangauge" v-model="userLanguage">
           </div>
           <div class="user-info-button-box">
             <button @click="updateUserInfo">수정하기</button>
@@ -47,33 +47,36 @@
 
       </div>
     </div>
-    
+
     <UploadImgModal v-if="isImgModalOpen" @close="close"></UploadImgModal>
     <!-- <Profile class="profileFillingSection"/> -->
-    
+
     <!-- 이용했던 가이드 -->
     <h2 style="margin-top: 48px; margin-bottom: 24px;">내가 이용했던 여행 가이드</h2>
     <GuideList :load-more="true" :userGuideServices="userGuideServices"></GuideList>
-    
+
     <!-- 내가 이용했던 가이드 상품 -->
     <h2 style="margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
 
     <!-- Swiper -->
-    <swiper 
-      :options="swiperOption" 
-      ref="mySwiper" 
+    <swiper
+      :options="swiperOption"
+      ref="mySwiper"
       @someSwiperEvent="callback"
     >
       <!-- slides -->
-      <swiper-slide
-        v-for=" (guideService, id) in userGuideServices"
-        :key=id
+      <swiper-slide class="myProduct"
+        v-for="(guideService, id) in userGuideServices"
+        :key="id"
       >
         <img class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.user.username}}</p>
           <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p>
+          <div class="RWButtonOver">
+            <div class="RWButton" @click="showRW">후기 작성 하기</div>
+          </div>
         </div>
       </swiper-slide>
       <!-- Optional controls -->
@@ -86,7 +89,23 @@
       </div>
       <!-- <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
     </swiper>
-
+    <div v-if="isRWVisible" class="RWModal">
+      <div class="RWModalContent">
+        <div class="RWModalHeader">
+          <div></div>
+          <i @click="closeRW" style="cursor:pointer;" class="fas fa-times"></i>
+        </div>
+        <div class="RWModalBody">
+          <p>별점</p>
+          <b>후기 작성</b><br>
+          <textarea onkeyup="autogrow(this)"class="RWInput" type="text" name="review"></textarea>
+        </div>
+        <div class="RWModalAction">
+          <div>초기화</div>
+          <div>확인</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -119,6 +138,8 @@
     },
     data: function () {
       return {
+        isRWButtonVisible: false,
+        isRWVisible: false,
         items: [
           {
             src: 'https://new-image.withvolo.com/travel/423019/6-673h2it7pauB3D0naoffsjGMM=/0x0:900x900/809x/45e57a94c3a3f93db7ea5c6301aabc5d/76fb18f3-64cf-45df-9382-30c8afd42a97-cac8cd93c784d871aa3d1cac20ea67ea0a422222.jpg'
@@ -136,12 +157,28 @@
         userImage: '',
         isImgModalOpen: false,
         isUserInfoOpen: true,
-        
+
         userName : "",
         userIntro: "",
         userLanguage: [],
-        userGuideServices: [],
-        
+        userGuideServices:[{
+          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+          city_kor: "city_kor[1] city_kor[0]",
+          user:{username:"Hyeri0"},
+          fromDate:"190801"
+        },{
+          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+          city_kor: "city_kor[1] city_kor[0]",
+          user:{username:"Hyeri1"},
+          fromDate:"190801"
+        },{
+          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+          city_kor: "city_kor[1] city_kor[0]",
+          user:{username:"Hyeri2"},
+          fromDate:"190801"
+        }],
+        // userGuideServices: [],
+
         swiperOption: {
           slidesPerView: 4,
           spaceBetween: 20,
@@ -163,6 +200,27 @@
       }
     },
     methods: {
+      autogrow(el) {
+        el.style.height = (el.scrollHeight)+"px";
+      },
+      showRW() {
+        const navBarZIndex = document.querySelector('#navbox')
+        const footerZIndex = document.querySelector('#footer')
+        footerZIndex.style.zIndex = 0
+        navBarZIndex.style.zIndex = 0
+        document.documentElement.style.overflow='hidden'
+        document.body.scroll="no";
+        this.isRWVisible = true;
+      },
+      closeRW() {
+        document.documentElement.style.overflow='scroll';
+        document.body.scroll="yes";
+        const navBarZIndex = document.querySelector('#navbox')
+        const footerZIndex = document.querySelector('#footer')
+        navBarZIndex.style.zIndex = 1000;
+        footerZIndex.style.zIndex = 1000;
+        this.isRWVisible = false;
+      },
       closeHeader: function() {
         this.$store.commit("closeHeader")
       },
@@ -180,13 +238,13 @@
         this.isImgModalOpen = true
       },
       revisedUserInfo: function() {
-        
+
       },
 
       // 유저 정보 수정 섹션 관련 메서드
       showUserInfoModifier: function() {
-        this.isUserInfoOpen = false  
-        
+        this.isUserInfoOpen = false
+
       },
       closeUserInfoModifier: function() {
         this.isUserInfoOpen = true
@@ -233,7 +291,7 @@
             console.log(err)
           })
       },
-      
+
       addGuideServiceToUser: function() {
         // api/user/opalcat1013/usedguideservices/5d37e5aa1b38180f50acbb43
         // opalcat1013 == 유저 아이디
