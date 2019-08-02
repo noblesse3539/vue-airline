@@ -10,7 +10,7 @@
         <p class="user-image__modifier" @click="openImgModal">사진 수정하기</p>
       </div>
       <div class="user-infobox">
-        <p style="font-size: 3rem; font-weight: 1000; margin-bottom: 0.5rem;">안녕하세요, 이빵글입니다.</p>
+        <p style="font-size: 3rem; font-weight: 1000; margin-bottom: 0.5rem;">안녕하세요, {{userName}}입니다.</p>
         <p class="user-metainfo">
           가입일: 2019 · <span class="user-metainfo__modifier" @click="showUserInfoModifier">회원정보 수정하기</span>
         </p>
@@ -98,10 +98,11 @@
         </div>
         <div class="RWModalBody">
           <div class="rate">
-            <div>만족도 &nbsp;| &nbsp; </div>
+            <div>만족도 &nbsp; : &nbsp; </div>
             <v-rating  v-model="rating"  color="yellow darken-3"  background-color="grey lighten-2"
               empty-icon="$vuetify.icons.ratingFull"  half-increments hover></v-rating>&nbsp;( {{this.rating}} )
           </div>
+         <div class="RWTitle">한줄평 &nbsp; : &nbsp; <input type="text" placeholder="한줄로 표현해주세요." v-model="subcomment"></div>
           <textarea placeholder="후기를 작성해주세요."  v-model="comment" class="RWInput" type="text" name="review"></textarea>
         </div>
         <div class="RWModalAction">
@@ -129,9 +130,9 @@
       UploadImgModal,
     },
     created() {
-      this.getUserInfo()
     },
     mounted() {
+      // this.getUserInfo()
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
@@ -142,6 +143,7 @@
     },
     data: function () {
       return {
+        subcomment:'',
         comment:'',
         rating: 3,
         isRWButtonVisible: false,
@@ -167,23 +169,23 @@
         userName : "",
         userIntro: "",
         userLanguage: [],
-        // userGuideServices:[{
-        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-        //   city_kor: "city_kor[1] city_kor[0]",
-        //   user:{username:"Hyeri0"},
-        //   fromDate:"190801"
-        // },{
-        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-        //   city_kor: "city_kor[1] city_kor[0]",
-        //   user:{username:"Hyeri1"},
-        //   fromDate:"190801"
-        // },{
-        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-        //   city_kor: "city_kor[1] city_kor[0]",
-        //   user:{username:"Hyeri2"},
-        //   fromDate:"190801"
-        // }],
-        userGuideServices: [],
+        userGuideServices:[{
+          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+          city_kor: "city_kor[1] city_kor[0]",
+          user:{username:"Hyeri0"},
+          fromDate:"190801"
+        },{
+          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+          city_kor: "city_kor[1] city_kor[0]",
+          user:{username:"Hyeri1"},
+          fromDate:"190801"
+        },{
+          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+          city_kor: "city_kor[1] city_kor[0]",
+          user:{username:"Hyeri2"},
+          fromDate:"190801"
+        }],
+        // userGuideServices: [],
 
         swiperOption: {
           slidesPerView: 4,
@@ -207,12 +209,14 @@
     },
     methods: {
       clearReview() {
+        this.subcomment=''
         this.comment=''
         this.rating=0
       },
       submitReview(){
         // 푸쉬하고
         this.comment=''
+        this.subcomment=''
         this.closeRW()
 
       },
