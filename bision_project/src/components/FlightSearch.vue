@@ -101,7 +101,7 @@
                             <label class="comingDateText"> 오는날
                                 <input class="comingDate" type="text" placeholder="" :value="comingDate" disabled>
                                 <div class="comingDate-picker">
-                                    <v-date-picker :min="minDate" locale="ko-KR" v-model="comingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                                    <v-date-picker :min="minComingDate" locale="ko-KR" v-model="comingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                                 </div>
                             </label>
                         </div>
@@ -210,7 +210,7 @@ export default {
                 '.comingDate': false,
             },
             minDate: new Date().toISOString().substr(0, 10),
-            comingMinDate: new Date().toISOString().substr(0, 10),
+            // comingMinDate: ,
             isDateWeird: function() {
                 return minDate > comingDate? true : false
             },
@@ -293,7 +293,6 @@ export default {
                     leavingDatePicker.style.display = "none"
                     comingDatePicker.style.display = "none"
                 }
-
             }
 
             if (e.target.classList[0] !== 'flight-search-submitBtn'
@@ -330,6 +329,7 @@ export default {
             }
         },
         onArrowUp(travelType) {
+            
             if (travelType == 'departure') {
                 if (this.departureArrowCounter > 0) {
                     this.departureArrowCounter --
@@ -470,7 +470,9 @@ export default {
     },
     // 공항 출발지 및 도착지 Autocomplete 방식으로 검색
     computed: {
-
+        minComingDate() {
+            return this.leavingDate
+        },
     },
     watch: {
         departureInput: function() {
