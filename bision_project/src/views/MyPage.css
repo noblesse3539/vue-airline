@@ -11,6 +11,7 @@
 }
 
 .user-profileinfo {
+    margin-top: 5rem;
     width: 100%;
     display: flex;
     /* background: #f7f7f7; */
@@ -364,7 +365,7 @@
   position: relative;
   border-radius: 10px;
   width: max-content;
-  height: 400px;
+  height: 500px;
   overflow:visible;
   padding: 2rem;
   background-color: white;
@@ -431,4 +432,18 @@
   flex-wrap: wrap;
   align-items: baseline;
   font-size: 1.2rem;
+}
+.RWTitle {
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+.RWTitle input {
+  font-size: 1rem;
+  padding: .8rem;
+  border: solid 1px lightgrey;
+  border-radius: 3px;
+  width: 81.5%;
 }
