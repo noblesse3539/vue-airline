@@ -23,7 +23,7 @@
                 <img class="kakao-link-btn-img" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
             </a>
         </div>
-        {{this.serviceInfo}}
+        <!-- {{this.serviceInfo}} -->
     </div>
 </template>
 
@@ -48,7 +48,7 @@ export default {
         }
     },
     mounted() {
-        this.sendPaymentInfo()
+        // this.sendPaymentInfo()
         this.getTempServiceInfo()
         // this.updateRealServiceInfo()
         // this.deleteTempServiceInfo()
@@ -74,6 +74,11 @@ export default {
                             // console.log(res.data)
                             this.serviceInfo = res.data.tmpStore.service
                     })
+                        .then( () => {
+                            if (this.serviceInfo) {
+                                this.updateRealServiceInfo()
+                            }
+                        })
                 }
                 })
                 .catch(err => {
@@ -84,12 +89,15 @@ export default {
         updateRealServiceInfo() {
             const baseUrl = '/api/paymentstore/real/' + this.getUserId
             this.$http.post(baseUrl, {service: this.serviceInfo})
+                .then( () => {
+                    this.deleteTempServiceInfo()
+                })
         },
         deleteTempServiceInfo() {
             const baseUrl = "/api/paymentstore/tmp/" + this.getUserId
             this.$http.delete(baseUrl)
                 .then( res => {
-                    console.log(res)
+                    // console.log(res)
                 })
         },
 
@@ -122,9 +130,9 @@ export default {
                 Kakao.Link.sendCustom({
                 templateId: 17427,
                 templateArgs: {
-                'title': this.serviceInfo.title ? this.serviceInfo.title : '',
-                'description': '이빵글의 여행 일정입니다.',
-                'imageUrl' : 'https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg',
+                'title': this.getUsername + '님의 두근두근 콩닥콩닥 여행 일정입니다.',
+                'description': this.serviceInfo.title ? this.serviceInfo.title : '',
+                'imageUrl' : this.serviceInfo.mainImg,
                 }
             })
         }

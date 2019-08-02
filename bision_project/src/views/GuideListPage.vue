@@ -102,10 +102,10 @@
                 <!-- 가이드 상품 검색 결과 -->
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
-                    :key ="idx"
-                    @click="goToDetail(idx)"
+                    :key = idx
+                    @click="goToDetail(idx + (page-1)*10)"
                 >
-                    <div class="result-body-card">
+                    <div class="result-body-card" :id="service._id">
                         <div class="result-body-card-imgbox">
                             <img :src="service.image"
                                 alt="guide-tour-image"

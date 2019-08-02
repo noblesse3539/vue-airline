@@ -38,7 +38,17 @@ export default {
     hideGuideList () {
       this.limits = 4
       this.loadMore = true
-    }
+    },
+    getGuideInfo() {
+
+      this.userGuideServices.forEach( guideUser => {
+        this.$http.get(`/api/guide/findByUserObId/${guideUser.user}`)
+          .then( res => {
+            console.log(res)
+            console.log("hi!!")
+          })
+      })
+    },
   },
 	data() {
 		return {
@@ -82,8 +92,11 @@ export default {
       ]
 		}
   },
-  updated() {
+  mounted() {
+    // this.getGuideInfo()
     console.log(this.userGuideServices)
+  },
+  updated() {
   },
 }
 </script>

@@ -5,4 +5,5 @@ const controller = require('./controller')
 
 router.get('/', controller.cityList)
 
+router.post('/setup', controller.createCities)
 module.exports = router
