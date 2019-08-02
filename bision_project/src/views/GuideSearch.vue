@@ -57,7 +57,7 @@ export default {
             guideSearchOuput: [],
             guideSearchInput: '',
             isOpen: false,
-    
+
             defaultPlaceholder: '"어디로 떠나실건가요? 가고싶은 나라/도시 이름으로 가이드를 검색해보세요!"',
             userChoice : {},
             guideInputArrowCounter: 0,
@@ -106,20 +106,18 @@ export default {
 
             })
 
-            this.guideSearchOuput.forEach( output => console.log(output))
-
-            // if (this.guideSearchOuput.length === 0) {
-            //     this.guideSearchOuput = this.locationList.filter( location => { 
-            //         return (
-            //             location.city_kor.toLowerCase().includes(this.guideSearchInput)
-            //            || location.name_kor.includes(this.guideSearchInput)
-            //            || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
-            //            || location.nation_kor.includes(this.guideSearchInput)
-            //            || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-            //            || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-            //         )
-            //    }) 
-            // }
+            if (this.guideSearchOuput.length === 0) {
+                this.guideSearchOuput = this.locationList.filter( location => { 
+                    return (
+                        location.city_kor.toLowerCase().includes(this.guideSearchInput)
+                       || location.name_kor.includes(this.guideSearchInput)
+                       || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
+                       || location.nation_kor.includes(this.guideSearchInput)
+                       || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+                       || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+                    )
+               }) 
+            }
 
         },
         saveUserChoiceLocation(nationKor, cityKor) {
