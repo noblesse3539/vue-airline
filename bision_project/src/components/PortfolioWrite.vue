@@ -485,24 +485,24 @@ export default {
             opt: ''
           },
           senior: {
-            cost: '',
-            minAge: '',
-            maxAge: ''
+            cost: 0,
+            minAge: 0,
+            maxAge: 0
           },
           adult: {
-            cost: '',
-            minAge: '',
-            maxAge: ''
+            cost: 0,
+            minAge: 0,
+            maxAge: 0
           },
           child: {
-            cost: '',
-            minAge: '',
-            maxAge: ''
+            cost: 0,
+            minAge: 0,
+            maxAge: 0
           },
           infant: {
-            cost: '',
-            minAge: '',
-            maxAge: ''
+            cost: 0,
+            minAge: 0,
+            maxAge: 0
           },
           peopleTypeOpt:[],
           costType: '',
@@ -523,6 +523,7 @@ export default {
     getMain(value) {
       if(value){
         this.tourProgram.mainImg = value
+        this.tempMain = value
       } else{
         alert('잠시 후 다시 실행해주세요.')
       }
@@ -639,34 +640,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.options {
-  margin:auto;
-  text-align: center;
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 95%;
-}
-
-.options td, .options th {
-  border-radius: 20px;
-  border-spacing: 5px;
-  padding: 8px;
-}
-
-.options tr:nth-child(odd){background-color: #f2f2f2;}
-
-.options tr:hover {background-color: #ddd;}
-
-.options th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  background-color: #4CAF50;
-  color: white;
-}
-.peopleType{
-  width:150px;
-  font-size:1rem!important
-}
-</style>
