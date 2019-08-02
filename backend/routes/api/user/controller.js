@@ -1,6 +1,7 @@
 const User = require('../../../models/user')
 const GuideService = require('../../../models/guideservice')
-const ObjectID = require('mongodb').ObjectID; 
+const ObjectID = require('mongodb').ObjectID;
+const PaymentStore = require('../../../models/paymentStore')
 /*
     GET /api/user/list
 */
@@ -74,7 +75,17 @@ exports.mypage = (req, res) => {
     .select('-password')
     .populate({ path: 'UsedGuideServices', populate: {path: 'user'}, model: GuideService})
     .then( userInfo => {
-        res.json({userInfo})
+        PaymentStore.find()
+        .where('user').equals(userInfo._id)
+        .then( paymentRecords => {
+            res.json({userInfo, paymentRecords})
+        })
+        .catch( err => {
+            res.json({error: err})
+        })
+    })
+    .catch( err => {
+        res.json({error: err})
     })
 }
 
