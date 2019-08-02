@@ -295,6 +295,23 @@ paths:
 ############################
 #        GuideService      #
 ############################
+  /api/guideservice/findGSByGuideId/{guide}:
+    get:
+      tags:
+      - GuideService
+      summary: 가이드가 작성한 가이드서비스 데이터들을 반환합니다.
+      parameters:
+        - in: path
+          name: guide
+          type: string
+          required: true
+          description: GuideObId
+      responses:
+        200:
+          description: 가이드가 작성한 가이드서비스 데이터 반환
+          schema:
+            $ref: '#/definitions/GuideService'
+
   /api/guideservice/findGSById/{id}:
     get:
       tags:
