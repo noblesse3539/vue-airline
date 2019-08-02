@@ -220,6 +220,11 @@
       <div class="GS-service-user-content" v-html="detail"></div>
     </section>
 
+    <section class="GS-body-3">
+      <h3 class="GS-service-intro-title">환불 규정</h3>
+      <div class="GS-service-user-content"></div>
+    </section>
+
     <!-- 이용 후기 -->
     <section class="GS-body-4">
       <h3 class="GS-service-intro-title" id="GS-service-intro-title">상품 후기</h3>

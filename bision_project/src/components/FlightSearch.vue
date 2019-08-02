@@ -176,7 +176,7 @@ export default {
         return {
 
             RadioLabels: ["왕복", "편도", ],
-            classes: ['Economy', 'Business', 'First'],
+            classes: ['economy', 'business', 'first'],
 
             isOpen : false,
 
@@ -198,7 +198,7 @@ export default {
             destination: '',
             leavingDate: new Date().toISOString().substr(0, 10),
             comingDate: new Date().toISOString().substr(0, 10),
-            flightClass: 'Economy',
+            flightClass: 'economy',
             adults: 1,
             infants: 0,
 
@@ -332,7 +332,7 @@ export default {
             }
         },
         onArrowUp(travelType) {
-            
+
             if (travelType == 'departure') {
                 if (this.departureArrowCounter > 0) {
                     this.departureArrowCounter --
@@ -452,7 +452,7 @@ export default {
         },
         DepartureAirportAutoCompleteSearch() {
             this.departureOutput = this.airportList.filter( airport => {
-                
+
                 if ( airport.name_kor.includes(this.departureInput)
                     || airport.name_eng.toLowerCase().match(this.departureInput.toLowerCase())
                     || airport.nation_kor.includes(this.departureInput)
