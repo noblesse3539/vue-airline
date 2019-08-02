@@ -30,7 +30,7 @@
         <h2 class="display-1 mb-3">{{guideName}}
 
           <!-- v-if: 본인일 때 -->
-          <v-tooltip right>
+          <v-tooltip right v-if="guideId == getUserId">
             <template v-slot:activator="{ on }">
               <v-btn @click="showET" v-on="on" flat icon fab color="indigo">
                 <v-icon>edit</v-icon>
@@ -56,7 +56,7 @@
         <v-btn color="white">회원 탈퇴</v-btn>
       </v-flex>
     </v-layout>
-    
+
     <!-- tab 영역 -->
     <v-sheet color="white">
       <v-tabs  color="white">
@@ -162,9 +162,19 @@ export default {
       this.isIUVisible = true;
     },
     closeIU(value) {
-      console.log(value)
+      // console.log(value)
       if(value){
         this.imgurl=value;
+        const guideId = this.getUserId
+        const config = {
+          'profileImageUrl': this.imgurl
+        }
+        this.$http.put(`/api/guide/${guideId}`, config)
+          .then( res => {
+            // console.log(res.data)
+          })
+
+
       }
       this.isIUVisible = false;
     },
@@ -201,20 +211,31 @@ export default {
       }
       this.$http.put(`/api/guide/${guideId}`, config)
         .then( res => {
-          console.log(res.data)
+          // console.log(res.data)
         })
     },
     GuideDataRequest() {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
+
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
         this.guideName = guide.nickname
+
+        // 가이드 평균 평점 구하기
+        if (res.data.guide.starRatingList.length) {
+          sum = res.data.guide.starRatingList.reduce(function(acc, each) { return acc + each})
+          avg = sum / res.data.guide.starRatingList.length
+          this.rating = avg
+        }
+
+        this.imgurl = res.data.guide.profileImageUrl
+
       })
     },
     getGuideService() {
-      this.$http.get(`/api/guideservice/findGSById/${this.guideId}`)
+      this.$http.get(` /api/guideservice/findGSByGuideId/${this.guideId}`)
         .then( res => {
           console.log(res)
         })
@@ -223,7 +244,7 @@ export default {
   data (){
     return{
       guideName: '',
-      rating: 4,
+      rating: 1,
       isIUVisible: false,
       isETVisible: false,
       isPWVisible: false,
@@ -237,6 +258,12 @@ export default {
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'}
       ],
+
+      // 가이드 페이지 접근 차단 관리 변수
+      // 현재 가이드 페이지에 접근한 유저가 해당 가이드인지 일반 유저인지 판단 후,
+      // 일반 유저일 경우 수정 기능들을 비활성 처리합니다.
+      guideId: this.$route.query.guideId,
+
     }
   },
   computed: {
