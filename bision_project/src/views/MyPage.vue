@@ -92,17 +92,20 @@
     <div v-if="isRWVisible" class="RWModal">
       <div class="RWModalContent">
         <div class="RWModalHeader">
-          <div></div>
+          <div>여행은 즐거우셨나요?</div>
           <i @click="closeRW" style="cursor:pointer;" class="fas fa-times"></i>
         </div>
         <div class="RWModalBody">
-          <p>별점</p>
-          <b>후기 작성</b><br>
-          <textarea onkeyup="autogrow(this)"class="RWInput" type="text" name="review"></textarea>
+          <div class="rate">
+            <div>만족도 &nbsp;| &nbsp; </div>
+            <v-rating  v-model="rating"  color="yellow darken-3"  background-color="grey lighten-2"
+              empty-icon="$vuetify.icons.ratingFull"  half-increments hover></v-rating>&nbsp;( {{this.rating}} )
+          </div>
+          <textarea placeholder="후기를 작성해주세요."  v-model="comment" class="RWInput" type="text" name="review"></textarea>
         </div>
         <div class="RWModalAction">
-          <div>초기화</div>
-          <div>확인</div>
+          <div class="clear" @click="clearReview">초기화</div>
+          <div class="submit" @click="submitReview">확인</div>
         </div>
       </div>
     </div>
@@ -138,6 +141,8 @@
     },
     data: function () {
       return {
+        comment:'',
+        rating: 3,
         isRWButtonVisible: false,
         isRWVisible: false,
         items: [
@@ -200,8 +205,15 @@
       }
     },
     methods: {
-      autogrow(el) {
-        el.style.height = (el.scrollHeight)+"px";
+      clearReview() {
+        this.comment=''
+        this.rating=0
+      },
+      submitReview(){
+        // 푸쉬하고
+        this.comment=''
+        this.closeRW()
+
       },
       showRW() {
         const navBarZIndex = document.querySelector('#navbox')
