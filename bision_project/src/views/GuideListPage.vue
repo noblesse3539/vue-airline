@@ -30,8 +30,13 @@
                     </div>
                 <!-- </div> -->
                 <div class="result-body__search-by-tag">
-                    <input placeholder="# 태그별 검색" class="result-body__search-by-tag-search" type="text">
-                    <span class="result-body_search-by-tag-search-icon"><i class="fas fa-search"></i></span>
+                  <v-chip color="#5CE75C" text-color="white" @click="findTag('액티비티')">액티비티</v-chip>
+                  <v-chip color="#5CE75C" text-color="white">경치</v-chip>
+                  <v-chip color="#5CE75C" text-color="white">유람선</v-chip>
+                  <v-chip color="#5CE75C" text-color="white">박물관</v-chip>
+                  <v-chip color="#5CE75C" text-color="white">푸파</v-chip>
+                    <!-- <input placeholder="# 태그별 검색" class="result-body__search-by-tag-search" type="text"> -->
+                    <!-- <span class="result-body_search-by-tag-search-icon"><i class="fas fa-search"></i></span> -->
                 </div>
                 <div class="result-body__search-by-language">
                     <div class="result-body__search-by-lang-title">
@@ -50,7 +55,7 @@
                                 value="allLang"
                                 @change="disableAllVINput"
                             >
-                            </v-checkbox>
+                          </v-checkbox>
                         </li>
                         <li v-for="(lang, idx) in langs" :key="idx">
                             <v-checkbox
@@ -135,11 +140,9 @@
                             </p>
                             <div style="display: flex; flex-direction: row;">
                               <div v-for="i in service.tags.length" :key="i">
-
-                                  <v-chip color="#5CE75C" text-color="white">
-                                    {{service.tags[i-1].tag}}
-                                  </v-chip>
-
+                                <v-chip color="#5CE75C" text-color="white">
+                                  {{service.tags[i-1].tag}}
+                                </v-chip>
                               </div>
                             </div>
                             <div class="result-body-card-bottom">
@@ -218,6 +221,7 @@ export default {
 
             // 달력 관련 변수
             isCalenderOpen: false,
+            leavingDate: ''
         }
     },
     methods: {
@@ -293,30 +297,31 @@ export default {
         },
         // 추가
         updateResult : function () {
+          console.log(this.leavingDate)
           this.guideServiceList = []
           for (let i=0; i<this.fixedguideServiceList.length; i++) {
             for(let j=0; j<this.duration.length; j++) {
               if (this.duration[j] == 0) {
                 if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {
+                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
                     this.guideServiceList.push(this.fixedguideServiceList[i])
                   }
                 }
               } else if (this.duration[j] == 1) {
                 if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {
+                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
                     this.guideServiceList.push(this.fixedguideServiceList[i])
                   }
                 }
               } else if (this.duration[j] == 2) {
                 if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {
+                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
                     this.guideServiceList.push(this.fixedguideServiceList[i])
                   }
                 }
               } else if (this.duration[j] == 3) {
                 if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {
+                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
                     this.guideServiceList.push(this.fixedguideServiceList[i])
                   }
                 }
@@ -361,6 +366,16 @@ export default {
           to = parseInt(to.slice(0, 4)) * 365 + this.sum(parseInt(to.slice(5, 7))) + parseInt(to.slice(8, 10))
           if (select >= from && select <= to) return true
           return false
+        },
+        findTag : function (tag) {
+          console.log("태그를 찾아라")
+          // for (let i=0; i<this.fixedguideServiceList.length; i++) {
+          //   for (let j=0; j<this.fixedguideServiceList[i].tags.length; j++) {
+          //     if (this.fixedguideServiceList[i].tags[j].tag == tag) {
+          //       this.guideServiceList.push(fixedguideServiceList[i])
+          //     }
+          //   }
+          // }
         }
     },
 }
