@@ -74,6 +74,8 @@
           <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.user.username}}</p>
           <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p>
+
+<!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
           <div class="RWButtonOver">
             <div class="RWButton" @click="showRW">후기 작성 하기</div>
           </div>
@@ -87,7 +89,6 @@
       <div class="swiper-button-next" slot="button-next">
         <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
       </div>
-      <!-- <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
     </swiper>
     <div v-if="isRWVisible" class="RWModal">
       <div class="RWModalContent">
@@ -166,23 +167,23 @@
         userName : "",
         userIntro: "",
         userLanguage: [],
-        userGuideServices:[{
-          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-          city_kor: "city_kor[1] city_kor[0]",
-          user:{username:"Hyeri0"},
-          fromDate:"190801"
-        },{
-          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-          city_kor: "city_kor[1] city_kor[0]",
-          user:{username:"Hyeri1"},
-          fromDate:"190801"
-        },{
-          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-          city_kor: "city_kor[1] city_kor[0]",
-          user:{username:"Hyeri2"},
-          fromDate:"190801"
-        }],
-        // userGuideServices: [],
+        // userGuideServices:[{
+        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+        //   city_kor: "city_kor[1] city_kor[0]",
+        //   user:{username:"Hyeri0"},
+        //   fromDate:"190801"
+        // },{
+        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+        //   city_kor: "city_kor[1] city_kor[0]",
+        //   user:{username:"Hyeri1"},
+        //   fromDate:"190801"
+        // },{
+        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+        //   city_kor: "city_kor[1] city_kor[0]",
+        //   user:{username:"Hyeri2"},
+        //   fromDate:"190801"
+        // }],
+        userGuideServices: [],
 
         swiperOption: {
           slidesPerView: 4,
@@ -269,6 +270,7 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
+            console.log(res)
             this.userInfo = res.data.userInfo
             // console.log(this.userInfo)
             this.userName = this.userInfo.username
