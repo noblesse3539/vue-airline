@@ -152,7 +152,7 @@
                             </label>
                             <div class="flight-search-submit">
                                 <button class="flight-search-submitBtn" type="submit"
-                                    @click="goToUrl()">항공권 검색                       
+                                    @click="goToUrl()">항공권 검색
                                 </button>
                             </div>
                         </div>
@@ -249,7 +249,7 @@ export default {
             query.comingDate  = this.comingDate
             query.flightClass = this.flightClass
             query.adults = this.adults
-            query.departureInput = this.departureINput
+            query.departureInput = this.departureInput
             query.destinationInput = this.destinationInput
 
             this.$router.push({name: "FlightListPage", query: query})
@@ -395,7 +395,7 @@ export default {
             comingDatePicker.value = ""
             comingDateText.style.color = "white"
             this.comingDate = ''
-            
+
         },
         roundTrip: function() {
             const comingDatePicker = document.querySelector(".comingDate")
