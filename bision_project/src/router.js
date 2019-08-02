@@ -43,9 +43,10 @@ export default new Router({
             component: Pandora
         },
         {
-            path: '/mypage',
+            path: '/user/:userid',
             name: 'Mypage',
-            component: MyPage
+            component: MyPage,
+            props: true
         },
         {
             path: '/guide/:guideId',

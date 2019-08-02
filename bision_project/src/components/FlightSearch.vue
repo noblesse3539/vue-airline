@@ -57,7 +57,7 @@
                                     type="text"
                                     v-model="destinationInput"
                                     placeholder="국가, 도시 또는 공항"
-                                    class="right-end-input cancelBorder"
+                                    class="cancelBorder"
                                     @input="destinationInput = $event.target.value"
                                     @keyup="getDestinationOutput"
                                     @keydown.up="onArrowUp('destination')"
@@ -101,7 +101,7 @@
                             <label class="comingDateText"> 오는날
                                 <input class="comingDate" type="text" placeholder="" :value="comingDate" disabled>
                                 <div class="comingDate-picker">
-                                    <v-date-picker :min="minDate" locale="ko-KR" v-model="comingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                                    <v-date-picker :min="minComingDate" locale="ko-KR" v-model="comingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                                 </div>
                             </label>
                         </div>
@@ -210,7 +210,7 @@ export default {
                 '.comingDate': false,
             },
             minDate: new Date().toISOString().substr(0, 10),
-            comingMinDate: new Date().toISOString().substr(0, 10),
+            // comingMinDate: ,
             isDateWeird: function() {
                 return minDate > comingDate? true : false
             },
@@ -249,6 +249,7 @@ export default {
             query.comingDate  = this.comingDate
             query.flightClass = this.flightClass
             query.adults = this.adults
+            query.infants = this.infants
             query.departureInput = this.departureINput
             query.destinationInput = this.destinationInput
 
@@ -274,6 +275,7 @@ export default {
             const psgTriangleBox = document.querySelector(".psg-triangle-box")
             const psgaAdultsPicker = document.querySelector(".psg-adults-picker")
             const flightSearchBtn = document.querySelector(".flight-search-submit")
+            // const vBtn = document.query(".v-btn")
 
             // 인원 수 고를 때 제출 숨긴 버튼 다시 보이게 하기
             // console.log(flightSearchBtn.style.display)
@@ -293,7 +295,6 @@ export default {
                     leavingDatePicker.style.display = "none"
                     comingDatePicker.style.display = "none"
                 }
-
             }
 
             if (e.target.classList[0] !== 'flight-search-submitBtn'
@@ -307,7 +308,9 @@ export default {
                 && e.target.classList[0] !== 'v-input__icon'
                 && e.target.classList[0] !== 'v-icon'
                 && e.target.classList[0] !== 'container'
-                && e.target.classList[0] !== 'className') {
+                && e.target.classList[0] !== 'className'
+                && e.target.classList[0] !== 'vBtn'
+                ) {
                 flightSearchBtn.style.display = "block"
                 psgTriangleBox.style.display = "none"
                 psgaAdultsPicker.style.display = "none"
@@ -330,6 +333,7 @@ export default {
             }
         },
         onArrowUp(travelType) {
+            
             if (travelType == 'departure') {
                 if (this.departureArrowCounter > 0) {
                     this.departureArrowCounter --
@@ -416,6 +420,17 @@ export default {
                 this.adults -= 1
             }
         },
+        increaseInfants: function() {
+            if (this.infants <= 7) {
+                this.infants += 1
+            }
+        },
+        decreaseInfants: function() {
+            if (this.infants != 1) {
+                this.infants -= 1
+            }
+        },
+
         getDepartureOutput() {
             this.isOpen = true
 
@@ -438,6 +453,7 @@ export default {
         },
         DepartureAirportAutoCompleteSearch() {
             this.departureOutput = this.airportList.filter( airport => {
+                
                 if ( airport.name_kor.includes(this.departureInput)
                     || airport.name_eng.toLowerCase().match(this.departureInput.toLowerCase())
                     || airport.nation_kor.includes(this.departureInput)
@@ -470,7 +486,9 @@ export default {
     },
     // 공항 출발지 및 도착지 Autocomplete 방식으로 검색
     computed: {
-
+        minComingDate() {
+            return this.leavingDate
+        },
     },
     watch: {
         departureInput: function() {
