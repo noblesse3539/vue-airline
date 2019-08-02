@@ -133,6 +133,15 @@
                             <p class="result-body-card-city">
                                 <i class="far fa-calendar-alt"></i> {{service.fromDate}} - {{service.toDate}}
                             </p>
+                            <div style="display: flex; flex-direction: row;">
+                              <div v-for="i in service.tags.length" :key="i">
+
+                                  <v-chip color="#5CE75C" text-color="white">
+                                    {{service.tags[i-1].tag}}
+                                  </v-chip>
+
+                              </div>
+                            </div>
                             <div class="result-body-card-bottom">
                                 <p>
                                     <v-rating v-model="guideRating" size="5" dense></v-rating>
@@ -241,6 +250,7 @@ export default {
                         temp.serviceId  = eachService._id
                         temp.fromDate   = eachService.fromDate
                         temp.toDate     = eachService.toDate
+                        temp.tags       = eachService.tags
                         temp.guideId    = eachService.user ? eachService.user._id : ''
                         this.guideServiceList.push(temp)
                         this.fixedguideServiceList.push(temp)
@@ -282,7 +292,7 @@ export default {
             // {name: "GuideListPage", params: params}
         },
         // 추가
-        updateResult : function () {    
+        updateResult : function () {
           this.guideServiceList = []
           for (let i=0; i<this.fixedguideServiceList.length; i++) {
             for(let j=0; j<this.duration.length; j++) {
