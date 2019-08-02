@@ -21,7 +21,7 @@ export default {
         'itemName',
         'quantity',
         'totalAmount',
-        'taxFreeAmount'
+        'taxFreeAmount',
     ],
     mounted() {
         
@@ -41,15 +41,19 @@ export default {
                 'item_name'         : this.itemName,
                 'quantity'          : this.quantity,
                 'total_amount'      : this.totalAmount,
-                'tax_free_amount'   : this.taxFreeAmount
+                'tax_free_amount'   : this.totalAmount*0.01,
+                // 'item_name'         : 'hello',
+                // 'quantity'          : 3,
+                // 'total_amount'      : 10000,
+                // 'tax_free_amount'   : 2000,
             }
             this.$http.post(paymentURL, data)
                 .then( res => {
-                    // console.log(res)
+                    console.log(res.data)
 
                     console.log(res.data.next_redirect_pc_url)
                     console.log(this.getServiceInfo)
-                    // window.location.href = res.data.next_redirect_pc_url
+                    window.location.href = res.data.next_redirect_pc_url
                 })
         },
         goToNext() {

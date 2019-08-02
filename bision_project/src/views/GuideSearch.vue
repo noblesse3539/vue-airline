@@ -57,7 +57,7 @@ export default {
             guideSearchOuput: [],
             guideSearchInput: '',
             isOpen: false,
-
+    
             defaultPlaceholder: '"어디로 떠나실건가요? 가고싶은 나라/도시 이름으로 가이드를 검색해보세요!"',
             userChoice : {},
             guideInputArrowCounter: 0,

@@ -23,7 +23,7 @@
                 <img class="kakao-link-btn-img" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
             </a>
         </div>
-        <!-- {{this.serviceInfo}} -->
+        {{this.serviceInfo}}
     </div>
 </template>
 
@@ -71,6 +71,7 @@ export default {
                     const baseUrl = "/api/paymentstore/tmp/" + this.userId  
                     this.$http.get(baseUrl)
                         .then( res => {
+                            // console.log(res.data)
                             this.serviceInfo = res.data.tmpStore.service
                     })
                 }
@@ -121,7 +122,7 @@ export default {
                 Kakao.Link.sendCustom({
                 templateId: 17427,
                 templateArgs: {
-                'title': '이빵글의 여행 일정입니다.',
+                'title': this.serviceInfo.title ? this.serviceInfo.title : '',
                 'description': '이빵글의 여행 일정입니다.',
                 'imageUrl' : 'https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg',
                 }
