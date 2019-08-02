@@ -48,7 +48,7 @@ export default {
         }
     },
     mounted() {
-        this.sendPaymentInfo()
+        // this.sendPaymentInfo()
         this.getTempServiceInfo()
         // this.updateRealServiceInfo()
         // this.deleteTempServiceInfo()
@@ -74,6 +74,11 @@ export default {
                             // console.log(res.data)
                             this.serviceInfo = res.data.tmpStore.service
                     })
+                        .then( () => {
+                            if (this.serviceInfo) {
+                                this.updateRealServiceInfo()
+                            }
+                        })
                 }
                 })
                 .catch(err => {
@@ -84,12 +89,15 @@ export default {
         updateRealServiceInfo() {
             const baseUrl = '/api/paymentstore/real/' + this.getUserId
             this.$http.post(baseUrl, {service: this.serviceInfo})
+                .then( () => {
+                    this.deleteTempServiceInfo()
+                })
         },
         deleteTempServiceInfo() {
             const baseUrl = "/api/paymentstore/tmp/" + this.getUserId
             this.$http.delete(baseUrl)
                 .then( res => {
-                    console.log(res)
+                    // console.log(res)
                 })
         },
 

@@ -28,7 +28,7 @@
       <!-- Introduction -->
       <v-flex xs6>
         <h2 class="display-1 mb-3">{{guideName}}
-
+          
           <!-- v-if: 본인일 때 -->
           <v-tooltip right v-if="guideId == getUserId">
             <template v-slot:activator="{ on }">
@@ -67,7 +67,7 @@
             <v-card flat>
               <v-card-title><h2>Plan Title</h2></v-card-title>
               <v-layout mx-5 mb-5>
-                <v-flex xs12 md5>
+                <v-flex xs12 md5 @click="goToServiceDetail">
                   <v-img :src="getImgUrl('logo.png')"></v-img>
                 </v-flex>
                 <v-flex xs12 md7 ml-5>
@@ -103,13 +103,13 @@
           <!-- portfolio list -->
         <v-container fluid grid-list-md mx-2>
           <v-layout row wrap >
-            <v-flex mx-2 my-2 v-for="card in cards" :key="card.title" xs4>
+            <v-flex mx-2 my-2 v-for="(service, idx) in guideServices" :key="idx" xs4>
               <v-card>
-                <v-img :src="card.src" height="200px">
+                <v-img :src="service.mainImg" height="200px">
                   <v-container fill-height fluid pa-2>
                     <v-layout fill-height>
                       <v-flex xs12 align-end flexbox>
-                        <span class="headline white--text" v-text="card.title"></span>
+                        <span class="headline white--text" v-text="service.title"></span>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -155,6 +155,10 @@ export default {
   },
   props: ['guideId'],
   methods: {
+    goToServiceDetail() {
+      // `/user/${getuserId}`
+      // this.$route.push({path: ''})
+    },
     getImgUrl(img){
       return require('../assets/' + img)
     },
@@ -238,6 +242,8 @@ export default {
       this.$http.get(` /api/guideservice/findGSByGuideId/${this.guideId}`)
         .then( res => {
           console.log(res)
+          this.guideServices = res.data
+          // console.log(this.guideServices)
         })
     },
   },
@@ -264,6 +270,8 @@ export default {
       // 일반 유저일 경우 수정 기능들을 비활성 처리합니다.
       guideId: this.$route.query.guideId,
 
+      // 가이드 상품 관련
+      guideServices: [],
     }
   },
   computed: {
