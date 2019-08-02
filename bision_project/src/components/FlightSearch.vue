@@ -249,6 +249,7 @@ export default {
             query.comingDate  = this.comingDate
             query.flightClass = this.flightClass
             query.adults = this.adults
+            query.infants = this.infants
             query.departureInput = this.departureINput
             query.destinationInput = this.destinationInput
 
@@ -274,6 +275,7 @@ export default {
             const psgTriangleBox = document.querySelector(".psg-triangle-box")
             const psgaAdultsPicker = document.querySelector(".psg-adults-picker")
             const flightSearchBtn = document.querySelector(".flight-search-submit")
+            // const vBtn = document.query(".v-btn")
 
             // 인원 수 고를 때 제출 숨긴 버튼 다시 보이게 하기
             // console.log(flightSearchBtn.style.display)
@@ -306,7 +308,9 @@ export default {
                 && e.target.classList[0] !== 'v-input__icon'
                 && e.target.classList[0] !== 'v-icon'
                 && e.target.classList[0] !== 'container'
-                && e.target.classList[0] !== 'className') {
+                && e.target.classList[0] !== 'className'
+                && e.target.classList[0] !== 'vBtn'
+                ) {
                 flightSearchBtn.style.display = "block"
                 psgTriangleBox.style.display = "none"
                 psgaAdultsPicker.style.display = "none"
@@ -416,6 +420,17 @@ export default {
                 this.adults -= 1
             }
         },
+        increaseInfants: function() {
+            if (this.infants <= 7) {
+                this.infants += 1
+            }
+        },
+        decreaseInfants: function() {
+            if (this.infants != 1) {
+                this.infants -= 1
+            }
+        },
+
         getDepartureOutput() {
             this.isOpen = true
 
