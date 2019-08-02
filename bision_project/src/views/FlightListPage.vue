@@ -2,25 +2,24 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="height: 100px; width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%; display:grid; grid-template-columns: 43% 43% 16%">
+      <div style="height: 100px; width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%; display:grid; grid-template-columns: 50% 34% 16%">
         <div>
           <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
-            인천({{this.$route.params.departure}}) - 다낭({{this.$route.params.destination}})
-
+            {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
           </div>
           <div class="container" style="height: 50%; padding-top: 4px;">
-            {{this.$route.params.adults}} 성인 <span v-if="this.$route.params.children">{{this.$route.params.children}} 아동</span> <span v-if="this.$route.params.infants">{{this.$route.params.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.params.cabinClass"></span><span v-else>없음</span>
+            {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.cabinClass"></span><span v-else>없음</span>
           </div>
         </div>
 
         <div style="font-size: 15px; padding-top: 4%;">
           <div style="width: 50%; display: inline-block;">
             <div>가는 날</div>
-            <div>{{this.$route.params.leavingDate}}</div>
+            <div>{{this.$route.query.leavingDate}}</div>
           </div>
           <div style="width: 50%; display: inline-block;">
             <div>오는 날</div>
-            <div>{{this.$route.params.comingDate}}</div>
+            <div>{{this.$route.query.comingDate}}</div>
           </div>
         </div>
         <div style="padding-top: 10px;">
@@ -302,16 +301,16 @@ export default {
                             'locale': 'ko-KR',
                             // 'originPlace': 'ICN-sky',
                             // 'destinationPlace': 'HNL-sky',
-                            'originPlace': 'SFO-sky',
-                            'destinationPlace': 'LHR-sky',
-                            'outboundDate': '2019-09-01',
-                            'adults': '1',
-                            // 'originPlace': this.$route.params.departure + '-sky',
-                            // 'destinationPlace': this.$route.params.destination + '-sky',
-                            // 'outboundDate': this.$route.params.leavingDate,
-                            // 'adults': this.$route.params.adults,
+                            // 'originPlace': 'SFO-sky',
+                            // 'destinationPlace': 'LHR-sky',
+                            // 'outboundDate': '2019-09-01',
+                            // 'adults': '1',
+                            'originPlace': this.$route.query.departure + '-sky',
+                            'destinationPlace': this.$route.query.destination + '-sky',
+                            'outboundDate': this.$route.query.leavingDate,
+                            'adults': this.$route.query.adults,
                         }
-            // let inboundDate = this.$route.params.comingDate
+            // let inboundDate = this.$route.query.comingDate
             let inboundDate = '2019-09-10'
             if (inboundDate != '') {
               data['inboundDate'] = inboundDate
@@ -873,10 +872,17 @@ export default {
           console.log(this.flights)
           this.numofFlights = this.flights.length
           this.loading = false
+          // setTimeout("this.changeLoading()", 100);
         },
         transferforCheck : function(time) {
           return parseInt(time.slice(11, 13)) * 60 + parseInt(time.slice(14, 16))
-        }
+        },
+        getAirportName: function(name) {
+          return name.slice(0, name.indexOf(','))
+        },
+        // changeLoading : function () {
+        //   this.loading = false;
+        // }
 
     },
 }
