@@ -22,6 +22,35 @@ exports.createReview = (req,res)=>{
 exports.deleteReview = (req,res)=>{
   let newReview
   let reviewId
+  Review.findById(req.params.id,(err,review)=>{
+    if(err) res.status(500).json({err})
+    if(review) {
+      newReview=new Review(review)
+      reviewId=review._id
+      console.log(review);
+      GuideService.findOne({_id:review.guideservice}, (err,guideservice) => {
+              if (guideservice) {
+                    console.log(guideservice);
+                    const idx=guideservice.reviews.indexOf(reviewId);
+                    console.log(reviewId);
+                    console.log(guideservice.reviews);
+                    console.log(idx);
+                    if(idx>-1) guideservice.reviews.splice(idx,1)
+                    guideservice.save()
+                    Review.findByIdAndRemove({_id:reviewId},(err)=>{
+                      if(err) res.status(500).json({err})
+                      return res.json(newReview)
+                    })
+                }
+                if(err) res.status(500).json({err})
+          })
+    }
+  })
+}
+
+exports.deleteReviewByGSTitleContent = (req,res)=>{
+  let newReview
+  let reviewId
   Review.findOne({guideservice:req.params.id,title:req.params.title,content:req.params.content},(err,review)=>{
     if(err) res.status(500).json({err})
     if(review) {
@@ -49,7 +78,7 @@ exports.deleteReview = (req,res)=>{
 }
 
 exports.updateReview=(req,res)=>{
-    Review.findOne({guideservice:req.params.id,title:req.params.title,content:req.params.content}, (err,review) => {
+    Review.findById(req.params.id, (err,review) => {
         if (review) {
               console.log(review)
               let id=review._id
@@ -63,5 +92,4 @@ exports.updateReview=(req,res)=>{
         }
         if(err) res.status(500).json({err})
       })
-
   }

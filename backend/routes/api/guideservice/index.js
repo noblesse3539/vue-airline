@@ -12,8 +12,8 @@ router.get('/findGSAll',controller.findGSAll)
 router.get('/search/:keyword',controller.SearchGS)
 
 router.post('/create/',controller.createGuideService)
-router.delete('/delete/:user/:title',controller.deleteGuideService)
-router.put('/update/:user/:title',controller.updateGuideService)
+router.delete('/delete/:id',controller.deleteGuideService)
+router.put('/update/:id',controller.updateGuideService)
 
 router.post('/:guideServiceId/:userId', controller.likeGuideService)
 

@@ -43,26 +43,18 @@ exports.deleteGuideService = (req,res) =>{
           message: error.message
       })
   }
-  GuideService.deleteByTitle(req.params,req.params.title)
+  GuideService.findOneAndRemove({_id:req.params.id})
   .then(respond)
   .then(onError)
 }
 
 exports.updateGuideService = (req, res) => {
-    GuideService.findOne({user:req.params.user,title:req.params.title}, (err,guideservice) => {
-        if (guideservice) {
-              console.log(guideservice)
-              let id=guideservice._id
-              GuideService.update({ _id: id }, { $set: req.body }, function(err, output){
-                  if(err) res.status(500).json({ error: 'database failure' });
-                  console.log(output);
-                  if(!output.n) return res.status(404).json({ error: 'guideservice not found' });
-                  res.json( { message: 'guideservice updated' } );
-              })
-          if(err) res.status(500).json({err})
-        }
-        if(err) res.status(500).json({err})
-      })
+    GuideService.update({ _id: req.params.id }, { $set: req.body }, function(err, output){
+        if(err) res.status(500).json({ error: 'database failure' });
+        console.log(output);
+        if(!output.n) return res.status(404).json({ error: 'guideservice not found' });
+        res.json( { message: 'guideservice updated' } );
+    })
 }
 
 exports.findGSAll=(req,res)=>{
