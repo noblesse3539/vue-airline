@@ -195,19 +195,19 @@ exports.likeGuideService = (req, res) => {
         })
         user.save()
         guideService.save()
-        res.json({message:"삭제 완료"})
+        res.status(200).json({message:"삭제 완료", added:false})
       }
       else {
         await user.likeGuideServices.push(guideService)
         await guideService.likeUsers.push(user)
         user.save()
         guideService.save()
-        res.json({message:"추가 완료"})
+        res.status(200).json({message:"추가 완료", added:true})
       }
     })
   })
   .catch( err => {
-    res.json({error: err})
+    res.status(500).json({error: err})
   })
 }
 
