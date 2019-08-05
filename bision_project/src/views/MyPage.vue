@@ -132,7 +132,7 @@
     created() {
     },
     mounted() {
-      // this.getUserInfo()
+      this.getUserInfo()
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
@@ -169,23 +169,23 @@
         userName : "",
         userIntro: "",
         userLanguage: [],
-        userGuideServices:[{
-          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-          city_kor: "city_kor[1] city_kor[0]",
-          user:{username:"Hyeri0"},
-          fromDate:"190801"
-        },{
-          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-          city_kor: "city_kor[1] city_kor[0]",
-          user:{username:"Hyeri1"},
-          fromDate:"190801"
-        },{
-          mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-          city_kor: "city_kor[1] city_kor[0]",
-          user:{username:"Hyeri2"},
-          fromDate:"190801"
-        }],
-        // userGuideServices: [],
+        // userGuideServices:[{
+        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+        //   city_kor: "city_kor[1] city_kor[0]",
+        //   user:{username:"Hyeri0"},
+        //   fromDate:"190801"
+        // },{
+        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+        //   city_kor: "city_kor[1] city_kor[0]",
+        //   user:{username:"Hyeri1"},
+        //   fromDate:"190801"
+        // },{
+        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
+        //   city_kor: "city_kor[1] city_kor[0]",
+        //   user:{username:"Hyeri2"},
+        //   fromDate:"190801"
+        // }],
+        userGuideServices: [],
 
         swiperOption: {
           slidesPerView: 4,

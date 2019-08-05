@@ -282,7 +282,7 @@ export default {
             // {name: "GuideListPage", params: params}
         },
         // 추가
-        updateResult : function () {    
+        updateResult : function () {
           this.guideServiceList = []
           for (let i=0; i<this.fixedguideServiceList.length; i++) {
             for(let j=0; j<this.duration.length; j++) {
