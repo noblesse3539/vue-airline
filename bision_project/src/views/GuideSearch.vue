@@ -47,7 +47,7 @@
 
 <script>
 import './GuideSearch.css'
-import locationList from '../components/AirportList'
+import locationList from '../components/Locationlist'
 
 export default {
     name: 'GuideSearch',
