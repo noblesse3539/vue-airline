@@ -469,7 +469,7 @@ fieldset[disabled] .multiselect {
   right: auto;
   left: 1px;
 }
-.options {
+.guide__options {
   margin:auto;
   text-align: center;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -477,17 +477,17 @@ fieldset[disabled] .multiselect {
   width: 95%;
 }
 
-.options td, .options th {
+.guide__options td, .guide__options th {
   border-radius: 20px;
   border-spacing: 5px;
   padding: 8px;
 }
 
-.options tr:nth-child(odd){background-color: #f2f2f2;}
+.guide__options tr:nth-child(odd){background-color: #f2f2f2;}
 
-.options tr:hover {background-color: #ddd;}
+.guide__options tr:hover {background-color: #ddd;}
 
-.options th {
+.guide__options th {
   padding-top: 12px;
   padding-bottom: 12px;
   background-color: #4CAF50;

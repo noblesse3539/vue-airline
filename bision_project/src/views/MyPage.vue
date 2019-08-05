@@ -78,7 +78,7 @@
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
           <div class="RWButtonOver">
-            <div class="RWButton" @click="showRW">후기 작성 하기</div>
+            <div class="RWButton" @click="showRW(guideService._id)">후기 작성 하기</div>
           </div>
         </div>
       </swiper-slide>
@@ -145,6 +145,7 @@
     },
     data: function () {
       return {
+        guideServiceId : '',
         subcomment:'',
         comment:'',
         rating: 3,
@@ -167,28 +168,11 @@
         userImage: '',
         isImgModalOpen: false,
         isUserInfoOpen: true,
-
+        userId : '',
         userName : "",
         userIntro: "",
         userLanguage: [],
-        // userGuideServices:[{
-        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-        //   city_kor: "city_kor[1] city_kor[0]",
-        //   user:{username:"Hyeri0"},
-        //   fromDate:"190801"
-        // },{
-        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-        //   city_kor: "city_kor[1] city_kor[0]",
-        //   user:{username:"Hyeri1"},
-        //   fromDate:"190801"
-        // },{
-        //   mainImg: "https://cdn.pixabay.com/photo/2016/03/09/09/43/person-1245959_1280.jpg",
-        //   city_kor: "city_kor[1] city_kor[0]",
-        //   user:{username:"Hyeri2"},
-        //   fromDate:"190801"
-        // }],
         userGuideServices: [],
-
         swiperOption: {
           slidesPerView: 4,
           spaceBetween: 20,
@@ -207,7 +191,7 @@
 
         // 수정 필 !!!!!!!!!!!!!!!!!!!!!!
         myTourExperience: ["http://www.dream-wallpaper.com/free-wallpaper/travel-wallpaper/jeju-island--korea-scenery-wallpaper/1920x1200/free-wallpaper-13.jpg", "https://i.pinimg.com/originals/23/2e/f2/232ef249a037d9424a0e67a41eba8200.jpg", "https://i.pinimg.com/originals/98/e4/4e/98e44e7ce7245678d79e29e1075746a1.jpg", "http://luxurytraveler.s3.amazonaws.com/wp-content/uploads/2016/02/21144831/marina_bay_sands_singapore_view-pool.jpg"],
-      
+
         // 유저 결제 관련 데이터
       }
     },
@@ -215,16 +199,28 @@
       clearReview() {
         this.subcomment=''
         this.comment=''
-        this.rating=0
+        this.rating = 0
       },
       submitReview(){
-        // 푸쉬하고
-        this.comment=''
-        this.subcomment=''
-        this.closeRW()
-
+        var review = {
+          'user' : this.userId,
+          'title' : this.comment,
+          'content' : this.subcomment,
+          'rating' : this.rating,
+        }
+        // console.log(this.guideServiceId)
+        // console.log(review)
+        this.$http.post('/api/review/create/'+this.guideServiceId, review)
+         .then( res => {
+             console.log(1, res.data)
+             this.closeRW()
+         })
+         .catch( err => {
+           console.log(err)
+           this.closeRW()
+         })
       },
-      showRW() {
+      showRW(v) {
         const navBarZIndex = document.querySelector('#navbox')
         const footerZIndex = document.querySelector('#footer')
         footerZIndex.style.zIndex = 0
@@ -232,8 +228,13 @@
         document.documentElement.style.overflow='hidden'
         document.body.scroll="no";
         this.isRWVisible = true;
+        this.guideServiceId = v
       },
       closeRW() {
+        this.guideServiceId = ''
+        this.rating = 3
+        this.comment=''
+        this.subcomment=''
         document.documentElement.style.overflow='scroll';
         document.body.scroll="yes";
         const navBarZIndex = document.querySelector('#navbox')
@@ -278,7 +279,8 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
-            // console.log(res)
+            console.log(1, res)
+            this.userId = res.data.userInfo._id
             this.userGuideServices = res.data.paymentRecords
             this.userInfo = res.data.userInfo
             // console.log(this.userInfo)
