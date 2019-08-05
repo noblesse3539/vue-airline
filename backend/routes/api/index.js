@@ -13,6 +13,8 @@ const review = require('./review')
 const tag=require('./tag')
 const option=require('./option')
 const paidOption=require('./paidOption')
+const voc=require('./voc')
+const currency=require('./currency')
 
 const kakaopay = require('./kakaopay')
 const paymentstore = require('./paymentstore')
@@ -48,6 +50,9 @@ router.use('/airport', airport)
 
 router.use('/city', city)
 router.use('/nation', nation)
+
+router.use('/voc',voc)
+router.use('/currency',currency)
 
 router.use('/kakaopay', kakaopay)
 

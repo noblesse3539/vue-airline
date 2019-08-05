@@ -19,7 +19,8 @@ tags:
 - name: User
 - name: Option
 - name: paidOption
-
+- name: VOC
+- name: Currency
 
 schemes:
   # tip: remove http to make production-grade
@@ -823,7 +824,109 @@ paths:
           description: 결제한 옵션 데이터 하나 수정
           schema:
             $ref: '#/definitions/PaidOption'
+############################
+#            VOC           #
+############################
+  /api/voc/findVocByUser/{user}:
+    get:
+      tags:
+      - VOC
+      summary: 유저가 작성한 VOC들을 반환합니다.
+      parameters:
+        - in: path
+          name: user
+          type: string
+          required: true
+          description: userObId
+      responses:
+        200:
+          description: 유저가 작성한 VOC들을 반환
 
+  /api/voc/create:
+    post:
+      tags:
+      - VOC
+      summary: VOC 데이터 하나를 생성합니다.
+      parameters:
+        - in: body
+          name: voc
+          required: true
+          description: VOC
+          schema:
+            $ref: '#/definitions/VOC'
+      responses:
+        200:
+          description: VOC 데이터 하나 생성
+
+  /api/voc/delete/{id}:
+    delete:
+      tags:
+      - VOC
+      summary: VOC 데이터 하나를 삭제합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: VOCId
+      responses:
+        200:
+          description: VOC 데이터 하나 삭제
+
+  /api/voc/update/{id}:
+    put:
+      tags:
+      - VOC
+      summary: VOC 데이터 하나를 수정합니다.
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: VOCId
+        - in: body
+          name: VOC
+          required: true
+          description: VOC
+          schema:
+            $ref: '#/definitions/VOC'
+      responses:
+        200:
+          description: VOC 데이터 하나 수정
+
+############################
+#         Currency         #
+############################
+  /api/currency/search/{nationKor}:
+    get:
+      tags:
+      - Currency
+      summary: 국가의 한글명 하나를 전달하면 통화단위를 반환합니다.
+      parameters:
+        - in: path
+          name: nationKor
+          type: string
+          required: true
+          description: nation_kor
+      responses:
+        200:
+          description: 국가의 한글명 하나를 전달하면 통화단위를 반환
+
+  /api/currency/create:
+    post:
+      tags:
+      - Currency
+      summary: Currency 데이터 하나를 생성합니다.
+      parameters:
+        - in: body
+          name: currency
+          required: true
+          description: Currency
+          schema:
+            $ref: '#/definitions/Currency'
+      responses:
+        200:
+          description: Currency 데이터 하나 생성
 
   /swagger:
     x-swagger-pipe: swagger_raw
@@ -1091,7 +1194,31 @@ definitions:
         type: string
       code:
         type: string
+############################
+#            VOC           #
+############################
+  VOC:
+    properties:
+      user:
+        type: string
+      subject:
+        type: string
+      content:
+        type: string
 
+############################
+#         Currency         #
+############################
+  Currency:
+    properties:
+      nation:
+        type: string
+      code:
+        type: string
+
+############################
+#            etc           #
+############################
   TagCreate:
     properties:
       tag:
