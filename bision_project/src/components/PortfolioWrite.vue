@@ -525,7 +525,7 @@ export default {
         .then( res => {
           console.log(res.status)
         })
-    }
+    },
     addTag(newTag) {
       this.dbTags.push(newTag)
       this.tourProgram.tags.push(newTag)
