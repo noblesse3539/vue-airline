@@ -1,0 +1,965 @@
+[{
+    'costCode': 'GHS',
+    'nationCode': 'GH'
+  },
+  {
+    'costCode': 'XAF',
+    'nationCode': 'GA'
+  },
+  {
+    'costCode': 'GYD',
+    'nationCode': 'GY'
+  },
+  {
+    'costCode': 'GMD',
+    'nationCode': 'GM'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'GP'
+  },
+  {
+    'costCode': 'GTQ',
+    'nationCode': 'GT'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'GU'
+  },
+  {
+    'costCode': 'RUB',
+    'nationCode': 'RU'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'GD'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'GR'
+  },
+  {
+    'costCode': 'DKK',
+    'nationCode': 'GL'
+  },
+  {
+    'costCode': 'GNF',
+    'nationCode': 'GN'
+  },
+  {
+    'costCode': 'XAF',
+    'nationCode': 'GW'
+  },
+  {
+    'costCode': 'NAD',
+    'nationCode': 'NA'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'NR'
+  },
+  {
+    'costCode': 'NGN',
+    'nationCode': 'NG'
+  },
+  {
+    'costCode': 'SSP',
+    'nationCode': 'SS'
+  },
+  {
+    'costCode': 'ZAR',
+    'nationCode': 'ZA'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'NL'
+  },
+  {
+    'costCode': 'ANG',
+    'nationCode': 'AN'
+  },
+  {
+    'costCode': 'NPR',
+    'nationCode': 'NP'
+  },
+  {
+    'costCode': 'NOK',
+    'nationCode': 'NO'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'NF'
+  },
+  {
+    'costCode': 'NZD',
+    'nationCode': 'NZ'
+  },
+  {
+    'costCode': 'XPF',
+    'nationCode': 'NC'
+  },
+  {
+    'costCode': 'NZD',
+    'nationCode': 'NU'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'NE'
+  },
+  {
+    'costCode': 'NIO',
+    'nationCode': 'NI'
+  },
+  {
+    'costCode': 'TWD',
+    'nationCode': 'TW'
+  },
+  {
+    'costCode': 'KRW',
+    'nationCode': 'KR'
+  },
+  {
+    'costCode': 'DKK',
+    'nationCode': 'DK'
+  },
+  {
+    'costCode': 'DOP',
+    'nationCode': 'DO'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'DM'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'DE'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'TL'
+  },
+  {
+    'costCode': 'LAK',
+    'nationCode': 'LA'
+  },
+  {
+    'costCode': 'LRD',
+    'nationCode': 'LR'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'LV'
+  },
+  {
+    'costCode': 'RUB',
+    'nationCode': 'RU'
+  },
+  {
+    'costCode': 'LBP',
+    'nationCode': 'LB'
+  },
+  {
+    'costCode': 'LSL',
+    'nationCode': 'LS'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'RE'
+  },
+  {
+    'costCode': 'RON',
+    'nationCode': 'RO'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'LU'
+  },
+  {
+    'costCode': 'RWF',
+    'nationCode': 'RW'
+  },
+  {
+    'costCode': 'LYD',
+    'nationCode': 'LY'
+  },
+  {
+    'costCode': 'LTL',
+    'nationCode': 'LT'
+  },
+  {
+    'costCode': 'CHF',
+    'nationCode': 'LI'
+  },
+  {
+    'costCode': 'MGA',
+    'nationCode': 'MG'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'MQ'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'MH'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'YT'
+  },
+  {
+    'costCode': 'MOP',
+    'nationCode': 'MO'
+  },
+  {
+    'costCode': 'MKD',
+    'nationCode': 'MK'
+  },
+  {
+    'costCode': 'MWK',
+    'nationCode': 'MW'
+  },
+  {
+    'costCode': 'MYR',
+    'nationCode': 'MY'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'ML'
+  },
+  {
+    'costCode': 'MXN',
+    'nationCode': 'MX'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'MC'
+  },
+  {
+    'costCode': 'MAD',
+    'nationCode': 'MA'
+  },
+  {
+    'costCode': 'MUR',
+    'nationCode': 'MU'
+  },
+  {
+    'costCode': 'MRU',
+    'nationCode': 'MR'
+  },
+  {
+    'costCode': 'MZN',
+    'nationCode': 'MZ'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'MS'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'ME'
+  },
+  {
+    'costCode': 'MDL',
+    'nationCode': 'MD'
+  },
+  {
+    'costCode': 'MVR',
+    'nationCode': 'MV'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'MT'
+  },
+  {
+    'costCode': 'MNT',
+    'nationCode': 'MN'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'US'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'VI'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'UM'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'FM'
+  },
+  {
+    'costCode': 'VUV',
+    'nationCode': 'VU'
+  },
+  {
+    'costCode': 'BHD',
+    'nationCode': 'BH'
+  },
+  {
+    'costCode': 'BBD',
+    'nationCode': 'BB'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'VA'
+  },
+  {
+    'costCode': 'BSD',
+    'nationCode': 'BS'
+  },
+  {
+    'costCode': 'BDT',
+    'nationCode': 'BD'
+  },
+  {
+    'costCode': 'MMK',
+    'nationCode': 'MM'
+  },
+  {
+    'costCode': 'BMD',
+    'nationCode': 'BM'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'BJ'
+  },
+  {
+    'costCode': 'VES',
+    'nationCode': 'VE'
+  },
+  {
+    'costCode': 'VND',
+    'nationCode': 'VN'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'BE'
+  },
+  {
+    'costCode': 'BYN',
+    'nationCode': 'BY'
+  },
+  {
+    'costCode': 'BZD',
+    'nationCode': 'BZ'
+  },
+  {
+    'costCode': 'BAM',
+    'nationCode': 'BA'
+  },
+  {
+    'costCode': 'BWP',
+    'nationCode': 'BW'
+  },
+  {
+    'costCode': 'BOB',
+    'nationCode': 'BO'
+  },
+  {
+    'costCode': 'BND',
+    'nationCode': 'BN'
+  },
+  {
+    'costCode': 'BIF',
+    'nationCode': 'BI'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'BF'
+  },
+  {
+    'costCode': 'BTN',
+    'nationCode': 'BT'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'MP'
+  },
+  {
+    'costCode': 'KPW',
+    'nationCode': 'KP'
+  },
+  {
+    'costCode': 'BGN',
+    'nationCode': 'BG'
+  },
+  {
+    'costCode': 'BRL',
+    'nationCode': 'BR'
+  },
+  {
+    'costCode': 'SAR',
+    'nationCode': 'SA'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'SM'
+  },
+  {
+    'costCode': 'STN',
+    'nationCode': 'ST'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'PM'
+  },
+  {
+    'costCode': 'WST',
+    'nationCode': 'WS'
+  },
+  {
+    'costCode': 'MAD',
+    'nationCode': 'EH'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'SN'
+  },
+  {
+    'costCode': 'RSD',
+    'nationCode': 'RS'
+  },
+  {
+    'costCode': 'SCR',
+    'nationCode': 'SC'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'LC'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'VC'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'KN'
+  },
+  {
+    'costCode': 'SHP',
+    'nationCode': 'SH'
+  },
+  {
+    'costCode': 'SOS',
+    'nationCode': 'SO'
+  },
+  {
+    'costCode': 'SBD',
+    'nationCode': 'SB'
+  },
+  {
+    'costCode': 'SDG',
+    'nationCode': 'SD'
+  },
+  {
+    'costCode': 'SRD',
+    'nationCode': 'SR'
+  },
+  {
+    'costCode': 'LKR',
+    'nationCode': 'LK'
+  },
+  {
+    'costCode': 'NOK',
+    'nationCode': 'SJ'
+  },
+  {
+    'costCode': 'SZL',
+    'nationCode': 'SZ'
+  },
+  {
+    'costCode': 'SEK',
+    'nationCode': 'SE'
+  },
+  {
+    'costCode': 'CHF',
+    'nationCode': 'CH'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'ES'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'SK'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'SI'
+  },
+  {
+    'costCode': 'SYP',
+    'nationCode': 'SY'
+  },
+  {
+    'costCode': 'SLL',
+    'nationCode': 'SL'
+  },
+  {
+    'costCode': 'ANG',
+    'nationCode': 'SX'
+  },
+  {
+    'costCode': 'SGD',
+    'nationCode': 'SG'
+  },
+  {
+    'costCode': 'AED',
+    'nationCode': 'AE'
+  },
+  {
+    'costCode': 'AWG',
+    'nationCode': 'AW'
+  },
+  {
+    'costCode': 'AMD',
+    'nationCode': 'AM'
+  },
+  {
+    'costCode': 'ARS',
+    'nationCode': 'AR'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'AS'
+  },
+  {
+    'costCode': 'ISK',
+    'nationCode': 'IS'
+  },
+  {
+    'costCode': 'HTG',
+    'nationCode': 'HT'
+  },
+  {
+    'costCode': 'IMP',
+    'nationCode': 'IM'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'IE'
+  },
+  {
+    'costCode': 'AZN',
+    'nationCode': 'AZ'
+  },
+  {
+    'costCode': 'AFN',
+    'nationCode': 'AF'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'AD'
+  },
+  {
+    'costCode': 'ALL',
+    'nationCode': 'AL'
+  },
+  {
+    'costCode': 'DZD',
+    'nationCode': 'DZ'
+  },
+  {
+    'costCode': 'AOA',
+    'nationCode': 'AO'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'AG'
+  },
+  {
+    'costCode': 'XCD',
+    'nationCode': 'AI'
+  },
+  {
+    'costCode': 'ERN',
+    'nationCode': 'ER'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'EE'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'EC'
+  },
+  {
+    'costCode': 'ETB',
+    'nationCode': 'ET'
+  },
+  {
+    'costCode': 'SVC',
+    'nationCode': 'SV'
+  },
+  {
+    'costCode': 'GBP',
+    'nationCode': 'GB'
+  },
+  {
+    'costCode': 'GGP',
+    'nationCode': 'GG'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'VG'
+  },
+  {
+    'costCode': 'YER',
+    'nationCode': 'YE'
+  },
+  {
+    'costCode': 'OMR',
+    'nationCode': 'OM'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'AU'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'AT'
+  },
+  {
+    'costCode': 'HNL',
+    'nationCode': 'HN'
+  },
+  {
+    'costCode': 'JOD',
+    'nationCode': 'JO'
+  },
+  {
+    'costCode': 'UGX',
+    'nationCode': 'UG'
+  },
+  {
+    'costCode': 'UYU',
+    'nationCode': 'UY'
+  },
+  {
+    'costCode': 'UZS',
+    'nationCode': 'UZ'
+  },
+  {
+    'costCode': 'UAH',
+    'nationCode': 'UA'
+  },
+  {
+    'costCode': 'XPF',
+    'nationCode': 'WF'
+  },
+  {
+    'costCode': 'IQD',
+    'nationCode': 'IQ'
+  },
+  {
+    'costCode': 'IRR',
+    'nationCode': 'IR'
+  },
+  {
+    'costCode': 'ILS',
+    'nationCode': 'IL'
+  },
+  {
+    'costCode': 'EGP',
+    'nationCode': 'EG'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'IT'
+  },
+  {
+    'costCode': 'INR',
+    'nationCode': 'IN'
+  },
+  {
+    'costCode': 'IDR',
+    'nationCode': 'ID'
+  },
+  {
+    'costCode': 'GBP',
+    'nationCode': 'IO'
+  },
+  {
+    'costCode': 'JPY',
+    'nationCode': 'JP'
+  },
+  {
+    'costCode': 'JMD',
+    'nationCode': 'JM'
+  },
+  {
+    'costCode': 'ZMW',
+    'nationCode': 'ZM'
+  },
+  {
+    'costCode': 'JEP',
+    'nationCode': 'JE'
+  },
+  {
+    'costCode': 'GEL',
+    'nationCode': 'GE'
+  },
+  {
+    'costCode': 'CNY',
+    'nationCode': 'CN'
+  },
+  {
+    'costCode': 'XAF',
+    'nationCode': 'CF'
+  },
+  {
+    'costCode': 'DJF',
+    'nationCode': 'DJ'
+  },
+  {
+    'costCode': 'GIP',
+    'nationCode': 'GI'
+  },
+  {
+    'costCode': 'ZWL',
+    'nationCode': 'ZW'
+  },
+  {
+    'costCode': 'XAF',
+    'nationCode': 'TD'
+  },
+  {
+    'costCode': 'CZK',
+    'nationCode': 'CZ'
+  },
+  {
+    'costCode': 'CLP',
+    'nationCode': 'CL'
+  },
+  {
+    'costCode': 'XAF',
+    'nationCode': 'CM'
+  },
+  {
+    'costCode': 'CVE',
+    'nationCode': 'CV'
+  },
+  {
+    'costCode': 'KZT',
+    'nationCode': 'KZ'
+  },
+  {
+    'costCode': 'QAR',
+    'nationCode': 'QA'
+  },
+  {
+    'costCode': 'KHR',
+    'nationCode': 'KH'
+  },
+  {
+    'costCode': 'CAD',
+    'nationCode': 'CA'
+  },
+  {
+    'costCode': 'KES',
+    'nationCode': 'KE'
+  },
+  {
+    'costCode': 'KYD',
+    'nationCode': 'KY'
+  },
+  {
+    'costCode': 'KMF',
+    'nationCode': 'KM'
+  },
+  {
+    'costCode': 'CRC',
+    'nationCode': 'CR'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'CC'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'CI'
+  },
+  {
+    'costCode': 'COP',
+    'nationCode': 'CO'
+  },
+  {
+    'costCode': 'XAF',
+    'nationCode': 'CG'
+  },
+  {
+    'costCode': 'CDF',
+    'nationCode': 'CD'
+  },
+  {
+    'costCode': 'CUC',
+    'nationCode': 'CU'
+  },
+  {
+    'costCode': 'KWD',
+    'nationCode': 'KW'
+  },
+  {
+    'costCode': 'NZD',
+    'nationCode': 'CK'
+  },
+  {
+    'costCode': 'HRK',
+    'nationCode': 'HR'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'CX'
+  },
+  {
+    'costCode': 'KGS',
+    'nationCode': 'KG'
+  },
+  {
+    'costCode': 'KID',
+    'nationCode': 'KI'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'CY'
+  },
+  {
+    'costCode': 'TJS',
+    'nationCode': 'TJ'
+  },
+  {
+    'costCode': 'TZS',
+    'nationCode': 'TZ'
+  },
+  {
+    'costCode': 'THB',
+    'nationCode': 'TH'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'TC'
+  },
+  {
+    'costCode': 'TRY',
+    'nationCode': 'TR'
+  },
+  {
+    'costCode': 'XOF',
+    'nationCode': 'TG'
+  },
+  {
+    'costCode': 'NZD',
+    'nationCode': 'TK'
+  },
+  {
+    'costCode': 'TOP',
+    'nationCode': 'TO'
+  },
+  {
+    'costCode': 'TMT',
+    'nationCode': 'TM'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'TV'
+  },
+  {
+    'costCode': 'TND',
+    'nationCode': 'TN'
+  },
+  {
+    'costCode': 'TTD',
+    'nationCode': 'TT'
+  },
+  {
+    'costCode': 'PAB',
+    'nationCode': 'PA'
+  },
+  {
+    'costCode': 'PYG',
+    'nationCode': 'PY'
+  },
+  {
+    'costCode': 'PKR',
+    'nationCode': 'PK'
+  },
+  {
+    'costCode': 'PGK',
+    'nationCode': 'PG'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'PW'
+  },
+  {
+    'costCode': 'ILS',
+    'nationCode': 'PS'
+  },
+  {
+    'costCode': 'DKK',
+    'nationCode': 'FO'
+  },
+  {
+    'costCode': 'PEN',
+    'nationCode': 'PE'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'PT'
+  },
+  {
+    'costCode': 'PLN',
+    'nationCode': 'PL'
+  },
+  {
+    'costCode': 'USD',
+    'nationCode': 'PR'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'FR'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'FR'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'GF'
+  },
+  {
+    'costCode': 'XPF',
+    'nationCode': 'PF'
+  },
+  {
+    'costCode': 'FJD',
+    'nationCode': 'FJ'
+  },
+  {
+    'costCode': 'EUR',
+    'nationCode': 'FI'
+  },
+  {
+    'costCode': 'PHP',
+    'nationCode': 'PH'
+  },
+  {
+    'costCode': 'NZD',
+    'nationCode': 'PN'
+  },
+  {
+    'costCode': 'AUD',
+    'nationCode': 'HM'
+  },
+  {
+    'costCode': 'HUF',
+    'nationCode': 'HU'
+  },
+  {
+    'costCode': 'HKD',
+    'nationCode': 'HK'
+  }
+]
