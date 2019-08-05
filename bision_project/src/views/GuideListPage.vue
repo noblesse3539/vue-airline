@@ -109,7 +109,7 @@
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
                     :key = idx
-                    @click="goToDetail(idx + (page-1)*10)"
+                    @click="goToDetail(idx + (page-1)*10, $event)"
                 >
                     <div class="result-body-card" :id="service._id">
                         <div class="result-body-card-imgbox">
@@ -121,8 +121,10 @@
                         <div class="result-body-card-content">
                             <h1 class="result-body-card-title">
                                 {{service.title.slice(0, 20)}} ...
-                                <i @click="serviceLike(service.guideId)" class="far fa-heart guide-list-page-like-btn"></i>
-                                <i class="fas fa-heart guide-list-page-like-btn-active" id="fas-`${idx}`"></i>
+                                <div class="likeBtn-box">
+                                  <i v-if="service.likeUsers.indexOf(getuserId) != -1" @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn fas fa-heart guide-list-page-like-btn-active" :id="`fas-heart-${idx}`"></i>
+                                  <i v-else @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn far fa-heart guide-list-page-like-btn" :id="`fa-heart-${idx}`"></i>
+                                </div>
                             </h1>
                             <p class="result-body-card-detail">
                                 {{service.detail.slice(0, 120)}} ...
@@ -172,6 +174,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import './GuideListPage.css'
 import JSSoup from 'jssoup'
 import GuideServiceDetailPage from './GuideServiceDetailPage'
@@ -186,8 +189,11 @@ export default {
     },
     data() {
         return {
+
+            isLoaded : false,
+
             // 나라 및 도시
-            country_kor: this.$route.query.nation_kor || "",
+            country_kor: this.$route.query.nation_kor,
             city_kor: this.$route.query.city_kor || "",
             // 가이드 상품 리스트 관련
             page: 1,
@@ -256,7 +262,8 @@ export default {
                         temp.fromDate   = eachService.fromDate
                         temp.toDate     = eachService.toDate
                         temp.tags       = eachService.tags
-                        temp.guideId    = eachService.user ? eachService.user._id : ''
+                        temp.guideId    = eachService.guide
+                        temp.likeUsers   = eachService.likeUsers || []
                         this.guideServiceList.push(temp)
                         this.fixedguideServiceList.push(temp)
                         if (temp.cost > this.maxPrice) this.maxPrice = temp.cost
@@ -264,6 +271,7 @@ export default {
                     })
                     this.price[0] = this.minPrice
                     this.price[1] = this.maxPrice
+                    this.isLoaded = true
             })
         },
         getServiceAll : function() {
@@ -287,13 +295,32 @@ export default {
                 })
         },
         // 좋아요 POST 요청
-        serviceLike : function(guideId) {
-            // console.log(guideId)
+        serviceLike : function(serviceId, index) {
+
+            let userId  = this.getuserId
+
+            this.$http.post(`/api/guideservice/${serviceId}/${userId}`)
+              .then( res => {
+                return res.data.added
+              })
+              .then( added => {
+                this.$http.get(`/api/guideservice/findGSById/${serviceId}`)
+                  .then( res => {
+                    console.log(res.data.likeUsers)
+                    this.guideServiceList[index].likeUsers = res.data.likeUsers
+                  })
+              })
+
         },
-        goToDetail: function(serviceIdx) {
-            const params = this.guideServiceList[serviceIdx]
-            const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
-            this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
+        goToDetail: function(serviceIdx, event) {
+          // console.log(event.target)
+
+            if (event.target.classList[0] != 'likeBtn') {
+              
+              const params = this.guideServiceList[serviceIdx]
+              const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
+              this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
+            }
             // {name: "GuideListPage", params: params}
         },
         // 추가
@@ -377,7 +404,16 @@ export default {
           //     }
           //   }
           // }
-        }
+        },
+    },
+    computed: {
+        ...mapState({
+            getIsHeaderOpen : state => state.Header.isHeaderOpen,
+            getIsLoggedIn : state => state.User.isLoggedIn,
+            getuserId : state => state.User.userId,
+            getUsername : state => state.User.userName,
+            getIsGuide : state => state.User.isGuide,
+        }),
     },
 }
 </script>

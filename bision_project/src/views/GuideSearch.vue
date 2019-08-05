@@ -32,7 +32,7 @@
                                 @click="saveUserChoiceLocation(`${location.nation_kor}`, `${location.city_kor}`)"
                             >
                                 <i class="fas fa-map-marker-alt" style="margin-right: 15px;"></i> 
-                                <span>{{location.nation_kor}}</span> - {{location.city_kor}}
+                                <span>{{location.nation}}</span> - {{location.city_kor}}
                             </div>
                         </div>
                     </div>
@@ -47,13 +47,13 @@
 
 <script>
 import './GuideSearch.css'
-import locationList from '../components/Locationlist'
+import cities from '../components/cities'
 
 export default {
     name: 'GuideSearch',
     data() {
         return {
-            locationList: locationList,
+            locationList: cities.cities,
             guideSearchOuput: [],
             guideSearchInput: '',
             isOpen: false,
@@ -96,25 +96,23 @@ export default {
         guideSearchAutocomplete() {
             
             this.guideSearchOuput = this.locationList.filter( location => {
-
                 return (
-                    location.city_kor === this.guideSearchInput 
+                    location.city_kor === this.guideSearchInput
                     // && this.guideSearchOuput.find(function(output) {
                     //     return location.city_kor !== output
                     // })
                     )
-
             })
 
             if (this.guideSearchOuput.length === 0) {
                 this.guideSearchOuput = this.locationList.filter( location => { 
                     return (
                         location.city_kor.toLowerCase().includes(this.guideSearchInput)
-                       || location.name_kor.includes(this.guideSearchInput)
-                       || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
-                       || location.nation_kor.includes(this.guideSearchInput)
-                       || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
-                       || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+                    //    || location.name_kor.includes(this.guideSearchInput)
+                    //    || location.name_eng.toLowerCase().match(this.guideSearchInput.toLowerCase())
+                       || location.nation.includes(this.guideSearchInput)
+                    //    || location.city_eng.toLowerCase().includes(this.guideSearchInput.toLowerCase())
+                    //    || location.code.toLowerCase().includes(this.guideSearchInput.toLowerCase())
                     )
                }) 
             }
@@ -123,7 +121,6 @@ export default {
         saveUserChoiceLocation(nationKor, cityKor) {
 
             const userInput = document.querySelector('.guide-search-result-each')
-
             this.userChoice.nation_kor = nationKor
             this.userChoice.city_kor   = cityKor
             this.defaultPlaceholder = nationKor
@@ -148,7 +145,7 @@ export default {
             const searchListTri = document.querySelector(".guide-search-triangle-box")
             const searchList = document.querySelector(".guide-search-list")
 
-            this.saveUserChoiceLocation(this.guideSearchOuput[this.guideInputArrowCounter].nation_kor,
+            this.saveUserChoiceLocation(this.guideSearchOuput[this.guideInputArrowCounter].nation,
                                         this.guideSearchOuput[this.guideInputArrowCounter].city_kor)
             this.isOpen = false
             searchListTri.style.display = "none"
