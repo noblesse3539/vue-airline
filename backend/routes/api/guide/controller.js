@@ -1,6 +1,8 @@
 const Guide = require('../../../models/guide')
 const User = require('../../../models/user')
-
+const GuideService = require('../../../models/guideservice')
+const Option = require('../../../models/option')
+const mongoose = require('mongoose')
 exports.createGuide = (req,res) =>{
   console.log(req.body);
   var guide=new Guide(req.body);
@@ -116,5 +118,54 @@ exports.getGuideList = (req,res) => {
   })
   .catch(err => {
     res.status(500).json({'error': err})
+  })
+}
+
+exports.calender = (req, res) => {
+  GuideService.find({guide: req.params.id})
+  .populate({path:'options', model:Option, select:'title fromDate toDate dayOfWeek times'})
+  // .select('options')
+  .then( gss => {
+    console.log(gss)
+    // for ( gs of gss) {
+    //   console.log(`${gs.fromDate} - ${gs.toDate} - ${gs.duration}`)
+    // }
+    res.json({calender: gss.map( gs => {
+      if (gs.options.length == 0) {
+        return {
+          title: gs.title, 
+          fromDate: gs.fromDate, 
+          toDate:gs.toDate,
+          duration: gs.dutation,
+          options: null 
+        }
+      } else {
+        return {
+          title: gs.title, 
+          fromDate: gs.fromDate, 
+          toDate: gs.toDate,
+          duration: gs.dutation,
+          options: gs.options.map( op => {
+                    return {
+                      title: op.title,
+                      fromDate: op.fromDate,
+                      toDate: op.toDate,
+                      dayOfWeek: op.dayOfWeek,
+                      times: op.times
+                    }
+                  })
+        }
+      }
+    })})
+  })
+  .catch( err => {
+    res.json({error: err})
+  })
+}
+
+exports.deleteAllGuideService = (req, res) => {
+  GuideService.deleteMany({guide: req.params.id})
+  .then( () => {
+    res.json({success:true})
   })
 }
