@@ -26,7 +26,8 @@ const GuideService = new Schema({
     'refund100':Number, // 0이면 환불 불가.
     'refund50':Number,
     'refund30':Number
-  }]
+  }],
+  likeUsers: [{type: Schema.Types.ObjectId, ref: 'User'}]
 })
 
 GuideService.statics.updateByTitle = function(guide,title,title,mainImg,nation,city,fromDate,toDate,duration,cost,minTrav,maxTrav,desc,detail,reviewList){

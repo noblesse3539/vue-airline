@@ -45,3 +45,45 @@ exports.createCities = (req, res) => {
         res.json({error:err})
     })
 }
+
+exports.cleanList = (req, res) => {
+    City.find({})
+    .populate('nation', 'nation_kor -_id')
+    .select('-_id nation city_kor')
+    .then( cities => {
+        // console.log(cities[0])
+        return cities.filter(city => {
+            return typeof city.city_kor === 'string' && !city.city_kor.includes('/')
+        })
+    })
+    .then( cities => {
+        return cities.map( city => {
+            return {nation: city.nation.nation_kor, city_kor: city.city_kor}
+        })
+    })
+    .then( cities => {
+        return cities.filter( city => {
+            return city.city_kor !== ""
+        })
+    })
+    .then( (cities) => {
+        const cityList = []
+        const newCities = []
+        // console.log(cities[0])
+        for (city of cities) {
+            // console.log(cityList)
+            if (cityList.indexOf(city.city_kor) == -1) {
+                cityList.push(city.city_kor)
+                newCities.push(city)
+            }
+        }
+        return newCities
+    })
+    .then (newCities => {
+        res.json({aa: newCities})
+    })
+    .catch( err => {
+        console.log(err)
+        res.json({error: err})
+    })
+}
