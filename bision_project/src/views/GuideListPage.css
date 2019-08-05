@@ -376,6 +376,7 @@
 }
 
 .v-input-custom {
+
     height: 5px !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -483,4 +484,19 @@
 
 .result-body__search-by-lang-title {
     margin-bottom: 20px !important;
+}
+
+.fa-square, .v-icon {
+    font-size: 1rem !important;
+  }
+
+.v-input--selection-controls__ripple {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.v-input--selection-controls__input {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }

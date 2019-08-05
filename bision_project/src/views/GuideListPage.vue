@@ -50,6 +50,7 @@
                             <v-checkbox
                                 class="v-input-custom"
                                 color="success"
+                                width="20"
                                 v-model="temp"
                                 label="모든 언어"
                                 value="allLang"
