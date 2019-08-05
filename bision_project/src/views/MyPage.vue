@@ -197,6 +197,7 @@
     },
     methods: {
       clearReview() {
+        console.log(this.userGuideServices)
         this.subcomment=''
         this.comment=''
         this.rating = 0
@@ -208,15 +209,18 @@
           'content' : this.subcomment,
           'rating' : this.rating,
         }
-        // console.log(this.guideServiceId)
-        // console.log(review)
+        console.log(this.userId)
+        console.log(this.guideServiceId)
+        console.log(review)
         this.$http.post('/api/review/create/'+this.guideServiceId, review)
          .then( res => {
-             console.log(1, res.data)
+             console.log("성공", res.data)
+             alert('리뷰가 작성되었습니다.')
              this.closeRW()
          })
          .catch( err => {
            console.log(err)
+           alert('잠시 후 다시 시도해주세요.')
            this.closeRW()
          })
       },

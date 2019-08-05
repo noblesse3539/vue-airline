@@ -1,0 +1,25 @@
+.voc *{
+    z-index: 30000;
+}
+.voc__openbutton {
+  cursor: pointer;
+  position: fixed ;
+  bottom: 80px;
+  right: 30px;
+}
+.voc__openbutton:hover {
+  background-color: blue;
+  color: white;
+}
+.voc__modal {
+  box-shadow: aliceblue;
+  position: fixed;
+  bottom: 120px;
+  right: 0px;
+  background: linear-gradient(#80ffff, #8eff4d);
+  border-radius: 8px;
+  color: white;
+}
+.voc__modal__content {
+
+}
