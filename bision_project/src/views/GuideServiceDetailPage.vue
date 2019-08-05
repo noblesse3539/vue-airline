@@ -222,7 +222,20 @@
 
     <section class="GS-body-3">
       <h3 class="GS-service-intro-title">환불 규정</h3>
-      <div class="GS-service-user-content"></div>
+      <div class="GS-service-user-refund">
+        <div>
+          <div class="GS-service-user-refund-table">환불 금액</div>
+          <div class="GS-service-user-refund-table">100% 환불</div>
+          <div class="GS-service-user-refund-table">50% 환불</div>
+          <div class="GS-service-user-refund-table">30% 환불</div>
+        </div>
+        <div>
+          <div class="GS-service-user-refund-table">환불 사유 발생일</div>
+          <div class="GS-service-user-refund-table">여행 시작 일 기준 {{serviceInfo.refund[0].refund100}}일 전</div>
+          <div class="GS-service-user-refund-table">여행 시작 일 기준 {{serviceInfo.refund[0].refund50}}일 전</div>
+          <div class="GS-service-user-refund-table">여행 시작 일 기준 {{serviceInfo.refund[0].refund30}}일 전</div>
+        </div>
+      </div>
     </section>
 
     <!-- 이용 후기 -->
@@ -451,6 +464,7 @@ export default {
           this.serviceInfo.nation_kor = data.nation_kor
           this.serviceInfo.mainImg = data.mainImg
           this.serviceInfo.options = data.options
+          this.serviceInfo.refund = data.refund
           this.setHero();
 
           return data.user

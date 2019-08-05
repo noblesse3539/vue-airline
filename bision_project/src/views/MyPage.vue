@@ -69,11 +69,12 @@
         v-for="(guideService, id) in userGuideServices"
         :key="id"
       >
-        <img class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
-          <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.user.username}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p>
+          <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
           <div class="RWButtonOver">
@@ -137,6 +138,7 @@
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
       // this.addGuideServiceToUser()
+      // console.log(this.userGuideServices)
     },
     beforeDestroy() {
       this.openHeader()
@@ -205,6 +207,8 @@
 
         // 수정 필 !!!!!!!!!!!!!!!!!!!!!!
         myTourExperience: ["http://www.dream-wallpaper.com/free-wallpaper/travel-wallpaper/jeju-island--korea-scenery-wallpaper/1920x1200/free-wallpaper-13.jpg", "https://i.pinimg.com/originals/23/2e/f2/232ef249a037d9424a0e67a41eba8200.jpg", "https://i.pinimg.com/originals/98/e4/4e/98e44e7ce7245678d79e29e1075746a1.jpg", "http://luxurytraveler.s3.amazonaws.com/wp-content/uploads/2016/02/21144831/marina_bay_sands_singapore_view-pool.jpg"],
+      
+        // 유저 결제 관련 데이터
       }
     },
     methods: {
@@ -274,14 +278,15 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
-            console.log(res)
+            // console.log(res)
+            this.userGuideServices = res.data.paymentRecords
             this.userInfo = res.data.userInfo
             // console.log(this.userInfo)
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
             this.userImage = this.userInfo.profileImg
-            this.userGuideServices  = this.userInfo.UsedGuideServices
+            // this.userGuideServices  = this.userInfo.UsedGuideServices
             // console.log(this.userGuideServices)
           })
           .catch( err => {

@@ -6,7 +6,7 @@ const Review = new Schema({
   guideservice:{ type: Schema.Types.ObjectId, ref: 'GuideService' },
   title:String,
   content: String,
-  username: String,
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
   rating: Number,
 })
 

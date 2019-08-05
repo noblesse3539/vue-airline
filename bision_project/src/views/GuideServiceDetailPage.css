@@ -695,3 +695,16 @@
     display: flex;
     justify-content: space-between;
 }
+
+.GS-service-user-refund {
+  width: 67%;
+  padding: 10px;
+  margin: 0 !important;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.GS-service-user-refund-table {
+  height: 25%;
+  padding-bottom: 10px;
+}

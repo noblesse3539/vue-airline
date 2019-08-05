@@ -419,44 +419,34 @@ paths:
         200:
           description: 유저 및 가이드서비스 좋아요 추가/삭제
 
-  /api/guideservice/delete/{user}/{title}:
+  /api/guideservice/delete/{id}:
     delete:
       tags:
       - GuideService
       summary: 가이드서비스 데이터 하나를 삭제합니다.
       parameters:
         - in: path
-          name: user
+          name: id
           type: string
           required: true
-          description: UserObId
-        - in: path
-          name: title
-          type: string
-          required: true
-          description: title
+          description: GuideServiceObId
       responses:
         200:
           description: 가이드서비스 데이터 하나 삭제
           schema:
             $ref: '#/definitions/GuideService'
 
-  /api/guideservice/update/{user}/{title}:
+  /api/guideservice/update/{id}:
     put:
       tags:
       - GuideService
       summary: 가이드서비스 데이터 하나를 수정합니다.
       parameters:
         - in: path
-          name: user
+          name: id
           type: string
           required: true
-          description: UserObId
-        - in: path
-          name: title
-          type: string
-          required: true
-          description: title
+          description: GuideServiceObId
         - in: body
           name: guideservice
           required: true
@@ -508,7 +498,7 @@ paths:
         200:
           description: 리뷰 데이터 하나 생성
 
-  /api/review/delete/{id}/{username}/{title}:
+  /api/review/delete/{id}:
     delete:
       tags:
       - Review
@@ -518,22 +508,12 @@ paths:
           name: id
           type: string
           required: true
-          description: GuideServiceObId
-        - in: path
-          name: username
-          type: string
-          required: true
-          description: username
-        - in: path
-          name: title
-          type: string
-          required: true
-          description: title
+          description: ReviewId
       responses:
         200:
           description: 리뷰 데이터 하나 삭제
 
-  /api/review/update/{id}/{username}/{title}:
+  /api/review/update/{id}:
     put:
       tags:
       - Review
@@ -543,17 +523,7 @@ paths:
           name: id
           type: string
           required: true
-          description: GuideServiceObId
-        - in: path
-          name: username
-          type: string
-          required: true
-          description: username
-        - in: path
-          name: title
-          type: string
-          required: true
-          description: title
+          description: ReviewId
         - in: body
           name: review
           required: true
@@ -1018,12 +988,12 @@ definitions:
   Review:
     properties:
       guideservice:
-        $ref: '#/definitions/ObId'
+        type: string
       title:
         type: string
       content:
         type: string
-      username:
+      user:
         type: string
       rating:
         type: integer
