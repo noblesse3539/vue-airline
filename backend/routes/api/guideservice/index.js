@@ -17,4 +17,6 @@ router.put('/update/:id',controller.updateGuideService)
 
 router.post('/:guideServiceId/:userId', controller.likeGuideService)
 
+router.delete('/alltags', controller.deleteAllTags)
+
 module.exports = router

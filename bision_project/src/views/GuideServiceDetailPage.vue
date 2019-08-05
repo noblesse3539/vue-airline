@@ -124,7 +124,7 @@
     <section class="GS-body-2">
       <div class="GS-body-2-left" >
         <h3 class="GS-body-2-left-title" style="font-size: 2rem; margin-bottom: 15px;">옵션 선택하기</h3>
-        <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
+        <!-- <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
           <span class="result-body__search-by-date-icon" >
             <i class="far fa-calendar-check"></i>
           </span>
@@ -132,7 +132,7 @@
           <div v-if="isCalenderOpen" class="GS-date-picker" @click="pushLeavingDate()">
             <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
           </div>
-        </div>
+        </div> -->
         <div style="display: flex; flex-wrap: wrap;">
           <div v-for="i in leavingDates.length" :key="i">
             <div class="result-body__search-by-date" style="margin-right: 1rem; width: 150px; font-size: 15px; text-align: center; display: grid; grid-template-columns: 80% 20%; border: 1px solid #45CE30; padding-top: 8px;" v-if="leavingDates">
@@ -144,9 +144,19 @@
         <div class="GS-option-box">
           <!-- 각 상품에 대한 옵션 리스트 v-for로 출력할 것 -->
           <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-          <div class="GS-individual-option GS-individual-option-1">
+          <div v-for="(option, idx) in options" :key="idx" class="GS-individual-option GS-individual-option-1">
             <div class="GS-individual-option-title-box">
-              <div class="GS-individual-option-title">{{title.slice(0, 25)}}...</div>
+              <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
+                <span class="result-body__search-by-date-icon">
+                  <i class="far fa-calendar-check"></i>
+
+                </span>
+                <input placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
+                <div v-if="isCalenderOpen" class="GS-date-picker" @click="pushLeavingDate()">
+                  <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                </div>
+              </div>
+              <div class="GS-individual-option-title">{{option.title.slice(0, 25)}}...</div>
               <div class="GS-individual-top-price">
                 <span style="font-size: 1rem; margin-right: 5px;">KRW</span>
                 <span>{{cost}}</span>
@@ -154,6 +164,7 @@
             </div>
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
+              
               <button
                 class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
                 @click="openOptionSelectingModal(`.GS-individual-option-1`)"
@@ -163,12 +174,12 @@
             </div>
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-            <div class="GS-individual-option-detail GS-individual-option-detail-1"></div>
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-detail-loadmore
                         GS-individual-option-detail-loadmore-1"
                         style="display: none">
+              
               <div class="GS-individual-option-detail-option-select">
                   <v-select
                     v-model="select"
@@ -317,8 +328,8 @@ export default {
   },
   created() {},
   mounted() {
-    this.getServiceInformation();
-    window.addEventListener("scroll", this.dragDownSideBar);
+    this.getServiceInformation()
+    window.addEventListener("scroll", this.dragDownSideBar)
     window.addEventListener('click', this.hideElements)
   },
   destroyed() {
@@ -340,6 +351,10 @@ export default {
       nationFlag: '',
       duration: '',
       cost: 0,
+      optionId: '',
+      guide: '',
+      options: [],
+      tempOption: [],
 
       // 결제 관련 정보
       serviceInfo: {
@@ -437,18 +452,10 @@ export default {
       this.$http
         .get(`/api/guideservice/findGSById/${this.$route.query.serviceId}`)
         .then(res => {
-          // this.thisPostInfo.title = res.data.title
-          // this.thisPostInfo.city = res.data.city_kor
-          // this.thisPostInfo.image = res.data.mainImg
-          // this.thisPostInfo.duration = res.data.duration
-          // this.thisPostInfo.rawDetail = res.data.detail
-          // this.thisPostInfo.desc = res.data.desc
-          //   console.log(res.data);
           return res.data;
         })
         .then(data => {
-          // this.setHero()
-          console.log(data);
+          // console.log(data); 
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -458,32 +465,22 @@ export default {
           this.reviews = data.reviews;
           this.duration = data.duration;
           this.cost = data.cost;
-
+          this.optionId = data._id;
+          this.guide = data.guide;
+          
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
           this.serviceInfo.nation_kor = data.nation_kor
           this.serviceInfo.mainImg = data.mainImg
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
-          this.setHero();
 
-          return data.user
+          return
         })
-        .then( (guideId) => {
+        .then( () => {
+          this.setHero()
           this.getNationFlag()
-
-          // 가이드 정보 가져오기
-          const baseUrl = `/api/guide/findByUserObid/${guideId}`
-          this.$http.get(baseUrl)
-            .then( res => {
-              console.log(res)
-              this.guideInfo.guideName = res.data.guide.user.username
-              this.guideInfo.starRatingList = res.data.guide.starRatingList
-              this.guideInfo.guideImg = res.data.guide.user.profileImg || ''
-              this.guideInfo.guideId  = res.data.guide._id
-
-            })
-
+          this.getGuideServiceOption()
         })
     },
     loadReviewMore: function() {
@@ -550,15 +547,95 @@ export default {
         })
     },
     pushLeavingDate : function () {
-      console.log("추가")
+      // console.log("추가")
       if (this.leavingDates.indexOf(this.leavingDate) == -1)
         this.leavingDates.push(this.leavingDate)
     },
     deleteLeavingDate : function (idx) {
 
       this.leavingDates.splice([idx], 1)
-    }
+    },
+    
+    getGuideServiceOption() {
+
+      this.$http.get(`/api/guideservice/findOption/${this.optionId}`)
+        .then( res => {
+          this.options = res.data.options
+          
+          this.options.forEach( option => {
+
+            // option.day
+            option.allowedDates = []
+            option.dayOfWeek.forEach( day => {
+              
+              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))
+            })
+            // console.log(option.allowedDates)
+
+            option.allowedDatesFunc = val => {
+                let allowedDatesInside = option.allowedDates
+                return allowedDatesInside.includes(val)
+
+              }
+
+          })
+        })
+    },
+    getAllDays(goalDay) {
+      
+      let day = new Date()
+
+      // 월의 시작일을 1일로 설정
+      day.setDate(1)
+
+      // 최종 년도 및 월 설정
+      let endYear = day.getFullYear() + 1
+      let endMonth = day.getMonth()
+
+      /* ===============
+          찾고자하는 요일 설정 (Default 월요일)
+          =============== */  
+      
+      // 1. 월요일
+      let days
+      let goalDayNumber
+      
+      if (goalDay == '월') {
+          goalDayNumber = 9
+      } else if (goalDay == '화') {
+          goalDayNumber = 10
+      } else if (goalDay == '수') {
+          goalDayNumber = 11 
+      } else if (goalDay == '목') {
+          goalDayNumber = 12
+      } else if (goalDay == '금') {
+          goalDayNumber = 13 
+      } else if (goalDay == '토') {
+          goalDayNumber = 14
+      } else if (goalDay == '일') {
+          goalDayNumber = 15
+      }
+
+      day.setDate(day.getDate() + (goalDayNumber - 1 - day.getDay() || 7) % 7)
+      days = [new Date(+day).toISOString().slice(0, 10)]
+      // console.log(days)
+      // 최종 년도 및 월까지 모든 월요일 구하기
+      while (day.getFullYear() < endYear || day.getMonth() != endMonth) {
+        let anotherDay = new Date(day.setDate(day.getDate() + 7))
+        days.push(anotherDay.toISOString().slice(0, 10))
+      }
+
+      // getDate: 일요일을 0을 시작으로 요일의 번호를 나타냄 
+      // console.log(days)
+      return days
+    },
+
+    checkAllowedDates: val => {
+      console.log(val)
+    },
   },
-  computed: {}
+  computed: {
+
+  },
 };
 </script>

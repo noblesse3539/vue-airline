@@ -78,3 +78,20 @@ exports.findGSByTag = (req, res) => {
         res.status(500).json({ error });
       });
 }
+
+exports.getTagList = (req, res) => {
+  Tag.find({})
+  .select('tag')
+  .then( tags => {
+    return tags.map( tag => {
+      return tag.tag
+    })
+  })
+  .then( tagList => {
+    res.json({tags: [...new Set(tagList)]})
+  })
+  .catch( err => {
+    console.log(err)
+    res.json({error:err})
+  })
+}
