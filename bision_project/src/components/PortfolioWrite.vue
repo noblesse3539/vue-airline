@@ -15,6 +15,7 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
+              <v-btn @clikc="makeDummy">DUMMY만들기</v-btn>
               <h2>제목 입력</h2>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
@@ -457,6 +458,7 @@ export default {
         guide:'',
         title:'',
         mainImg:'',
+        // 여기부터다시!
         nation_kor: '',
         city_kor:[],
         fromDate:'',
@@ -516,6 +518,14 @@ export default {
     })
   },
   methods : {
+    makeDummy() {
+      this.tourProgram.mainImg='https://source.unsplash.com/category/travel/1600x900'
+      this.tourProgram.guide=this.getUserId;
+      this.$http.post('/api/guideservice/create', this.tourProgram)
+        .then( res => {
+          console.log(res.status)
+        })
+    }
     addTag(newTag) {
       this.dbTags.push(newTag)
       this.tourProgram.tags.push(newTag)
