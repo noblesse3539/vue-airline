@@ -15,7 +15,7 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-btn @clikc="makeDummy">DUMMY만들기</v-btn>
+              <v-btn @click="makeDummy(61)">DUMMY만들기</v-btn>
               <h2>제목 입력</h2>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
@@ -288,7 +288,7 @@
 
               <v-flex xs12 v-for="(item,key) in tourProgram.options">
                 <v-card style="padding:20px">
-                  <table class="options">
+                  <table class="guide__options">
                     <tr>
                       <td>옵션 제목</td>
                       <td>시작 날짜</td>
@@ -455,10 +455,9 @@ export default {
       optionToMenu: false,
       complete: false,
       tourProgram:{
-        guide:'',
+        guide : '',
         title:'',
         mainImg:'',
-        // 여기부터다시!
         nation_kor: '',
         city_kor:[],
         fromDate:'',
@@ -509,7 +508,24 @@ export default {
           peopleTypeOpt:[],
           costType: '',
           maxPeople: ''
-        }
+        },
+        tempCountry:['대한민국', '미국', '캐나다', '베트남', '우크라이나', '영국', '독일', '프랑스'],
+        tempCity:[['서울', '부산'],['뉴욕', '로스앤젤레스'], ['토론토', '오타와'], ['다낭', '하노이'],
+                  ['키예프','헤르손'], ['런던', '옥스퍼드'], ['베를린', '뮌헨'], ['파리', '니스']],
+        tempTags: ['액티비티', '문화체험', '역사유적', '야간투어', '공연관람'],
+        settings : {
+          "url": "https://api.imgur.com/3/image",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+            "Authorization": "Client-ID 6def70bd30a2e6a"
+          },
+          "processData": false,
+          "mimeType": "multipart/form-data",
+          "contentType": false,
+          "data": 'https://source.unsplash.com/category/travel'
+        },
+        tempDayofWeek : [['월', '화', '수', '목', '금'], ['토', '일']]
     }
   },
   computed:{
@@ -518,12 +534,75 @@ export default {
     })
   },
   methods : {
-    makeDummy() {
-      this.tourProgram.mainImg='https://source.unsplash.com/category/travel/1600x900'
-      this.tourProgram.guide=this.getUserId;
-      this.$http.post('/api/guideservice/create', this.tourProgram)
-        .then( res => {
-          console.log(res.status)
+    makeDummy(v) {
+      var i = v
+      this.$http(this.settings).then(res=>{
+        this.tourProgram.guide = this.getUserId
+        this.tourProgram.mainImg = res.data.data.link
+        this.tourProgram.nation_kor = this.tempCountry[parseInt(i%8)]
+        this.tourProgram.city_kor = this.tempCity[parseInt(i%8)][parseInt(i%8%2)]
+        this.tourProgram.title = i + ' 번째 테스트 상품'
+        this.tourProgram.desc = i + this.tourProgram.nation_kor + ' ' + this.tourProgram.city_kor + ' 상품 '
+        this.tourProgram.detail ='테스트 데이터입니다.'
+        this.tourProgram.fromDate = '2019-08-05'
+        this.tourProgram.toDate = '2019-11-05'
+        this.tourProgram.duration = '1박2일'
+        this.tourProgram.refund = {
+          'refund100' : 30,
+          'refund50' : 10,
+          'refund30' : 3
+        }
+        this.tourProgram.options = [{
+          'guideservice' : '',
+          'fromDate' : '2019-08-05',
+          'toDate' : '2020-11-05',
+          'costType' : 'KRW',
+          'dayOfWeek' : this.tempDayofWeek[parseInt(i%2)],
+          'adult' : {
+            'cost' : 500*i,
+            'minAge' :  0,
+            'maxAge' : 0
+          },
+          'peopleTypeOpt' : ['none'],
+        }]
+        this.tourProgram.tags = [this.tempTags[i%5], this.tourProgram.city_kor]
+      }).catch(err =>{
+          this.tourProgram.mainImg = 'https://source.unsplash.com/category/travel'
+          this.tourProgram.nation_kor = this.tempCountry[parseInt(i%8)]
+          this.tourProgram.city_kor = this.tempCity[parseInt(i%8)][parseInt(i%8%2)]
+          this.tourProgram.title = i + ' 번째 테스트 상품'
+          this.tourProgram.desc = this.tourProgram.nation_kor + ' ' + this.tourProgram.city_kor + ' 상품 ' + i
+          this.tourProgram.detail ='테스트 데이터입니다.'
+          this.tourProgram.fromDate = '2019-08-05'
+          this.tourProgram.toDate = '2019-11-05'
+          this.tourProgram.duration = '1박2일'
+          this.tourProgram.refund = {
+            'refund100' : 30,
+            'refund50' : 10,
+            'refund30' : 3
+          }
+          this.tourProgram.options = [{
+            'guideservice' : '',
+            'fromDate' : '2019-08-05',
+            'toDate' : '2019-11-05',
+            'costType' : 'KRW',
+            'dayOfWeek' :  this.tempDayofWeek[parseInt(i%2)],
+            'adult' : {
+              'cost' : 500*i,
+              'minAge' :  0,
+              'maxAge' : 0
+            },
+            'peopleTypeOpt' : ['none'],
+          }]
+        this.tourProgram.tags = [this.tempTags[i%5], this.tourProgram.city_kor]
+          console.log(err.status, err.data.error.message)
+        }).then(() =>{
+          this.$http.post('/api/guideservice/create', this.tourProgram)
+          .then( res => {
+            console.log(i, res.status)
+            console.log(res.data)
+            if(i<70) this.makeDummy(i+1)
+          })
         })
     },
     addTag(newTag) {

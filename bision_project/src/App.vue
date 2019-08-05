@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Header></Header>
+    <Voc></Voc>
     <v-content>
       <v-app>
         <router-view></router-view>
@@ -15,13 +16,15 @@
 import { mapGetters, mapState } from "vuex";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Voc from "./components/Voc";
 import "./App.css";
 
 export default {
   name: "app",
   components: {
     Header,
-    Footer
+    Footer,
+    Voc
   },
   created() {
     this.checkUserLoginStatus();
