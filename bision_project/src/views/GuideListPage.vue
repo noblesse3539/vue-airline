@@ -30,11 +30,16 @@
                     </div>
                 <!-- </div> -->
                 <div class="result-body__search-by-tag">
-                  <v-chip color="#5CE75C" text-color="white" @click="findTag('액티비티')">액티비티</v-chip>
-                  <v-chip color="#5CE75C" text-color="white">경치</v-chip>
-                  <v-chip color="#5CE75C" text-color="white">유람선</v-chip>
-                  <v-chip color="#5CE75C" text-color="white">박물관</v-chip>
-                  <v-chip color="#5CE75C" text-color="white">푸파</v-chip>
+                  <!-- 1안 -->
+                  <!-- <div v-for="i in tags.length" :key="i">
+                    <v-chip color="#5CE75C" text-color="white" @click="findTag('액티비티')">{{tags[i-1]}}</v-chip>
+                  </div> -->
+
+                  <!-- 2안 -->
+                  <div v-for="i in tags.length" :key="i">
+                    <v-chip color="#5CE75C" text-color="white" @click="findTag(tags[i-1])" v-if="selectedTags.indexOf(tags[i-1]) != -1">{{tags[i-1]}}</v-chip>
+                    <v-chip color="#dcdcdc" text-color="black" @click="findTag(tags[i-1])" v-else>{{tags[i-1]}}</v-chip>
+                  </div>
                     <!-- <input placeholder="# 태그별 검색" class="result-body__search-by-tag-search" type="text"> -->
                     <!-- <span class="result-body_search-by-tag-search-icon"><i class="fas fa-search"></i></span> -->
                 </div>
@@ -104,6 +109,10 @@
                 <div class="result-body__result-show">
                     <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과
                 </div>
+                <!-- <div class="result-body__result-show">
+                  <v-chip color="#5CE75C" text-color="white">유람선</v-chip>
+                  <v-chip color="#5CE75C" text-color="white">2019-08-13</v-chip>
+                </div> -->
                 <!-- 가이드 상품 검색 결과 -->
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
@@ -221,7 +230,11 @@ export default {
 
             // 달력 관련 변수
             isCalenderOpen: false,
-            leavingDate: ''
+            leavingDate: '',
+
+            // 태그 관련 변수
+            tags: ['액티비티', '경치', '유람선', '박물관', '푸파', '힐링', '고성', '맛집', '전통음식', '공연'],
+            selectedTags: [],
         }
     },
     methods: {
@@ -369,6 +382,13 @@ export default {
         },
         findTag : function (tag) {
           console.log("태그를 찾아라")
+          console.log(tag)
+          if (this.selectedTags.indexOf(tag) == -1) {
+            this.selectedTags.push(tag)
+          } else {
+            this.selectedTags.splice(this.selectedTags.indexOf(tag),1)
+          }
+          console.log(this.selectedTags)
           // for (let i=0; i<this.fixedguideServiceList.length; i++) {
           //   for (let j=0; j<this.fixedguideServiceList[i].tags.length; j++) {
           //     if (this.fixedguideServiceList[i].tags[j].tag == tag) {

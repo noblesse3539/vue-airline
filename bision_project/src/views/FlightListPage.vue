@@ -2,36 +2,43 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="height: 100px; width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%; display:grid; grid-template-columns: 50% 34% 16%">
-        <div>
-          <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
-            {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
+      <div style="width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
+        <div style="display:grid; grid-template-columns: 50% 34% 16%;">
+          <div>
+            <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
+              {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
+            </div>
+            <div class="container" style="height: 50%; padding-top: 4px;">
+              {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
+            </div>
           </div>
-          <div class="container" style="height: 50%; padding-top: 4px;">
-            {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
+          <div style="font-size: 15px; padding-top: 4%;">
+            <div style="width: 50%; display: inline-block;">
+              <div>가는 날</div>
+              <div>{{this.$route.query.leavingDate}}</div>
+            </div>
+            <div style="width: 50%; display: inline-block;">
+              <div>오는 날</div>
+              <div>{{this.$route.query.comingDate}}</div>
+            </div>
+          </div>
+          <div style="padding-top: 10px;">
+            <v-btn class="mx-2" fab small color="grey lighten-3" v-on:click="searchPannel=!searchPannel">
+              <i class="fas fa-search fa-2x"></i>
+            </v-btn>
+            <div style="font-size: 10px;">
+              다른 조건으로
+            </div>
+            <div style="font-size: 10px;">
+              검색해보세요.
+            </div>
           </div>
         </div>
-
-        <div style="font-size: 15px; padding-top: 4%;">
-          <div style="width: 50%; display: inline-block;">
-            <div>가는 날</div>
-            <div>{{this.$route.query.leavingDate}}</div>
-          </div>
-          <div style="width: 50%; display: inline-block;">
-            <div>오는 날</div>
-            <div>{{this.$route.query.comingDate}}</div>
-          </div>
-        </div>
-        <div style="padding-top: 10px;">
-          <v-btn class="mx-2" fab small color="grey lighten-3">
-            <i class="fas fa-search fa-2x"></i>
-          </v-btn>
-          <div style="font-size: 10px;">
-            다른 조건으로
-          </div>
-          <div style="font-size: 10px;">
-            검색해보세요.
-          </div>
+        <div v-if="searchPannel" style="color: black">
+          <v-radio-group v-model="row" row>
+            <v-radio label="왕복" value="radio-1"></v-radio>
+            <v-radio label="편도" value="radio-2"></v-radio>
+          </v-radio-group>
         </div>
       </div>
       <div class="maingrid-a maingrid-b maingrid-c" style="">
@@ -227,6 +234,9 @@ export default {
     },
     data: function() {
         return {
+          // 검색 패널
+          RadioLabels: ["왕복", "편도", ],
+
           loading: false,
           inboundDate: '',
           selected: ['0', '1', '2'],
@@ -255,6 +265,7 @@ export default {
           transferedDuration: 0,
           minDuration: 0,
           maxDuration: 1800 ,
+          searchPannel: false,
           timeOptions: [
             '00%3A00',
             '23%3A59',
@@ -296,7 +307,7 @@ export default {
             this.pageSize = 1000
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
             let data  = {
-                            'country': 'US',
+                            'country': 'KW',
                             'currency': 'USD',
                             'locale': 'ko-KR',
                             // 'originPlace': 'ICN-sky',
