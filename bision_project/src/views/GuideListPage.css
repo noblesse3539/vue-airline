@@ -467,15 +467,16 @@
 }
 
 .guide-list-page-like-btn {
-    position: absolute;
+    color: black !important;
+    /* position: absolute; */
     z-index: 5000;
     right: 0;
-    margin-right: 30px;
+    /* margin-right: 30px; */
 
 }
 
 .guide-list-page-like-btn:hover {
-    color: red;
+    /* color: red; */
 }
 
 .result-body__search-by-lang-body > li {
@@ -499,4 +500,51 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+}
+
+.likeBtn {
+    font-size: 2rem;
+    color: rgb(247, 202, 201);
+    /* color: rgb(106, 243, 117); */
+    transition: 0.1s;
+    text-shadow: 1px 3px 0 grey, 1px 13px 5px grey;
+}
+
+.likeBtn:hover {
+    transform: rotateY(180deg);
+    transition: 0.2s;
+}
+
+.likeBtn:active {
+    transform: translateY(-10px);
+}
+
+.likeBtn-box {
+    min-width: 50px;
+    min-height: 50px;
+    /* background: rgba(0,0,0,0.9); */
+    /* border: 2px solid #1e90ff; */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    /* -webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 8px 6px -6px black;
+            box-shadow: 0 8px 6px -6px black; */
+    
+
+}
+
+
+.guide-list-page-like-btn-active {
+    font-size: 40px;
+    display: flex;
+    /* width: 100%; */
+    /* background: rgba(30, 144, 255, 0.3); */
+    /* background: #A8D5BAFF; */
+    /* -webkit-box-shadow: 0 8px 6px -6px rgba(30, 144, 255, 0.3);
+	   -moz-box-shadow: 0 8px 6px -6px rgba(30, 144, 255, 0.3);
+	        box-shadow: 0 8px 6px -6px rgba(30, 144, 255, 0.3); */
+    border-radius: 50%;
+    text-shadow: 1px 3px 0 hotpink, 1px 13px 5px hotpink;
 }
