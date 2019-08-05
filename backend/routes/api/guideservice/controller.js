@@ -210,3 +210,17 @@ exports.likeGuideService = (req, res) => {
     res.json({error: err})
   })
 }
+
+
+exports.deleteAllTags = (req, res) => {
+  GuideService.find({})
+  .then( gss => {
+    for( gs of gss) {
+      gs.tags = []
+      gs.save()
+    }
+  })
+  .then( () => {
+    res.json({얍얍:'얍얍'})
+  })
+}
