@@ -139,7 +139,6 @@
   </div>
 </template>
 
-
 <script>
 import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
