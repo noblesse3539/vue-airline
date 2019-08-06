@@ -86,7 +86,7 @@
               <v-flex xs12>
                 <h2>태그 추가</h2>
               </v-flex>
-              <v-flex xs12>
+              <v-flex xs12 >
                 <multiselect v-model="tourProgram.tags" tag-placeholder="새로운 태그 추가하기" placeholder="새로운 태그를 추가하세요"
                              :options="dbTags" :multiple="true" :taggable="true" @keyup.enter="tag" @tag="addTag"
                              selectLabel="태그 추가하기" selectedLabel="태그 삭제하기" deselectLabel="태그 삭제하기"></multiselect>
@@ -137,15 +137,20 @@
               </v-flex>
               <v-flex xs12 d-flex>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
-                v-model="option.title" label="결제 옵션의 제목을 입력해주세요. 예) 4인 1실|3월~6월(비수기)|투어(점심포함)" solo></v-text-field>
+                v-model="option.title" label="결제 옵션의 제목을 입력해주세요. " hint="예) 4인 1실 | 성수기 | 중식 포함" solo></v-text-field>
+              </v-flex>
+
+              <v-flex xs12 sm4 class="PW__checkOption">
+                <div class="PW__chkbox" :class="{ PW__checked : dateOption }" @click="setOptDate"><i v-if="dateOption" class="fas fa-check"></i></div>
+                날짜 구분
               </v-flex>
               <!-- 시작날짜 -->
-              <v-flex xs12 sm6>
+              <v-flex xs12 sm4>
                 <v-menu ref="optionFromMenu" v-model="optionFromMenu" :close-on-content-click="false"
                         :nudge-right="40" :return-value.sync="option.fromDate" lazy transition="scale-transition"
                         min-width="290px" offset-y full-width>
                   <template v-slot:activator="{ on }">
-                    <v-text-field color="blue" v-model="option.fromDate" label="시작 날짜*" :value="option.fromDate" prepend-icon="event" readonly v-on="on"></v-text-field>
+                    <v-text-field :disabled="!dateOption" color="blue" v-model="option.fromDate" label="시작 날짜*" :value="option.fromDate" prepend-icon="event" readonly v-on="on"></v-text-field>
                   </template>
                   <v-date-picker :max="option.toDate" v-model="option.fromDate" no-title scrollable>
                     <v-spacer></v-spacer>
@@ -155,12 +160,12 @@
                 </v-menu>
               </v-flex>
               <!-- 종료날짜 -->
-              <v-flex xs12 sm6>
+              <v-flex xs12 sm4>
                 <v-menu ref="optionToMenu" v-model="optionToMenu" :close-on-content-click="false"
                         :nudge-right="40" :return-value.sync="option.toDate" lazy transition="scale-transition"
                         min-width="290px" offset-y full-width>
                   <template v-slot:activator="{ on }">
-                    <v-text-field color="blue" v-model="option.toDate" :value="option.toDate" label="종료 날짜*" prepend-icon="event" readonly v-on="on"></v-text-field>
+                    <v-text-field :disabled="!dateOption" color="blue" v-model="option.toDate" :value="option.toDate" label="종료 날짜*" prepend-icon="event" readonly v-on="on"></v-text-field>
                   </template>
                   <v-date-picker :min="option.fromDate" v-model="option.toDate" no-title scrollable>
                     <v-spacer></v-spacer>
@@ -169,6 +174,8 @@
                   </v-date-picker>
                 </v-menu>
               </v-flex>
+
+
               <!-- 요일 선택 -->
               <v-flex xs12 sm6 d-flex>
                 <v-select prepend-icon="map" label="요일 선택(다수 가능)*" v-model="option.dayOfWeek" :items="dayOfWeek" attach small-chips multiple></v-select>
@@ -195,74 +202,74 @@
 
               <!-- 인원 구분 -->
               <v-flex xs6 d-flex>
-                <v-select prepend-icon="fa-users" label="인원 구분 선택*" v-bind:items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
+                <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
                 </v-select>
               </v-flex>
 
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
-                <v-flex xs3>
+                <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">유아</h3>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" class="peopleType" type="number" v-model="option.infant.cost" placeholder="1인당 가격"/>
+                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.infant.cost" label="1인당 가격"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.infant.minAge" placeholder="최소 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.infant.minAge" label="최소 나이 제한"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.infant.maxAge" placeholder="최대 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.infant.maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex>
               </template>
 
               <template v-if="option.peopleTypeOpt.indexOf('child')!==-1">
-                <v-flex xs3>
+                <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">아동</h3>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" class="peopleType" type="number" v-model="option.child.cost" placeholder="1인당 가격"/>
+                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.child.cost" label="1인당 가격"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.child.minAge" placeholder="최소 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.child.minAge" label="최소 나이 제한"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.child.maxAge" placeholder="최대 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.child.maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex>
               </template>
 
               <template v-if="option.peopleTypeOpt.indexOf('adult')!==-1 || option.peopleTypeOpt.indexOf('none')!==-1">
-                <v-flex xs3>
+                <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">성인</h3>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" class="peopleType" type="number" v-model="option.adult.cost" placeholder="1인당 가격"/>
+                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.adult.cost" label="1인당 가격"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.adult.minAge" placeholder="최소 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.adult.minAge" label="최소 나이 제한"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.adult.maxAge" placeholder="최대 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.adult.maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex>
               </template>
 
               <template xs12 v-if="option.peopleTypeOpt.indexOf('senior')!==-1">
-                <v-flex xs3>
+                <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">고령자</h3>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" class="peopleType" type="number" v-model="option.senior.cost" placeholder="1인당 가격"/>
+                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.senior.cost" label="1인당 가격"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.senior.minAge" placeholder="최소 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.senior.minAge" label="최소 나이 제한"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <input min="0" max="99" class="peopleType" type="number" v-model="option.senior.maxAge" placeholder="최대 나이 제한"/>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.senior.maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex>
               </template>
 
               <!-- 상세설명 -->
               <v-flex xs12 sm9 d-flex>
                 <v-text-field height="50px" style="font-weight:bold; font-size: 2rem;"
-                v-model="desc" label="상세 설명 추가 예) 최소 2인이상|점심 불포함" solo></v-text-field>
+                v-model="desc" label="상세 설명 추가" hint="예) 최소 2인이상 | 점심 불포함" solo></v-text-field>
               </v-flex>
 
               <v-flex xs12 sm3 d-flex>
@@ -282,95 +289,38 @@
                 </v-card>
               </v-flex>
 
-              <div style="margin:auto">
+              <v-flex xs12 d-flex justify-center >
                 <v-btn @click="OptionAdd()" color="light-blue" class="white--text">결제 옵션 추가</v-btn>
-              </div>
+              </v-flex>
 
               <v-flex xs12 v-for="(item,key) in tourProgram.options">
-                <v-card style="padding:20px">
-                  <table class="guide__options">
-                    <tr>
-                      <td>옵션 제목</td>
-                      <td>시작 날짜</td>
-                      <td>종료 날짜</td>
-                    </tr>
-                    <tr>
-                      <td>{{item.title}}</td>
-                      <td>{{item.fromDate}}</td>
-                      <td>{{item.toDate}}</td>
-                    </tr>
-                    <tr>
-                      <td>요일</td>
-                      <td>시간대</td>
-                      <td>상세설명</td>
-                    </tr>
-                    <tr>
-                      <td>{{item.dayOfWeek}}</td>
-                      <td>{{item.times}}</td>
-                      <td>{{item.desc}}</td>
-                    </tr>
-                    <tr>
-                      <td>최소 인원</td>
-                      <td>기준 선택</td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>{{item.refPeople.num}}</td>
-                      <td>{{item.refPeople.opt}}</td>
-                      <td></td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('senior')!==-1">
-                      <td>1인당 가격(고령자)</td>
-                      <td>최소 나이 제한(고령자)</td>
-                      <td>최대 나이 제한(고령자)</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('senior')!==-1">
-                      <td>{{item.senior.cost}}</td>
-                      <td>{{item.senior.minAge}}</td>
-                      <td>{{item.senior.maxAge}}</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('adult')!==-1">
-                      <td>1인당 가격(성인)</td>
-                      <td>최소 나이 제한(성인)</td>
-                      <td>최대 나이 제한(성인)</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('adult')!==-1">
-                      <td>{{item.adult.cost}}</td>
-                      <td>{{item.adult.minAge}}</td>
-                      <td>{{item.adult.maxAge}}</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('child')!==-1">
-                      <td>1인당 가격(아동)</td>
-                      <td>최소 나이 제한(아동)</td>
-                      <td>최대 나이 제한(아동)</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('child')!==-1">
-                      <td>{{item.child.cost}}</td>
-                      <td>{{item.child.minAge}}</td>
-                      <td>{{item.child.maxAge}}</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('infant')!==-1">
-                      <td>1인당 가격(유아)</td>
-                      <td>최소 나이 제한(유아)</td>
-                      <td>최대 나이 제한(유아)</td>
-                    </tr>
-                    <tr v-if="item.peopleTypeOpt.indexOf('infant')!==-1">
-                      <td>{{item.infant.cost}}</td>
-                      <td>{{item.infant.minAge}}</td>
-                      <td>{{item.infant.maxAge}}</td>
-                    </tr>
-                    <tr>
-                      <td>costType</td>
-                      <td>maxPeople</td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>{{item.costType}}</td>
-                      <td>{{item.maxPeople}}</td>
-                      <td></td>
-                    </tr>
-                  </table>
-                </v-card>
+                <div class="PW__ShowOption">
+                  <div class="PW__ShowOption__Title">
+                    <div>{{item.title}}</div>
+                    <div class="Opt_deleteButton" @click="OptionDelete(key)">삭제</div>
+                  </div>
+
+                  <div class="PW__ShowOption__Content">
+                    <div class="PW__Opt__Info">
+                      <div><b>기간 :</b> {{item.fromDate}} ~ {{item.toDate}}</div>
+                      <div v-if="item.dayOfWeek.length"><b>요일 : </b>{{item.dayOfWeek.join(', ')}}</div>
+                      <div v-if="item.times.length"><b>시간대 : </b>{{item.times.join(', ')}}</div>
+                    </div>
+                    <div class="PW__Opt__Cost">
+                    <div  v-for="pType in item.peopleTypeOpt">
+                      <div>{{pTypeToKor(pType)}} <span> (Age {{item[pType].minAge}} - {{item[pType].maxAge}})</span></div>
+                      <div>{{item.costType}} {{item[pType].cost}} / 한 명</div>
+                    </div>
+                    </div>
+                    <div class="PW__Opt__Pop" v-if="item.refPeople.num">인원 : {{item.refPeople.num}}명 {{`${item.refPeople.opt=='more'? '이상':'단위'}`}} 최대 {{item.maxPeople}}명</div>
+                  </div>
+                  <div class="PW__Opt__Desc" v-if="item.desc.length">
+                    <h3>상세 설명</h3>
+                    <ul v-for="desc in item.desc">
+                      <li>{{desc}}</li>
+                    </ul>
+                  </div>
+                </div>
               </v-flex>
 
             </v-layout>
@@ -418,6 +368,7 @@ export default {
   },
   data (){
     return{
+      dateOption: true,
       dbTags:['액티비티', '공연관람'],
       showTags:[],
       checkText:'',
@@ -469,7 +420,43 @@ export default {
           refund30: 0
         },
         desc:'',
-        options:[],
+        options:[{
+              guideservice: '',
+              title: '제목1',
+              fromDate: '123',
+              toDate: '456',
+              dayOfWeek:['월', '화', '수'],
+              times: ['12','34','56'],
+              desc: ['상세1', '상세2'],
+              refPeople: {
+                num: '3',
+                opt: 'more'
+              },
+              senior: {
+                cost: 1,
+                minAge: 2,
+                maxAge: 3
+              },
+              adult: {
+                cost: 4,
+                minAge: 5,
+                maxAge: 6
+              },
+              child: {
+                cost: 7,
+                minAge: 9,
+                maxAge: 8
+              },
+              infant: {
+                cost: 10,
+                minAge: 11,
+                maxAge: 12
+              },
+              peopleTypeOpt:['child', 'adult'],
+              costType: '',
+              maxPeople: '5'
+            },
+        ],
         tags: [],
         detail:'',
       },
@@ -534,6 +521,21 @@ export default {
     })
   },
   methods : {
+    pTypeToKor(v) {
+      if(v == 'infant') return '유아'
+      if(v == 'child') return '아동'
+      if(v == 'adult') return '성인'
+      if(v == 'senior') return '고령자'
+    },
+    setOptDate() {
+      if(this.dateOption) {
+        this.dateOption = false;
+        this.option.fromDate = this.tourProgram.fromDate;
+        this.option.toDate = this.tourProgram.toDate;
+      } else{
+        this.dateOption = true;
+      }
+    },
     makeDummy(v) {
       var i = v
       this.$http(this.settings).then(res=>{

@@ -28,7 +28,7 @@
       <!-- Introduction -->
       <v-flex xs6>
         <h2 class="display-1 mb-3">{{guideName}}
-          
+
           <!-- v-if: 본인일 때 -->
           <v-tooltip right v-if="guideId == getUserId">
             <template v-slot:activator="{ on }">
@@ -164,6 +164,7 @@ export default {
     },
     showIU() {
       this.isIUVisible = true;
+
     },
     closeIU(value) {
       // console.log(value)
@@ -180,6 +181,7 @@ export default {
 
 
       }
+
       this.isIUVisible = false;
     },
 
@@ -203,9 +205,13 @@ export default {
       footerZIndex.style.zIndex = 0;
 
       navBarZIndex.style.zIndex = 0;
+      document.documentElement.style.overflow='hidden';
+      document.body.scroll="no";
       this.isPWVisible = true;
     },
     closePW(){
+      document.documentElement.style.overflow='scroll';
+      document.body.scroll="yes";
       this.isPWVisible = false;
     },
     updateIntro() {

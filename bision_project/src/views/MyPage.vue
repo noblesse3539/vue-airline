@@ -287,7 +287,6 @@
             console.log(1, res)
             this.userId = res.data.userInfo._id
             this.userGuideServices = res.data.paymentRecords
-            this.guideServiceId = res.data.options.guideservice
             console.log(2, this.userGuideServices)
             this.userInfo = res.data.userInfo
             // console.log(this.userInfo)
@@ -295,11 +294,15 @@
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
             this.userImage = this.userInfo.profileImg
+          }).catch( err => {
+              console.log(err)
+          }).then( () => {
+              this.$http.get('/api/review/findReviewByUser/'+this.userId)
+              .then( res => {
+                console.log(3, res)
+              })
             // this.userGuideServices  = this.userInfo.UsedGuideServices
             // console.log(this.userGuideServices)
-          })
-          .catch( err => {
-            console.log(err)
           })
       },
 
