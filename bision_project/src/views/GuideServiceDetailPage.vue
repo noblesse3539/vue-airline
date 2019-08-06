@@ -364,6 +364,7 @@ export default {
         quantity: 1,
         taxFreeAmount: 3000,
         date: '',
+        guide: '',
         get totalAmount() {
 
           return this.people * this.unitPrice
@@ -474,6 +475,7 @@ export default {
           this.serviceInfo.mainImg = data.mainImg
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
+          this.serviceInfo.guide = data.guide
 
           return
         })

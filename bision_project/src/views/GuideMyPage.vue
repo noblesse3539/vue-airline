@@ -110,6 +110,8 @@
                       >
                         수정하기
                       </button>
+                      <!-- 수정 시 Portfoliowrite 컴포넌트에 props 넘겨줍니다. -->
+                      <PortfolioWrite :class="portfilo-write-idx" :serviceInfo="guideServices[idx]" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
                       <button
                         v-if="getUserId !== guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn"
@@ -291,15 +293,28 @@ export default {
       document.body.scroll="no";
       this.isPWVisible = true;
     },
+    showPWEdit() {
+      const navBarZIndex = document.querySelector('#navbox')
+
+      const footerZIndex = document.querySelector('#footer')
+      footerZIndex.style.zIndex = 0;
+      
+      navBarZIndex.style.zIndex = 0;
+      document.documentElement.style.overflow='hidden';
+      document.body.scroll="no";
+      this.isPWEditVisible = true;
+    },
     closePW(){
       document.documentElement.style.overflow='scroll';
       document.body.scroll="yes";
       this.isPWVisible = false;
+      this.isPWEditVisible = false;
     },
     updateIntro() {
       const guideId = this.getUserId
       const config = {
-        'intro': this.intro
+        'intro': this.intro,
+        'profileImageUrl' : this.imgurl,
       }
       this.$http.put(`/api/guide/${guideId}`, config)
         .then( res => {
@@ -353,6 +368,10 @@ export default {
       // if (this.isHeaderOpen == false) {
       // }
     },
+
+    editGuideService() {
+      this.showPWEdit()
+    },
   },
   data (){
     return{
@@ -361,6 +380,7 @@ export default {
       isIUVisible: false,
       isETVisible: false,
       isPWVisible: false,
+      isPWEditVisible: false,
       imgurl: require('../assets/guideProfile.png'),
       intro: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.',
       introTemp: '',
