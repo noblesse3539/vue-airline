@@ -3,11 +3,11 @@
     <v-container>
 
     <!-- Profile 영역 -->
-    <v-layout xs12 my-5 mx-5 align-end>
+    <v-layout xs12 my-5 mx-5 align-center>
 
       <!-- ProfileImg -->
       <v-flex xs3 mr-5>
-
+        
         <!-- if: 본인 아닐 때 -->
         <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
 
@@ -16,7 +16,7 @@
             <v-img fluid style="border-radius: 50%;"  @click="showIU" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
               <v-fade-transition>
                 <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
-                    이미지 변경
+                    <!-- 이미지 변경 -->
                 </div>
               </v-fade-transition>
             </v-img>
@@ -26,13 +26,18 @@
       </v-flex>
 
       <!-- Introduction -->
-      <v-flex xs6>
-        <h2 class="display-1 mb-3">{{guideName}}
+      <v-flex xs6 class="gs-guidename-box">
+        <!-- <div class="guide-country-flag">
+          <img src="" alt="">
+        </div> -->
+        <h2 class="display-1 mb-3">
+          <span class="gs-guidename">
+            {{guideName}}</span>
           
           <!-- v-if: 본인일 때 -->
           <v-tooltip right v-if="guideId == getUserId">
             <template v-slot:activator="{ on }">
-              <v-btn @click="showET" v-on="on" flat icon fab color="indigo">
+              <v-btn @click="showET" v-on="on" flat icon fab color="indigo" class="gs-edit-btn">
                 <v-icon>edit</v-icon>
               </v-btn>
             </template>
@@ -40,7 +45,7 @@
           </v-tooltip>
 
           <form v-if="isETVisible">
-            <v-textarea clearable v-model = "introTemp" label="내 소개 수정" :value="introTemp"></v-textarea>
+            <v-textarea class="my-intro" clearable v-model = "introTemp" label="내 소개 수정" :value="introTemp"></v-textarea>
             <!-- intro 데이터에 수정여부 추가 -->
             <v-btn @click="doneET">submit</v-btn>
             <v-btn @click="cancelET">cancel</v-btn>
@@ -52,22 +57,69 @@
       </v-flex>
 
       <!--v-if 본인이면 -->
-      <v-flex xs3 >
+      <!-- <v-flex xs3 >
         <v-btn color="white">회원 탈퇴</v-btn>
-      </v-flex>
+      </v-flex> -->
     </v-layout>
-
+    
     <!-- tab 영역 -->
-    <v-sheet color="white">
-      <v-tabs  color="white">
-        <v-tab key="Now" > Now </v-tab>
-        <v-tab key="Portfolio"> 지난 여행 상품 </v-tab>
-        <v-tab-item key="Now">
-          <v-flex xs12>
-            <v-card flat>
-              <v-card-title><h2>Plan Title</h2></v-card-title>
-              <v-layout mx-5 mb-5>
-                <v-flex xs12 md5 @click="goToServiceDetail">
+    <v-sheet color="white" class="tab-section" >
+      <v-tabs slider-color="#45CE30" color="white" fixed-tabs>
+        <v-tab key="Now" class="tab-name">Now</v-tab>
+        <v-tab key="ALL" class="tab-name" >ALL</v-tab>
+        <v-tab key="Portfolio" class="tab-name" >RESERVATION</v-tab>
+
+        <!-- 현재 상품 -->
+        <v-tab-item key="Now" color="yellow">
+          <v-flex xs12 >
+            <v-card flat v-for="(service, idx) in guideServices" :key="idx">
+              <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
+              <v-layout mt-4 class="gs-mypage-service-box"
+              
+              >
+              <v-img class="gs-mypage-service-bg" :src="service.mainImg" max-height="300">
+              </v-img>
+              <div>
+
+              </div>
+                <div class="gs-mypage-service-content">
+                  <div class="gs-mypage-service-content-title">
+                    {{service.title}}
+                  </div>
+                  <hr>
+                  <div class="gs-mypage-service-content-info">
+                    {{service.desc}}
+                  </div>
+                  <div class="gs-mypage-service-content-date">
+                    위치: {{service.city_kor[0]}}<br>
+                    기간: {{service.fromDate}} ~ {{service.toDate}}<br>
+                    가이드 시간: {{service.duration}}
+                  </div>
+                  <div class="gs-mypage-service-content-bottom">
+                    <div class="gs-mypage-keyword-list">
+
+                    </div>
+                    <div class="gs-mypage-service-content-bottom-reserve">
+                      <button 
+                        v-if="getUserId == guideId"
+                        class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
+                        style="margin-right: 10px;"
+                        @click="goToServiceDetail(service._id)"
+                      >
+                        수정하기
+                      </button>
+                      <button
+                        v-if="getUserId !== guideId"
+                        class="gs-mypage-service-content-bottom-reserve-btn"
+                        @click="goToServiceDetail(service._id)"
+                      >
+                        예약하기
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              <Weather class="gs-mypage-weather" :city="service.city_kor[0]"></Weather>
+                <!-- <v-flex xs12 md5 @click="goToServiceDetail">
                   <v-img :src="getImgUrl('logo.png')"></v-img>
                 </v-flex>
                 <v-flex xs12 md7 ml-5>
@@ -77,15 +129,14 @@
                   <v-card-actions>
                     <v-btn flat>Book now</v-btn>
                   </v-card-actions>
-                </v-flex>
+                </v-flex> -->
               </v-layout>
             </v-card>
-            <v-divider></v-divider>
 
-            <h2>가이드 평균 별점</h2>
+            <!-- <h2>가이드 평균 별점</h2> -->
             <!-- vuetify 그대로 긁어왔는데 반쪽이랑 span 안댐 -->
-            <span class="grey--text text--lighten-2 caption mr-2"> ({{ this.rating }})</span>
-            <v-rating readonly x-large v-model="rating" background-color="grey" color="yellow accent-4" dense half-increments hover size="18"></v-rating>
+            <!-- <span class="grey--text text--lighten-2 caption mr-2"> ({{ this.rating }})</span>
+            <v-rating readonly x-large v-model="rating" background-color="grey" color="yellow accent-4" dense half-increments hover size="18"></v-rating> -->
 
             <!-- 후기 영역 -->
              <v-list three-line>
@@ -96,16 +147,30 @@
         </v-tab-item>
 
         <!-- Portfolio tab item -->
-        <v-tab-item key="Portfolio">
-          <v-btn  @click="showPW" color="white">여행 상품 등록</v-btn>
+        <v-tab-item key="ALL">
+          <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn>
           <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
 
-          <!-- portfolio list -->
-        <v-container fluid grid-list-md mx-2>
-          <v-layout row wrap >
+          <div class="gs-ALL-container">
+            <div class="gs-ALL-service-add-btn">
+              <div class="gs-ALL-service-add-btn-inside">
+                
+              </div>
+            </div>
+            <div class="gs-ALL-service-card" v-for="(service, idx) in guideServices" :key="idx">
+              
+            </div>
+          </div>
+        <!-- portfolio list -->
+        <!-- <v-container fluid grid-list-md mx-2> -->
+          <!-- <v-layout row wrap >
             <v-flex mx-2 my-2 v-for="(service, idx) in guideServices" :key="idx" xs4>
               <v-card>
-                <v-img :src="service.mainImg" height="200px">
+                <v-img 
+                  :src="service.mainImg"
+                  height="200px"
+                  @click="goToServiceDetail(service._id)"
+                >
                   <v-container fill-height fluid pa-2>
                     <v-layout fill-height>
                       <v-flex xs12 align-end flexbox>
@@ -129,8 +194,8 @@
                 </v-card-actions>
               </v-card>
             </v-flex>
-          </v-layout>
-        </v-container>
+          </v-layout> -->
+        <!-- </v-container> -->
 
         </v-tab-item>
       </v-tabs>
@@ -143,6 +208,7 @@
 import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
+import Weather from '../components/Weather'
 import './GuideMyPage.css'
 import { mapGetters, mapState } from "vuex";
 export default {
@@ -151,12 +217,14 @@ export default {
     UploadImg,
     UploadImgModal,
     PortfolioWrite,
+    Weather,
   },
   props: ['guideId'],
   methods: {
-    goToServiceDetail() {
+    goToServiceDetail(guideServiceId) {
+      console.log(guideServiceId)
       // `/user/${getuserId}`
-      // this.$route.push({path: ''})
+      this.$router.push({path: `/guideServiceDetailPage`, query: {serviceId : guideServiceId}})
     },
     getImgUrl(img){
       return require('../assets/' + img)
@@ -220,7 +288,7 @@ export default {
     GuideDataRequest() {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then(res => {
-        // console.log(res.data)
+        console.log(res.data)
 
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
@@ -241,9 +309,28 @@ export default {
       this.$http.get(` /api/guideservice/findGSByGuideId/${this.guideId}`)
         .then( res => {
           console.log(res)
-          this.guideServices = res.data
+          this.guideServices = res.data.reverse()
           // console.log(this.guideServices)
         })
+    },
+    closeFooter() {
+
+      const footer = document.querySelector(".v-footer")
+
+      this.$store.commit("closeFooter")
+
+      if (this.isFooterOpen == false) {
+        footer.style.display = "none"
+      }
+    },
+    blurHeader() {
+      const footer = document.querySelector("#navbox")
+
+      // this.$store.commit("closeHeader")
+      footer.style.background = "rgba(255, 255, 255, 1)"
+
+      // if (this.isHeaderOpen == false) {
+      // }
     },
   },
   data (){
@@ -268,7 +355,7 @@ export default {
       // 현재 가이드 페이지에 접근한 유저가 해당 가이드인지 일반 유저인지 판단 후,
       // 일반 유저일 경우 수정 기능들을 비활성 처리합니다.
       guideId: this.$route.query.guideId,
-
+      
       // 가이드 상품 관련
       guideServices: [],
     }
@@ -277,11 +364,15 @@ export default {
     ...mapState({
       getUserId: state => state.User.userId,
       getIsLoggedIn: state => state.User.isLoggedIn,
+      isFooterOpen : state => state.Footer.isFooterOpen,
+      isHeaderOpen : state => state.Header.isHeaderOpen,
     })
   },
   mounted() {
     this.GuideDataRequest()
     this.getGuideService()
+    this.closeFooter()
+    this.blurHeader()
   },
 }
 </script>

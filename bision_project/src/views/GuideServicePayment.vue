@@ -63,6 +63,7 @@ export default {
 
         this.closeHeader()
         this.serviceInfo = this.$route.query
+        console.log(this.serviceInfo)
         this.setServiceInfo(this.serviceInfo)
         this.addTempServiceInfo()
         // console.log(this.getServiceInfo)

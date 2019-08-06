@@ -62,7 +62,7 @@ export default {
             const config = {
                 headers: { "x-access-token": token }
             };
-
+                
             this.$http
                 .get("/api/auth/check", config)
                 .then(res => {
@@ -71,7 +71,7 @@ export default {
                     const baseUrl = "/api/paymentstore/tmp/" + this.userId  
                     this.$http.get(baseUrl)
                         .then( res => {
-                            // console.log(res.data)
+                            console.log(res.data)
                             this.serviceInfo = res.data.tmpStore.service
                     })
                         .then( () => {
