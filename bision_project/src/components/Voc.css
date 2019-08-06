@@ -4,22 +4,99 @@
 .voc__openbutton {
   cursor: pointer;
   position: fixed ;
-  bottom: 80px;
-  right: 30px;
+  transform: rotate(270deg);
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  bottom: 140px;
+  right: -30px;
+  background-color: rgba(53, 194, 53, 0.8);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 7px;
 }
 .voc__openbutton:hover {
-  background-color: blue;
+  background-color:  rgba(0, 111, 255, 0.8);
   color: white;
 }
-.voc__modal {
-  box-shadow: aliceblue;
+.HR__Modal {
   position: fixed;
-  bottom: 120px;
-  right: 0px;
-  background: linear-gradient(#80ffff, #8eff4d);
-  border-radius: 8px;
+  z-index: 30000;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: RGBA(0, 0, 0, 0.3);
+}
+.HR__ModalContent {
+  /* display: flex;
+  align-content: space-between; */
+  position: relative;
+  border-radius: 10px;
+  width: max-content;
+  height: 500px;
+  overflow:visible;
+  padding: 2rem;
+  background-color: white;
+}
+.HR__ModalHeader {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.HR__ModalBody {
+  padding: 1rem;
+}
+.HR__ModalAction {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+}
+.HR__ModalAction div{
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  border-radius: 5px;
+  width: 100px;
+  padding: 1rem;
+  margin: 1rem;
+}
+.VOC__Input{
+  width: 500px;
+  margin: 1rem 0;
+  height: 300px;
+  overflow-y: visible;
+  font-size: 1rem;
+  border: solid 1px lightgrey;
+  border-radius: 2px;
+  padding: 0.7rem;
+}
+.HR__ModalAction .clear {
+  color: Tomato;
+  border: solid 1px Tomato;
+}
+.HR__ModalAction .clear:hover{
+  background-color: Tomato;
   color: white;
 }
-.voc__modal__content {
-
+.HR__ModalAction .submit {
+  color: dodgerblue;
+  border: solid 1px dodgerblue;
+}
+.HR__ModalAction .submit:hover {
+  background-color: dodgerblue;
+  color: white;
 }
