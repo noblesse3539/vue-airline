@@ -235,16 +235,16 @@
       <h3 class="GS-service-intro-title">환불 규정</h3>
       <div class="GS-service-user-refund">
         <div>
-          <div class="GS-service-user-refund-table border-solid-left"> 환불 금액</div>
-          <div class="GS-service-user-refund-table border-solid-left"> 100% 환불</div>
-          <div class="GS-service-user-refund-table border-solid-left"> 50% 환불</div>
-          <div class="GS-service-user-refund-table border-solid-left"> 30% 환불</div>
+          <div class="GS-service-user-refund-table border-solid-left border-solid-top border-solid-bottom">환불 금액</div>
+          <div class="GS-service-user-refund-table border-solid-left border-dashed-bottom">100% 환불</div>
+          <div class="GS-service-user-refund-table border-solid-left border-dashed-bottom">50% 환불</div>
+          <div class="GS-service-user-refund-table border-solid-left border-solid-bottom">30% 환불</div>
         </div>
         <div>
-          <div class="GS-service-user-refund-table border-solid-right">환불 사유 발생일</div>
-          <div class="GS-service-user-refund-table border-solid-right">여행 시작 일 기준 {{serviceInfo.refund[0].refund100}}일 전</div>
-          <div class="GS-service-user-refund-table border-solid-right">여행 시작 일 기준 {{serviceInfo.refund[0].refund50}}일 전</div>
-          <div class="GS-service-user-refund-table border-solid-right">여행 시작 일 기준 {{serviceInfo.refund[0].refund30}}일 전</div>
+          <div class="GS-service-user-refund-table border-solid-right border-solid-top border-solid-left border-solid-bottom">환불 사유 발생일</div>
+          <div class="GS-service-user-refund-table border-solid-right border-dashed-left border-dashed-bottom">여행 시작 일 기준 {{serviceInfo.refund[0].refund100}}일 전</div>
+          <div class="GS-service-user-refund-table border-solid-right border-dashed-left border-dashed-bottom">여행 시작 일 기준 {{serviceInfo.refund[0].refund50}}일 전</div>
+          <div class="GS-service-user-refund-table border-solid-right border-solid-bottom border-dashed-left">여행 시작 일 기준 {{serviceInfo.refund[0].refund30}}일 전</div>
         </div>
       </div>
     </section>
@@ -364,7 +364,6 @@ export default {
         quantity: 1,
         taxFreeAmount: 3000,
         date: '',
-        guideid: '',
         get totalAmount() {
 
           return this.people * this.unitPrice
@@ -475,7 +474,6 @@ export default {
           this.serviceInfo.mainImg = data.mainImg
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
-          this.serviceInfo.guide  = data.guide
 
           return
         })
