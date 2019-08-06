@@ -75,6 +75,7 @@ exports.SearchGS=(req,res)=>{
   console.log(keyword);
   GuideService.find()
   .populate('tags')
+  .populate('options')
   .or([{city_eng: { $regex: '.*' + keyword + '.*' }},
       {city_kor: { $regex: '.*' + keyword + '.*' }},
       {nation_eng: { $regex: '.*' + keyword + '.*' }},
@@ -124,6 +125,7 @@ exports.findGSByGuideObId = (req,res)=>{
   }
   console.log('findGSByGuideObId');
   GuideService.find({guide:req.params.guide})
+  .populate('tags')
   .populate('guide')
   .then(
       guideservices => {

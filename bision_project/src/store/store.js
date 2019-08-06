@@ -4,6 +4,7 @@ import Counter from './modules/counter'
 import Alerter from './modules/alerter'
 import Admin from './modules/admin'
 import Header from './modules/header'
+import Footer from './modules/footer'
 import User from './modules/user'
 import Guideservice from './modules/guideservice'
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     Alerter,
     Admin,
     Header,
+    Footer,
     User,
     Guideservice,
   },

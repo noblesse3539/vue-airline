@@ -1,6 +1,8 @@
 .guidepage {
   margin-top: 110px;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
+  background: #fff;
+  height: 100%;
 }
 .profileImg:hover {
   cursor: pointer;
@@ -12,4 +14,169 @@ justify-content: center;
 opacity: .5;
 position: absolute;
 width: 100%;
+}
+
+.gs-mypage-service-box {
+  /* background: black; */
+  /* width: 100%; */
+  min-height: 10%;
+}
+
+.gs-mypage-service-bg {
+  position: relative;
+}
+
+
+.gs-mypage-service-content {
+  position: absolute;
+  height: 100%;
+  width: 70%;
+  background: rgba(0,0,0,0.5);
+  max-height: 100%;
+}
+
+.tab-name {
+  margin-bottom: 50px !important;
+  font-size: 1.25rem;
+  font-weight: 1000;
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.v-tabs__container {
+  margin-bottom: 10px;
+}
+
+.gs-mypage-service-content {
+  padding: 25px;
+}
+
+.gs-mypage-service-content-title {
+  color: white;
+  font-weight: 700;
+  font-size: 2vw;
+  text-overflow: ellipsis;
+}
+
+.gs-mypage-service-content-info {
+  margin-top: 10px;
+  min-height: 74px;
+  max-height: 74px;
+  color: white;
+  font-size: 1vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap;  */
+}
+
+.gs-mypage-service-content-date {
+  margin-top: 10px;
+  color: white;
+  font-size: 1vw;
+}
+
+.gs-mypage-service-content-bottom {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-size: 1.12vw;
+}
+
+.gs-mypage-service-content-bottom-reserve-btn {
+  background: rgb(69, 206, 48);
+  color: #fff;
+  padding: 10px;
+  font-weight: 700;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.gs-mypage-service-content-bottom-reserve-btn:hover {
+  /* transform: translateY(-5px); */
+  background: #1e90ff;
+  transition: 0.5s;
+}
+
+.gs-mypage-weather {
+  color: #fff;
+  position: absolute;
+  width: 30%;
+  height: 100%;
+  left: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(30, 144, 255, 0.8);
+}
+
+.gs-guidename {
+  font-size: 5vw;
+}
+
+.gs-guidename-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* margin-bottom: 110px; */
+}
+
+.gs-edit-btn {
+  font-size: 2vw !important;
+}
+
+.v-btn__content > i {
+  margin-left: 20px;
+  font-size: 2vw !important;
+}
+
+.v-text-field__slot > textarea {
+  padding-top: 20px;
+}
+
+.gs-btn-revise {
+  background: hotpink;
+}
+
+.gs-ALL-container {
+  width: 100% !important;
+  height: 100%;
+  margin-bottom: 110px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.gs-ALL-service-add-btn {
+  text-align: center;
+  color: white;
+  background: black;
+  /* border: 1px solid rgba(0, 0, 0, 0.5); */
+  width: 30%;
+  height: 40vh;
+  /* height: 300px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: -5vw; */
+}
+
+.gs-ALL-service-add-btn-inside {
+  font-size: 10vw;
+  line-height: 9vw;
+  overflow: hidden;
+  max-height: 10vw;
+  min-height: 10vw;
+}
+
+.gs-ALL-service-card {
+  background: red;
+  width: 30%;
+  height: 40vh;
+  border: 1px solid black;
 }

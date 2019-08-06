@@ -24,8 +24,8 @@
                         <i class="far fa-calendar-check"></i>
                       </span>
                       <input placeholder="날짜별 검색" disabled class="result-body__search-by-date-input" type="text" />
-                      <div v-if="isCalenderOpen" class="GS-date-picker" @click="updateResult()">
-                        <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                      <div v-if="isCalenderOpen" class="GS-date-picker" @click="selectDate(leavingDate)">
+                        <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30" :allowed-dates="allowedDates"></v-date-picker>
                       </div>
                     </div>
                 <!-- </div> -->
@@ -36,9 +36,9 @@
                   </div> -->
 
                   <!-- 2안 -->
-                  <div v-for="i in tags.length" :key="i">
-                    <v-chip color="#5CE75C" text-color="white" @click="findTag(tags[i-1])" v-if="selectedTags.indexOf(tags[i-1]) != -1">{{tags[i-1]}}</v-chip>
-                    <v-chip color="#dcdcdc" text-color="black" @click="findTag(tags[i-1])" v-else>{{tags[i-1]}}</v-chip>
+                  <div v-for="i in tags.length > 10 ? 10 : tags.length" :key="i">
+                    <v-chip color="#5CE75C" text-color="white" style="font-weight: 300;" @click="selectTags(tags[i-1])" v-if="selectedTags.indexOf(tags[i-1]) != -1">{{tags[i-1]}}</v-chip>
+                    <v-chip color="#EBEBEB" text-color="black" style="font-weight: 700;" @click="selectTags(tags[i-1])" v-else>{{tags[i-1]}}</v-chip>
                   </div>
                     <!-- <input placeholder="# 태그별 검색" class="result-body__search-by-tag-search" type="text"> -->
                     <!-- <span class="result-body_search-by-tag-search-icon"><i class="fas fa-search"></i></span> -->
@@ -99,7 +99,7 @@
                                 class="v-input-custom"
                                 color="success"
                                 :label="period[0]" :value="idx"
-                                @change="updateResult"
+                                @change="selectDuration(idx)"
                             >
                             </v-checkbox>
                         </li>
@@ -110,10 +110,11 @@
                 <div class="result-body__result-show">
                     <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과
                 </div>
-                <!-- <div class="result-body__result-show">
-                  <v-chip color="#5CE75C" text-color="white">유람선</v-chip>
-                  <v-chip color="#5CE75C" text-color="white">2019-08-13</v-chip>
-                </div> -->
+                <div class="result-body__result-show" v-if="searchChips.length != 0">
+                  <div v-for="i in searchChips.length" :key="i">
+                    <v-chip class="guide-list-page-selected-chip">{{searchChips[i-1]}}<i class="fas fa-times-circle delete-chip" @click="deletechip(searchChips[i-1])"></i></v-chip>
+                  </div>
+                </div>
                 <!-- 가이드 상품 검색 결과 -->
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
@@ -163,7 +164,7 @@
                                 </p>
                                 <p class="result-body-card-bottom-price">
                                     <span class="currency">KRW</span>
-                                    <span class="cost" style="color: rgb(34,139,34); font-size: 1.74rem;">{{service.cost}}</span>
+                                    <span class="cost" style="color: rgb(34,139,34); font-size: 1.74rem;">{{priceTransfer(service.cost)}}</span>
                                 </p>
                             </div>
                         </div>
@@ -233,15 +234,18 @@ export default {
                             ['1일 ~ 2일', 172800], // 1일 ~ 2일
                             ['2일 이상', 172801]     // 2일 이상
                         ],
-            duration: [0, 1, 2, 3],
+            duration: [],
 
             // 달력 관련 변수
             isCalenderOpen: false,
             leavingDate: '',
+            leavingDates: [],
 
             // 태그 관련 변수
-            tags: ['액티비티', '경치', '유람선', '박물관', '푸파', '힐링', '고성', '맛집', '전통음식', '공연'],
+            tags: [],
+            // tags: ['액티비티', '경치', '유람선', '박물관', '푸파', '힐링', '고성', '맛집', '전통음식', '공연'],
             selectedTags: [],
+            searchChips: [],
         }
     },
     methods: {
@@ -269,7 +273,7 @@ export default {
                         temp.rawDetail  = eachService.detail
                         temp.image      = eachService.mainImg
                         temp.duration   = eachService.duration
-                        temp.cost       = eachService.cost
+                        temp.cost       = eachService.options[0].adult.cost
                         temp.city       = eachService.city_kor
                         temp.serviceId  = eachService._id
                         temp.fromDate   = eachService.fromDate
@@ -281,6 +285,11 @@ export default {
                         this.fixedguideServiceList.push(temp)
                         if (temp.cost > this.maxPrice) this.maxPrice = temp.cost
                         if (temp.cost < this.minPrice) this.minPrice = temp.cost
+                        for (let i=0; i<eachService.tags.length; i++) {
+                          if (this.tags.indexOf(eachService.tags[i].tag) == -1) {
+                            this.tags.push(eachService.tags[i].tag)
+                          }
+                        }
                     })
                     this.price[0] = this.minPrice
                     this.price[1] = this.maxPrice
@@ -329,45 +338,191 @@ export default {
           // console.log(event.target)
 
             if (event.target.classList[0] != 'likeBtn') {
-              
+
               const params = this.guideServiceList[serviceIdx]
               const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
               this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
             }
             // {name: "GuideListPage", params: params}
         },
-        // 추가
+
+        // 달력 허용 날짜
+        allowedDates: function (val) {
+          if (this.dateCalculate(val) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {
+            if (this.leavingDates.indexOf(val) == -1) {
+              return val
+            }
+          }
+        },
+
+        // 날짜 선택 시
+        selectDate : function (leavingDate) {
+          console.log(leavingDate)
+          if (this.leavingDates.indexOf(leavingDate) == -1) {
+            this.leavingDates.push(leavingDate)
+            this.updateResult(leavingDate)
+            this.searchChips.push(leavingDate)
+          }
+          this.updateResult()
+        },
+
+        // 여행 기간 선택 시
+        selectDuration : function (idx) {
+          console.log(this.duration)
+          if (this.duration.indexOf(idx) != -1) {
+            this.searchChips.push(this.periodList[idx][0])
+          } else {
+            if (this.searchChips.indexOf(this.periodList[idx][0]) != -1) {
+              this.searchChips.splice(this.searchChips.indexOf(this.periodList[idx][0]),1)
+            }
+          }
+          this.updateResult()
+        },
+
+        //태그 선택 시
+        selectTags : function (tag) {
+          if (this.selectedTags.indexOf(tag) == -1) {
+            this.selectedTags.push(tag)
+            this.searchChips.push(tag)
+          } else {
+            this.selectedTags.splice(this.selectedTags.indexOf(tag),1)
+            this.searchChips.splice(this.searchChips.indexOf(tag),1)
+          }
+          this.updateResult()
+        },
+
+        // 검색 칩 삭제
+        deletechip (chip) {
+          console.log("딜리트")
+          this.searchChips.splice(this.searchChips.indexOf(chip),1)
+          // 날짜 삭제
+          if (isNaN(this.dateCalculate(chip)) == false) {
+            console.log(this.dateCalculate(chip))
+            this.leavingDates.splice(this.leavingDates.indexOf(chip),1)
+            // 여행기간 삭제
+          } else if (chip.indexOf("시간") != -1 && chip.indexOf("~") != -1) {
+            for (let i=0; i<this.periodList.length; i++) {
+              if (this.periodList[i][0] == chip) {
+                this.duration.splice(this.duration.indexOf(i),1)
+                break;
+              }
+            }
+            // 태그 삭제
+          } else {
+            console.log(this.selectedTags)
+            this.selectedTags.splice(this.selectedTags.indexOf(chip),1)
+          }
+          this.updateResult()
+        },
+
+        // 결과리스트 업데이트
         updateResult : function () {
-          console.log(this.leavingDate)
+          console.log("업데이트!!")
           this.guideServiceList = []
+          let flag
           for (let i=0; i<this.fixedguideServiceList.length; i++) {
-            for(let j=0; j<this.duration.length; j++) {
-              if (this.duration[j] == 0) {
-                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-                    this.guideServiceList.push(this.fixedguideServiceList[i])
+
+            // 날짜
+            flag = false
+            if (this.leavingDates.length == 0) {
+              console.log("영")
+              flag = true
+            } else {
+              for (let k=0; k<this.leavingDates.length; k++) {
+                if (this.dateCompare(this.leavingDates[k], this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {                  
+                  flag = true
+                  break;
+                }
+              }
+            }
+
+            if (flag == false) continue;
+            console.log("날짜패스")
+
+            // 태그
+            flag = false
+            if (this.selectedTags.length == 0) {
+              flag = true
+            } else {
+              for (let j=0; j<this.fixedguideServiceList[i].tags.length; j++) {
+                for (let k=0; k<this.selectedTags.length; k++) {
+                  if (this.fixedguideServiceList[i].tags[j].tag == this.selectedTags[k]) {
+                    flag = true
+                    break;
                   }
                 }
-              } else if (this.duration[j] == 1) {
-                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-                    this.guideServiceList.push(this.fixedguideServiceList[i])
+                if (flag == true) break;
+              }
+            }
+
+            if (flag == false) continue;
+            console.log("태그패스")
+
+            // 가격
+            console.log(this.price[1])
+            flag = false
+            if (this.fixedguideServiceList[i].cost <= this.price[1] && this.fixedguideServiceList[i].cost >= this.price[0]) flag = true
+            if (flag == false) continue;
+            console.log("가격패스")
+
+            // 여행 기간
+            flag = false
+            if (this.duration.length == 0) {
+              flag = true
+            } else {
+              for (let j=0; j<this.duration.length; j++) {
+                if (this.duration[j] == 0) {
+                  if (this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
+                    flag = true
                   }
-                }
-              } else if (this.duration[j] == 2) {
-                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-                    this.guideServiceList.push(this.fixedguideServiceList[i])
+                } else if (this.duration[j] == 1) {
+                  if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
+                    flag = true
                   }
-                }
-              } else if (this.duration[j] == 3) {
-                if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
-                  if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-                    this.guideServiceList.push(this.fixedguideServiceList[i])
+                } else if (this.duration[j] == 2) {
+                  if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
+                    flag = true
+                  }
+                } else if (this.duration[j] == 3) {
+                  if (this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
+                    flag = true
                   }
                 }
               }
             }
+
+            if (flag == true) {
+              this.guideServiceList.push(this.fixedguideServiceList[i])
+              console.log("기간패스")
+            }
+
+
+              // if (this.duration[j] == 0) {
+              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
+              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
+              //       this.guideServiceList.push(this.fixedguideServiceList[i])
+              //     }
+              //   }
+              // } else if (this.duration[j] == 1) {
+              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
+              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
+              //       this.guideServiceList.push(this.fixedguideServiceList[i])
+              //     }
+              //   }
+              // } else if (this.duration[j] == 2) {
+              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
+              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
+              //       this.guideServiceList.push(this.fixedguideServiceList[i])
+              //     }
+              //   }
+              // } else if (this.duration[j] == 3) {
+              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
+              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
+              //       this.guideServiceList.push(this.fixedguideServiceList[i])
+              //     }
+              //   }
+              // }
+
           }
         },
         durationTransfer : function (duration) {
@@ -401,30 +556,61 @@ export default {
           }
           return sum
         },
-        dateCalculate : function (select, from, to) {
+        dateCompare : function (select, from, to) {
           select = parseInt(select.slice(0, 4)) * 365 + this.sum(parseInt(select.slice(5, 7))) + parseInt(select.slice(8, 10))
           from = parseInt(from.slice(0, 4)) * 365 + this.sum(parseInt(from.slice(5, 7))) + parseInt(from.slice(8, 10))
           to = parseInt(to.slice(0, 4)) * 365 + this.sum(parseInt(to.slice(5, 7))) + parseInt(to.slice(8, 10))
           if (select >= from && select <= to) return true
           return false
         },
+        dateCalculate : function (date) {
+          return date = parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
+        },
         findTag : function (tag) {
-          console.log("태그를 찾아라")
-          console.log(tag)
+          console.log(this.selectedTags)
           if (this.selectedTags.indexOf(tag) == -1) {
             this.selectedTags.push(tag)
           } else {
             this.selectedTags.splice(this.selectedTags.indexOf(tag),1)
           }
-          console.log(this.selectedTags)
-          // for (let i=0; i<this.fixedguideServiceList.length; i++) {
-          //   for (let j=0; j<this.fixedguideServiceList[i].tags.length; j++) {
-          //     if (this.fixedguideServiceList[i].tags[j].tag == tag) {
-          //       this.guideServiceList.push(fixedguideServiceList[i])
-          //     }
-          //   }
-          // }
+
+          this.guideServiceList = []
+          if (this.selectedTags.length == 0) {
+            for (let i=0; i<this.fixedguideServiceList.length; i++) {
+              this.guideServiceList.push(this.fixedguideServiceList[i])
+            }
+          } else {
+
+            for (let i=0; i<this.fixedguideServiceList.length; i++) {
+              for (let j=0; j<this.fixedguideServiceList[i].tags.length; j++) {
+                if (this.selectedTags.indexOf(this.fixedguideServiceList[i].tags[j].tag) != -1) {
+                  this.guideServiceList.push(this.fixedguideServiceList[i])
+                }
+                break;
+              }
+            }
+          }
+
         },
+        priceTransfer: function (price) {
+          price = price.toString()
+          for (let i=0; i<price.length; i++) {
+            if (price[i] == ".")
+              price = price.slice(0,i)
+          }
+          let result = ''
+          for (let i=0; i<price.length; i++) {
+            if (i>0 && i%3 == 0)
+              result += ","
+            result += price[price.length-i-1]
+          }
+          let reverse = ''
+          for (let i=result.length-1; i>=0; i--) {
+            reverse += result[i]
+          }
+          return reverse
+        },
+
     },
     computed: {
         ...mapState({

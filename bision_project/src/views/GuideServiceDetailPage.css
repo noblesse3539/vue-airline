@@ -699,6 +699,7 @@
 .GS-service-user-refund {
   width: 67%;
   padding: 10px;
+  padding-left: 0px !important;
   margin: 0 !important;
   display: grid;
   grid-template-columns: 50% 50%;
@@ -707,4 +708,45 @@
 .GS-service-user-refund-table {
   height: 25%;
   padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.border-solid-left {
+  border-left: 1px solid;
+  border-color: #969696;
+  padding-left: 10px;
+}
+
+.border-solid-right {
+  border-right: 1px solid;
+  border-color: #969696;
+}
+
+.border-solid-bottom {
+  border-bottom: 1px solid;
+  border-color: #969696;
+}
+
+.border-solid-top {
+  border-top: 1px solid;
+  border-color: #969696;
+  font-weight: 700;
+  background-color: #dcdcdc;
+}
+
+.border-dashed-left {
+  border-left: 1px dashed;
+  padding-left: 10px;
+}
+
+.border-dashed-right {
+  border-right: 1px dashed;
+}
+
+.border-dashed-bottom {
+  border-bottom: 1px dashed;
+}
+
+.border-dashed-top {
+  border-top: 1px dashed;
 }
