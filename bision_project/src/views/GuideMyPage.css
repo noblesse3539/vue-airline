@@ -19,13 +19,31 @@ width: 100%;
 .gs-mypage-service-box {
   /* background: black; */
   /* width: 100%; */
-  min-height: 10%;
+  /* min-height: 3%; */
+  min-height: 200px;
+  max-height: 350px;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
 .gs-mypage-service-bg {
   position: relative;
+  /* height: 100%; */
+  width: 100%;
 }
 
+.gs-mypage-keyword-list {
+  display: flex;
+  align-items: center;
+}
+
+.gs-mypage-kyeword-each {
+  margin-right: 15px;
+  background: rgba(53, 194, 53, 0.8);
+  padding: 10px;
+  border-radius: 10%;
+}
 
 .gs-mypage-service-content {
   position: absolute;
@@ -33,6 +51,10 @@ width: 100%;
   width: 70%;
   background: rgba(0,0,0,0.5);
   max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
 }
 
 .tab-name {
@@ -76,6 +98,7 @@ width: 100%;
 }
 
 .gs-mypage-service-content-bottom {
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
   color: white;
@@ -145,25 +168,34 @@ width: 100%;
 .gs-ALL-container {
   width: 100% !important;
   height: 100%;
+  margin-top: 25px;
   margin-bottom: 110px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: stretch;
-  align-items: stretch;
+  position: relative;
+  /* justify-content: stretch;
+  align-items: stretch; */
 }
 
 .gs-ALL-service-add-btn {
   text-align: center;
-  color: white;
-  background: black;
+  color: grey;
+  /* background: black; */
   /* border: 1px solid rgba(0, 0, 0, 0.5); */
-  width: 30%;
+  width: 33.333% !important;
   height: 40vh;
   /* height: 300px; */
   display: flex;
   justify-content: center;
   align-items: center;
   /* margin-top: -5vw; */
+}
+
+.gs-ALL-service-add-btn:hover {
+  cursor: pointer;
+  opacity: 0.5;
+  transform: translateY(-5px);
+  transition: 0.25s;
 }
 
 .gs-ALL-service-add-btn-inside {
@@ -175,8 +207,70 @@ width: 100%;
 }
 
 .gs-ALL-service-card {
-  background: red;
-  width: 30%;
+  /* background: red; */
+  width: 33.333% !important;
   height: 40vh;
-  border: 1px solid black;
+  position: relative !important; 
+  /* border: 1px solid black; */
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.gs-ALL-service-card-bg {
+  width: 100%;
+  height: 100%;
+  z-index: 5 !important;
+  position: absolute !important;
+}
+
+.gs-ALL-service-card-img {
+  width: 100%;
+  height: 100%;
+  position: relative !important;
+  z-index: 8;
+}
+
+.gs-ALL-service-card-title {
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  /* font-size: 50rem !important; */
+  /* font-size: 2rem !important; */
+  color: black !important;
+  position: absolute !important;
+  z-index: 20 !important;
+  top: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gs-ALL-service-card-date {
+  width: 100%;
+  font-size: 1vw;
+}
+
+.gs-ALL-service-card-title-title {
+  font-size: 1.2vw;
+  color: white;
+  font-weight: 700;
+}
+
+.gs-ALL-service-card-title:hover {
+  cursor: pointer;
+  font-size: 1.5vw;
+  opacity: 0.8;
+  border: 10px solid rgba(30, 144, 255, 1);
+}
+
+.gs-ALL-service-card-seemore {
+  position: absolute;
+  z-index: 20;
+  bottom: 0;
+  font-size: 1.25vw;
+  font-weight: 700;
+  right: 0;
+  width: 20%;
+  height: 20%;
+  background: white;
 }

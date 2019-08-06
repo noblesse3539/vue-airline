@@ -97,7 +97,7 @@ export default {
         },
         addTempServiceInfo(){
             const baseUrl = '/api/paymentstore/tmp/' + this.getUserId
-            this.$http.post(baseUrl, { service: this.serviceInfo})
+            this.$http.post(baseUrl, this.serviceInfo)
                 .then( res => {
                     // console.log(res)
                 })
