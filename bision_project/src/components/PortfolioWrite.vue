@@ -378,6 +378,7 @@ export default {
     // 무슨 form? Edit/Create/New/Past
     VueEditor,
     title: String,
+    serviceInfo: Object,
   },
   components:{
     Multiselect,
@@ -559,6 +560,7 @@ export default {
   mounted:function(){
     // this.citySelect()
     this.nationSelect()
+    console.log(this.$props.serviceInfo)
  },
   methods : {
     pTypeToKor(v) {
