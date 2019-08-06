@@ -164,7 +164,7 @@
             </div>
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
-              
+
               <button
                 class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
                 @click="openOptionSelectingModal(`.GS-individual-option-1`)"
@@ -179,7 +179,7 @@
             <div class="GS-individual-option-detail-loadmore
                         GS-individual-option-detail-loadmore-1"
                         style="display: none">
-              
+
               <div class="GS-individual-option-detail-option-select">
                   <v-select
                     v-model="select"
@@ -235,16 +235,16 @@
       <h3 class="GS-service-intro-title">환불 규정</h3>
       <div class="GS-service-user-refund">
         <div>
-          <div class="GS-service-user-refund-table">환불 금액</div>
-          <div class="GS-service-user-refund-table">100% 환불</div>
-          <div class="GS-service-user-refund-table">50% 환불</div>
-          <div class="GS-service-user-refund-table">30% 환불</div>
+          <div class="GS-service-user-refund-table border-solid-left"> 환불 금액</div>
+          <div class="GS-service-user-refund-table border-solid-left"> 100% 환불</div>
+          <div class="GS-service-user-refund-table border-solid-left"> 50% 환불</div>
+          <div class="GS-service-user-refund-table border-solid-left"> 30% 환불</div>
         </div>
         <div>
-          <div class="GS-service-user-refund-table">환불 사유 발생일</div>
-          <div class="GS-service-user-refund-table">여행 시작 일 기준 {{serviceInfo.refund[0].refund100}}일 전</div>
-          <div class="GS-service-user-refund-table">여행 시작 일 기준 {{serviceInfo.refund[0].refund50}}일 전</div>
-          <div class="GS-service-user-refund-table">여행 시작 일 기준 {{serviceInfo.refund[0].refund30}}일 전</div>
+          <div class="GS-service-user-refund-table border-solid-right">환불 사유 발생일</div>
+          <div class="GS-service-user-refund-table border-solid-right">여행 시작 일 기준 {{serviceInfo.refund[0].refund100}}일 전</div>
+          <div class="GS-service-user-refund-table border-solid-right">여행 시작 일 기준 {{serviceInfo.refund[0].refund50}}일 전</div>
+          <div class="GS-service-user-refund-table border-solid-right">여행 시작 일 기준 {{serviceInfo.refund[0].refund30}}일 전</div>
         </div>
       </div>
     </section>
@@ -455,7 +455,7 @@ export default {
           return res.data;
         })
         .then(data => {
-          // console.log(data); 
+          // console.log(data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -467,7 +467,7 @@ export default {
           this.cost = data.cost;
           this.optionId = data._id;
           this.guide = data.guide;
-          
+
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
           this.serviceInfo.nation_kor = data.nation_kor
@@ -555,19 +555,19 @@ export default {
 
       this.leavingDates.splice([idx], 1)
     },
-    
+
     getGuideServiceOption() {
 
       this.$http.get(`/api/guideservice/findOption/${this.optionId}`)
         .then( res => {
           this.options = res.data.options
-          
+
           this.options.forEach( option => {
 
             // option.day
             option.allowedDates = []
             option.dayOfWeek.forEach( day => {
-              
+
               option.allowedDates = option.allowedDates.concat(this.getAllDays(day))
             })
             // console.log(option.allowedDates)
@@ -582,7 +582,7 @@ export default {
         })
     },
     getAllDays(goalDay) {
-      
+
       let day = new Date()
 
       // 월의 시작일을 1일로 설정
@@ -594,22 +594,22 @@ export default {
 
       /* ===============
           찾고자하는 요일 설정 (Default 월요일)
-          =============== */  
-      
+          =============== */
+
       // 1. 월요일
       let days
       let goalDayNumber
-      
+
       if (goalDay == '월') {
           goalDayNumber = 9
       } else if (goalDay == '화') {
           goalDayNumber = 10
       } else if (goalDay == '수') {
-          goalDayNumber = 11 
+          goalDayNumber = 11
       } else if (goalDay == '목') {
           goalDayNumber = 12
       } else if (goalDay == '금') {
-          goalDayNumber = 13 
+          goalDayNumber = 13
       } else if (goalDay == '토') {
           goalDayNumber = 14
       } else if (goalDay == '일') {
@@ -625,7 +625,7 @@ export default {
         days.push(anotherDay.toISOString().slice(0, 10))
       }
 
-      // getDate: 일요일을 0을 시작으로 요일의 번호를 나타냄 
+      // getDate: 일요일을 0을 시작으로 요일의 번호를 나타냄
       // console.log(days)
       return days
     },
