@@ -4,7 +4,7 @@ const controller = require('./controller')
 
 
 router.get('/', controller.cityList)
-
+router.get('/findCities/:nationKor', controller.cityListByNation)
 router.post('/setup', controller.createCities)
 
 router.get('/cleanList', controller.cleanList)

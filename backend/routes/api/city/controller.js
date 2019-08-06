@@ -1,5 +1,7 @@
 const Airport = require('../../../models/airport')
 const City = require('../../../models/city')
+const Nation = require('../../../models/nation')
+
 const mongoose = require('mongoose')
 exports.cityList = (req, res) => {
     City.find({})
@@ -10,6 +12,20 @@ exports.cityList = (req, res) => {
     })
     .catch( err => {
         res.json({error:err})
+    })
+}
+
+exports.cityListByNation = (req, res) => {
+    Nation.findOne({nation_kor:req.params.nationKor},(err,nat)=>{
+      if(err) res.status(500).json(err)
+      if(nat){
+        City.find({nation:nat._id},(err,cities)=>{
+           if(err) res.status(500).json(err)
+           if(cities){
+             return res.status(200).json(cities)
+           }
+        })
+      }
     })
 }
 

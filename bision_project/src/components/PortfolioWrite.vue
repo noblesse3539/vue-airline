@@ -34,10 +34,28 @@
 
               <!-- 나라, 도시 선택 -->
               <v-flex xs12 sm4 d-flex>
-                <v-select prepend-icon="fa-globe-asia" label="나라 선택*" v-model="tourProgram.nation_kor" :items="nation"></v-select>
+                <!-- <v-select prepend-icon="fa-globe-asia" label="나라 선택*" v-model="tourProgram.nation_kor" :items="nation"></v-select> -->
+                <template>
+                  <div>
+                    <v-autocomplete
+                      label="나라 선택"
+                      :items="nation"
+                      prepend-icon="fa-globe-asia"
+                      no-data-text
+                      v-model="nationSelected"
+                    ></v-autocomplete>
+                  </div>
+                </template>
               </v-flex>
               <v-flex xs12 sm8 d-flex>
-                <v-select prepend-icon="map" label="도시 선택(다수 가능)*" v-model="tourProgram.city_kor" :items="city" attach small-chips multiple></v-select>
+                <!-- <v-select prepend-icon="map" label="도시 선택(다수 가능)*" v-model="tourProgram.city_kor" :items="city" attach small-chips multiple></v-select> -->
+                <v-autocomplete
+                  label="도시 선택"
+                  :items="city"
+                  prepend-icon="map"
+                  no-data-text
+                  v-model="tourProgram.city_kor"
+                ></v-autocomplete>
               </v-flex>
 
               <!-- 시작날짜 -->
@@ -424,8 +442,9 @@ export default {
       check : false,
       validate: false,
       tempMain:'https:\/\/i.imgur.com\/9ge6Osc.jpg',
-      nation: ['대한민국'],
-      city: ['서울', '부산', '대전'],
+      nation: [],
+      nationSelected:'',
+      city: [],
       dayOfWeek:['월','화','수','목','금','토','일'],
       times:[
         '00:00','00:15','00:30','00:45','01:00','01:15','01:30','01:45','02:00','02:15','02:30','02:45','03:00','03:15','03:30','03:45',
@@ -531,8 +550,29 @@ export default {
   computed:{
     ...mapState({
       getUserId: state => state.User.userId
-    })
+    }),
+
   },
+  watch:{
+    nationSelected: function () {
+      this.$http.get('/api/city/findCities/'+this.nationSelected)
+        .then( res => {
+          for (var i = 0; i < res.data.length; i++) {
+            if (this.city.indexOf(res.data[i].city_kor) < 0 ) this.city.push(res.data[i].city_kor);
+            else{
+              break;
+            }
+          }
+        })
+        .catch( err => {
+          console.log(err)
+        })
+    }
+  },
+  mounted:function(){
+    // this.citySelect()
+    this.nationSelect()
+ },
   methods : {
     makeDummy(v) {
       var i = v
@@ -669,6 +709,7 @@ export default {
     },
     closePW(){
       if(this.validate){
+        this.tourProgram.nation_kor=this.nationSelected
         this.tourProgram.guide=this.getUserId;
         this.$http.post('/api/guideservice/create', this.tourProgram)
           .then( res => {
@@ -725,6 +766,28 @@ export default {
       this.option.costType= ''
       this.option.maxPeople= ''
       this.option.peopleTypeOpt= ''
+    },
+    nationSelect(){
+      this.$http.get('/api/nation')
+        .then( res => {
+          for (var i = 0; i < res.data.nations.length; i++) {
+            this.nation.push(res.data.nations[i].nation_kor)
+          }
+        })
+        .catch( err => {
+          console.log(err)
+        })
+    },
+    citySelect(){
+      this.$http.get('/api/city')
+        .then( res => {
+          for (var i = 0; i < res.data.cities.length; i++) {
+            this.city.push(res.data.cities[i].city_kor)
+          }
+        })
+        .catch( err => {
+          console.log(err)
+        })
     }
   }
 }
