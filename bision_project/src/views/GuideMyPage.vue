@@ -77,7 +77,7 @@
               <v-layout mt-4 class="gs-mypage-service-box"
               
               >
-              <v-img class="gs-mypage-service-bg" :src="service.mainImg" max-height="300">
+              <v-img class="gs-mypage-service-bg" :src="service.mainImg">
               </v-img>
               <div>
 
@@ -97,14 +97,16 @@
                   </div>
                   <div class="gs-mypage-service-content-bottom">
                     <div class="gs-mypage-keyword-list">
-
+                      <div class="gs-mypage-kyeword-each" v-for="tag in service.tags" :key="tag">
+                        {{tag.tag}}
+                      </div>
                     </div>
                     <div class="gs-mypage-service-content-bottom-reserve">
                       <button 
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
                         style="margin-right: 10px;"
-                        @click="goToServiceDetail(service._id)"
+                        @click="editGuideService()"
                       >
                         수정하기
                       </button>
@@ -151,8 +153,8 @@
           <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
           
           <div class="gs-ALL-container">
-            <div class="gs-ALL-service-add-btn">
-              <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId"  @click="showPW">
+            <div class="gs-ALL-service-add-btn" @click="showPW">
+              <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId" >
                 +
               </div>
               <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
@@ -161,7 +163,7 @@
               <div class="gs-ALL-service-card-bg">
                 <img class="gs-ALL-service-card-img"  :src="service.mainImg" alt="guide service img">
               </div>
-              <div class="gs-ALL-service-card-title">
+              <div class="gs-ALL-service-card-title" @click="goToServiceDetail(service._id)">
                 <div class="gs-ALL-service-card-title-title">
                   {{service.title}}
                 </div>
@@ -169,6 +171,9 @@
                   {{service.fromDate}}~{{service.toDate}}
                 </div>
               </div>
+              <!-- <div class="gs-ALL-service-card-seemore">
+                Detail
+              </div> -->
             </div>
           </div>
         <!-- portfolio list -->
@@ -278,7 +283,7 @@ export default {
 
       const footerZIndex = document.querySelector('#footer')
       footerZIndex.style.zIndex = 0;
-
+      
       navBarZIndex.style.zIndex = 0;
       this.isPWVisible = true;
     },
