@@ -429,8 +429,8 @@ export default {
               flag = true
             } else {
               for (let k=0; k<this.leavingDates.length; k++) {
-                if (this.dateCompare(this.leavingDate[k], this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-                  dateflag = true
+                if (this.dateCompare(this.leavingDates[k], this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {                  
+                  flag = true
                   break;
                 }
               }
