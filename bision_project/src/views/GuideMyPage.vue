@@ -148,17 +148,27 @@
 
         <!-- Portfolio tab item -->
         <v-tab-item key="ALL">
-          <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn>
-          <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
-
+          <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
+          
           <div class="gs-ALL-container">
             <div class="gs-ALL-service-add-btn">
-              <div class="gs-ALL-service-add-btn-inside">
-                
+              <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId"  @click="showPW">
+                +
               </div>
+              <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
             </div>
             <div class="gs-ALL-service-card" v-for="(service, idx) in guideServices" :key="idx">
-              
+              <div class="gs-ALL-service-card-bg">
+                <img class="gs-ALL-service-card-img"  :src="service.mainImg" alt="guide service img">
+              </div>
+              <div class="gs-ALL-service-card-title">
+                <div class="gs-ALL-service-card-title-title">
+                  {{service.title}}
+                </div>
+                <div class="gs-ALL-service-card-title-title">
+                  {{service.fromDate}}~{{service.toDate}}
+                </div>
+              </div>
             </div>
           </div>
         <!-- portfolio list -->
