@@ -78,7 +78,7 @@
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
           <div class="RWButtonOver">
-            <div class="RWButton" @click="showRW(guideService._id)">후기 작성 하기</div>
+            <div class="RWButton" @click="showRW(id)">후기 작성 하기</div>
           </div>
         </div>
       </swiper-slide>
@@ -91,22 +91,22 @@
         <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
       </div>
     </swiper>
-    <div v-if="isRWVisible" class="RWModal">
-      <div class="RWModalContent">
-        <div class="RWModalHeader">
+    <div v-if="isRWVisible" class="HR__Modal">
+      <div class="HR__ModalContent">
+        <div class="HR__ModalHeader">
           <div>여행은 즐거우셨나요?</div>
           <i @click="closeRW" style="cursor:pointer;" class="fas fa-times"></i>
         </div>
-        <div class="RWModalBody">
+        <div class="HR__ModalBody">
           <div class="rate">
             <div>만족도 &nbsp; : &nbsp; </div>
             <v-rating  v-model="rating"  color="yellow darken-3"  background-color="grey lighten-2"
               empty-icon="$vuetify.icons.ratingFull"  half-increments hover></v-rating>&nbsp;( {{this.rating}} )
           </div>
-         <div class="RWTitle">한줄평 &nbsp; : &nbsp; <input type="text" placeholder="한줄로 표현해주세요." v-model="subcomment"></div>
-          <textarea placeholder="후기를 작성해주세요."  v-model="comment" class="RWInput" type="text" name="review"></textarea>
+         <div class="RW__Title">한줄평 &nbsp; : &nbsp; <input type="text" placeholder="한줄로 표현해주세요." v-model="subcomment"></div>
+          <textarea placeholder="후기를 작성해주세요."  v-model="comment" class="RW__Input" type="text" name="review"></textarea>
         </div>
-        <div class="RWModalAction">
+        <div class="HR__ModalAction">
           <div class="clear" @click="clearReview">초기화</div>
           <div class="submit" @click="submitReview">확인</div>
         </div>
@@ -145,6 +145,7 @@
     },
     data: function () {
       return {
+        review: [],
         guideServiceId : '',
         subcomment:'',
         comment:'',
@@ -232,7 +233,7 @@
         document.documentElement.style.overflow='hidden'
         document.body.scroll="no";
         this.isRWVisible = true;
-        this.guideServiceId = v
+
       },
       closeRW() {
         this.guideServiceId = ''
@@ -286,6 +287,8 @@
             console.log(1, res)
             this.userId = res.data.userInfo._id
             this.userGuideServices = res.data.paymentRecords
+            this.guideServiceId = res.data.options.guideservice
+            console.log(2, this.userGuideServices)
             this.userInfo = res.data.userInfo
             // console.log(this.userInfo)
             this.userName = this.userInfo.username

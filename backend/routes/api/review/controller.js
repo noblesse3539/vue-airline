@@ -48,6 +48,16 @@ exports.deleteReview = (req,res)=>{
   })
 }
 
+exports.findReviewByUser = (req,res)=>{
+  console.log(req.params.user);
+  Review.find({user:req.params.user},(err,reviews)=>{
+    if(err) res.status(500).json({err})
+    if(reviews){
+      return res.json({reviews})
+    }
+  })
+}
+
 exports.deleteReviewByGSTitleContent = (req,res)=>{
   let newReview
   let reviewId

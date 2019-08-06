@@ -124,6 +124,7 @@ exports.findGSByGuideObId = (req,res)=>{
   }
   console.log('findGSByGuideObId');
   GuideService.find({guide:req.params.guide})
+  .populate('tags')
   .populate('guide')
   .then(
       guideservices => {
