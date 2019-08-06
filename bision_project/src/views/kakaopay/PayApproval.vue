@@ -87,8 +87,8 @@ export default {
         
         },
         updateRealServiceInfo() {
-            const baseUrl = '/api/paymentstore/real/' + this.getUserId
-            this.$http.post(baseUrl, {service: this.serviceInfo})
+            const baseUrl = '/api/paymentstore/real/' +  
+            this.$http.post(baseUrl, this.serviceInfo)
                 .then( () => {
                     this.deleteTempServiceInfo()
                 })
