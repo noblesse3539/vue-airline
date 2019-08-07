@@ -466,6 +466,7 @@ export default {
           this.reviews = data.reviews;
           this.duration = data.duration;
           this.cost = data.cost;
+
           this.optionId = data._id;
           this.guide = data.guide;
 
@@ -476,6 +477,7 @@ export default {
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
           this.serviceInfo.guide = data.guide
+          this.serviceInfo.unitPrice = data.cost;
 
           return
         })

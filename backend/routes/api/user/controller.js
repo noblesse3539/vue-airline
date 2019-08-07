@@ -79,6 +79,9 @@ exports.mypage = (req, res) => {
         PaymentStore.find()
         .where('user').equals(userInfo._id)
         .then( paymentRecords => {
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+            console.log({userInfo, paymentRecords})
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
             res.json({userInfo, paymentRecords})
         })
         .catch( err => {

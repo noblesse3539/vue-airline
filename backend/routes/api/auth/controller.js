@@ -138,7 +138,7 @@ exports.login = (req, res) => {
 */
 
 exports.check = (req, res) => {
-    res.json({
+    res.status(200).json({
         success: true,
         info: req.decoded
     })

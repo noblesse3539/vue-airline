@@ -66,16 +66,17 @@ export default {
             this.$http
                 .get("/api/auth/check", config)
                 .then(res => {
-                if (res.status == 200) {
+                if (res.data.success) {
                     this.userId = res.data.info._id
                     const baseUrl = "/api/paymentstore/tmp/" + this.userId  
                     this.$http.get(baseUrl)
                         .then( res => {
                             console.log(res.data)
                             this.serviceInfo = res.data.tmpStore.service
-                    })
+                        })
                         .then( () => {
                             if (this.serviceInfo) {
+                                
                                 this.updateRealServiceInfo()
                             }
                         })
@@ -87,7 +88,7 @@ export default {
         
         },
         updateRealServiceInfo() {
-            const baseUrl = '/api/paymentstore/real/' +  
+            const baseUrl = '/api/paymentstore/real/' +  this.userId  
             this.$http.post(baseUrl, this.serviceInfo)
                 .then( () => {
                     this.deleteTempServiceInfo()
