@@ -654,6 +654,7 @@ export default {
             'refund100' : 30,
             'refund50' : 10,
             'refund30' : 3
+            
           }
           this.tourProgram.options = [{
             'guideservice' : '',
