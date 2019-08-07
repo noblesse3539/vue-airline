@@ -398,6 +398,18 @@ export default {
           this.getGuideService()
         })
     },
+
+    getPaymentsByGuide(guideId) {
+      this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
+        .then( res => {
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+          console.log(res.data)
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+        })
+        .catch( err=> {
+          console.log(err)
+        })
+    }
   },
   data (){
     return{
@@ -444,6 +456,7 @@ export default {
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
+    this.getPaymentsByGuide(this.guideId)
   },
   updaetd() {
   },
