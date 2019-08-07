@@ -17,6 +17,23 @@ exports.createCurrency = (req,res)=>{
   })
 }
 
+exports.findListCurrency = (req,res) =>{
+  Currency.find({})
+  .select('code')
+  .then( currencies => {
+    return currencies.map( currency => {
+      return currency.code
+    })
+  })
+  .then(currencyList=>{
+    res.json({currencies:[...new Set(currencyList)]})
+  })
+  .catch( err => {
+    console.log(err)
+    res.json({error:err})
+  })
+}
+
 exports.searchCurrency = (req,res) =>{
   Nation.findOne({nation_kor:req.params.nationKor})
   .then(nat=>{

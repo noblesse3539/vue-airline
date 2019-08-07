@@ -2,21 +2,33 @@ const Review = require('../../../models/review')
 const GuideService =require('../../../models/guideservice')
 
 exports.createReview = (req,res)=>{
-  const review = new Review(req.body)
-  review.guideservice=req.params.id
-  console.log(req.params.id);
-  review.save()
-    .then((result) => {
-      GuideService.findOne({_id:req.params.id}, (err, guideservice) => {
-        console.log(review);
-          if(err) res.status(500).json({err})
-          if (guideservice) {
-              guideservice.reviews.push(review);
-              guideservice.save();
-              res.json(review);
-          }
-      });
-    })
+  console.log(req.params.payment);
+  Review.findOne({payment:req.params.payment},(err,existReview)=>{
+    if(err) return res.status(500).json({err})
+    if(existReview){
+      console.log('this paymentstore review already exists');
+      console.log(existReview);
+      res.status(500).json({message:'this paymentstore review already exists'})
+    } else{
+      console.log(req.body);
+      const review = new Review(req.body)
+      review.guideservice=req.params.id
+      review.payment=req.params.payment
+      console.log(req.params.id);
+      review.save()
+        .then((result) => {
+          GuideService.findOne({_id:req.params.id}, (err, guideservice) => {
+            console.log(review);
+              if(err) res.status(500).json({err})
+              if (guideservice) {
+                  guideservice.reviews.push(review);
+                  guideservice.save();
+                  res.json(review);
+              }
+          });
+        })
+    }
+  })
 }
 
 exports.deleteReview = (req,res)=>{

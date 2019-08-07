@@ -50,13 +50,15 @@
               </v-flex>
               <v-flex xs12 sm8 d-flex>
                 <!-- <v-select prepend-icon="map" label="도시 선택(다수 가능)*" v-model="tourProgram.city_kor" :items="city" attach small-chips multiple></v-select> -->
-                <v-autocomplete
+                <v-select
                   label="도시 선택"
                   :items="city"
                   prepend-icon="map"
                   no-data-text
+                  multiple
+                  attach small-chips
                   v-model="tourProgram.city_kor"
-                ></v-autocomplete>
+                ></v-select>
               </v-flex>
 
               <!-- 시작날짜 -->
@@ -545,13 +547,12 @@ export default {
   },
   watch:{
     nationSelected: function () {
+      this.tourProgram.nation_kor=this.nationSelected
       this.$http.get('/api/city/findCities/'+this.nationSelected)
         .then( res => {
+          this.city=[]
           for (var i = 0; i < res.data.length; i++) {
-            if (this.city.indexOf(res.data[i].city_kor) < 0 ) this.city.push(res.data[i].city_kor);
-            else{
-              break;
-            }
+            this.city.push(res.data[i].city_kor);
           }
         })
         .catch( err => {
@@ -810,17 +811,6 @@ export default {
         .then( res => {
           for (var i = 0; i < res.data.nations.length; i++) {
             this.nation.push(res.data.nations[i].nation_kor)
-          }
-        })
-        .catch( err => {
-          console.log(err)
-        })
-    },
-    citySelect(){
-      this.$http.get('/api/city')
-        .then( res => {
-          for (var i = 0; i < res.data.cities.length; i++) {
-            this.city.push(res.data.cities[i].city_kor)
           }
         })
         .catch( err => {
