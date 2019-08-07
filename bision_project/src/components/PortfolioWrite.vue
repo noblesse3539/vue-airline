@@ -159,7 +159,7 @@
               </v-flex>
 
               <v-flex xs12 sm4 class="PW__checkOption">
-                <div class="PW__chkbox" :class="{ PW__checked : dateOption }" @click="setOptDate"><i v-if="dateOption" class="fas fa-check"></i></div>
+                <div class="PW__chkbox" :class="{ PW__checked : dateOption }" @click="dateOption = !dateOption"><i v-if="dateOption" class="fas fa-check"></i></div>
                 날짜 구분
               </v-flex>
               <!-- 시작날짜 -->
@@ -168,7 +168,7 @@
                         :nudge-right="40" :return-value.sync="option.fromDate" lazy transition="scale-transition"
                         min-width="290px" offset-y full-width>
                   <template v-slot:activator="{ on }">
-                    <v-text-field :disabled="!dateOption" color="blue" v-model="option.fromDate" label="시작 날짜*" :value="option.fromDate" prepend-icon="event" readonly v-on="on"></v-text-field>
+                    <v-text-field :disabled="!dateOption" color="blue" :v-model="option.fromDate" label="시작 날짜*" :value="option.fromDate" prepend-icon="event" readonly v-on="on"></v-text-field>
                   </template>
                   <v-date-picker :max="option.toDate" v-model="option.fromDate" no-title scrollable>
                     <v-spacer></v-spacer>
@@ -193,36 +193,46 @@
                 </v-menu>
               </v-flex>
 
-
               <!-- 요일 선택 -->
               <v-flex xs12 sm6 d-flex>
-                <v-select prepend-icon="map" label="요일 선택(다수 가능)*" v-model="option.dayOfWeek" :items="dayOfWeek" attach small-chips multiple></v-select>
+                <v-select color="blue" prepend-icon="map" label="요일 선택(다수 가능)*" v-model="option.dayOfWeek" :items="dayOfWeek" attach small-chips multiple></v-select>
               </v-flex>
               <!-- 시간대 선택 -->
               <v-flex xs12 sm6 d-flex>
-                <v-select prepend-icon="map" label="시간대 선택(다수 가능)*" v-model="option.times" :items="times" attach small-chips multiple></v-select>
+                <v-select color="blue" prepend-icon="map" label="시간대 선택(다수 가능)*" v-model="option.times" :items="times" attach small-chips multiple></v-select>
               </v-flex>
 
               <!-- 인원 -->
-              <v-flex xs6>
+              <v-flex xs4>
                 <v-text-field prepend-icon="far fa-user" suffix="명" v-model.number="option.refPeople.num" label="최소 인원*"
                               clearable clear-icon="clear" type="number" color="blue" :min="0"></v-text-field>
               </v-flex>
               <!-- 기준 선택 -->
-              <v-flex xs6 d-flex>
-                <v-select prepend-icon="map" label="기준 선택*" v-model="option.refPeople.opt" :items="refPeopleOpt" item-text="desc" item-value="val" attach small-chips></v-select>
+              <v-flex xs4 d-flex>
+                <div></div>
+                <div class="PW__pickPOpt" :class="{ PW__checked : selectMore }" @click="selectRefPeopleOpt(selectMore)" >이상</div>
+                <div class="PW__pickPOpt" :class="{ PW__checked : !selectMore }" @click="selectRefPeopleOpt(selectMore)">단위</div>
+                <div></div>
+                <!-- <v-select prepend-icon="map" label="기준 선택*" v-model="option.refPeople.opt" :items="refPeopleOpt" item-text="desc" item-value="val" attach small-chips></v-select> -->
               </v-flex>
               <!-- 서비스 종료 최대 인원 -->
-              <v-flex xs6>
+              <v-flex xs4>
                 <v-text-field prepend-icon="fa-users" suffix="명" v-model.number="option.maxPeople" label="최대 인원*"
                               clearable clear-icon="clear" type="number" color="blue" :min="option.refPeople.num"></v-text-field>
               </v-flex>
 
               <!-- 인원 구분 -->
-              <v-flex xs6 d-flex>
-                <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
-                </v-select>
+              <v-flex xs12>
+                <v-autocomplete width="50px" label="통화 선택   ex)KRW, USD..." :items="currency" prepend-icon="fa-globe-asia" no-data-text v-model="option.cosType"></v-autocomplete>
               </v-flex>
+                <v-flex xs12 v-for="item in peopleType" class="PW__cost">
+                  <div class="PW__costType"><div class="PW__chkbox"></div><b>{{item.name_kor}} </b> &nbsp;</div>
+                  <v-text-field min="0" class="peopleType" type="number" :suffix="option.cosType" v-model="option.child.cost" label="1인당 가격"/></v-text-field>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.child.minAge" label="최소 나이 제한"/></v-text-field>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.child.maxAge" label="최대 나이 제한"/></v-text-field>
+                </v-flex>
+                <!-- <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
+                </v-select> -->
 
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
                 <v-flex xs3 d-flex align-self-center>
@@ -387,7 +397,9 @@ export default {
   },
   data (){
     return{
-      dateOption: true,
+      selectMore: false,
+      currency: [],
+      dateOption: false,
       dbTags:['액티비티', '공연관람'],
       showTags:[],
       checkText:'',
@@ -408,7 +420,7 @@ export default {
       ],
       refPeopleOpt:[{desc:'이상(최소인원에서 1씩 차례로 증가)',val:'more'},
                     {desc:'배수(최소인원에서 배수로 증가)',val:'multiple'}],
-      peopleType:[{name_kor:'없음',
+      peopleType:[{name_kor:'구분 없음',
                   name_eng:'none'},
                   {name_kor:'유아',
                   name_eng:'infant'},
@@ -556,28 +568,46 @@ export default {
           console.log(err)
         })
     }
+
   },
   mounted:function(){
     // this.citySelect()
+    this.currencySelect()
     this.nationSelect()
     console.log(this.$props.serviceInfo)
  },
   methods : {
+    selectRefPeopleOpt(v){
+      this.selectMore = !v
+      if(v) this.option.refPeople.opt =  'multiple'
+      else this.option.refPeople.opt ='more'
+    },
+    currencySelect() {
+      this.$http.get('/api/currency/findList/')
+        .then( res => {
+          console.log("통화",res)
+          // for (var i = 0; i < res.data.nations.length; i++) {
+          //   this.nation.push(res.data.nations[i].nation_kor)
+          // }
+        })
+        .catch( err => {
+          console.log("통화에러",err)
+        })
+
+    },
     pTypeToKor(v) {
       if(v == 'infant') return '유아'
       if(v == 'child') return '아동'
       if(v == 'adult') return '성인'
       if(v == 'senior') return '고령자'
     },
-    setOptDate() {
-      if(this.dateOption) {
-        this.dateOption = false;
-        this.option.fromDate = this.tourProgram.fromDate;
-        this.option.toDate = this.tourProgram.toDate;
-      } else{
-        this.dateOption = true;
-      }
-    },
+    // setOptDate() {
+    //   if(this.dateOption) {
+    //     this.dateOption = false;
+    //   } else{
+    //     this.dateOption = true;
+    //   }
+    // },
     makeDummy(v) {
       var i = v
       this.$http(this.settings).then(res=>{
@@ -739,6 +769,10 @@ export default {
     },
     OptionAdd(){
       // const a=new Object(this.option)
+      if(!this.dateOption) {
+        this.option.fromDate = this.tourProgram.fromDate
+        this.option.toDate = this.tourProgram.toDate
+      }
       this.tourProgram.options = [...this.tourProgram.options, JSON.parse(JSON.stringify(this.option))]
       this.OptionClear()
 
