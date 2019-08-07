@@ -1,7 +1,7 @@
 const router=require('express').Router()
 const controller=require('./controller')
 
-router.post('/create/:id',controller.createReview)
+router.post('/create/:id/:payment',controller.createReview)
 router.put('/update/:id',controller.updateReview)
 router.delete('/delete/:id',controller.deleteReview)
 router.get('/findReviewByUser/:user',controller.findReviewByUser)
