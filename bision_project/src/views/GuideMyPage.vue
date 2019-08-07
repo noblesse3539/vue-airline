@@ -67,7 +67,7 @@
       <v-tabs slider-color="#45CE30" color="white" fixed-tabs>
         <v-tab key="Now" class="tab-name">Now</v-tab>
         <v-tab key="ALL" class="tab-name" >ALL</v-tab>
-        <v-tab key="Portfolio" class="tab-name" >RESERVATION</v-tab>
+        <v-tab key="RESERVATION" class="tab-name"  v-if="guideId == getUserId">RESERVATION</v-tab>
         
         <!-- 현재 상품 -->
         <v-tab-item key="Now" color="yellow">
@@ -75,7 +75,7 @@
             <v-card flat v-for="(service, idx) in guideServices" :key="idx">
               <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
               <v-layout mt-4 class="gs-mypage-service-box"
-              
+                
               >
               <v-img class="gs-mypage-service-bg" :src="service.mainImg">
               </v-img>
@@ -159,7 +159,7 @@
           </v-flex>
         </v-tab-item>
 
-        <!-- Portfolio tab item -->
+        <!-- ALL -->
         <v-tab-item key="ALL">
           <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
           
@@ -184,48 +184,25 @@
                   {{service.fromDate}}~{{service.toDate}}
                 </div>
               </div>
-              <!-- <div class="gs-ALL-service-card-seemore">
-                Detail
-              </div> -->
             </div>
           </div>
-        <!-- portfolio list -->
-        <!-- <v-container fluid grid-list-md mx-2> -->
-          <!-- <v-layout row wrap >
-            <v-flex mx-2 my-2 v-for="(service, idx) in guideServices" :key="idx" xs4>
-              <v-card>
-                <v-img 
-                  :src="service.mainImg"
-                  height="200px"
-                  @click="goToServiceDetail(service._id)"
-                >
-                  <v-container fill-height fluid pa-2>
-                    <v-layout fill-height>
-                      <v-flex xs12 align-end flexbox>
-                        <span class="headline white--text" v-text="service.title"></span>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-img>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>favorite</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>share</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout> -->
-        <!-- </v-container> -->
-
         </v-tab-item>
+
+        <!-- Reservation -->
+        <v-tab-item key="RESERVATION">
+
+          <div class="reservation-box">
+            <div class="reservation-collapsible-box" @click="openCollapsible()">
+            </div>
+            <div class="res-collapsible-inside">
+              <p>
+                오오오오오오오오옹오오오오오오옹
+              </p>
+            </div>
+          </div>
+        
+        </v-tab-item>
+
       </v-tabs>
     </v-sheet>
     </v-container>
@@ -409,7 +386,19 @@ export default {
         .catch( err=> {
           console.log(err)
         })
-    }
+    },
+
+    openCollapsible() {
+      const collapsible = document.querySelector(".reservation-collapsible-box")
+      const content = collapsible.nextElementSibling
+      console.log(content)
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px'
+      }
+
+    },
   },
   data (){
     return{
@@ -456,7 +445,8 @@ export default {
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
-    this.getPaymentsByGuide(this.guideId)
+    this.getPaymentsByGuide(this.guideId)    
+
   },
   updaetd() {
   },

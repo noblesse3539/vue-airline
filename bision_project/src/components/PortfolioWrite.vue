@@ -738,7 +738,7 @@ export default {
         this.$http.post('/api/guideservice/create', this.tourProgram)
           .then( res => {
             console.log(res.status)
-            this.$props.getGuideService
+            this.$props.getGuideService()
           })
 
       // 수정 요청

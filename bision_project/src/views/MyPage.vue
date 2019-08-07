@@ -94,7 +94,6 @@
     <swiper
       :options="swiperOption"
       ref="mySwiper"
-      @someSwiperEvent="callback"
     >
       <!-- slides -->
       <swiper-slide class="myProduct"
@@ -328,12 +327,18 @@
             console.log(this.guideServices);
             this.userId = res.data.userInfo._id
             
-            // this.currentGuideServices = res.data.paymentRecords.map( record => {
-            //   const today = new Date()
-            //   // record.service.data <= 
-            // })
+            const today = new Date().toISOString().slice(0, 10)
 
-            this.userGuideServices = res.data.paymentRecords
+            this.currentGuideServices = res.data.paymentRecords.filter( record => {
+              // console.log(record.service.date)
+              return record.service.date >= today 
+            })
+            
+            this.userGuideServices = res.data.paymentRecords.filter( record => {
+              return record.service.date < today
+            })
+
+
             console.log(2, this.userGuideServices)
             this.userInfo = res.data.userInfo
             // console.log(this.userInfo)
