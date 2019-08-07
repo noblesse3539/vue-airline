@@ -4,7 +4,7 @@
       <p>
         {{city_kor[1]}} in {{nation_kor}}
       </p>
-      <img :src="nationFlag" width="60" height="60" v-if="nationFlag"/>
+      <img :src="nationFlag" width="60" height="60"/>
     </div>
     <div class="GS-hero"></div>
     <section class="GS-body-1">
@@ -84,7 +84,7 @@
         <div class="GS-payment-box">
           <div class="GS-payment-price">
             KRW
-            <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
+            <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>  
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
               <button class="GS-payment-decision-btn" @click="goToPayment">결제하기</button>
@@ -141,7 +141,7 @@
             </div>
           </div>
         </div>
-        <div class="GS-option-box">
+        <div class="GS-option-box" v-if="options">
           <!-- 각 상품에 대한 옵션 리스트 v-for로 출력할 것 -->
           <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
           <div v-for="(option, idx) in options" :key="idx" class="GS-individual-option GS-individual-option-1">
@@ -156,7 +156,7 @@
                   <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
                 </div>
               </div>
-              <div class="GS-individual-option-title">{{option.title.slice(0, 25)}}...</div>
+              <!-- <div class="GS-individual-option-title">{{option.title.slice(0, 25)}}...</div> -->
               <div class="GS-individual-top-price">
                 <span style="font-size: 1rem; margin-right: 5px;">KRW</span>
                 <span>{{cost}}</span>
@@ -326,7 +326,9 @@ export default {
   components: {
     PayBtn
   },
-  created() {},
+  created() {
+
+  },
   mounted() {
     this.getServiceInformation()
     window.addEventListener("scroll", this.dragDownSideBar)
@@ -337,6 +339,7 @@ export default {
   },
   data() {
     return {
+      isOptionsAvailable: false,
       isSideBarSticky: false,
       // guideServiceUserWrote: this.thisPostInfo.rawDetail || '',
       thisPostInfo: {},
@@ -350,7 +353,7 @@ export default {
       servieOptions: [],
       nationFlag: '',
       duration: '',
-      cost: 0,
+      cost: 1000,
       optionId: '',
       guide: '',
       options: [],
@@ -366,7 +369,6 @@ export default {
         date: '',
         guide: '',
         get totalAmount() {
-
           return this.people * this.unitPrice
         },
       },
@@ -465,7 +467,7 @@ export default {
           this.mainImg = data.mainImg;
           this.reviews = data.reviews;
           this.duration = data.duration;
-          this.cost = data.cost;
+          // this.cost = data.cost;
 
           this.optionId = data._id;
           this.guide = data.guide;
@@ -477,16 +479,19 @@ export default {
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
           this.serviceInfo.guide = data.guide
-          this.serviceInfo.unitPrice = data.cost;
+          // this.serviceInfo.unitPrice = data.cost;
+          this.serviceInfo.unitPrice = 1000;
+
 
           console.log(data)
 
           return
         })
         .then( () => {
+
+          this.getGuideServiceOption()
           this.setHero()
           this.getNationFlag()
-          this.getGuideServiceOption()
         })
     },
     loadReviewMore: function() {
@@ -567,6 +572,7 @@ export default {
       this.$http.get(`/api/guideservice/findOption/${this.optionId}`)
         .then( res => {
           this.options = res.data.options
+          // this.isOptionsAvailable = true
 
           this.options.forEach( option => {
 
@@ -585,6 +591,8 @@ export default {
               }
 
           })
+        }).then(() => {
+          console.log(this.options)
         })
     },
     getAllDays(goalDay) {
