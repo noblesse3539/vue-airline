@@ -4,15 +4,15 @@
       <div style="height: 110px; width: 100%;"></div>
       <div style="width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
         <div style="display:grid; grid-template-columns: 50% 34% 16%;">
-          <div class="ticket-info-section">
-            <div class="container" style="font-size: 20px; height: 50%; padding-bottom: 0;">
+          <div>
+            <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
               {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
             </div>
-            <div class="container" style="height: 50%;">
+            <div class="container" style="height: 50%; padding-top: 4px;">
               {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
             </div>
           </div>
-          <div class="date-section" style="font-size: 15px;">
+          <div style="font-size: 15px; padding-top: 4%;">
             <div style="width: 50%; display: inline-block;">
               <div>가는 날</div>
               <div>{{this.$route.query.leavingDate}}</div>
@@ -22,7 +22,7 @@
               <div>{{this.$route.query.comingDate}}</div>
             </div>
           </div>
-          <div class="search-again-section" style="">
+          <div style="padding-top: 10px;">
             <v-btn class="mx-2" fab small color="grey lighten-3" v-on:click="searchPannel=!searchPannel">
               <i class="fas fa-search fa-2x"></i>
             </v-btn>
@@ -240,6 +240,7 @@ export default {
           flightselectedName: [],
           flightselectedCodes: '',
           flightselected: [],
+          len: 0,
 
           // 정렬에 따른 결과 저장
           flights: [0],
@@ -716,6 +717,54 @@ export default {
 
                           })
                           .then( () => {
+
+                            // if (s < 2) {
+                            //   this.flights = [0]
+                            //   this.flightsSorted = [
+                            //     [], // SortbyPrice
+                            //     [], // SortbyDuration
+                            //     [], // SortbyOutDeparture
+                            //     [], // SortbyInDeparture
+                            //     [], // SortbyStops
+                            //   ]
+                            //   return this.getFlights(0, s+1)
+                            // } else if (s == 2 && this.flights.length == 0) {
+                            //   this.loading = false
+                            //   return
+                            // } else if (s >= 2) {
+                            //   console.log(s)
+                            //   if (this.len < this.flights.length) {
+                            //     this.len = this.flights.length
+                            //     this.flights = [0]
+                            //     this.flightsSorted = [
+                            //       [], // SortbyPrice
+                            //       [], // SortbyDuration
+                            //       [], // SortbyOutDeparture
+                            //       [], // SortbyInDeparture
+                            //       [], // SortbyStops
+                            //     ]
+                            //     return this.getFlights(0, s+1)
+                            //   } else {
+                            //       console.log("들어옴")
+                            //       if (optionTypeIndex == 4) {
+                            //         this.flightsSorted[4].sort(function(a, b) {
+                            //           return a['NumofStops'] - b['NumofStops'];
+                            //         });
+                            //       }
+                            //       if (optionTypeIndex == 0) {
+                            //         this.minDuration = minDuration
+                            //         this.transferedMinDuration = this.durationTransfer(minDuration)
+                            //         this.maxDuration = maxDuration
+                            //         this.transferedDuration = this.durationTransfer(maxDuration)
+                            //         this.duration = this.maxDuration
+                            //         this.numofFlights = this.flights.length
+                            //         // console.log(this.flights)
+                            //       }
+                            //       this.loading = false
+                            //       return
+                            //     }
+                            //   }
+
                             // console.log(this.flights)
                             // console.log(this.flightsSorted)
                             if (s == 2) {
@@ -747,6 +796,7 @@ export default {
                               return setTimeout(() => {this.getFlights(optionTypeIndex, s+1)}, 500);
                               // return this.getFlights(0, s+1)
                             }
+
                           })
                     })
 
@@ -920,7 +970,7 @@ export default {
 
 
 
-<style scoped>
+<style>
   @media (max-width: 980px) {
   .maingrid-a {
     display: grid;
@@ -945,27 +995,4 @@ export default {
     grid-template-columns: 25% 55% 20%;
   }
   }
-
-  .date-section {
-    display: flex !important;
-    /* flex-direction: column; */
-    justify-content: center;
-    align-items: center;
-    font-size: 1.25rem !important;
-  }
-
-  .ticket-info-section {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .search-again-section {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
 </style>
