@@ -8,8 +8,8 @@
          <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
-           <v-btn dark flat v-if="isProps" @click="checkSave">수정하기</v-btn>
-           <v-btn dark flat v-else @click="checkSave">Save</v-btn>
+           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기</v-btn>
+           <v-btn dark flat v-else  @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>
 
@@ -545,7 +545,9 @@ export default {
     // this.citySelect()
     this.currencySelect()
     this.nationSelect()
+    console.log(this.isProps())
     console.log("-----------------------")
+    console.log(this.$props.serviceInfo)
     if (this.$props.serviceInfo) {
       this.$props.serviceInfo.tags.map( tag => {
         this.tourProgram.tags.push(tag.tag)
@@ -572,7 +574,6 @@ export default {
     },
     isProps() {
       if (this.$props.serviceInfo !== undefined) {
-
 
         console.log("ok")
         return true
@@ -731,7 +732,7 @@ export default {
     closePW(){
 
       // 생성 요청
-      if(this.validate && this.isProps == false){
+      if(this.validate && this.isProps() == false){
         this.tourProgram.nation_kor=this.nationSelected
         this.tourProgram.guide=this.getUserId;
         this.$http.post('/api/guideservice/create', this.tourProgram)
@@ -741,13 +742,14 @@ export default {
           })
 
       // 수정 요청
-      } else if (this.validate && this.isProps) {
+      } else if (this.validate && this.isProps() == true) {
+        console.log(this.$props.serviceInfo._id)
         // this.tourProgram.nation_kor=this.nationSelected
         // this.tourProgram.guide=this.getUserId;
         const newProgram = this.tourProgram
         delete newProgram.guide
         delete newProgram.options
-        this.$http.put(`/api/guideservice/update/${this.$props.serviceInfo._id}`, newProgram  )
+        this.$http.put(`/api/guideservice/update/${this.$props.serviceInfo._id}`, newProgram)
           .then( res => {
             console.log("fuck yeah")
             this.$props.getGuideService()
