@@ -236,13 +236,8 @@
         document.documentElement.style.overflow='hidden'
         document.body.scroll="no";
         this.isRWVisible = true;
-<<<<<<< HEAD
         this.guideServiceId = this.guideServices[idx]
         this.paymentId=this.userGuideServices[idx]._id
-        console.log();
-=======
-
->>>>>>> ec181b1f7ce180ea212ed74990e55223603f3fa6
       },
       closeRW() {
         this.guideServiceId = ''
