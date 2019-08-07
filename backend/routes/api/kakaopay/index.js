@@ -6,6 +6,7 @@ const qs = require('qs')
 
 const controller = require('./controller')
 router.post('/', (req, res) => {
+    console.log(req.body)
     const data = {
         'approval_url'      : kakaosecret.approval_url,
         'cancel_url'        : kakaosecret.cancel_url,
