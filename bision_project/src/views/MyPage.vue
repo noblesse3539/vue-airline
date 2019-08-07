@@ -329,7 +329,10 @@
             console.log(this.guideServices);
             this.userId = res.data.userInfo._id
             
-            this.currentGuideServices
+            this.currentGuideServices = res.data.paymentRecords.map( record => {
+              const today = new Date()
+              // record.service.data <= 
+            })
 
             this.userGuideServices = res.data.paymentRecords
             console.log(2, this.userGuideServices)
