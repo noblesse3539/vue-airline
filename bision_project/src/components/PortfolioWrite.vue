@@ -226,7 +226,7 @@
 
               <!-- 인원 구분 -->
               <v-flex xs6>
-                <v-autocomplete width="50px" label="통화 선택   ex)KRW, USD..." :items="currency" prepend-icon="fa-globe-asia" no-data-text v-model="option.cosType"></v-autocomplete>
+                <v-autocomplete width="50px" label="통화 선택   ex)KRW, USD..." :items="currency" prepend-icon="fa-globe-asia" no-data-text v-model="option.costType"></v-autocomplete>
               </v-flex>
                 <!-- <v-flex xs12 v-for="(item, idx) in peopleType" class="PW__cost">
                   <div class="PW__costType"><div @click="refOpt[idx] = !refOpt[idx]" class="PW__chkbox" :class="{PW__checked : refOpt[idx] }"></div><b>{{item.name_kor}} {{refOpt[idx]}}</b> &nbsp;</div>
@@ -240,16 +240,16 @@
               </v-flex>
               <template v-if="option.peopleTypeOpt.indexOf('none')!==-1">
                 <v-flex xs3 d-flex align-self-center>
-                  <h3 style="text-align:center">구분없음</h3>
+                  <h3 style="text-align:center">성인</h3>
                 </v-flex>
                 <v-flex xs3>
-                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.none.cost" label="1인당 가격"/></v-text-field>
+                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.adult.cost" label="1인당 가격"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.none.minAge" label="최소 나이 제한"/></v-text-field>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.adult.minAge" label="최소 나이 제한"/></v-text-field>
                 </v-flex>
                 <v-flex xs3>
-                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.none.maxAge" label="최대 나이 제한"/></v-text-field>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.adult.maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex>
               </template>
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
@@ -443,8 +443,8 @@ export default {
       refPeopleOpt:[{desc:'이상(최소인원에서 1씩 차례로 증가)',val:'more'},
                     {desc:'배수(최소인원에서 배수로 증가)',val:'multiple'}],
       peopleType:[
-                  {name_kor:'구분없음',
-                    name_eng:'none'},
+                  {name_kor:'없음',
+                  name_eng:'none'},
                   {name_kor:'유아',
                   name_eng:'infant'},
                   {name_kor:'아동',
@@ -475,43 +475,7 @@ export default {
           refund30:  this.$props.serviceInfo ? this.$props.serviceInfo.refund30 : 0
         },
         desc: this.$props.serviceInfo ? this.$props.serviceInfo.desc : '',
-        options:[{
-              guideservice: '',
-              title: '제목1',
-              fromDate: '123',
-              toDate: '456',
-              dayOfWeek:['월', '화', '수'],
-              times: ['12','34','56'],
-              desc: ['상세1', '상세2'],
-              refPeople: {
-                num: '3',
-                opt: 'more'
-              },
-              senior: {
-                cost: 1,
-                minAge: 2,
-                maxAge: 3
-              },
-              adult: {
-                cost: 4,
-                minAge: 5,
-                maxAge: 6
-              },
-              child: {
-                cost: 7,
-                minAge: 9,
-                maxAge: 8
-              },
-              infant: {
-                cost: 10,
-                minAge: 11,
-                maxAge: 12
-              },
-              peopleTypeOpt:['child', 'adult'],
-              costType: '',
-              maxPeople: '5'
-            },
-        ],
+        options:[],
         tags: [],
         detail: this.$props.serviceInfo ? this.$props.serviceInfo.detail : '',
       },
@@ -613,9 +577,8 @@ export default {
       this.$http.get('/api/currency/findList/')
         .then( res => {
           console.log("통화",res)
-          // for (var i = 0; i < res.data.nations.length; i++) {
-          //   this.nation.push(res.data.nations[i].nation_kor)
-          // }
+          this.currency = res.data.currencies
+          console.log(this.currency)
         })
         .catch( err => {
           console.log("통화에러",err)
