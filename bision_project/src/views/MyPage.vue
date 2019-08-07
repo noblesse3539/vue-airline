@@ -74,6 +74,7 @@
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
+          <p style="font-size: 1.25rem;">{{id}}</p>
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
@@ -145,6 +146,8 @@
     },
     data: function () {
       return {
+        guideServices : [],
+        paymentId:'',
         review: [],
         guideServiceId : '',
         subcomment:'',
@@ -213,7 +216,7 @@
         console.log(this.userId)
         console.log(this.guideServiceId)
         console.log(review)
-        this.$http.post('/api/review/create/'+this.guideServiceId, review)
+        this.$http.post('/api/review/create/'+this.guideServiceId+'/'+this.paymentId, review)
          .then( res => {
              console.log("성공", res.data)
              alert('리뷰가 작성되었습니다.')
@@ -225,7 +228,7 @@
            this.closeRW()
          })
       },
-      showRW(v) {
+      showRW(idx) {
         const navBarZIndex = document.querySelector('#navbox')
         const footerZIndex = document.querySelector('#footer')
         footerZIndex.style.zIndex = 0
@@ -233,7 +236,13 @@
         document.documentElement.style.overflow='hidden'
         document.body.scroll="no";
         this.isRWVisible = true;
+<<<<<<< HEAD
+        this.guideServiceId = this.guideServices[idx]
+        this.paymentId=this.userGuideServices[idx]._id
+        console.log();
+=======
 
+>>>>>>> ec181b1f7ce180ea212ed74990e55223603f3fa6
       },
       closeRW() {
         this.guideServiceId = ''
@@ -285,6 +294,10 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             console.log(1, res)
+            for (var i = 0; i < res.data.options.length; i++) {
+              this.guideServices.push(res.data.options[i][0].guideservice)
+            }
+            console.log(this.guideServices);
             this.userId = res.data.userInfo._id
             this.userGuideServices = res.data.paymentRecords
             console.log(2, this.userGuideServices)
@@ -302,7 +315,6 @@
                 console.log(3, res)
               })
             // this.userGuideServices  = this.userInfo.UsedGuideServices
-            // console.log(this.userGuideServices)
           })
       },
 
