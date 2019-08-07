@@ -495,7 +495,8 @@ fieldset[disabled] .multiselect {
 }
 .peopleType{
   width:150px;
-  font-size:1rem!important
+  font-size:1rem!important;
+  margin-left: 2rem;
 }
 .PW__checkOption {
   display: flex;
@@ -505,13 +506,14 @@ fieldset[disabled] .multiselect {
   font-weight: 600;
 }
 .PW__chkbox {
+  display: inline-block;
   margin-left: 2rem;
   margin-right: 1rem;
   cursor: pointer;
   width: 2rem;
   height: 2rem;
   border-radius: 5px;
-  border: solid 2px lightblue;
+  border: solid 1.5px  dodgerblue;
 }
 .PW__checked {
   display: flex;
@@ -519,7 +521,16 @@ fieldset[disabled] .multiselect {
   align-items: center;
   color: white;
   border: none;
-  background-color: #41b883;
+  background-color: dodgerblue;
+}
+.PW__pickPOpt {
+  border: solid 1.5px  dodgerblue;
+  margin: 1.3rem .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
 }
 .Opt_deleteButton {
   width: 80px;
@@ -587,4 +598,13 @@ fieldset[disabled] .multiselect {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px lightgray solid;
+}
+.PW__cost{
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.PW__costType {
+  width: 150px;
 }
