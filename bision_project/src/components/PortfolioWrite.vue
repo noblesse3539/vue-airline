@@ -420,17 +420,17 @@ export default {
       selectMore: false,
       currency: [],
       dateOption: false,
-      titleLabel: this.$props.serviceInfo.title ? this.$props.serviceInfo.title : '제목을 입력해주세요.',
+      titleLabel: this.$props.serviceInfo ? this.$props.serviceInfo.title : '제목을 입력해주세요.',
       dateOption: true,
       dbTags:['액티비티', '공연관람'],
       showTags:[],
       checkText:'',
       check : false,
       validate: false,
-      tempMain: this.$props.serviceInfo.mainImg ?  this.$props.serviceInfo.mainImg : 'https:\/\/i.imgur.com\/9ge6Osc.jpg',
+      tempMain: this.$props.serviceInfo ?  this.$props.serviceInfo.mainImg : 'https:\/\/i.imgur.com\/9ge6Osc.jpg',
       nation: [],
-      nationSelected: this.$props.serviceInfo.nation_kor ? this.$props.serviceInfo.nation_kor : '',
-      city: this.$props.serviceInfo.city_kor ? this.$props.serviceInfo.city_kor : [],
+      nationSelected: this.$props.serviceInfo ? this.$props.serviceInfo.nation_kor : '',
+      city: this.$props.serviceInfo ? this.$props.serviceInfo.city_kor : [],
       dayOfWeek:['월','화','수','목','금','토','일'],
       times:[
         '00:00','00:15','00:30','00:45','01:00','01:15','01:30','01:45','02:00','02:15','02:30','02:45','03:00','03:15','03:30','03:45',
@@ -461,20 +461,20 @@ export default {
       optionToMenu: false,
       complete: false,
       tourProgram: {
-        guide : this.$props.serviceInfo.guide ?  this.$props.serviceInfo.guide : '',
-        title: this.$props.serviceInfo.titlse ?  this.$props.serviceInfo.title : '',
-        mainImg: this.$props.serviceInfo.mainImg ?  this.$props.serviceInfo.mainImg : '',
-        nation_kor: this.$props.serviceInfo.nation_kor ? this.$props.serviceInfo.nation_kor : '',
-        city_kor: this.$props.serviceInfo.city_kor ? this.$props.serviceInfo.city_kor : [],
-        fromDate: this.$props.serviceInfo.fromDate ? this.$props.serviceInfo.fromDate : '',
-        toDate: this.$props.serviceInfo.toDate ? this.$props.serviceInfo.toDate : '',
-        duration: this.$props.serviceInfo.duration ? this.$props.serviceInfo.duration : '',
+        guide : this.$props.serviceInfo ?  this.$props.serviceInfo.guide : '',
+        title: this.$props.serviceInfo ?  this.$props.serviceInfo.title : '',
+        mainImg: this.$props.serviceInfo ?  this.$props.serviceInfo.mainImg : '',
+        nation_kor: this.$props.serviceInfo ? this.$props.serviceInfo.nation_kor : '',
+        city_kor: this.$props.serviceInfo ? this.$props.serviceInfo.city_kor : [],
+        fromDate: this.$props.serviceInfo ? this.$props.serviceInfo.fromDate : '',
+        toDate: this.$props.serviceInfo ? this.$props.serviceInfo.toDate : '',
+        duration: this.$props.serviceInfo ? this.$props.serviceInfo.duration : '',
         refund: {
-          refund100:  this.$props.serviceInfo.refund100 ? this.$props.serviceInfo.refund100 : 1,
-          refund50:  this.$props.serviceInfo.refund50 ? this.$props.serviceInfo.refund50 : 0,
-          refund30:  this.$props.serviceInfo.refund30 ? this.$props.serviceInfo.refund30 : 0
+          refund100:  this.$props.serviceInfo ? this.$props.serviceInfo.refund100 : 1,
+          refund50:  this.$props.serviceInfo ? this.$props.serviceInfo.refund50 : 0,
+          refund30:  this.$props.serviceInfo ? this.$props.serviceInfo.refund30 : 0
         },
-        desc: this.$props.serviceInfo.desc ? this.$props.serviceInfo.desc : '',
+        desc: this.$props.serviceInfo ? this.$props.serviceInfo.desc : '',
         options:[{
               guideservice: '',
               title: '제목1',
@@ -513,7 +513,7 @@ export default {
             },
         ],
         tags: [],
-        detail: this.$props.serviceInfo.detail ? this.$props.serviceInfo.detail : '',
+        detail: this.$props.serviceInfo ? this.$props.serviceInfo.detail : '',
       },
       option:{
           guideservice: '',
@@ -596,9 +596,11 @@ export default {
     this.currencySelect()
     this.nationSelect()
     console.log("-----------------------")
-    this.$props.serviceInfo.tags.map( tag => {
-      this.tourProgram.tags.push(tag.tag)
-    })
+    if (this.$props.serviceInfo) {
+      this.$props.serviceInfo.tags.map( tag => {
+        this.tourProgram.tags.push(tag.tag)
+      })
+    }
     console.log("-----------------------")
  },
   methods : {
