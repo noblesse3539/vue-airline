@@ -11,6 +11,7 @@
           <v-select
             :items="subject"
             label="주제"
+            v-model="selectedSubject"
           ></v-select>
           <textarea placeholder="상세한 내용을 작성해주세요."  v-model="content" class="VOC__Input" type="text" name="review"></textarea>
         </div>
@@ -40,18 +41,32 @@ export default {
     return{
       isVocVisible: false,
       subject: ['개선사항', '불만사항', '기타'],
-      content: ''
+      content: '',
+      selectedSubject: '',
     }
   },
   methods: {
     clearVOC() {
-      this.subject = ''
       this.content = ''
     },
     submitVOC() {
-
-      this.clearVOC()
-      this.isVocVisible=false
+      const token = this.$getToken("BisionToken")
+      const config = {
+        headers: { 'x-access-token': token }
+      }
+      const data = {
+        subject: this.selectedSubject,
+        content: this.content
+      }
+      this.$http.post('/api/voc/create', data, config)
+        .then( res => {
+          console.log(res)
+          this.clearVOC()
+          this.isVocVisible=false
+        })
+        .catch( err => {
+          console.log(err)
+        })
     }
 
   }

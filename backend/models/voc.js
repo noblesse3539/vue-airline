@@ -3,9 +3,12 @@ const Schema = mongoose.Schema
 const config = require('../config')
 
 const VOC = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  userOrGuide: Schema.Types.ObjectId,
+  isGuide: Boolean,
   subject: String,
-  content: String
+  content: String,
+  
+
 })
 
 module.exports = mongoose.model('VOC',VOC)
