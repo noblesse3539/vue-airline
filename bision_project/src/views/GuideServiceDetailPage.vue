@@ -84,7 +84,7 @@
         <div class="GS-payment-box">
           <div class="GS-payment-price">
             KRW
-            <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>  
+            <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
               <button class="GS-payment-decision-btn" @click="goToPayment">결제하기</button>
@@ -136,7 +136,7 @@
         <div style="display: flex; flex-wrap: wrap;">
           <div v-for="i in leavingDates.length" :key="i">
             <div class="result-body__search-by-date" style="margin-right: 1rem; width: 150px; font-size: 15px; text-align: center; display: grid; grid-template-columns: 80% 20%; border: 1px solid #45CE30; padding-top: 8px;" v-if="leavingDates">
-              {{leavingDate}}
+              {{leavingDates[i-1]}}
               <i class="fas fa-times" style="color: grey; margin-top: 4px;" @click="deleteLeavingDate(i-1)"></i>
             </div>
           </div>
@@ -193,6 +193,7 @@
                   >
                   </v-select>
               </div>
+              성인
               <div class="num-of-customers" style="min-width: 200px;">
                 <div class="num-of-customers__increaseBtn">
                   <v-btn
@@ -213,10 +214,11 @@
                   </v-btn>
                 </div>
               </div>
+
               <div class="Gs-individual-price">
                 <p style="margin: 0;">
                   KRW
-                  <span>{{cost}}/ 한 명</span>
+                  <span>{{priceTransfer(option.adult.cost)}} / 한 명</span>
                 </p>
               </div>
             </div>
@@ -361,7 +363,11 @@ export default {
 
       // 결제 관련 정보
       serviceInfo: {
-        people: 1,
+        people: 0,
+        adult: 0,
+        senior: 0,
+        child: 0,
+        infants: 0,
         unitPrice: '1000',
         itemName: "베이징상품",
         quantity: 1,
@@ -428,7 +434,6 @@ export default {
       this.$router.push({ path: 'GuideMyPage', query: {guideId : this.guideInfo.guideId}})
     },
     goToPayment: function() {
-      this.serviceInfo.date = this.leavingDate
       this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
     },
     dragDownSideBar: function() {
@@ -459,7 +464,7 @@ export default {
           return res.data;
         })
         .then(data => {
-          // console.log(data);
+          console.log(data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -472,7 +477,7 @@ export default {
 
           this.optionId = data._id;
           this.guide = data.guide;
-          
+
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
           this.serviceInfo.nation_kor = data.nation_kor
@@ -647,6 +652,25 @@ export default {
 
     checkAllowedDates: val => {
       console.log(val)
+    },
+
+    priceTransfer: function (price) {
+      price = price.toString()
+      for (let i=0; i<price.length; i++) {
+        if (price[i] == ".")
+          price = price.slice(0,i)
+      }
+      let result = ''
+      for (let i=0; i<price.length; i++) {
+        if (i>0 && i%3 == 0)
+          result += ","
+        result += price[price.length-i-1]
+      }
+      let reverse = ''
+      for (let i=result.length-1; i>=0; i--) {
+        reverse += result[i]
+      }
+      return reverse
     },
   },
   computed: {
