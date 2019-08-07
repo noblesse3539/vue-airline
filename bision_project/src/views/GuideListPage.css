@@ -192,7 +192,9 @@
 .result-body__result-show {
     font-size: 1.25rem;
     font-weight: 700;
-    display: block;
+    /* display: block; */
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
     /* height: 100px; */
     margin-bottom: 20px;
@@ -531,7 +533,7 @@
     /* -webkit-box-shadow: 0 8px 6px -6px black;
 	   -moz-box-shadow: 0 8px 6px -6px black;
             box-shadow: 0 8px 6px -6px black; */
-    
+
 
 }
 
@@ -547,4 +549,24 @@
 	        box-shadow: 0 8px 6px -6px rgba(30, 144, 255, 0.3); */
     border-radius: 50%;
     text-shadow: 1px 3px 0 hotpink, 1px 13px 5px hotpink;
+}
+
+.guide-list-page-xbutton {
+  color: white;
+  margin-top: 4px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.guide-list-page-selected-chip {
+  border: 1px solid !important;
+  /* border-color: #5CE75C !important; */
+  /* background-color: #FFFFF0 !important; */
+  border-color: #dcdcdc !important;
+  background-color: #E1FFE1 !important;
+}
+
+.delete-chip {
+  margin-left: 10px;
+  cursor: pointer;
 }

@@ -4,15 +4,15 @@
       <div style="height: 110px; width: 100%;"></div>
       <div style="width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
         <div style="display:grid; grid-template-columns: 50% 34% 16%;">
-          <div>
-            <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
+          <div class="ticket-info-section">
+            <div class="container" style="font-size: 20px; height: 50%; padding-bottom: 0;">
               {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
             </div>
-            <div class="container" style="height: 50%; padding-top: 4px;">
+            <div class="container" style="height: 50%;">
               {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
             </div>
           </div>
-          <div style="font-size: 15px; padding-top: 4%;">
+          <div class="date-section" style="font-size: 15px;">
             <div style="width: 50%; display: inline-block;">
               <div>가는 날</div>
               <div>{{this.$route.query.leavingDate}}</div>
@@ -22,7 +22,7 @@
               <div>{{this.$route.query.comingDate}}</div>
             </div>
           </div>
-          <div style="padding-top: 10px;">
+          <div class="search-again-section" style="">
             <v-btn class="mx-2" fab small color="grey lighten-3" v-on:click="searchPannel=!searchPannel">
               <i class="fas fa-search fa-2x"></i>
             </v-btn>
@@ -920,7 +920,7 @@ export default {
 
 
 
-<style>
+<style scoped>
   @media (max-width: 980px) {
   .maingrid-a {
     display: grid;
@@ -945,4 +945,27 @@ export default {
     grid-template-columns: 25% 55% 20%;
   }
   }
+
+  .date-section {
+    display: flex !important;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem !important;
+  }
+
+  .ticket-info-section {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .search-again-section {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
 </style>

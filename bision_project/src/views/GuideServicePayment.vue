@@ -63,6 +63,7 @@ export default {
 
         this.closeHeader()
         this.serviceInfo = this.$route.query
+        console.log(this.serviceInfo)
         this.setServiceInfo(this.serviceInfo)
         this.addTempServiceInfo()
         // console.log(this.getServiceInfo)
@@ -96,7 +97,7 @@ export default {
         },
         addTempServiceInfo(){
             const baseUrl = '/api/paymentstore/tmp/' + this.getUserId
-            this.$http.post(baseUrl, { service: this.serviceInfo})
+            this.$http.post(baseUrl, this.serviceInfo)
                 .then( res => {
                     // console.log(res)
                 })
