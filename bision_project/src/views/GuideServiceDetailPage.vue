@@ -468,7 +468,7 @@ export default {
           this.cost = data.cost;
           this.optionId = data._id;
           this.guide = data.guide;
-
+          
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
           this.serviceInfo.nation_kor = data.nation_kor
@@ -476,6 +476,8 @@ export default {
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
           this.serviceInfo.guide = data.guide
+
+          console.log(data)
 
           return
         })

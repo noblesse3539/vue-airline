@@ -294,6 +294,7 @@ export default {
                     this.price[0] = this.minPrice
                     this.price[1] = this.maxPrice
                     this.isLoaded = true
+                    console.log(this.guideServiceList)
             })
         },
         getServiceAll : function() {
