@@ -136,7 +136,7 @@
         <div style="display: flex; flex-wrap: wrap;">
           <div v-for="i in leavingDates.length" :key="i">
             <div class="result-body__search-by-date" style="margin-right: 1rem; width: 150px; font-size: 15px; text-align: center; display: grid; grid-template-columns: 80% 20%; border: 1px solid #45CE30; padding-top: 8px;" v-if="leavingDates">
-              {{leavingDates[i-1]}}
+              {{leavingDate}}
               <i class="fas fa-times" style="color: grey; margin-top: 4px;" @click="deleteLeavingDate(i-1)"></i>
             </div>
           </div>
@@ -428,6 +428,7 @@ export default {
       this.$router.push({ path: 'GuideMyPage', query: {guideId : this.guideInfo.guideId}})
     },
     goToPayment: function() {
+      this.serviceInfo.date = this.leavingDate
       this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
     },
     dragDownSideBar: function() {
