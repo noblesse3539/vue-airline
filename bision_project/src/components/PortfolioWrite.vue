@@ -238,20 +238,6 @@
                 <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
                 </v-select>
               </v-flex>
-              <template v-if="option.peopleTypeOpt.indexOf('none')!==-1">
-                <v-flex xs3 d-flex align-self-center>
-                  <h3 style="text-align:center">성인</h3>
-                </v-flex>
-                <v-flex xs3>
-                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.adult.cost" label="1인당 가격"/></v-text-field>
-                </v-flex>
-                <v-flex xs3>
-                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.adult.minAge" label="최소 나이 제한"/></v-text-field>
-                </v-flex>
-                <v-flex xs3>
-                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.adult.maxAge" label="최대 나이 제한"/></v-text-field>
-                </v-flex>
-              </template>
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
                 <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">유아</h3>
@@ -654,7 +640,7 @@ export default {
             'refund100' : 30,
             'refund50' : 10,
             'refund30' : 3
-            
+
           }
           this.tourProgram.options = [{
             'guideservice' : '',
