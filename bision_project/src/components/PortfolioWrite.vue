@@ -749,6 +749,8 @@ export default {
         const newProgram = this.tourProgram
         delete newProgram.guide
         delete newProgram.options
+        delete newProgram.reviews
+        delete newProgram.tags
         this.$http.put(`/api/guideservice/update/${this.$props.serviceInfo._id}`, newProgram)
           .then( res => {
             console.log("fuck yeah")
