@@ -127,21 +127,21 @@
               </v-flex>
               <v-flex xs12 sm9 md9>
                   <v-container style="height:150px;">
-                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >100% 환불 : {{tourProgram.cost}}원</v-chip>
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >100% 환불</v-chip>
                     <v-text-field class="refund-text" :min="tourProgram.refund.refund50" max="365" suffix="일 까지 가능" v-model="tourProgram.refund.refund100" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
                     <v-slider :disabled="!tourProgram.refund.refund100" min="0" max="365" v-model="tourProgram.refund.refund100"
                     always-dirty color="red" track-color="grey"></v-slider>
                   </v-container>
                   <v-container style="height:150px;">
-                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불 : {{tourProgram.cost*0.5}}원</v-chip>
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >50% 환불</v-chip>
                     <v-text-field class="refund-text" :min="tourProgram.refund.refund30" :max="tourProgram.refund.refund100" suffix="일 까지 가능" v-model="tourProgram.refund.refund50" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
                      <v-slider :disabled="!tourProgram.refund.refund100" min="0" :max="tourProgram.refund.refund100" v-model="tourProgram.refund.refund50"
                       always-dirty color="red" track-color="grey" :style="`width: ${(tourProgram.refund.refund100/365) *100}%`"></v-slider>
                   </v-container>
                   <v-container style="height:170px;">
-                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불 : {{tourProgram.cost*0.3}}원</v-chip>
+                    <v-chip disabled :class="`${tourProgram.refund.refund100? 'refund-act':'refund-dis'}`" >30% 환불</v-chip>
                     <v-text-field class="refund-text" suffix="일 까지 가능" v-model="tourProgram.refund.refund30" solo flat
                                   :disabled="!tourProgram.refund.refund100" hide-details single-line type="number"></v-text-field>
                       <v-slider :disabled="!tourProgram.refund.refund50" min="0" :max="tourProgram.refund.refund50" v-model="tourProgram.refund.refund30"
@@ -222,18 +222,33 @@
               </v-flex>
 
               <!-- 인원 구분 -->
-              <v-flex xs12>
+              <v-flex xs6>
                 <v-autocomplete width="50px" label="통화 선택   ex)KRW, USD..." :items="currency" prepend-icon="fa-globe-asia" no-data-text v-model="option.cosType"></v-autocomplete>
               </v-flex>
-                <v-flex xs12 v-for="item in peopleType" class="PW__cost">
-                  <div class="PW__costType"><div class="PW__chkbox"></div><b>{{item.name_kor}} </b> &nbsp;</div>
-                  <v-text-field min="0" class="peopleType" type="number" :suffix="option.cosType" v-model="option.child.cost" label="1인당 가격"/></v-text-field>
-                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.child.minAge" label="최소 나이 제한"/></v-text-field>
-                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.child.maxAge" label="최대 나이 제한"/></v-text-field>
+                <!-- <v-flex xs12 v-for="(item, idx) in peopleType" class="PW__cost">
+                  <div class="PW__costType"><div @click="refOpt[idx] = !refOpt[idx]" class="PW__chkbox" :class="{PW__checked : refOpt[idx] }"></div><b>{{item.name_kor}} {{refOpt[idx]}}</b> &nbsp;</div>
+                  <v-text-field min="0" class="peopleType" type="number" :suffix="option.cosType" v-model="option[item.name_eng].cost" label="1인당 가격"/></v-text-field>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option[item.name_eng].minAge" label="최소 나이 제한"/></v-text-field>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option[item.name_eng].maxAge" label="최대 나이 제한"/></v-text-field>
+                </v-flex> -->
+              <v-flex xs6>
+                <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
+                </v-select>
+              </v-flex>
+              <template v-if="option.peopleTypeOpt.indexOf('none')!==-1">
+                <v-flex xs3 d-flex align-self-center>
+                  <h3 style="text-align:center">구분없음</h3>
                 </v-flex>
-                <!-- <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
-                </v-select> -->
-
+                <v-flex xs3>
+                  <v-text-field min="0" class="peopleType" type="number" suffix="원" v-model="option.none.cost" label="1인당 가격"/></v-text-field>
+                </v-flex>
+                <v-flex xs3>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.none.minAge" label="최소 나이 제한"/></v-text-field>
+                </v-flex>
+                <v-flex xs3>
+                  <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option.none.maxAge" label="최대 나이 제한"/></v-text-field>
+                </v-flex>
+              </template>
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
                 <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">유아</h3>
@@ -397,6 +412,7 @@ export default {
   },
   data (){
     return{
+      refOpt:[false, false, false, false],
       selectMore: false,
       currency: [],
       dateOption: false,
@@ -420,8 +436,9 @@ export default {
       ],
       refPeopleOpt:[{desc:'이상(최소인원에서 1씩 차례로 증가)',val:'more'},
                     {desc:'배수(최소인원에서 배수로 증가)',val:'multiple'}],
-      peopleType:[{name_kor:'구분 없음',
-                  name_eng:'none'},
+      peopleType:[
+                  {name_kor:'구분없음',
+                    name_eng:'none'},
                   {name_kor:'유아',
                   name_eng:'infant'},
                   {name_kor:'아동',
