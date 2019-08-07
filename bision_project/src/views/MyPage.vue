@@ -323,9 +323,9 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             console.log(1, res)
-            // for (var i = 0; i < res.data.options.length; i++) {
-            //   this.guideServices.push(res.data.options[i][0].guideservice)
-            // }
+            for (let i = 0; i < res.data.options.length; i++) {
+              this.guideServices.push(res.data.options[i][0].guideservice)
+            }
             console.log(this.guideServices);
             this.userId = res.data.userInfo._id
             
