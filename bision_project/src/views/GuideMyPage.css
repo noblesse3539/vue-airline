@@ -278,3 +278,21 @@ width: 100%;
   height: 20%;
   background: white;
 }
+
+.reservation-box {
+  margin-bottom: 110px;
+}
+
+.reservation-collapsible-box {
+  width: 100%;
+  min-height: 100px;
+  background: grey;
+}
+
+.res-collapsible-inside {
+  /* padding: 0 18px; */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
