@@ -51,9 +51,41 @@
     <UploadImgModal v-if="isImgModalOpen" @close="close"></UploadImgModal>
     <!-- <Profile class="profileFillingSection"/> -->
 
-    <!-- 이용했던 가이드 -->
-    <h2 style="margin-top: 48px; margin-bottom: 24px;">내가 이용했던 여행 가이드</h2>
-    <GuideList :load-more="true" :userGuideServices="userGuideServices"></GuideList>
+    <!-- 현재 예약한 상품 -->
+    <h2 style="margin-top: 48px; margin-bottom: 24px;">현재 예약한 상품</h2>
+    <!-- <GuideList :load-more="true" :userGuideServices="userGuideServices"></GuideList> -->
+    <swiper
+      :options="swiperOption"
+      ref="mySwiper"
+    >
+      <!-- slides -->
+      <swiper-slide class="myProduct"
+        v-for="(guideService, id) in currentGuideServices"
+        :key="id"
+      >
+        <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <div class="myTourExperience-description">
+          <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
+          <p style="font-size: 1.25rem;">{{id}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
+
+<!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
+          <div class="RWButtonOver">
+            <div class="RWButton" @click="showRW(id)">후기 작성 하기</div>
+          </div>
+        </div>
+      </swiper-slide>
+      <!-- Optional controls -->
+      <div class="swiper-pagination"  slot="pagination"></div>
+      <div class="swiper-button-prev" slot="button-prev">
+        <svg viewBox="0 0 18 18" role="img" aria-label="이전" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m13.7 16.29a1 1 0 1 1 -1.42 1.41l-8-8a1 1 0 0 1 0-1.41l8-8a1 1 0 1 1 1.42 1.41l-7.29 7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+      <div class="swiper-button-next" slot="button-next">
+        <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+    </swiper>
 
     <!-- 내가 이용했던 가이드 상품 -->
     <h2 style="margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
@@ -74,6 +106,7 @@
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
+          <p style="font-size: 1.25rem;">{{id}}</p>
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
@@ -145,6 +178,8 @@
     },
     data: function () {
       return {
+        guideServices : [],
+        paymentId:'',
         review: [],
         guideServiceId : '',
         subcomment:'',
@@ -174,6 +209,7 @@
         userIntro: "",
         userLanguage: [],
         userGuideServices: [],
+        currentGuideServices: [],
         swiperOption: {
           slidesPerView: 4,
           spaceBetween: 20,
@@ -213,7 +249,7 @@
         console.log(this.userId)
         console.log(this.guideServiceId)
         console.log(review)
-        this.$http.post('/api/review/create/'+this.guideServiceId, review)
+        this.$http.post('/api/review/create/'+this.guideServiceId+'/'+this.paymentId, review)
          .then( res => {
              console.log("성공", res.data)
              alert('리뷰가 작성되었습니다.')
@@ -225,7 +261,7 @@
            this.closeRW()
          })
       },
-      showRW(v) {
+      showRW(idx) {
         const navBarZIndex = document.querySelector('#navbox')
         const footerZIndex = document.querySelector('#footer')
         footerZIndex.style.zIndex = 0
@@ -233,7 +269,8 @@
         document.documentElement.style.overflow='hidden'
         document.body.scroll="no";
         this.isRWVisible = true;
-
+        this.guideServiceId = this.guideServices[idx]
+        this.paymentId=this.userGuideServices[idx]._id
       },
       closeRW() {
         this.guideServiceId = ''
@@ -285,7 +322,17 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             console.log(1, res)
+            // for (let i = 0; i < res.data.options.length; i++) {
+            //   this.guideServices.push(res.data.options[i][0].guideservice)
+            // }
+            console.log(this.guideServices);
             this.userId = res.data.userInfo._id
+            
+            // this.currentGuideServices = res.data.paymentRecords.map( record => {
+            //   const today = new Date()
+            //   // record.service.data <= 
+            // })
+
             this.userGuideServices = res.data.paymentRecords
             console.log(2, this.userGuideServices)
             this.userInfo = res.data.userInfo
@@ -293,7 +340,12 @@
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
-            this.userImage = this.userInfo.profileImg
+            this.userImage = this.userInfo.profileImageUrl
+
+            console.log("==============================")
+            console.log(this.userName)
+            console.log("==============================")
+
           }).catch( err => {
               console.log(err)
           }).then( () => {
@@ -302,7 +354,6 @@
                 console.log(3, res)
               })
             // this.userGuideServices  = this.userInfo.UsedGuideServices
-            // console.log(this.userGuideServices)
           })
       },
 

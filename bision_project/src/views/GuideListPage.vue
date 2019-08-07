@@ -137,7 +137,7 @@
                                 </div>
                             </h1>
                             <p class="result-body-card-detail">
-                                {{service.detail.slice(0, 120)}} ...
+                                {{service.detail.slice(0, 120)}} ... {{service.index}}
                             </p>
                             <div style="display: flex; flex-direction: row;">
                               <p class="result-body-card-city" style="padding-right: 20px;">
@@ -243,7 +243,6 @@ export default {
 
             // 태그 관련 변수
             tags: [],
-            // tags: ['액티비티', '경치', '유람선', '박물관', '푸파', '힐링', '고성', '맛집', '전통음식', '공연'],
             selectedTags: [],
             searchChips: [],
         }
@@ -273,33 +272,58 @@ export default {
                         temp.rawDetail  = eachService.detail
                         temp.image      = eachService.mainImg
                         temp.duration   = eachService.duration
-                        temp.cost       = eachService.options[0].adult.cost
+                        if (eachService.options.length != 0) {
+                          temp.cost = eachService.options[0].adult.cost
+                        } else {
+                          temp.cost = 0
+                        }
+                        // temp.cost       = eachService.options[0].adult.cost || 0
                         temp.city       = eachService.city_kor
                         temp.serviceId  = eachService._id
                         temp.fromDate   = eachService.fromDate
                         temp.toDate     = eachService.toDate
                         temp.tags       = eachService.tags
-                        temp.guideId    = eachService.guide
+                        // temp.guideId    = eachService.guide
                         temp.likeUsers   = eachService.likeUsers || []
-                        this.guideServiceList.push(temp)
-                        this.fixedguideServiceList.push(temp)
-                        if (temp.cost > this.maxPrice) this.maxPrice = temp.cost
-                        if (temp.cost < this.minPrice) this.minPrice = temp.cost
-                        for (let i=0; i<eachService.tags.length; i++) {
-                          if (this.tags.indexOf(eachService.tags[i].tag) == -1) {
-                            this.tags.push(eachService.tags[i].tag)
+
+                        // this.guideServiceList.push(temp)
+                        // this.fixedguideServiceList.push(temp)
+                        //
+                        // if (temp.cost > this.maxPrice) this.maxPrice = temp.cost
+                        // if (temp.cost < this.minPrice) this.minPrice = temp.cost
+                        // for (let i=0; i<eachService.tags.length; i++) {
+                        //   if (this.tags.indexOf(eachService.tags[i].tag) == -1) {
+                        //     this.tags.push(eachService.tags[i].tag)
+                        //   }
+                        // }
+                        // console.log(this.dateCalculate(temp.toDate))
+                        // console.log(this.dateCalculate(new Date().toISOString().substr(0, 10)))
+
+                        if (this.dateCalculate(temp.toDate) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {
+                          // console.log("인")
+                          this.guideServiceList.push(temp)
+                          this.fixedguideServiceList.push(temp)
+
+                          if (temp.cost > this.maxPrice) this.maxPrice = temp.cost
+                          if (temp.cost < this.minPrice) this.minPrice = temp.cost
+                          for (let i=0; i<eachService.tags.length; i++) {
+                            if (this.tags.indexOf(eachService.tags[i].tag) == -1) {
+                              this.tags.push(eachService.tags[i].tag)
+                            }
                           }
                         }
                     })
+                    console.log(this.guideServiceList)
                     this.price[0] = this.minPrice
                     this.price[1] = this.maxPrice
                     this.isLoaded = true
+                    console.log(this.guideServiceList)
             })
         },
         getServiceAll : function() {
             this.$http.get("/api/guideservice/findGSALL")
                 .then( res => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     res.data.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text
                         const temp = {}
@@ -328,7 +352,7 @@ export default {
               .then( added => {
                 this.$http.get(`/api/guideservice/findGSById/${serviceId}`)
                   .then( res => {
-                    console.log(res.data.likeUsers)
+                    // console.log(res.data.likeUsers)
                     this.guideServiceList[index].likeUsers = res.data.likeUsers
                   })
               })
@@ -357,7 +381,7 @@ export default {
 
         // 날짜 선택 시
         selectDate : function (leavingDate) {
-          console.log(leavingDate)
+          // console.log(leavingDate)
           if (this.leavingDates.indexOf(leavingDate) == -1) {
             this.leavingDates.push(leavingDate)
             this.updateResult(leavingDate)
@@ -368,7 +392,7 @@ export default {
 
         // 여행 기간 선택 시
         selectDuration : function (idx) {
-          console.log(this.duration)
+          // console.log(this.duration)
           if (this.duration.indexOf(idx) != -1) {
             this.searchChips.push(this.periodList[idx][0])
           } else {
@@ -393,11 +417,9 @@ export default {
 
         // 검색 칩 삭제
         deletechip (chip) {
-          console.log("딜리트")
           this.searchChips.splice(this.searchChips.indexOf(chip),1)
           // 날짜 삭제
           if (isNaN(this.dateCalculate(chip)) == false) {
-            console.log(this.dateCalculate(chip))
             this.leavingDates.splice(this.leavingDates.indexOf(chip),1)
             // 여행기간 삭제
           } else if (chip.indexOf("시간") != -1 && chip.indexOf("~") != -1) {
@@ -409,7 +431,6 @@ export default {
             }
             // 태그 삭제
           } else {
-            console.log(this.selectedTags)
             this.selectedTags.splice(this.selectedTags.indexOf(chip),1)
           }
           this.updateResult()
@@ -417,7 +438,6 @@ export default {
 
         // 결과리스트 업데이트
         updateResult : function () {
-          console.log("업데이트!!")
           this.guideServiceList = []
           let flag
           for (let i=0; i<this.fixedguideServiceList.length; i++) {
@@ -425,11 +445,10 @@ export default {
             // 날짜
             flag = false
             if (this.leavingDates.length == 0) {
-              console.log("영")
               flag = true
             } else {
               for (let k=0; k<this.leavingDates.length; k++) {
-                if (this.dateCompare(this.leavingDates[k], this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {                  
+                if (this.dateCompare(this.leavingDates[k], this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate)) {
                   flag = true
                   break;
                 }
@@ -437,7 +456,6 @@ export default {
             }
 
             if (flag == false) continue;
-            console.log("날짜패스")
 
             // 태그
             flag = false
@@ -456,14 +474,11 @@ export default {
             }
 
             if (flag == false) continue;
-            console.log("태그패스")
 
             // 가격
-            console.log(this.price[1])
             flag = false
             if (this.fixedguideServiceList[i].cost <= this.price[1] && this.fixedguideServiceList[i].cost >= this.price[0]) flag = true
             if (flag == false) continue;
-            console.log("가격패스")
 
             // 여행 기간
             flag = false
@@ -493,36 +508,7 @@ export default {
 
             if (flag == true) {
               this.guideServiceList.push(this.fixedguideServiceList[i])
-              console.log("기간패스")
             }
-
-
-              // if (this.duration[j] == 0) {
-              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 14400) {
-              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-              //       this.guideServiceList.push(this.fixedguideServiceList[i])
-              //     }
-              //   }
-              // } else if (this.duration[j] == 1) {
-              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 14401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 86400) {
-              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-              //       this.guideServiceList.push(this.fixedguideServiceList[i])
-              //     }
-              //   }
-              // } else if (this.duration[j] == 2) {
-              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 86401 && this.durationTransfer(this.fixedguideServiceList[i].duration) <= 172800) {
-              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-              //       this.guideServiceList.push(this.fixedguideServiceList[i])
-              //     }
-              //   }
-              // } else if (this.duration[j] == 3) {
-              //   if (this.fixedguideServiceList[i].cost <= this.price[1] && this.durationTransfer(this.fixedguideServiceList[i].duration) >= 172801) {
-              //     if (this.dateCalculate(this.leavingDate, this.fixedguideServiceList[i].fromDate, this.fixedguideServiceList[i].toDate) || !this.leavingDate) {
-              //       this.guideServiceList.push(this.fixedguideServiceList[i])
-              //     }
-              //   }
-              // }
-
           }
         },
         durationTransfer : function (duration) {
@@ -565,32 +551,6 @@ export default {
         },
         dateCalculate : function (date) {
           return date = parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
-        },
-        findTag : function (tag) {
-          console.log(this.selectedTags)
-          if (this.selectedTags.indexOf(tag) == -1) {
-            this.selectedTags.push(tag)
-          } else {
-            this.selectedTags.splice(this.selectedTags.indexOf(tag),1)
-          }
-
-          this.guideServiceList = []
-          if (this.selectedTags.length == 0) {
-            for (let i=0; i<this.fixedguideServiceList.length; i++) {
-              this.guideServiceList.push(this.fixedguideServiceList[i])
-            }
-          } else {
-
-            for (let i=0; i<this.fixedguideServiceList.length; i++) {
-              for (let j=0; j<this.fixedguideServiceList[i].tags.length; j++) {
-                if (this.selectedTags.indexOf(this.fixedguideServiceList[i].tags[j].tag) != -1) {
-                  this.guideServiceList.push(this.fixedguideServiceList[i])
-                }
-                break;
-              }
-            }
-          }
-
         },
         priceTransfer: function (price) {
           price = price.toString()

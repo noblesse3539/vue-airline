@@ -78,15 +78,28 @@ exports.mypage = (req, res) => {
     .then( userInfo => {
         PaymentStore.find()
         .where('user').equals(userInfo._id)
+        .lean()
         .then( paymentRecords => {
-            res.json({userInfo, paymentRecords})
+            const optionsTmp = []
+            for (rc of paymentRecords) {
+                optionsTmp.push(rc.service.options)
+            }
+            Promise.all(optionsTmp.map( async (op) => {
+                return await Option.find({_id: {$in: op}})
+            }))
+            .then(values => {
+                console.log(values)
+                res.status(200).json({userInfo, paymentRecords, options: values})
+            })
         })
         .catch( err => {
-            res.json({error: err})
+            console.log(err)
+            res.status(500).json({error: err})
         })
     })
     .catch( err => {
-        res.json({error: err})
+        console.log(err)
+        res.status(500).json({error: err})
     })
 }
 

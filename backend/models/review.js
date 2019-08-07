@@ -10,7 +10,7 @@ const Review = new Schema(
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     rating: Number,
   },
-  { 
+  {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}
   }
 )

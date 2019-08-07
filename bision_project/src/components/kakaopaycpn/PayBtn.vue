@@ -22,6 +22,8 @@ export default {
         'quantity',
         'totalAmount',
         'taxFreeAmount',
+        'title',
+        'people'
     ],
     mounted() {
         
@@ -38,8 +40,8 @@ export default {
         payment() {
             const paymentURL = '/api/kakaopay'
             const data = {
-                'item_name'         : this.itemName,
-                'quantity'          : this.quantity,
+                'item_name'         : this.title,
+                'quantity'          : this.people,
                 'total_amount'      : this.totalAmount,
                 'tax_free_amount'   : this.totalAmount*0.01,
                 // 'item_name'         : 'hello',

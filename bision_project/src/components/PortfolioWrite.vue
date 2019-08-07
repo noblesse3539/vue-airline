@@ -8,7 +8,8 @@
          <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
-           <v-btn dark flat @click="checkSave">Save</v-btn>
+           <v-btn dark flat v-if="isProps" @click="checkSave">수정하기</v-btn>
+           <v-btn dark flat v-else @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>
 
@@ -19,7 +20,7 @@
               <h2>제목 입력</h2>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
-                v-model="tourProgram.title" label="제목을 입력해주세요." solo></v-text-field>
+                v-model="tourProgram.title" :label="titleLabel" solo></v-text-field>
                 <!-- <ckeditor :editor="titleEditor" v-model="titleData" :config="titleConfig"></ckeditor> -->
               </v-flex>
 
@@ -49,13 +50,15 @@
               </v-flex>
               <v-flex xs12 sm8 d-flex>
                 <!-- <v-select prepend-icon="map" label="도시 선택(다수 가능)*" v-model="tourProgram.city_kor" :items="city" attach small-chips multiple></v-select> -->
-                <v-autocomplete
+                <v-select
                   label="도시 선택"
                   :items="city"
                   prepend-icon="map"
                   no-data-text
+                  multiple
+                  attach small-chips
                   v-model="tourProgram.city_kor"
-                ></v-autocomplete>
+                ></v-select>
               </v-flex>
 
               <!-- 시작날짜 -->
@@ -404,6 +407,7 @@ export default {
     VueEditor,
     title: String,
     serviceInfo: Object,
+    getGuideService: Function,
   },
   components:{
     Multiselect,
@@ -416,15 +420,17 @@ export default {
       selectMore: false,
       currency: [],
       dateOption: false,
+      titleLabel: this.$props.serviceInfo.title ? this.$props.serviceInfo.title : '제목을 입력해주세요.',
+      dateOption: true,
       dbTags:['액티비티', '공연관람'],
       showTags:[],
       checkText:'',
       check : false,
       validate: false,
-      tempMain:'https:\/\/i.imgur.com\/9ge6Osc.jpg',
+      tempMain: this.$props.serviceInfo.mainImg ?  this.$props.serviceInfo.mainImg : 'https:\/\/i.imgur.com\/9ge6Osc.jpg',
       nation: [],
-      nationSelected:'',
-      city: [],
+      nationSelected: this.$props.serviceInfo.nation_kor ? this.$props.serviceInfo.nation_kor : '',
+      city: this.$props.serviceInfo.city_kor ? this.$props.serviceInfo.city_kor : [],
       dayOfWeek:['월','화','수','목','금','토','일'],
       times:[
         '00:00','00:15','00:30','00:45','01:00','01:15','01:30','01:45','02:00','02:15','02:30','02:45','03:00','03:15','03:30','03:45',
@@ -454,21 +460,21 @@ export default {
       optionFromMenu: false,
       optionToMenu: false,
       complete: false,
-      tourProgram:{
-        guide : '',
-        title:'',
-        mainImg:'',
-        nation_kor: '',
-        city_kor:[],
-        fromDate:'',
-        toDate:'',
-        duration: '',
+      tourProgram: {
+        guide : this.$props.serviceInfo.guide ?  this.$props.serviceInfo.guide : '',
+        title: this.$props.serviceInfo.titlse ?  this.$props.serviceInfo.title : '',
+        mainImg: this.$props.serviceInfo.mainImg ?  this.$props.serviceInfo.mainImg : '',
+        nation_kor: this.$props.serviceInfo.nation_kor ? this.$props.serviceInfo.nation_kor : '',
+        city_kor: this.$props.serviceInfo.city_kor ? this.$props.serviceInfo.city_kor : [],
+        fromDate: this.$props.serviceInfo.fromDate ? this.$props.serviceInfo.fromDate : '',
+        toDate: this.$props.serviceInfo.toDate ? this.$props.serviceInfo.toDate : '',
+        duration: this.$props.serviceInfo.duration ? this.$props.serviceInfo.duration : '',
         refund: {
-          refund100: 1,
-          refund50: 0,
-          refund30: 0
+          refund100:  this.$props.serviceInfo.refund100 ? this.$props.serviceInfo.refund100 : 1,
+          refund50:  this.$props.serviceInfo.refund50 ? this.$props.serviceInfo.refund50 : 0,
+          refund30:  this.$props.serviceInfo.refund30 ? this.$props.serviceInfo.refund30 : 0
         },
-        desc:'',
+        desc: this.$props.serviceInfo.desc ? this.$props.serviceInfo.desc : '',
         options:[{
               guideservice: '',
               title: '제목1',
@@ -507,7 +513,7 @@ export default {
             },
         ],
         tags: [],
-        detail:'',
+        detail: this.$props.serviceInfo.detail ? this.$props.serviceInfo.detail : '',
       },
       option:{
           guideservice: '',
@@ -568,17 +574,15 @@ export default {
     ...mapState({
       getUserId: state => state.User.userId
     }),
-
   },
   watch:{
     nationSelected: function () {
+      this.tourProgram.nation_kor=this.nationSelected
       this.$http.get('/api/city/findCities/'+this.nationSelected)
         .then( res => {
+          this.city=[]
           for (var i = 0; i < res.data.length; i++) {
-            if (this.city.indexOf(res.data[i].city_kor) < 0 ) this.city.push(res.data[i].city_kor);
-            else{
-              break;
-            }
+            this.city.push(res.data[i].city_kor);
           }
         })
         .catch( err => {
@@ -591,7 +595,11 @@ export default {
     // this.citySelect()
     this.currencySelect()
     this.nationSelect()
-    console.log(this.$props.serviceInfo)
+    console.log("-----------------------")
+    this.$props.serviceInfo.tags.map( tag => {
+      this.tourProgram.tags.push(tag.tag)
+    })
+    console.log("-----------------------")
  },
   methods : {
     selectRefPeopleOpt(v){
@@ -611,6 +619,16 @@ export default {
           console.log("통화에러",err)
         })
 
+    isProps() {
+      if (this.$props.serviceInfo !== undefined) {
+
+
+        console.log("ok")
+        return true
+      } else {
+        console.log("no")
+        return false
+      }
     },
     pTypeToKor(v) {
       if(v == 'infant') return '유아'
@@ -759,12 +777,29 @@ export default {
       }
     },
     closePW(){
-      if(this.validate){
+
+      // 생성 요청
+      if(this.validate && this.isProps == false){
         this.tourProgram.nation_kor=this.nationSelected
         this.tourProgram.guide=this.getUserId;
         this.$http.post('/api/guideservice/create', this.tourProgram)
           .then( res => {
             console.log(res.status)
+            this.$props.getGuideService
+          })
+      
+      // 수정 요청
+      } else if (this.validate && this.isProps) {
+        // this.tourProgram.nation_kor=this.nationSelected
+        // this.tourProgram.guide=this.getUserId;
+        const newProgram = this.tourProgram
+        delete newProgram.guide
+        delete newProgram.options
+        this.$http.put(`/api/guideservice/update/${this.$props.serviceInfo._id}`, newProgram  )
+          .then( res => {
+            console.log("fuck yeah")
+            this.$props.getGuideService()
+            // alert(this.$props.getGuideService)
           })
       }
       // this.$http.post('/api/createGuideService', this.tourProgram)
@@ -827,17 +862,6 @@ export default {
         .then( res => {
           for (var i = 0; i < res.data.nations.length; i++) {
             this.nation.push(res.data.nations[i].nation_kor)
-          }
-        })
-        .catch( err => {
-          console.log(err)
-        })
-    },
-    citySelect(){
-      this.$http.get('/api/city')
-        .then( res => {
-          for (var i = 0; i < res.data.cities.length; i++) {
-            this.city.push(res.data.cities[i].city_kor)
           }
         })
         .catch( err => {

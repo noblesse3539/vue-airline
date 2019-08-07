@@ -68,7 +68,7 @@
         <v-tab key="Now" class="tab-name">Now</v-tab>
         <v-tab key="ALL" class="tab-name" >ALL</v-tab>
         <v-tab key="Portfolio" class="tab-name" >RESERVATION</v-tab>
-
+        
         <!-- 현재 상품 -->
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
@@ -104,14 +104,23 @@
                     <div class="gs-mypage-service-content-bottom-reserve">
                       <button 
                         v-if="getUserId == guideId"
+                        class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
+                        style="margin-right: 10px;"
+                        @click="deleteGuideService(service)"
+                      >
+                        삭제하기
+                      </button>
+                      <button 
+                        v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
                         style="margin-right: 10px;"
-                        @click="editGuideService()"
+                        @click="editGuideService(service)"
                       >
                         수정하기
                       </button>
+                      <PortfolioWrite :getGuideService="getGuideService" :serviceInfo="serviceInfoProp" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
                       <!-- 수정 시 Portfoliowrite 컴포넌트에 props 넘겨줍니다. -->
-                      <PortfolioWrite :class="portfilo-write-idx" :serviceInfo="guideServices[idx]" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+                      <!-- <PortfolioWrite class="`portfilo-write-${idx}`" :serviceInfo="guideServices[idx]" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite> -->
                       <button
                         v-if="getUserId !== guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn"
@@ -155,7 +164,9 @@
           <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
           
           <div class="gs-ALL-container">
-            <div class="gs-ALL-service-add-btn" @click="showPW">
+            <div class="gs-ALL-service-add-btn" 
+              @click="showPW"
+            >
               <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId" >
                 +
               </div>
@@ -292,6 +303,7 @@ export default {
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
       this.isPWVisible = true;
+      this.serviceInfoProp = {}
     },
     showPWEdit() {
       const navBarZIndex = document.querySelector('#navbox')
@@ -302,13 +314,13 @@ export default {
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
-      this.isPWEditVisible = true;
+      this.isPWVisible = true;
     },
     closePW(){
       document.documentElement.style.overflow='scroll';
       document.body.scroll="yes";
       this.isPWVisible = false;
-      this.isPWEditVisible = false;
+      // this.isPWEditVisible = false;
     },
     updateIntro() {
       const guideId = this.getUserId
@@ -344,7 +356,7 @@ export default {
     getGuideService() {
       this.$http.get(` /api/guideservice/findGSByGuideId/${this.guideId}`)
         .then( res => {
-          console.log(res)
+          console.log("ok")
           this.guideServices = res.data.reverse()
           // console.log(this.guideServices)
         })
@@ -369,12 +381,42 @@ export default {
       // }
     },
 
-    editGuideService() {
+    editGuideService(service) {
+      console.log("------------------------------")
+      console.log(service)
+      console.log("------------------------------")
+      this.serviceInfoProp = service
+      console.log(this.serviceInfoProp)
       this.showPWEdit()
     },
+    deleteGuideService(service) {
+      alert("정말 삭제하시겠어요?")
+
+      this.$http.delete(`/api/guideservice/delete/${service._id}`)
+        .then( res => {
+          alert("삭제되었습니다!")
+          this.getGuideService()
+        })
+    },
+
+    getPaymentsByGuide(guideId) {
+      this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
+        .then( res => {
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+          console.log(res.data)
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+        })
+        .catch( err=> {
+          console.log(err)
+        })
+    }
   },
   data (){
     return{
+
+      // 가이드 상품 수정시 넘겨줄 props 객체
+      serviceInfoProp : {},
+
       guideName: '',
       rating: 1,
       isIUVisible: false,
@@ -411,9 +453,12 @@ export default {
   },
   mounted() {
     this.GuideDataRequest()
-    this.getGuideService()
     this.closeFooter()
+    this.getGuideService()
     this.blurHeader()
+    this.getPaymentsByGuide(this.guideId)
+  },
+  updaetd() {
   },
 }
 </script>

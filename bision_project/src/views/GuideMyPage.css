@@ -162,6 +162,10 @@ width: 100%;
 }
 
 .gs-btn-revise {
+  background: rgba(30, 144, 255, 1);
+}
+
+.gs-btn-delete {
   background: hotpink;
 }
 
