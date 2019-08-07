@@ -618,7 +618,7 @@ export default {
         .catch( err => {
           console.log("통화에러",err)
         })
-
+    },
     isProps() {
       if (this.$props.serviceInfo !== undefined) {
 
@@ -787,7 +787,7 @@ export default {
             console.log(res.status)
             this.$props.getGuideService
           })
-      
+
       // 수정 요청
       } else if (this.validate && this.isProps) {
         // this.tourProgram.nation_kor=this.nationSelected
