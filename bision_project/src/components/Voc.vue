@@ -8,6 +8,10 @@
         </div>
         <div class="HR__ModalBody">
           <div>불만사항 선택 폼</div>
+          <v-select
+            :items="subject"
+            label="주제"
+          ></v-select>
           <textarea placeholder="상세한 내용을 작성해주세요."  v-model="content" class="VOC__Input" type="text" name="review"></textarea>
         </div>
         <div class="HR__ModalAction">
@@ -35,7 +39,7 @@ export default {
   data() {
     return{
       isVocVisible: false,
-      subject: '',
+      subject: ['개선사항', '불만사항', '기타'],
       content: ''
     }
   },
