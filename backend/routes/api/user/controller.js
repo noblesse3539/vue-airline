@@ -23,7 +23,18 @@ exports.list = (req, res) => {
         res.json({error: err})
     })
 }
-
+exports.getByUserId = (req, res) => {
+    const {userid} = req.params
+    User.findById(userid)
+    .select('_id email nickname profileImageUrl')
+    .then( user => {
+        res.status(200).json({user, success:true})
+    })
+    .catch( err => {
+        console.log(err)
+        res.status(400).json({success:false, msg:'없는 유저입니다.'})
+    })
+}
 // exports.assignAdmin = (req, res) => {
 //     // refuse if not an admin
 //     if(!req.decoded.admin) {
