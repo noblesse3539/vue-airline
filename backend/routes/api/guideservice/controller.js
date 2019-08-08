@@ -49,12 +49,52 @@ exports.deleteGuideService = (req,res) =>{
 }
 
 exports.updateGuideService = (req, res) => {
-    GuideService.update({ _id: req.params.id }, { $set: req.body }, function(err, output){
-        if(err) res.status(500).json({ error: 'database failure' });
-        console.log(output);
+    let tagsName=req.body.tags;
+    req.body.tags=[];
+    let gsId=req.params.id;
+    let newTags=[]
+    GuideService.update({ _id: gsId }, { $set: req.body }, function(err,output){
         if(!output.n) return res.status(404).json({ error: 'guideservice not found' });
-        res.json( { message: 'guideservice updated' } );
+        return res.json( { message: 'guideservice updated' } );
     })
+    .then((output)=>{
+      return Tag.find({guideservice:gsId})
+    })
+    .then((tags)=>{
+      Promise.all(tags.map((tag) => {
+        return tag.remove()
+      }))
+    })
+    .then((output)=>{
+        for (let i = 0; i < tagsName.length; i++) {
+          newTags.push(new Tag({tag:tagsName[i],guideservice:gsId}))
+        }
+        Promise.all(newTags.map((newTag)=>{
+          return newTag.save()
+        }))
+      }
+    )
+    .then((output)=>{
+      for (let i = 0; i < newTags.length; i++) {
+        GuideService.findById(gsId)
+        .then((gs)=>{
+          gs.tags.push(newTags[i]._id)
+          gs.save()
+        })
+      }
+    })
+    .catch((err)=>{
+      res.status(500).json({err})
+    })
+    // .then(gs=>{
+    //   Tag.find({guideservice:gs._id},tags)
+    // })
+    // .then(tags=>{
+    //   console.log(tags);
+    //   // for (let i = 0; i < tags.length; i++) {
+    //   //   array[i]
+    //   // }
+    // })
 }
 
 exports.findGSAll=(req,res)=>{
