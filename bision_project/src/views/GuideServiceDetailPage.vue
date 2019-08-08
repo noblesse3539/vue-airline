@@ -18,7 +18,7 @@
               <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!">
               </router-link>
             </div>
-            <div class="GS-guide-detail-guideName">    
+            <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
             </div>
@@ -39,11 +39,12 @@
             </div>
             <div class="GS-guide-language GS-guide-detail-icon">
               <i class="fas fa-language"></i>
-              <span style="margin-left: 10px;">영어/프랑스어 가이드 언어</span>
+              <span style="margin-left: 10px;">가이드 언어 : 영어/프랑스어</span>
             </div>
             <div class="GS-guide-refund GS-guide-detail-icon">
               <i class="fas fa-coins"></i>
-              <span style="margin-left: 10px;">환불 규정</span>
+              <span style="margin-left: 10px;" v-if="serviceInfo.refund[0].refund100 > 0">{{serviceInfo.refund[0].refund100}}일 전 전액 환불</span>
+              <span style="margin-left: 10px;" v-else>환불 불가</span>
             </div>
           </div>
           <div class="GS-guide-detail-description">
@@ -126,23 +127,6 @@
     <section class="GS-body-2">
       <div class="GS-body-2-left" >
         <h3 class="GS-body-2-left-title" style="font-size: 2rem; margin-bottom: 15px;">옵션 선택하기</h3>
-        <!-- <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
-          <span class="result-body__search-by-date-icon" >
-            <i class="far fa-calendar-check"></i>
-          </span>
-          <input placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
-          <div v-if="isCalenderOpen" class="GS-date-picker" @click="pushLeavingDate()">
-            <v-date-picker :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
-          </div>
-        </div> -->
-        <div style="display: flex; flex-wrap: wrap;">
-          <div v-for="i in leavingDates.length" :key="i">
-            <div class="result-body__search-by-date" style="margin-right: 1rem; width: 150px; font-size: 15px; text-align: center; display: grid; grid-template-columns: 80% 20%; border: 1px solid #45CE30; padding-top: 8px;" v-if="leavingDates">
-              {{leavingDates[i-1]}}
-              <i class="fas fa-times" style="color: grey; margin-top: 4px;" @click="deleteLeavingDate(i-1)"></i>
-            </div>
-          </div>
-        </div>
         <div class="GS-option-box" v-if="options">
           <!-- 각 상품에 대한 옵션 리스트 v-for로 출력할 것 -->
           <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
@@ -210,14 +194,14 @@
                     <i class="far fa-calendar-check"></i>
 
                   </span>
-                  <input v-if="leavingDate" :placeholder="leavingDate" disabled class="result-body__search-by-date-input" type="text" />
+                  <input v-if="serviceInfo.date" :placeholder="serviceInfo.date" disabled class="result-body__search-by-date-input" type="text" />
                   <input v-else placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
                   <div v-if="isCalenderOpen" class="GS-date-picker">
-                    <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                    <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="serviceInfo.date" :reactive="reactive" color="#45CE30"></v-date-picker>
                   </div>
                 </div>
 
-                <div class="GS-individual-option-detail-option-select" v-if="option.length > 0">
+                <div class="GS-individual-option-detail-option-select" v-if="option.times.length > 0">
                     <v-select
                       v-model="select"
                       :items="option.times"
@@ -521,7 +505,6 @@ export default {
 
       // 달력 관련 변수
       isCalenderOpen: false,
-
       isLoadMore: false,
       isPaymentReady: false,
       leavingDate: '',
@@ -664,20 +647,34 @@ export default {
       }
     },
     openOptionSelectingModal(optionDetailToOpen, idx) {
-      const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
+      // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
+
       const toShow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
       const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
       const payBtn = document.querySelector('.GS-payment-choose-option')
 
-      payBtn.classList.add('animated')
-      payBtn.classList.add('flash')
-      // payBtn.classList.add('delay-0.1s')
 
-      // console.log(toDrawBorder)
-      this.setPaymentReady()
-      toDrawBorder.classList.add('option-selected')
-      toHide.style.display = "none"
-      toShow.style.display = "flex"
+      if (toShow.style.display == "none") {
+        payBtn.classList.add('animated')
+        payBtn.classList.add('flash')
+        // payBtn.classList.add('delay-0.1s')
+
+        // console.log(toDrawBorder)
+        this.setPaymentReady()
+        toDrawBorder.classList.add('option-selected')
+        // toHide.style.display = "none"
+        toShow.style.display = "flex"
+      } else {
+        toShow.style.display = "none"
+        document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
+        toDrawBorder.classList.remove('option-selected')
+        this.cancelPaymentReady()
+        payBtn.classList.remove('flash')
+        payBtn.classList.remove('animated')
+      }
+
+
+
 
       // 선택한 옵션이 결제정보로 넘어가야 한다
       this.serviceInfo.adultprice = this.options[idx].adult.cost
@@ -691,9 +688,15 @@ export default {
     setPaymentReady() {
 
       this.isPaymentReady = true
-      document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
       document.querySelector('.GS-payment-choose-option-pay').style.display = "block"
+      document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
 
+    },
+    cancelPaymentReady() {
+      console.log("들어오니")
+      this.isPaymentReady = false
+      document.querySelector('.GS-payment-choose-option-reserve').style.display = "block"
+      // document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
     },
     getNationFlag() {
       this.$http.get(`/api/nation/search/${this.nation_kor}`)
@@ -713,16 +716,6 @@ export default {
 
         })
     },
-    pushLeavingDate : function () {
-      // console.log("추가")
-      if (this.leavingDates.indexOf(this.leavingDate) == -1)
-        this.leavingDates.push(this.leavingDate)
-    },
-    deleteLeavingDate : function (idx) {
-
-      this.leavingDates.splice([idx], 1)
-    },
-
     getGuideServiceOption() {
 
       this.$http.get(`/api/guideservice/findOption/${this.optionId}`)
