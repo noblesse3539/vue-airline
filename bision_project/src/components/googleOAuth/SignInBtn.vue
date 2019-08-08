@@ -7,9 +7,10 @@
                 <div class="toggle-btn">
                 </div>
             </label> -->
-              <v-switch v-model="isGuide" inset flat :label="welcomeMessage"
+              <v-switch v-model="isGuide" :label="welcomeMessage"
                 @click="changeWelcomeMsg"
                 style="color: grey;"
+                class="whyisthis"
               >
               </v-switch>
           </div>

@@ -115,7 +115,7 @@ a:hover {
 
 .loginBtn {
     padding: 10px;
-    color: rgba(47, 180, 62, 1) !important;
+    color: rgba(0, 171, 132, 1) !important;
     font-size: 1.25rem !important;
     font-weight: bolder !important;
     border: 2px solid 	rgb(211,211,211);
@@ -164,7 +164,7 @@ a:hover {
     color: white !important;
     text-align: center;
     font-size: 1.25rem;
-    background: #45CE30;
+    background: rgba(0, 171, 132, 1);;
     margin-right: 2%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -179,7 +179,7 @@ a:hover {
     text-align: center;
     font-size: 1.25rem;
     margin-right: 2%;
-    background: #45CE30;
+    background: rgba(0, 171, 132, 1);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
