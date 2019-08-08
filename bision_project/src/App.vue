@@ -70,6 +70,7 @@ export default {
               userName: res.data.info.username,
               isGuideNow: res.data.info.isGuide
             });
+            this.$http.defaults.headers.common["x-access-token"] = token
           }
         })
         .catch(err => {
