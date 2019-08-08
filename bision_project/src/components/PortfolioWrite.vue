@@ -8,7 +8,7 @@
          <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
-           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기</v-btn>
+           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기 {{isProps()}}</v-btn>
            <v-btn dark flat v-else  @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>
@@ -16,7 +16,7 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-btn @click="makeDummy(61)">DUMMY만들기</v-btn>
+              <!-- <v-btn @click="makeDummy(61)">DUMMY만들기</v-btn> -->
               <h2>제목 입력</h2>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
