@@ -47,7 +47,7 @@
               <span style="margin-left: 10px;" v-else>환불 불가</span>
             </div>
           </div>
-          <div class="GS-guide-detail-description">
+          <div class="GS-guide-detail-description" v-if="maxrationgReviewLoaded">
             <div class="GS-guide-detail-simple-description">
               <span>{{desc}}</span>
             </div>
@@ -65,20 +65,22 @@
               ></div>
               <div class="GS-guide-detail-best-review-right">
                 <div class="text-center GS-guide-detail-best-review-right-inside">
-                  <v-rating v-model="rating" dense size="17.4"></v-rating>
+                  <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="17.4"></v-rating>
                   <div class="userinfo-used-this-service">
-                    <p class="userinfo-used-this-service-name">이빵글</p>
+                    <p class="userinfo-used-this-service-name">{{reviews[maxratingReviewIdx].user}}</p>
                     <p class="userinfo-used-this-service-date">이용날짜</p>
                   </div>
                 </div>
                 <div class="user-comment">
+                  {{reviews[maxratingReviewIdx].content}}
+                  <!-- 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
                   어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
                   어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                  어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                  어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
+                  어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 -->
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -91,6 +93,21 @@
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
               <button class="GS-payment-decision-btn" @click="goToPayment">결제하기</button>
+
+              <v-dialog v-model="dialog" max-width="400px">
+                <v-card>
+                  <!-- <v-card-title class="headline">결제를 하시려면 필수정보를 입력해주세요.</v-card-title> -->
+                  <v-card-text>
+                    <i class="fas fa-exclamation" style="margin-right: 10px;"></i>결제를 하시려면 필수옵션을 입력해주세요.
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="#60BD89" @click="dialog = false" style="font-weight: 400">
+                      확인
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             <!-- <PayBtn class="GS-payment-decision-btn" v-bind="serviceInfo">
             </PayBtn> -->
           </div>
@@ -117,7 +134,7 @@
             </div>
             <div class="GS-payment-current-info-each">
               평점:
-              <v-rating class="serviceRating" v-model="rating" dense size="17.4" readonly></v-rating>
+              <v-rating class="serviceRating" v-model="average" dense size="17.4" readonly></v-rating>
             </div>
           </div>
         </div>
@@ -360,10 +377,10 @@
       <h3 class="GS-service-intro-title" id="GS-service-intro-title">상품 후기</h3>
       <div class="GS-service-review-box">
         <div class="GS-service-reivew-overview">
-          <div class="GS-service-review-score">5.0</div>
+          <div class="GS-service-review-score">{{average}}</div>
           <div class="GS-service-review-score-right">
             <div class="GS-service-review-score-stars">
-              <v-rating v-model="rating" dense size="24.7" readonly></v-rating>
+              <v-rating v-model="average" dense size="24.7" readonly></v-rating>
             </div>
             <div class="GS-service-review-count">100개의 진심 가득한 후기</div>
           </div>
@@ -381,40 +398,47 @@
               />
             </div>
             <div class="GS-service-reivew-content">
-              <div class="GS-service-review-top">
-                <div class="GS-service-review-top-userInfo">
-                  <div class="GS-service-review-userScore GS-service-review-info">
-                    <v-rating v-model="rating" dense size="14.7" readonly></v-rating>
+              <div v-for="i in reviews.length">
+                <div class="GS-service-review-top">
+                  <div class="GS-service-review-top-userInfo">
+                    <div class="GS-service-review-userScore GS-service-review-info">
+                      <v-rating v-model="reviews[i-1].rating" dense size="14.7" readonly></v-rating>
+                    </div>
+                    <div class="GS-service-review-userName GS-service-review-info">{{reviews[i-1].user}}</div>
+                    <div class="GS-service-review-info">·</div>
+                    <div class="GS-service-review-userDate GS-service-review-info">이용날짜: 2019/07/29</div>
                   </div>
-                  <div class="GS-service-review-userName GS-service-review-info">이빵글</div>
-                  <div class="GS-service-review-info">·</div>
-                  <div class="GS-service-review-userDate GS-service-review-info">이용날짜: 2019/07/29</div>
+                  <div class="Gs-service-review-top-option">옵션:</div>{{reviews[i-1].content}}
                 </div>
-                <div class="Gs-service-review-top-option">옵션:</div>
+                <div class="GS-service-reivew-userReview">
+                  <p>
+                    {{reviews[i-1].content}}
+                  </p>
+                  <!-- <p>
+                    혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
+                    단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
+                    운이 좋아야 있을정도 그리고 되게 말할사람도 없어서 외로워요 ( 유리박물관에서
+                    한국 여행사 차량봤을때 갑자기 울컥했어요 ㅠㅜ) 솔직히 미국에서도 외국인입
+                    장이라 나빼고 출발하면 어쩌지..? 이런 생각도 많이했었고 (영어도 못하는데ㅠㅜ)그
+                    런데 전혀 그런거없고 오히려 영어못하는 저를 배려많이 해주셨어요!(감사해요😘)그리고
+                    한국여행사는 전일정이 다포함된 가격으로 움직이지만 여기는 선택한 관광만 골라서 거기서
+                    직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
+                    해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
+                    일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
+                    하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
+                  </p> -->
+                  <button @click="loadReviewMore" v-if="isLoadMore">
+                    닫기
+                    <i class="fa fa-angle-up"></i>
+                  </button>
+                  <button @click="loadReviewMore" v-else>
+                    더 읽어보기
+                    <i class="fa fa-angle-down"></i>
+                  </button>
+                </div>
               </div>
-              <div class="GS-service-reivew-userReview">
-                <p>
-                  혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
-                  단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
-                  운이 좋아야 있을정도 그리고 되게 말할사람도 없어서 외로워요 ( 유리박물관에서
-                  한국 여행사 차량봤을때 갑자기 울컥했어요 ㅠㅜ) 솔직히 미국에서도 외국인입
-                  장이라 나빼고 출발하면 어쩌지..? 이런 생각도 많이했었고 (영어도 못하는데ㅠㅜ)그
-                  런데 전혀 그런거없고 오히려 영어못하는 저를 배려많이 해주셨어요!(감사해요😘)그리고
-                  한국여행사는 전일정이 다포함된 가격으로 움직이지만 여기는 선택한 관광만 골라서 거기서
-                  직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
-                  해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
-                  일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
-                  하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
-                </p>
-                <button @click="loadReviewMore" v-if="isLoadMore">
-                  닫기
-                  <i class="fa fa-angle-up"></i>
-                </button>
-                <button @click="loadReviewMore" v-else>
-                  더 읽어보기
-                  <i class="fa fa-angle-down"></i>
-                </button>
-              </div>
+
+
             </div>
           </div>
         </div>
@@ -464,6 +488,8 @@ export default {
       guide: '',
       options: [],
       tempOption: [],
+      reviewIds: [],
+      reviews: [],
 
       // 결제 관련 정보
       serviceInfo: {
@@ -494,6 +520,9 @@ export default {
         },
       },
 
+      // 결제 모달 정보
+      dialog: false,
+
 
       // 가이드 관련 정보
       guideInfo : {
@@ -509,7 +538,13 @@ export default {
       isPaymentReady: false,
       leavingDate: '',
       leavingDates: [],
+
+      // 레이팅 관련 변수
+      average: 0,
+      maxratingReviewIdx: 0,
+      maxrationgReviewLoaded: false,
     };
+
   },
   methods: {
 
@@ -549,7 +584,11 @@ export default {
     //   this.$router.push({ path: 'GuideMyPage', query: {guideId : this.guideInfo.guideId}})
     // },
     goToPayment: function() {
-      this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
+      if (this.serviceInfo.people == 0 || this.serviceInfo.totalAmount == 0 || this.serviceInfo.date == 0) {
+        this.dialog = true
+      } else {
+        this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
+      }
     },
     dragDownSideBar: function() {
       const scrollY = window.scrollY;
@@ -586,7 +625,7 @@ export default {
           this.desc = data.desc;
           this.detail = data.detail;
           this.mainImg = data.mainImg;
-          this.reviews = data.reviews;
+          this.reviewIds = data.reviews;
           this.duration = data.duration;
           // this.cost = data.cost;
 
@@ -613,6 +652,7 @@ export default {
           this.setHero()
           this.getNationFlag()
           this.getGuideInfo()
+          this.getReviews()
         })
     },
 
@@ -622,6 +662,40 @@ export default {
         this.guideInfo.guideName = res.data.guide.username
         this.guideInfo.guideImg = res.data.guide.profileImageUrl
         this.guideInfo.guideId = res.data.guide._id
+      })
+    },
+
+    getReviews : function () {
+      this.$http.get(`/api/guideservice/findReview/${this.$route.query.serviceId}`)
+      .then( res => {
+        this.reviews = res.data.reviews
+        console.log("리뷰", res.data.reviews)
+      })
+      .then( () => {
+        let sum = 0
+        let maxrating = 0
+        let idx = 0
+        let latestdate = 0
+        for (let i=0; i<this.reviews.length; i++) {
+          sum += this.reviews[i].rating
+          if (this.reviews[i].rating > maxrating) {
+            idx = i
+            maxrating = this.reviews[i].rating
+          }
+            // latestdate = this.dateCalculate(this.reviews[i].created_at)
+            // console.log("여기다")
+            // console.log(latestdate)
+          // } else if (this.reviews[i].rating == maxrating) {
+          //   if (this.dateCalculate(this.reviews[i].created_at) > latestdate) {
+          //     idx = i
+          //     maxrating = this.reviews[i].rating
+          //     latestdate = this.dateCalculate(this.reviews[i].created_at)
+          //   }
+          // }
+        }
+        this.average = (sum/this.reviews.length).toFixed(1)
+        this.maxratingReviewIdx = idx
+        this.maxrationgReviewLoaded = true
       })
     },
 
@@ -816,6 +890,11 @@ export default {
       return reverse
     },
   },
+
+  dateCalculate : function (date) {
+    return date = parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
+  },
+
   computed: {
 
   },
