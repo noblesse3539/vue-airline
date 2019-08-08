@@ -353,7 +353,7 @@
       <h3 class="GS-service-intro-title">상품 소개</h3>
       <div class="GS-service-user-content" v-html="detail"></div>
     </section>
-
+    
     <section class="GS-body-3">
       <h3 class="GS-service-intro-title">환불 규정</h3>
       <div class="GS-service-user-refund">
