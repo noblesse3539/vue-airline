@@ -110,7 +110,8 @@
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
           <div class="RWButtonOver">
-            <div class="RWButton" @click="showRW(id)">후기 작성 하기</div>
+            <div v-if="reviews[guideService._id]" class="RWButton" @click="showMyReview(guideService._id)">내가 쓴 후기</div>
+            <div v-else class="RWButton" @click="showRW(id)">후기 작성 하기</div>
           </div>
         </div>
       </swiper-slide>
@@ -144,6 +145,7 @@
         </div>
       </div>
     </div>
+    <div v-if="isMyReviewVisible" class="HR__Modal"></div>
   </div>
 </template>
 
@@ -163,9 +165,9 @@
       UploadImgModal,
     },
     created() {
+      this.getUserInfo()
     },
     mounted() {
-      this.getUserInfo()
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
@@ -177,9 +179,9 @@
     },
     data: function () {
       return {
-        guideServices : [],
+        isMyReviewVisible: false,
         paymentId:'',
-        review: [],
+        reviews: [],
         guideServiceId : '',
         subcomment:'',
         comment:'',
@@ -232,6 +234,9 @@
       }
     },
     methods: {
+      showMyReview(PMid){
+        this.isMyReviewVisible = PMid
+      },
       clearReview() {
         console.log(this.userGuideServices)
         this.subcomment=''
@@ -245,8 +250,8 @@
           'content' : this.subcomment,
           'rating' : this.rating,
         }
-        console.log(this.userId)
-        console.log(this.guideServiceId)
+        console.log("g", this.userId)
+        console.log("gg", this.guideServiceId)
         console.log(review)
         this.$http.post('/api/review/create/'+this.guideServiceId+'/'+this.paymentId, review)
          .then( res => {
@@ -268,7 +273,7 @@
         document.documentElement.style.overflow='hidden'
         document.body.scroll="no";
         this.isRWVisible = true;
-        this.guideServiceId = this.guideServices[idx]
+        this.guideServiceId = this.userGuideServices[idx].guide
         this.paymentId=this.userGuideServices[idx]._id
       },
       closeRW() {
@@ -320,28 +325,20 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
-            console.log(1, res)
-            // for (let i = 0; i < res.data.options.length; i++) {
-            //   this.guideServices.push(res.data.options[i][0].guideservice)
-            // }
-            console.log(this.guideServices);
             this.userId = res.data.userInfo._id
-            
             const today = new Date().toISOString().slice(0, 10)
 
             this.currentGuideServices = res.data.paymentRecords.filter( record => {
               // console.log(record.service.date)
-              return record.service.date >= today 
+              return record.service.date >= today
             })
-            
+
             this.userGuideServices = res.data.paymentRecords.filter( record => {
               return record.service.date < today
             })
 
-
-            console.log(2, this.userGuideServices)
+            console.log("userGuideServices", this.userGuideServices)
             this.userInfo = res.data.userInfo
-            // console.log(this.userInfo)
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
@@ -352,16 +349,22 @@
             console.log("==============================")
 
           }).catch( err => {
-              console.log(err)
+            console.log(err)
           }).then( () => {
-              this.$http.get('/api/review/findReviewByUser/'+this.userId)
+            console.log(this.userId)
+            this.$http.get('/api/review/findReviewByUser/'+this.userId)
               .then( res => {
-                console.log(3, res)
-              })
-            // this.userGuideServices  = this.userInfo.UsedGuideServices
+                console.log(res.data.reviews)
+                for(var item of res.data.reviews) {
+                  this.reviews[item.payment] = {'content' : item.content,
+                                                'title' : item.title,
+                                                'rating' : item.rating}
+                }
+              console.log("리뷰",  this.reviews)
+            })
           })
-      },
 
+      },
       updateUserInfo: function() {
         // api/user/:username
         this.isUserInfoOpen = true
