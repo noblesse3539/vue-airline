@@ -2,7 +2,7 @@
   <div class="GS-detail-page">
     <div class="GS-travel-route">
       <p>
-        {{city_kor[1]}} in {{nation_kor}}
+        {{city_kor[0]}} in {{nation_kor}}
       </p>
       <img :src="nationFlag" width="60" height="60"/>
     </div>
@@ -13,12 +13,14 @@
 
           <!-- 가이드 유저 정보 -->
           <div class="GS-guide-detail-guideDetail">
-            <div class="GS-guide-detail-guideImg"  @click="goToGuideDetail">
-              <img class="GS-guide-detail-guideImg-image" src="https://t1.daumcdn.net/cfile/tistory/999DDE435AB8E9AE31" alt="Our guide's beautiful face!">
+            <div class="GS-guide-detail-guideImg">
+              <router-link :to="`${'/guide/'+guideId}`">
+              <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!">
+              </router-link>
             </div>
-            <div class="GS-guide-detail-guideName">
+            <div class="GS-guide-detail-guideName">    
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
-              <span @click="goToGuideDetail" style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
+              <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
             </div>
           </div>
 
@@ -84,7 +86,7 @@
         <div class="GS-payment-box">
           <div class="GS-payment-price">
             KRW
-            <span style="font-size: 3rem;">{{serviceInfo.totalAmount}}</span>
+            <span style="font-size: 3rem;">{{priceTransfer(serviceInfo.totalAmount)}}</span>
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-pay" style="display: none">
               <button class="GS-payment-decision-btn" @click="goToPayment">결제하기</button>
@@ -146,24 +148,46 @@
           <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
           <div v-for="(option, idx) in options" :key="idx" class="GS-individual-option GS-individual-option-1">
             <div class="GS-individual-option-title-box">
-              <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
-                <span class="result-body__search-by-date-icon">
-                  <i class="far fa-calendar-check"></i>
-
-                </span>
-                <input placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
-                <div v-if="isCalenderOpen" class="GS-date-picker" @click="pushLeavingDate()">
-                  <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+              <div>
+                <div style="display: flex; font-size: 20px; padding-bottom: 20px;">
+                  <div>{{option.title}}</div>
+                </div>
+                <div style="display: flex; padding-bottom: 5px;">
+                  <i class="fas fa-map-pin" style="padding-right: 10px;"></i>선택 가능 요일 :
+                  <div v-for="i in option.dayOfWeek.length">
+                    <div style="padding-left: 5px;">{{option.dayOfWeek[i-1]}}</div>
+                  </div>
+                </div>
+                <div style="display: flex; padding-bottom: 5px;">
+                  <i class="fas fa-map-pin" style="padding-right: 10px;"></i>시간대 :
+                  <div v-for="i in option.times.length" v-if="option.times.length > 0">
+                    <div style="padding-left: 5px;">{{option.times[i-1]}}</div>
+                  </div>
+                  <div v-if="option.times.length == 0">구분 없음</div>
+                </div>
+                <div style="display: flex; padding-bottom: 5px;">
+                  <i class="fas fa-map-pin" style="padding-right: 10px;"></i>가격 :
+                  <div style="padding-left: 5px; padding-right: 5px;">{{priceTransfer(option.adult.cost)}} KRW</div>
+                  <div style="color: #dcdcdc;">(성인 기준)</div>
                 </div>
               </div>
+
+              <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
+                <button
+                  class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
+                  @click="openOptionSelectingModal(`.GS-individual-option-1`, idx)"
+                >
+                  선택
+                </button>
+              </div>
               <!-- <div class="GS-individual-option-title">{{option.title.slice(0, 25)}}...</div> -->
-              <div class="GS-individual-top-price">
+              <!-- <div class="GS-individual-top-price">
                 <span style="font-size: 1rem; margin-right: 5px;">KRW</span>
                 <span>{{cost}}</span>
-              </div>
+              </div> -->
             </div>
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-            <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
+            <!-- <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
 
               <button
                 class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
@@ -171,55 +195,151 @@
               >
                 선택
               </button>
-            </div>
+            </div> -->
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <div class="GS-individual-option-detail-loadmore
                         GS-individual-option-detail-loadmore-1"
-                        style="display: none">
+                        style="display: none;">
 
-              <div class="GS-individual-option-detail-option-select">
-                  <v-select
-                    v-model="select"
-                    :items="items"
-                    item-text="state"
-                    item-value="abbr"
-                    label="시간대 선택"
-                    persistent-hint
-                    return-object
-                    single-line
-                  >
-                  </v-select>
-              </div>
-              성인
-              <div class="num-of-customers" style="min-width: 200px;">
-                <div class="num-of-customers__increaseBtn">
-                  <v-btn
-                    @click="decreasePeople"
-                    fab
-                    dark
-                    color="rgba(47, 230, 62, 1)"
-                    small
-                    outlined
-                  >
-                    <v-icon dark>remove</v-icon>
-                  </v-btn>
-                </div>
-                <div class="num-of-customers-count"> {{serviceInfo.people}} </div>
-                <div class="num-of-customers__decreaseBtn">
-                  <v-btn @click="increasePeople" fab dark color="rgba(47, 230, 62, 1)" small>
-                    <v-icon dark>add</v-icon>
-                  </v-btn>
-                </div>
-              </div>
+              <div class="GS-individual-options-detail">
+                <div @click="openCalender" class="result-body__search-by-date GS-body__search-by-date">
+                  <span class="result-body__search-by-date-icon">
+                    <i class="far fa-calendar-check"></i>
 
-              <div class="Gs-individual-price">
-                <p style="margin: 0;">
-                  KRW
-                  <span>{{priceTransfer(option.adult.cost)}} / 한 명</span>
-                </p>
+                  </span>
+                  <input v-if="leavingDate" :placeholder="leavingDate" disabled class="result-body__search-by-date-input" type="text" />
+                  <input v-else placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
+                  <div v-if="isCalenderOpen" class="GS-date-picker">
+                    <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="leavingDate" :reactive="reactive" color="#45CE30"></v-date-picker>
+                  </div>
+                </div>
+
+                <div class="GS-individual-option-detail-option-select" v-if="option.length > 0">
+                    <v-select
+                      v-model="select"
+                      :items="option.times"
+                      item-text="state"
+                      item-value="abbr"
+                      label="시간대 선택"
+                      persistent-hint
+                      return-object
+                      single-line
+                    >
+                    </v-select>
+                </div>
+
+                <div class="GS-individual-option-detail-adult-select">
+                  <!-- 성인 -->
+                  <div class="num-of-customers" style="min-width: 200px;">
+                    <div class="num-of-customers__increaseBtn">
+                      성인
+                      <v-btn @click="decreasePeople('adult')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-if="serviceInfo.adult == 0" disabled>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                      <v-btn @click="decreasePeople('adult')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-else>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                    </div>
+                    <div class="num-of-customers-count"> {{serviceInfo.adult}} </div>
+                    <div class="num-of-customers__decreaseBtn">
+                      <v-btn @click="increasePeople('adult')" fab dark color="rgba(47, 230, 62, 1)" small>
+                        <v-icon dark>add</v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div class="Gs-individual-price">
+                    <p style="margin: 0;">
+                      KRW
+                      <span>{{priceTransfer(option.adult.cost)}} / 한 명</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="GS-individual-option-detail-adult-select" v-if="option.child.maxAge != 0">
+                  <!-- 아동 -->
+                  <div class="num-of-customers" style="min-width: 200px;">
+                    <div class="num-of-customers__increaseBtn">
+                      아동
+                      <v-btn @click="decreasePeople('child')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-if="serviceInfo.child == 0" disabled>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                      <v-btn @click="decreasePeople('child')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-else>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                    </div>
+                    <div class="num-of-customers-count"> {{serviceInfo.child}} </div>
+                    <div class="num-of-customers__decreaseBtn">
+                      <v-btn @click="increasePeople('child')" fab dark color="rgba(47, 230, 62, 1)" small>
+                        <v-icon dark>add</v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div class="Gs-individual-price">
+                    <p style="margin: 0;">
+                      KRW
+                      <span>{{priceTransfer(option.child.cost)}} / 한 명</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="GS-individual-option-detail-adult-select" v-if="option.infant.maxAge != 0">
+                  <!-- 유아 -->
+                  <div class="num-of-customers" style="min-width: 200px;">
+                    <div class="num-of-customers__increaseBtn">
+                      유아
+                      <v-btn @click="decreasePeople('infant')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-if="serviceInfo.infant == 0" disabled>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                      <v-btn @click="decreasePeople('infant')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-else>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                    </div>
+                    <div class="num-of-customers-count"> {{serviceInfo.infant}} </div>
+                    <div class="num-of-customers__decreaseBtn">
+                      <v-btn @click="increasePeople('infant')" fab dark color="rgba(47, 230, 62, 1)" small>
+                        <v-icon dark>add</v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div class="Gs-individual-price">
+                    <p style="margin: 0;">
+                      KRW
+                      <span>{{priceTransfer(option.infant.cost)}} / 한 명</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="GS-individual-option-detail-adult-select" v-if="option.senior.maxAge != 0">
+                  <!-- 유아 -->
+                  <div class="num-of-customers" style="min-width: 200px;">
+                    <div class="num-of-customers__increaseBtn">
+                      60세 이상
+                      <v-btn @click="decreasePeople('senior')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-if="serviceInfo.senior == 0" disabled>
+                        <v-icon dark>remove</v-icon>
+                      </v-btn>
+                      <v-btn @click="decreasePeople('senior')" fab  dark color="rgba(47, 230, 62, 1)" small outlined v-else>
+                        <v-icon dark style="margin: 0;">remove</v-icon>
+                      </v-btn>
+                    </div>
+                    <div class="num-of-customers-count"> {{serviceInfo.senior}} </div>
+                    <div class="num-of-customers__decreaseBtn">
+                      <v-btn @click="increasePeople('senior')" fab dark color="rgba(47, 230, 62, 1)" small style="margin: 0px !important;">
+                        <v-icon dark class="fix-icon">add</v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div class="Gs-individual-price">
+                    <p style="margin: 0;">
+                      KRW
+                      <span>{{priceTransfer(option.senior.cost)}} / 한 명</span>
+                    </p>
+                  </div>
+                </div>
+
+
               </div>
             </div>
           </div>
@@ -363,19 +483,30 @@ export default {
 
       // 결제 관련 정보
       serviceInfo: {
-        people: 0,
+        // people: 0,
         adult: 0,
         senior: 0,
         child: 0,
-        infants: 0,
-        unitPrice: '1000',
+        infant: 0,
+
+        adultprice: 0,
+        seniorprice: 0,
+        childprice: 0,
+        infantprice: 0,
+
+        // unitPrice: '1000',
         itemName: "베이징상품",
         quantity: 1,
         taxFreeAmount: 3000,
         date: '',
         guide: '',
+        get people() {
+          // return 1000
+          return this.adult + this.senior + this.child + this.infant
+        },
         get totalAmount() {
-          return this.people * this.unitPrice
+          // return 1000
+          return this.adult * this.adultprice + this.senior * this.seniorprice + this.child * this.childprice + this.infant * this.infantprice
         },
       },
 
@@ -399,12 +530,13 @@ export default {
   },
   methods: {
 
-    decreasePeople: function() {
-      // console.log(this.serviceInfo.people)
-      this.serviceInfo.people -= 1
+    decreasePeople: function(select) {
+      // this.serviceInfo.people -= 1
+      this.serviceInfo[select] -= 1
     },
-    increasePeople: function() {
-      this.serviceInfo.people += 1
+    increasePeople: function(select) {
+      // this.serviceInfo.people += 1
+      this.serviceInfo[select] += 1
     },
 
     hideElements: function(e) {
@@ -430,9 +562,9 @@ export default {
       chosingOptions.scrollIntoView({behavior : 'smooth'})
 
     },
-    goToGuideDetail: function() {
-      this.$router.push({ path: 'GuideMyPage', query: {guideId : this.guideInfo.guideId}})
-    },
+    // goToGuideDetail: function() {
+    //   this.$router.push({ path: 'GuideMyPage', query: {guideId : this.guideInfo.guideId}})
+    // },
     goToPayment: function() {
       this.$router.push({ path: 'GuideServicePayment', query: this.serviceInfo})
     },
@@ -476,7 +608,7 @@ export default {
           // this.cost = data.cost;
 
           this.optionId = data._id;
-          this.guide = data.guide;
+          this.guideId = data.guide;
 
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
@@ -494,12 +626,22 @@ export default {
           return
         })
         .then( () => {
-
           this.getGuideServiceOption()
           this.setHero()
           this.getNationFlag()
+          this.getGuideInfo()
         })
     },
+
+    getGuideInfo : function () {
+      this.$http.get(`/api/guide/${this.guideId}`)
+      .then( res => {
+        this.guideInfo.guideName = res.data.guide.username
+        this.guideInfo.guideImg = res.data.guide.profileImageUrl
+        this.guideInfo.guideId = res.data.guide._id
+      })
+    },
+
     loadReviewMore: function() {
       const loadReiveMoreBtn = document.querySelector(
         ".GS-service-reivew-userReview"
@@ -521,7 +663,7 @@ export default {
         this.isLoadMore = true;
       }
     },
-    openOptionSelectingModal(optionDetailToOpen) {
+    openOptionSelectingModal(optionDetailToOpen, idx) {
       const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
       const toShow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
       const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
@@ -536,6 +678,14 @@ export default {
       toDrawBorder.classList.add('option-selected')
       toHide.style.display = "none"
       toShow.style.display = "flex"
+
+      // 선택한 옵션이 결제정보로 넘어가야 한다
+      this.serviceInfo.adultprice = this.options[idx].adult.cost
+      this.serviceInfo.seniorprice = this.options[idx].senior.cost
+      this.serviceInfo.childprice = this.options[idx].child.cost
+      this.serviceInfo.infantprice = this.options[idx].infant.cost
+      this.serviceInfo.itemName = this.options[idx].list__tile__title
+      console.log(this.serviceInfo)
 
     },
     setPaymentReady() {
