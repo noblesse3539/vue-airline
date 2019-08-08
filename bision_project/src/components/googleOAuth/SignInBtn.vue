@@ -39,8 +39,9 @@ export default {
           isGuide: false,
           welcomeMessage: '가이드이신가요?',
 
-          apiLoginUrl: 'http://localhost:3000/api/auth/google/user/',
-          apiGuideLoginUrl : "http://localhost:3000/api/auth/google/guide/",
+          apiLoginUrl: 'http://localhost:3000/api/auth/google/user/?return=',
+          apiGuideLoginUrl : "http://localhost:3000/api/auth/google/guide/?return=",
+
         }
     },
     updated() {
@@ -63,11 +64,14 @@ export default {
           }
       },
         doLogin() {
+          let curentURL = window.location.href
+          curentURL = curentURL.split('&').join('%26')
+
             if (this.isGuide) {
-                window.location.href = this.apiGuideLoginUrl
-              } else {
-                window.location.href ="http://localhost:3000/api/auth/google/user/"
-              }
+                window.location.href = this.apiGuideLoginUrl + curentURL
+            } else {
+              window.location.href =this.apiLoginUrl + curentURL
+            }     
         },
         checkUserLoginStatus: function() {
       const token = this.$getToken("BisionToken");

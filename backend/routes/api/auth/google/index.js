@@ -3,16 +3,27 @@ const router = express.Router()
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 
+const saveRedirectUrl = (req, res, next) => {
+    if (req.query.return) {
+        let returnURL = req.query.return
+        returnURL = returnURL.split('%26').join('&')
+        req.session.oauth2return = returnURL
+    }
+    next()
+}
 // router.get('/', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }))
-router.get('/user', passport.authenticate('googleUser', { scope: ['profile', 'email'] }))
+router.get('/user', saveRedirectUrl, passport.authenticate('googleUser', { scope: ['profile', 'email'] }))
 
-router.get('/guide', passport.authenticate('googleGuide', { scope: ['profile', 'email'] }))
+router.get('/guide', saveRedirectUrl, passport.authenticate('googleGuide', { scope: ['profile', 'email'] }))
 
 router.get(
     '/callback',
     passport.authenticate('googleUser', { failureRedirect: '/', session: false}),
     (req, res) => {
-        
+        const returnUrl = req.session.oauth2return || '/'
+        console.log('&&&&&&&&&&&')
+        console.log(returnUrl)
+        console.log('&&&&&&&&&&&')
         jwt.sign(
             {
                 _id: req.user._id,
@@ -33,7 +44,8 @@ router.get(
                     console.log('토큰 생성 실패: ', err)
                     res.redirect('http://localhost:8080')
                 }
-                res.redirect('http://localhost:8080?token='+token)
+                res.cookie('BisionToken', token, { maxAge: 3600* 1000 * 3})
+                res.redirect(returnUrl)
             }
         )
         // loginSuccessHandler(req, res)
@@ -43,7 +55,10 @@ router.get(
     '/callback-guide',
     passport.authenticate('googleGuide', { failureRedirect: '/', session: false}),
     (req, res) => {
-        
+        const returnUrl = req.session.oauth2return || '/'
+        console.log('&&&&&&&&&&&')
+        console.log(returnUrl)
+        console.log('&&&&&&&&&&&')
         jwt.sign(
             {
                 _id: req.user._id,
@@ -64,7 +79,8 @@ router.get(
                     console.log('토큰 생성 실패: ', err)
                     res.redirect('http://localhost:8080')
                 }
-                res.redirect('http://localhost:8080?token='+token)
+                res.cookie('BisionToken', token, { maxAge: 3600* 1000 * 3})
+                res.redirect(returnUrl)
             }
         )
         // loginSuccessHandler(req, res)

@@ -37,9 +37,14 @@
                                     class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
             </span>
-            <router-link v-if="getIsLoggedIn == false" to="/" class="hvr-underline-from-center">
+
+            <div v-if="getIsLoggedIn == false" class="hvr-underline-from-center">
                 <span class="loginBtn" @click="open()">로그인 🌴</span>
-            </router-link>
+            </div>
+
+            <!-- <router-link v-if="getIsLoggedIn == false" :to="getCurrentUrl" class="hvr-underline-from-center">
+                <span class="loginBtn" @click="open()">로그인 🌴</span>
+            </router-link> -->
             <!-- 로그인 됐을 경우에만 보여줄 것 -->
         </div>
         <v-layout wrap style="height: 100vh; width: 70%; right: 0;"  id="nav-right-collapsed">
@@ -146,6 +151,9 @@ export default {
         closeModal() {
             this.modal = false
         },
+        getCurrentUrl() {
+            return window.location.href
+        }
     },
     computed: {
         ...mapState({
