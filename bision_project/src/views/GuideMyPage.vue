@@ -58,13 +58,15 @@
         </v-flex>
       </v-layout>
       <!-- 현재 수익 -->
-        <div class="gs-money-made">
+        <div class="gs-money-made" v-if="guideId == getUserId">
           <div style="display: flex;">
-            <span style="font-size: 2vw;">$</span>
-            <span style="font-size: 5vw; font-weight: 1000;">2000</span>
+            <span style="font-size: 2vw;">₩</span>
+            <span style="font-size: 100%; font-weight: 1000;">{{profit}}</span>
           </div>
-          <div style="font-size: 1.3vw;">
-            {{monthList[thisMonth]}}
+          <div>
+            <div style="font-size: 50%;">
+              {{monthList[thisMonth]}}
+            </div>
           </div>
         </div>
     </div>
@@ -72,7 +74,7 @@
     <v-container>    
     <!-- tab 영역 -->
     <v-sheet color="white" class="tab-section" >
-      <v-tabs slider-color="#45CE30" color="white" fixed-tabs>
+      <v-tabs slider-color="rgba(0, 151, 132, 1)" color="white" fixed-tabs>
         <v-tab key="Now" class="tab-name">Dashboard</v-tab>
         <v-tab key="ALL" class="tab-name" >ALL SERVICES</v-tab>
         <v-tab key="RESERVATION" class="tab-name"  v-if="guideId == getUserId">RESERVATION</v-tab>
@@ -177,8 +179,9 @@
           <div class="gs-ALL-container">
             <div class="gs-ALL-service-add-btn" 
               @click="showPW"
+              v-if="getUserId == guideId"
             >
-              <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId" >
+              <div class="gs-ALL-service-add-btn-inside" >
                 +
               </div>
               <PortfolioWrite :getGuideService="getGuideService" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
@@ -202,12 +205,20 @@
         
         <!-- Reservation -->
         <v-tab-item key="RESERVATION">
-          <div class="reservation-box">
-            <div class="reservation-collapsible-box" @click="openCollapsible()">
+          <div class="reservation-box" v-for="(payment, idx) in paymentList" v-if="payment.userInfo" :key="idx">
+            <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
+              <div :class="`reserve-user-face-${idx} reserve-user-face`">
+                <!-- {{payment}} -->
+                <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+              </div>
+              <div class="reserve-user-pick-service">{{payment.payment.service.title}}<br>
+                {{payment.payment.created_at.slice(0, 10)}}
+              </div>
+              <div class="reserve-user-pick-price"></div>
             </div>
-            <div class="res-collapsible-inside">
+            <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
               <p>
-                오오오오오오오오옹오오오오오오옹
+                
               </p>
             </div>
           </div>
@@ -403,31 +414,70 @@ export default {
     getPaymentsByGuide(guideId) {
       this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
         .then( res => {
-          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-          console.log(res.data)
-          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+          // console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+          // console.log(res.data)
+          // console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
           const payments = res.data.payments
           payments.forEach( payment => {
             const temp = {}
+
+            // this입니다. temp아닙니다!
+        
             temp.title = payment.service.title
             temp.date  = payment.service.date
             temp.textColor = 'red'
             temp.backgroundColor = '#1e90ff'
             temp.url   = payment.service._id   // 해당 결제 상품의 고유 id값
             this.events.push(temp)
+            this.profit += parseInt(payment.service.totalAmount)
+
           })
 
+          // 3자리 이상 수 일시에 쉼표로 구분해주기
+          let newProfit = ''
+          if (this.profit.toString().length >= 3) {
+            const oldProfit = this.profit.toString()
+            
+            for (let i = 0; i < oldProfit.length; i++) {
+              
+              newProfit += oldProfit[oldProfit.length - 1 - i] 
+              if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
+                newProfit += ','
+              } 
+              
+            }
+          }
+          let reversedProfit = newProfit.split("").reverse().join("")
+          this.profit = reversedProfit
+
+          return res.data.payments
+        })
+        .then( (payments) => {
+          
+          payments.forEach( payment => {
+            const temp   = {} 
+            const userId = payment.user
+            // console.log(userId)
+            this.$http.get(`/api/user/search/${userId}`)
+              .then( res => {
+                temp.payment = payment
+                temp.userInfo = res.data.user
+                this.paymentList.push(temp)
+              })
+            
+          })
+          console.log(this.paymentList)
         })
         .catch( err=> {
           console.log(err)
         })
     },
 
-    openCollapsible() {
-      const collapsible = document.querySelector(".reservation-collapsible-box")
+    openCollapsible(idx) {
+      const collapsible = document.querySelector(`.reservation-collapsible-box-${idx}`)
       const content = collapsible.nextElementSibling
-      console.log(content)
+      // console.log(collapsible)
       if (content.style.maxHeight) {
         content.style.maxHeight = null
       } else {
@@ -439,8 +489,11 @@ export default {
   data (){
     return{
 
+      // 결제 내역
+      paymentList: [],
+
       // 이번 달 수익 관련 변수
-      profit: '',
+      profit: 0,
       thisMonth: new Date().getMonth(),
       monthList: ['January', 'February', 'March', 'April', 'March', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
@@ -489,7 +542,8 @@ export default {
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
-    this.getPaymentsByGuide(this.guideId)    
+    this.getPaymentsByGuide(this.guideId)   
+
 
   },
   updaetd() {

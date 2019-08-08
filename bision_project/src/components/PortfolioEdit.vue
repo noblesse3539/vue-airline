@@ -5,14 +5,14 @@
          <v-btn icon dark @click="checkClose">
            <v-icon>close</v-icon>
          </v-btn>
-         <v-toolbar-title>{{this.title}} 수정하기다</v-toolbar-title>
+         <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
            <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기</v-btn>
            <v-btn dark flat v-else  @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>
-
+        
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
