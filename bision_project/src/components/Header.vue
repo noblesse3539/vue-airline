@@ -145,7 +145,7 @@ export default {
             logoutBtn.style.display = "none"
             const mypageBtn = document.querySelector('.mypageBtn')
             mypageBtn.style.display = "none"
-
+            this.$http.defaults.headers.common["x-access-token"] = null
             window.location.replace("/");
         },
         closeModal() {
