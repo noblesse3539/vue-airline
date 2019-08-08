@@ -8,7 +8,7 @@
          <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
-           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기</v-btn>
+           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기 {{isProps()}}</v-btn>
            <v-btn dark flat v-else  @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>

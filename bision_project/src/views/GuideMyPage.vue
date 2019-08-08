@@ -115,7 +115,7 @@
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
-                        @click="deleteGuideService(service)"
+                        @click="showPW"
                       >
                         삭제하기
                       </button>
@@ -127,7 +127,7 @@
                       >
                         수정하기
                       </button>
-                      <PortfolioWrite :getGuideService="getGuideService" :serviceInfo="serviceInfoProp" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+                      <PortfolioEdit :getGuideService="getGuideService" :serviceInfoFuck="serviceInfoProp" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioEdit>
                       <!-- 수정 시 Portfoliowrite 컴포넌트에 props 넘겨줍니다. -->
                       <!-- <PortfolioWrite class="`portfilo-write-${idx}`" :serviceInfo="guideServices[idx]" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite> -->
                       <button
@@ -181,7 +181,8 @@
               <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId" >
                 +
               </div>
-              <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+              <PortfolioWrite :getGuideService="getGuideService" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+            
             </div>
             <div class="gs-ALL-service-card" v-for="(service, idx) in guideServices" :key="idx">
               <div class="gs-ALL-service-card-bg">
@@ -198,7 +199,7 @@
             </div>
           </div>
         </v-tab-item>
-
+        
         <!-- Reservation -->
         <v-tab-item key="RESERVATION">
           <div class="reservation-box">
@@ -223,6 +224,7 @@
 import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
+import PortfolioEdit from '../components/PortfolioEdit'
 import Weather from '../components/Weather'
 import GuideCalendar from '../components/GuideCalendar'
 import './GuideMyPage.css'
@@ -233,6 +235,7 @@ export default {
     UploadImg,
     UploadImgModal,
     PortfolioWrite,
+    PortfolioEdit,
     Weather,
     GuideCalendar,
   },
@@ -291,8 +294,8 @@ export default {
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
-      this.isPWVisible = true;
       this.serviceInfoProp = {}
+      this.isPWVisible = true;
     },
     showPWEdit() {
       const navBarZIndex = document.querySelector('#navbox')
@@ -303,13 +306,13 @@ export default {
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
-      this.isPWVisible = true;
+      this.isPWEditVisible = true;
     },
     closePW(){
       document.documentElement.style.overflow='scroll';
       document.body.scroll="yes";
       this.isPWVisible = false;
-      // this.isPWEditVisible = false;
+      this.isPWEditVisible = false;
     },
     updateIntro() {
       const guideId = this.getUserId
@@ -371,12 +374,20 @@ export default {
     },
 
     editGuideService(service) {
-      console.log("------------------------------")
-      console.log(service)
-      console.log("------------------------------")
       this.serviceInfoProp = service
-      console.log(this.serviceInfoProp)
-      this.showPWEdit()
+      const navBarZIndex = document.querySelector('#navbox')
+
+      const footerZIndex = document.querySelector('#footer')
+      footerZIndex.style.zIndex = 0;
+
+      navBarZIndex.style.zIndex = 0;
+      document.documentElement.style.overflow='hidden';
+      document.body.scroll="no";
+
+      this.serviceInfoProp = service
+      this.isPWEditVisible = true;
+      // this.showPWEdit()
+
     },
     deleteGuideService(service) {
       alert("정말 삭제하시겠어요?")
@@ -437,7 +448,7 @@ export default {
       events: [],
       
       // 가이드 상품 수정시 넘겨줄 props 객체
-      serviceInfoProp : {},
+      serviceInfoProp : { 'fuck' : 'fuck you jmotherfucker'},
 
       guideName: '',
       rating: 1,
