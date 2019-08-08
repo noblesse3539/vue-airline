@@ -14,7 +14,7 @@
                 </span> -->
               </div>
             </div>
-            <biutton class="closeBtn" @click="close()">&#x2716;</biutton>
+            <button class="closeBtn" @click="close()">&#x2716;</button>
             <div class="user-modal">
                 
               <!--
