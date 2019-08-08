@@ -59,9 +59,13 @@
       </v-layout>
       <!-- 현재 수익 -->
         <div class="gs-money-made">
-          <span style="font-size: 1.25vw; margin-right: 5px;">$</span>
-          {{thisMonth}}
-          2000
+          <div style="display: flex;">
+            <span style="font-size: 2vw;">$</span>
+            <span style="font-size: 5vw; font-weight: 1000;">2000</span>
+          </div>
+          <div style="font-size: 1.3vw;">
+            {{monthList[thisMonth]}}
+          </div>
         </div>
     </div>
 
@@ -427,6 +431,7 @@ export default {
       // 이번 달 수익 관련 변수
       profit: '',
       thisMonth: new Date().getMonth(),
+      monthList: ['January', 'February', 'March', 'April', 'March', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
       // calendar로 넘겨줄 events 리스트
       events: [],

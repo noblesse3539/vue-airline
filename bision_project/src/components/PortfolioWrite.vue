@@ -574,7 +574,7 @@ export default {
     },
     isProps() {
       if (this.$props.serviceInfo !== undefined) {
-
+        console.log( function(){this.$props.serviceInfo ? true : false}() )
         console.log("ok")
         return true
       } else {
