@@ -738,7 +738,7 @@ export default {
         this.$http.post('/api/guideservice/create', this.tourProgram)
           .then( res => {
             console.log(res.status)
-            this.$props.getGuideService
+            this.$props.getGuideService()
           })
 
       // 수정 요청
@@ -749,6 +749,8 @@ export default {
         const newProgram = this.tourProgram
         delete newProgram.guide
         delete newProgram.options
+        delete newProgram.reviews
+        delete newProgram.tags
         this.$http.put(`/api/guideservice/update/${this.$props.serviceInfo._id}`, newProgram)
           .then( res => {
             console.log("fuck yeah")

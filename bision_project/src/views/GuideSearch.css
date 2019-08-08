@@ -81,7 +81,7 @@
     font-weight: 1000;
     color: white;
     text-transform: uppercase;
-    background: linear-gradient(to right, white 0%, #35c235 30% );
+    background: linear-gradient(to right, white 0%, rgba(0, 171, 132, 1) 30% );
     -webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
@@ -122,7 +122,7 @@
     border-radius: 10px;
     font-size: 1.74rem;
     font-weight: 1000;
-    background: #35c235;
+    background: rgba(0, 171, 132, 1);
     color: white;
     -webkit-box-shadow: 0 8px 6px -6px light;
 	-moz-box-shadow: 0 8px 6px -6px black;

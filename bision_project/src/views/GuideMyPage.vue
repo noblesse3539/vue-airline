@@ -1,81 +1,86 @@
 <template>
   <div class="guidepage" v-if="getIsLoggedIn">
-    <v-container>
 
-    <!-- Profile 영역 -->
-    <v-layout xs12 my-5 mx-5 align-center>
+    <div class="gs-profile-hero-curtain"></div>
+    <div class="gs-profile-hero">
+      <!-- Profile 영역 -->
+      <v-layout mx-5 class="gs-profile-hero-left">
 
-      <!-- ProfileImg -->
-      <v-flex xs3 mr-5>
-        
-        <!-- if: 본인 아닐 때 -->
-        <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
-
-        <!-- else: 본인 일 때 -->
-          <v-hover>
-            <v-img fluid style="border-radius: 50%;"  @click="showIU" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
-              <v-fade-transition>
-                <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
-                    <!-- 이미지 변경 -->
-                </div>
-              </v-fade-transition>
-            </v-img>
-          </v-hover>
-          <UploadImgModal v-model="imgurl" v-if="isIUVisible" @close="closeIU"/>
-        <!-- else 끝 -->
-      </v-flex>
-
-      <!-- Introduction -->
-      <v-flex xs6 class="gs-guidename-box">
-        <!-- <div class="guide-country-flag">
-          <img src="" alt="">
-        </div> -->
-        <h2 class="display-1 mb-3">
-          <span class="gs-guidename">
-            {{guideName}}</span>
+        <!-- ProfileImg -->
+        <v-flex xs3 mr-5>
           
-          <!-- v-if: 본인일 때 -->
-          <v-tooltip right v-if="guideId == getUserId">
-            <template v-slot:activator="{ on }">
-              <v-btn @click="showET" v-on="on" flat icon fab color="indigo" class="gs-edit-btn">
-                <v-icon>edit</v-icon>
-              </v-btn>
-            </template>
-            <span>내 소개 수정하기</span>
-          </v-tooltip>
+          <!-- if: 본인 아닐 때 -->
+          <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
 
-          <form v-if="isETVisible">
-            <v-textarea class="my-intro" clearable v-model = "introTemp" label="내 소개 수정" :value="introTemp"></v-textarea>
-            <!-- intro 데이터에 수정여부 추가 -->
-            <v-btn @click="doneET">submit</v-btn>
-            <v-btn @click="cancelET">cancel</v-btn>
-          </form>
-          <!--  -->
-        </h2>
+          <!-- else: 본인 일 때 -->
+            <v-hover>
+              <v-img fluid style="border-radius: 50%;"  @click="showIU" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
+                <v-fade-transition>
+                  <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
+                      <!-- 이미지 변경 -->
+                  </div>
+                </v-fade-transition>
+              </v-img>
+            </v-hover>
+            <UploadImgModal v-model="imgurl" v-if="isIUVisible" @close="closeIU"/>
+          <!-- else 끝 -->
+        </v-flex>
 
-        <p v-show="!isETVisible" class="title"> {{intro}}</p>
-      </v-flex>
+        <!-- Introduction -->
+        <v-flex xs12 class="gs-guidename-box">
+          <!-- <div class="guide-country-flag">
+            <img src="" alt="">
+          </div> -->
+          <h2 class="display-1 mb-3">
+            <span class="gs-guidename">
+              {{guideName}}</span>
+            
+            <!-- v-if: 본인일 때 -->
+            <v-tooltip right v-if="guideId == getUserId">
+              <template v-slot:activator="{ on }">
+                <v-btn @click="showET" v-on="on" flat icon fab color="indigo" class="gs-edit-btn">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+              </template>
+              <span>내 소개 수정하기</span>
+            </v-tooltip>
 
-      <!--v-if 본인이면 -->
-      <!-- <v-flex xs3 >
-        <v-btn color="white">회원 탈퇴</v-btn>
-      </v-flex> -->
-    </v-layout>
-    
+            <form v-if="isETVisible">
+              <v-textarea class="my-intro" clearable v-model = "introTemp" label="내 소개 수정" :value="introTemp"></v-textarea>
+              <!-- intro 데이터에 수정여부 추가 -->
+              <v-btn @click="doneET">submit</v-btn>
+              <v-btn @click="cancelET">cancel</v-btn>
+            </form>
+            <!--  -->
+          </h2>
+
+          <p v-show="!isETVisible" class="title"> {{intro}}</p>
+        </v-flex>
+      </v-layout>
+      <!-- 현재 수익 -->
+        <div class="gs-money-made">
+          <span style="font-size: 1.25vw; margin-right: 5px;">$</span>
+          {{thisMonth}}
+          2000
+        </div>
+    </div>
+
+    <v-container>    
     <!-- tab 영역 -->
     <v-sheet color="white" class="tab-section" >
       <v-tabs slider-color="#45CE30" color="white" fixed-tabs>
-        <v-tab key="Now" class="tab-name">Now</v-tab>
-        <v-tab key="ALL" class="tab-name" >ALL</v-tab>
-        <v-tab key="Portfolio" class="tab-name" >RESERVATION</v-tab>
+        <v-tab key="Now" class="tab-name">Dashboard</v-tab>
+        <v-tab key="ALL" class="tab-name" >ALL SERVICES</v-tab>
+        <v-tab key="RESERVATION" class="tab-name"  v-if="guideId == getUserId">RESERVATION</v-tab>
         
-        <!-- 현재 상품 -->
+        <!-- Dashboard -->
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
+            <h1 class="gs-guidemypage-section-divider">현재 진행중인 상품</h1>
             <v-card flat v-for="(service, idx) in guideServices" :key="idx">
               <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
-              <v-layout mt-4 class="gs-mypage-service-box"
-              
+              <v-layout mb-4 class="gs-mypage-service-box"
+                
               >
               <v-img class="gs-mypage-service-bg" :src="service.mainImg">
               </v-img>
@@ -157,9 +162,11 @@
              </v-list>
 
           </v-flex>
+          <h1 class="gs-guidemypage-section-divider">예약 일정</h1>
+          <GuideCalendar :events="events"></GuideCalendar>
         </v-tab-item>
 
-        <!-- Portfolio tab item -->
+        <!-- ALL -->
         <v-tab-item key="ALL">
           <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
           
@@ -184,48 +191,24 @@
                   {{service.fromDate}}~{{service.toDate}}
                 </div>
               </div>
-              <!-- <div class="gs-ALL-service-card-seemore">
-                Detail
-              </div> -->
             </div>
           </div>
-        <!-- portfolio list -->
-        <!-- <v-container fluid grid-list-md mx-2> -->
-          <!-- <v-layout row wrap >
-            <v-flex mx-2 my-2 v-for="(service, idx) in guideServices" :key="idx" xs4>
-              <v-card>
-                <v-img 
-                  :src="service.mainImg"
-                  height="200px"
-                  @click="goToServiceDetail(service._id)"
-                >
-                  <v-container fill-height fluid pa-2>
-                    <v-layout fill-height>
-                      <v-flex xs12 align-end flexbox>
-                        <span class="headline white--text" v-text="service.title"></span>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-img>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>favorite</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>share</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout> -->
-        <!-- </v-container> -->
-
         </v-tab-item>
+
+        <!-- Reservation -->
+        <v-tab-item key="RESERVATION">
+          <div class="reservation-box">
+            <div class="reservation-collapsible-box" @click="openCollapsible()">
+            </div>
+            <div class="res-collapsible-inside">
+              <p>
+                오오오오오오오오옹오오오오오오옹
+              </p>
+            </div>
+          </div>
+        
+        </v-tab-item>
+
       </v-tabs>
     </v-sheet>
     </v-container>
@@ -237,6 +220,7 @@ import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
 import Weather from '../components/Weather'
+import GuideCalendar from '../components/GuideCalendar'
 import './GuideMyPage.css'
 import { mapGetters, mapState } from "vuex";
 export default {
@@ -246,6 +230,7 @@ export default {
     UploadImgModal,
     PortfolioWrite,
     Weather,
+    GuideCalendar,
   },
   props: ['guideId'],
   methods: {
@@ -399,21 +384,53 @@ export default {
         })
     },
 
+    // 가이드 결제 내역 
     getPaymentsByGuide(guideId) {
       this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
         .then( res => {
           console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
           console.log(res.data)
           console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+
+          const payments = res.data.payments
+          payments.forEach( payment => {
+            const temp = {}
+            temp.title = payment.service.title
+            temp.date  = payment.service.date
+            temp.textColor = 'red'
+            temp.backgroundColor = '#1e90ff'
+            temp.url   = payment.service._id   // 해당 결제 상품의 고유 id값
+            this.events.push(temp)
+          })
+
         })
         .catch( err=> {
           console.log(err)
         })
-    }
+    },
+
+    openCollapsible() {
+      const collapsible = document.querySelector(".reservation-collapsible-box")
+      const content = collapsible.nextElementSibling
+      console.log(content)
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px'
+      }
+
+    },
   },
   data (){
     return{
 
+      // 이번 달 수익 관련 변수
+      profit: '',
+      thisMonth: new Date().getMonth(),
+
+      // calendar로 넘겨줄 events 리스트
+      events: [],
+      
       // 가이드 상품 수정시 넘겨줄 props 객체
       serviceInfoProp : {},
 
@@ -456,7 +473,8 @@ export default {
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
-    this.getPaymentsByGuide(this.guideId)
+    this.getPaymentsByGuide(this.guideId)    
+
   },
   updaetd() {
   },

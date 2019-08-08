@@ -45,7 +45,7 @@
     padding-bottom: 50px;
     position: relative;
     padding-left: 13.5%;
-    background: linear-gradient(to bottom, #45CE30, #A9F36A, #f7f7f7);
+    background: linear-gradient(to bottom, rgba(0, 171, 132, 1), rgba(0, 171, 132, 0.5), #f7f7f7);
 }
 
 .result-body {

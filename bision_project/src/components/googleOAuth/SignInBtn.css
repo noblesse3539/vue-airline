@@ -1,51 +1,7 @@
-.toggle {
-    position: absolute;
-    width: 100px;
-    height: 20px;
-    top: 30%;
-    right: 25%;
-    border-radius: 0.5em;
-    border: 0.015em solid #9f9f9f;
-    background-image: linear-gradient(#f2f2f2, #fff, #f2f2f2);
-    /* margin: 0.26em 0.15em; */
-    cursor: pointer;
-    filter: drop-shadow(0.015em 0.015em 0.01em rgba(0, 0, 0, 0.3))
-}
 
-.toggle-btn::after {
-    position: relative;
-    top: -4rem;
-    left: -2rem;
-    width: 100%;
-    font-size: 5rem;
-    /* text-align: center; */
-    transition: all 500ms cubic-bezier(0.34, 0.78, 0.55, 1.4);
-}
-
-.toggle-checkbox {
-    position: absolute;
-    visibility: hidden;
-}
-
-.toggle-checkbox:checked + .toggle-btn::after {
-    left: 100%;
-}
-
-
-.toggle-checkbox:checked + .toggle-btn::after {
-    left: 50%;
-}
-
-.takeoff-land .toggle-btn::after {
-    content: '🛫';
-}
-
-.takeoff-land .toggle-checkbox:checked + .toggle-btn::after {
-    content: '🛬';
-}
 
 .login-boxbox {
-    display: flex;
+    /* display: flex; */
     /* flex-direction: column; */
     color: black;
 }
@@ -53,7 +9,7 @@
 .login-boxbox > p {
     position: absolute;
     top: 35%;
-    right: 20%;
+    /* right: 20%; */
     font-size: 1.25rem;
     font-weight: 600;
     /* width: 50% !important; */
@@ -74,5 +30,5 @@
 }
 
 .v-input--selection-controls__input > label {
-    font-size: 2rem !important;
+    /* font-size: 2rem !important; */
 }

@@ -157,7 +157,7 @@ input {
     height: 64px;
     width: 80%;
     margin-left: auto;
-    background-color: #35c235;
+    background-color: rgba(0, 171, 132, 1);;
     font-size: 1.74rem;
     font-weight: bold;
     border-top-left-radius: 10px;
@@ -167,7 +167,7 @@ input {
 }
 
 .flight-search-submit > button:hover {
-    background-color: rgba(47, 250, 62, 0.5);
+    background-color: rgba(0, 171, 132, 0.5);
 }
 
 .dep-triangle-box {

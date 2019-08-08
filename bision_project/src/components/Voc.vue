@@ -46,9 +46,23 @@ export default {
       this.content = ''
     },
     submitVOC() {
-
-      this.clearVOC()
-      this.isVocVisible=false
+      const token = this.$getToken("BisionToken")
+      const config = {
+        headers: { 'x-access-token': token }
+      }
+      const data = {
+        subject: this.selectedSubject,
+        content: this.content
+      }
+      this.$http.post('/api/voc/create', data, config)
+        .then( res => {
+          console.log(res)
+          this.clearVOC()
+          this.isVocVisible=false
+        })
+        .catch( err => {
+          console.log(err)
+        })
     }
 
   }
