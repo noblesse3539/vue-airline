@@ -91,7 +91,7 @@ export default {
           this.$emit('close',  res.data.data.link)
 
         }).catch(err=>{
-          this.imgurErr = true
+          alert('잠시 후 다시 시도해주세요')
           console.log(err)
         })
       }

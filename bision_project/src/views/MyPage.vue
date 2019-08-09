@@ -7,12 +7,12 @@
     <div class="user-profileinfo">
       <div class="user-imagebox">
         <div @click="openImgModal" class="user-image" :style="{ 'background' : 'url(' + userImage + ')'}"></div>
-        <p class="user-image__modifier" @click="openImgModal">사진 수정하기</p>
+        <!-- <p class="user-image__modifier" @click="openImgModal">사진 수정하기</p> -->
       </div>
       <div class="user-infobox">
         <p style="font-size: 3rem; font-weight: 1000; margin-bottom: 0.5rem;">안녕하세요, {{userName}}입니다.</p>
         <p class="user-metainfo">
-          가입일: 2019 · <span class="user-metainfo__modifier" @click="showUserInfoModifier">회원정보 수정하기</span>
+          가입일: 2019 &nbsp; <span class="user-metainfo__modifier" @click="showUserInfoModifier">&nbsp;소개수정&nbsp;<i class="fas fa-user-edit"></i></span>
         </p>
 
         <!-- 사용자 정보 -->
@@ -20,13 +20,13 @@
           <p class="user-quote-symbol">“</p>
           <p class="user-description">{{userIntro}}</p>
           <div class="user-line__section-divider"><div class="divider"></div></div>
-          <p class="user-langauge">
+          <!-- <p class="user-langauge">
             <i class="fas fa-language"></i>
               구사 언어:
               <span v-for=" (language, idx) in userLanguage" :key="idx">
                 {{language}}
               </span>
-          </p>
+          </p> -->
         </div>
 
         <!-- 사용자 정보 수정 섹션 -->
@@ -35,12 +35,12 @@
             <label for="user-intro">소개</label>
             <input type="text" id="userIntro"  v-model="userIntro" autofocus>
           </div>
-          <div class="user-language-box">
+          <!-- <div class="user-language-box">
             <label for="userLanguage">구사 언어</label>
             <input type="text" id="userLangauge" v-model="userLanguage">
-          </div>
+          </div> -->
           <div class="user-info-button-box">
-            <button @click="updateUserInfo">수정하기</button>
+            <button  @click="updateUserInfo">수정</button>
             <button @click="closeUserInfoModifier">취소</button>
           </div>
         </div>
@@ -58,20 +58,50 @@
       :options="swiperOption"
       ref="mySwiper"
     >
+    <div class="myTourExperience-empty GSSearchBtn" v-if="!currentGuideServices.length" @click="linktoGS"><div>Bision과 함께 여행하기</div></div>
       <!-- slides -->
       <swiper-slide class="myProduct"
-        v-for="(guideService, id) in currentGuideServices"
+        v-for="(guideService, idx) in currentGuideServices"
         :key="id"
       >
-        <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
           <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
+        </div>
+      </swiper-slide>
+      <!-- Optional controls -->
+      <div class="swiper-pagination"  slot="pagination"></div>
+      <div class="swiper-button-prev" slot="button-prev">
+        <svg viewBox="0 0 18 18" role="img" aria-label="이전" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m13.7 16.29a1 1 0 1 1 -1.42 1.41l-8-8a1 1 0 0 1 0-1.41l8-8a1 1 0 1 1 1.42 1.41l-7.29 7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+      <div class="swiper-button-next" slot="button-next">
+        <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+    </swiper>
 
-<!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
+    <!-- 찜한 상품 -->
+    <h2 style="margin-top: 5rem; margin-bottom: 24px;">내가 찜한 상품</h2>
+    <swiper
+      :options="swiperOption"
+      ref="mySwiper" >
+      <div class="myTourExperience-empty GSSearchBtn" v-if="!likedGuideServices.length" @click="linktoGS"><div>Bision상품 둘러보기</div></div>
+      <!-- slides -->
+      <swiper-slide class="myProduct"
+        v-for="(guideService, idx) in likedGuideServices"
+        :key="id">
+        <img click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
+        <div class="myTourExperience-description">
+
+          <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.title}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{guideService.date}}</p> -->
+          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
+          <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
         </div>
       </swiper-slide>
       <!-- Optional controls -->
@@ -85,22 +115,24 @@
     </swiper>
 
     <!-- 내가 이용했던 가이드 상품 -->
-    <h2 style="margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
+    <h2 style="margin-top: 5rem; margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
 
     <!-- Swiper -->
     <swiper
       :options="swiperOption"
       ref="mySwiper"
     >
+    <div class="myTourExperience-empty" v-if="!usedGuideServices.length"><div>아직 여행한 상품이 없어요</div></div>
       <!-- slides -->
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in usedGuideServices"
         :key="idx">
-        <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
+          <p v-if="!guideService.service.date" style="font-size: 1.25rem;">&nbsp;</p>
           <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
@@ -197,6 +229,7 @@
     },
     data: function () {
       return {
+        likedGuideServices: [],
         isMyReviewVisible: false,
         paymentId:'',
         reviews: {},
@@ -253,6 +286,22 @@
       }
     },
     methods: {
+      goToDetail(GS) {
+        console.log(GS.service)
+        console.log(GS.guideServiceId)
+        const query = {serviceId: GS.guideServiceId}
+        this.$router.push({name: 'GuideServiceDetailPage', query: query})
+      },
+      linktoGS() {
+        this.$router.push({name: 'GuideSearch'})
+      },
+      dislike(idx){
+        this.$http.post(`/api/guideservice/${this.likedGuideServices[idx]._id}/${this.userId}`)
+        .then( res => {
+          this.likedGuideServices.splice(idx, 1)
+          console.log(res.data)
+        })
+      },
       showMyReview(idx){
         this.paymentId = this.usedGuideServices[idx].paymentId
         this.isMyReviewVisible = PMid
@@ -365,6 +414,7 @@
         this.isImgModalOpen = false
         if(imgUrl) {
           this.userImage = imgUrl
+          console.log("이미지", imgUrl)
           this.updateUserInfo()
         }
       },
@@ -391,6 +441,7 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
+            console.log("userInfo",res.data.userInfo)
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
@@ -412,15 +463,16 @@
             }
             console.log("usedGuideServices", this.usedGuideServices)
 
-
-            // this.currentGuideServices = res.data.paymentRecords.filter( record => {
-            //   console.log("여기", record.service.date)
-            //   return record.service.date >= today
-            // })
-            //
-            // this.usedGuideServices = res.data.paymentRecords.filter( record => {
-            //   return record.service.date < today
-            // })
+            for(var liked of res.data.userInfo.likeGuideServices){
+              console.log("좋아", liked)
+              this.$http.get('/api/guideservice/findGSById/'+liked)
+              .then( res => {
+                this.likedGuideServices.push(res.data)
+              }).catch(err => {
+                console.log("찜데이터 에러", err)
+              })
+            }
+            console.log("찜데이터", this.likedGuideServices)
             this.userInfo = res.data.userInfo
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
@@ -459,11 +511,11 @@
         const data = {
             'intro' : this.userIntro,
             'languages' : this.userLanguage,
-            'profileImg' : this.userImage,
+            'profileImageUrl' : this.userImage,
         }
         this.$http.put('/api/user/username', data, config)
           .then( res => {
-            // console.log(res)
+            console.log("유저인포 업뎃!!!", res)
           })
           .catch( err => {
             console.log(err)
