@@ -433,3 +433,32 @@ width: 100%;
 .res-collap-inside-box-content {
   padding: 20px;
 }
+
+.res-collap-table th, .res-collap-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 15px !important; 
+}
+
+.res-collap-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+
+.res-h2 { 
+  margin-bottom: 10px;
+  /* padding-bottom: 10px; */
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.25); */
+}
+
+.res-price-divider {
+  margin: 25px 0;
+  background: rgba(0, 171, 132, 0.74);
+  border: 1px solid rgba(0, 171, 132, 0.74);
+}
+
+.res-total-price {
+  display: flex;
+  justify-content: space-between;
+}

@@ -230,7 +230,7 @@
                   예약날짜: {{payment.payment.created_at.slice(0, 10)}}
                 </div>
                 <div class="reserve-user-pick-price">
-                  ₩ {{payment.payment.service.totalAmount}}
+                  ₩ {{separateDigit(payment.payment.service.totalAmount)}}
                 </div>
               </div>
               <div class="reverse-guide-to-push-down"></div>
@@ -238,26 +238,63 @@
             <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
               <div class="res-collap-inside-box">
                 <div class="res-collap-inside-box-content">
-                  <div>상품명: {{payment.payment.service.title}}</div>
-                  <div>날짜: {{payment.payment.service.date}}</div>
+                  <div>
+                    <h2 class="res-h2">상품명</h2>
+                    {{payment.payment.service.title}}
+                  </div>
+                  <div>
+                    <h2 class="res-h2">날짜</h2>
+                    {{payment.payment.service.date}}
+                  </div>
                   <div class="res-collap-inside-peoople">
-                    인원: 
-                    <table>
+                    <h2 class="res-h2">결제 금액</h2>
+                    <table class="res-collap-table">
                       <tr>
-                        <th>성인</th>
-                        <th>아동</th>
-                        <th>유아</th>
-                        <th>노인</th>
+                        <th>구분</th>
+                        <th>1인당 가격</th>
+                        <th>인원</th>
+                        <th>금액</th>
                       </tr>
                       <tr>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
+                        <td>성인</td>
+                        <td>{{payment.payment.service.adultprice}}</td>
+                        <td>{{payment.payment.service.adult}}</td>
+                        <td>{{payment.payment.service.adult ? separateDigit(payment.payment.service.adultprice * payment.payment.service.adult) : 0}}</td>
                       </tr>
+                      <tr>
+                        <td>아동</td>
+                        <td>{{payment.payment.service.childprice}}</td>
+                        <td>{{payment.payment.service.child}}</td>
+                        <td>{{payment.payment.service.child ? separateDigit(payment.payment.service.childprice * payment.payment.service.child) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>유아</td>
+                        <td>{{payment.payment.service.infantprice}}</td>
+                        <td>{{payment.payment.service.infant}}</td>
+                        <td>{{payment.payment.service.infant ? separateDigit(payment.payment.service.infantprice * payment.payment.service.infant) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>노인</td>
+                        <td>{{payment.payment.service.seniorprice}}</td>
+                        <td>{{payment.payment.service.senior}}</td>
+                        <td>{{payment.payment.service.senior ? separateDigit(payment.payment.service.seniorprice * payment.payment.service.senior) : 0}}</td>
+                      </tr>
+                      <!-- <tr>
+                        <td>{{payment.payment.service.adult ? payment.payment.service.adult : 0 }}명</td>
+                        <td>{{payment.payment.service.child ? payment.payment.service.child : 0}}명</td>
+                        <td>{{payment.payment.service.infant ? payment.payment.service.infant : 0}}명</td>
+                        <td>{{payment.payment.service.senior ? payment.payment.service.senior : 0}}명</td>
+                        <td>{{payment.payment.service.people}}명</td>
+                      </tr> -->
                     </table>
                   </div>
-                  <div>총 결제액: </div>
+                  <hr class="res-price-divider">
+                  <div class="res-total-price">
+                    <div style="font-size: 2vw; font-weight: 1000;">Total Price:</div>
+                    <div style="font-size: 2vw; font-weight: 1000;">
+                      ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -292,6 +329,23 @@ export default {
   },
   props: ['guideId'],
   methods: {
+    separateDigit(profit) {
+      let newProfit = ''
+      if (profit.toString().length >= 3) {
+        const oldProfit = profit.toString()
+        
+        for (let i = 0; i < oldProfit.length; i++) {
+          
+          newProfit += oldProfit[oldProfit.length - 1 - i] 
+          if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
+            newProfit += ','
+          } 
+          
+        }
+      }
+      let reversedProfit = newProfit.split("").reverse().join("")
+      return reversedProfit
+    },
     goToServiceDetail(guideServiceId) {
       console.log(guideServiceId)
       // `/user/${getuserId}`
@@ -525,6 +579,7 @@ export default {
       }
 
     },
+
   },
   data (){
     return{
@@ -575,7 +630,7 @@ export default {
       getIsLoggedIn: state => state.User.isLoggedIn,
       isFooterOpen : state => state.Footer.isFooterOpen,
       isHeaderOpen : state => state.Header.isHeaderOpen,
-    })
+    }),
   },
   mounted() {
     this.GuideDataRequest()
