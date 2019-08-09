@@ -430,6 +430,16 @@ width: 100%;
   color: green;
 }
 
+.reservation-status-cancelled {
+  width: 5%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 1000;
+  color: red;
+}
+
 .res-collap-inside-box-content {
   padding: 20px;
 }

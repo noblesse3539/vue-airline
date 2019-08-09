@@ -205,6 +205,7 @@
         
         <!-- Reservation -->
         <v-tab-item key="RESERVATION" class="reservation-box-mother">
+          <!-- 예약 내역 -->
           <div class="reservation-box" v-for="(payment, idx) in paymentList" v-if="payment.userInfo" :key="idx">
             <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
               <div class="reservation-user-payment-info-box">
@@ -244,9 +245,9 @@
                       <h2 class="res-h2" style="margin-top: 0;">상품명</h2>
                       {{payment.payment.service.title}}
                     </div>
-                    <button @click="dialog = !dialog" class="reserve-cancel-btn">예약 취소하기</button>
+                    <button @click="cancelPayment(payment.payment._id)" class="reserve-cancel-btn">예약 취소하기</button>
                   </div>
-                  <v-dialog v-model="dialog" max-width="500px">
+                  <!-- <v-dialog v-model="dialog" max-width="500px">
                     <v-card>
                       <v-card-text>
                         <v-text-field label="예약 취소 사유를 입력해주세요."></v-text-field>
@@ -257,7 +258,7 @@
                         <v-btn text color="#F44336" @click="dialog = false" style="color: white;">예약 취소 확정</v-btn>
                       </v-card-actions>
                     </v-card>
-                  </v-dialog>
+                  </v-dialog> -->
                   <div>
                     <h2 class="res-h2">날짜</h2>
                     {{payment.payment.service.date}}
@@ -315,7 +316,117 @@
               </div>
             </div>
           </div>
-        
+          <!-- 취소 내역 -->
+          <div class="reservation-box" v-for="(payment, idx) in cancelList" v-if="payment.userInfo" :key="idx">
+            <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
+              <div class="reservation-user-payment-info-box">
+                <div class="reservation-status-cancelled">
+                  CANCELLED
+                </div>
+                <!-- <div class="reservation-status-pending">
+                  PENDING
+                </div>
+                <div class="reservation-status-cancelled">
+                  CANCELELD
+                </div> -->
+                <div :class="`reserve-user-face-${idx} reserve-user-face`">
+                  <!-- {{payment}} -->
+                  <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+                </div>
+                <div class="reserve-user-name">
+                  {{payment.userInfo.nickname}}<br>
+                  {{payment.userInfo.email}}<br>
+                  
+                </div>
+                <div class="reserve-user-pick-service">
+                  {{payment.payment.service.title}}<br>
+                  결제 취소 날짜: {{payment.payment.created_at.slice(0, 10)}}
+                </div>
+                <div class="reserve-user-pick-price">
+                  ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                </div>
+              </div>
+              <div class="reverse-guide-to-push-down"></div>
+            </div>
+            <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
+              <div class="res-collap-inside-box">
+                <div class="res-collap-inside-box-content">
+                  <div style="display: flex; justify-content: space-between">
+                    <div>
+                      <h2 class="res-h2" style="margin-top: 0;">상품명</h2>
+                      {{payment.payment.service.title}}
+                    </div>
+                    <!-- <button @click="cancelPayment(payment.payment._id)" class="reserve-cancel-btn">예약 취소하기</button> -->
+                  </div>
+                  <!-- <v-dialog v-model="dialog" max-width="500px">
+                    <v-card>
+                      <v-card-text>
+                        <v-text-field label="예약 취소 사유를 입력해주세요."></v-text-field>
+                        <small class="grey--text">* 상품 등록시 설정한 판매자의 환불 정책에 따라 예약 구매자에게 일정 금액이 환불됩니다.</small>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="#F44336" @click="dialog = false" style="color: white;">예약 취소 확정</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog> -->
+                  <div>
+                    <h2 class="res-h2">날짜</h2>
+                    {{payment.payment.service.date}}
+                  </div>
+                  <div class="res-collap-inside-peoople">
+                    <h2 class="res-h2">결제 금액</h2>
+                    <table class="res-collap-table">
+                      <tr>
+                        <th>구분</th>
+                        <th>1인당 가격</th>
+                        <th>인원</th>
+                        <th>금액</th>
+                      </tr>
+                      <tr>
+                        <td>성인</td>
+                        <td>{{payment.payment.service.adultprice}}</td>
+                        <td>{{payment.payment.service.adult}}</td>
+                        <td>{{payment.payment.service.adult ? separateDigit(payment.payment.service.adultprice * payment.payment.service.adult) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>아동</td>
+                        <td>{{payment.payment.service.childprice}}</td>
+                        <td>{{payment.payment.service.child}}</td>
+                        <td>{{payment.payment.service.child ? separateDigit(payment.payment.service.childprice * payment.payment.service.child) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>유아</td>
+                        <td>{{payment.payment.service.infantprice}}</td>
+                        <td>{{payment.payment.service.infant}}</td>
+                        <td>{{payment.payment.service.infant ? separateDigit(payment.payment.service.infantprice * payment.payment.service.infant) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>노인</td>
+                        <td>{{payment.payment.service.seniorprice}}</td>
+                        <td>{{payment.payment.service.senior}}</td>
+                        <td>{{payment.payment.service.senior ? separateDigit(payment.payment.service.seniorprice * payment.payment.service.senior) : 0}}</td>
+                      </tr>
+                      <!-- <tr>
+                        <td>{{payment.payment.service.adult ? payment.payment.service.adult : 0 }}명</td>
+                        <td>{{payment.payment.service.child ? payment.payment.service.child : 0}}명</td>
+                        <td>{{payment.payment.service.infant ? payment.payment.service.infant : 0}}명</td>
+                        <td>{{payment.payment.service.senior ? payment.payment.service.senior : 0}}명</td>
+                        <td>{{payment.payment.service.people}}명</td>
+                      </tr> -->
+                    </table>
+                  </div>
+                  <hr class="res-price-divider">
+                  <div class="res-total-price">
+                    <div style="font-size: 2vw; font-weight: 1000;">Total Price:</div>
+                    <div style="font-size: 2vw; font-weight: 1000;">
+                      ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </v-tab-item>
 
       </v-tabs>
@@ -524,10 +635,11 @@ export default {
     getPaymentsByGuide(guideId) {
       this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
         .then( res => {
-          // console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-          // console.log(res.data)
-          // console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+          console.log(res.data)
+          console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
+          const cancelled = res.data.cancel
           const payments = res.data.payments
           payments.forEach( payment => {
             const temp = {}
@@ -561,11 +673,11 @@ export default {
           let reversedProfit = newProfit.split("").reverse().join("")
           this.profit = reversedProfit
 
-          return res.data.payments
+          return res.data
         })
-        .then( (payments) => {
-          
-          payments.forEach( payment => {
+        .then( (data) => {
+
+          data.payments.forEach( payment => {
             const temp   = {} 
             const userId = payment.user
             // console.log(userId)
@@ -575,12 +687,32 @@ export default {
                 temp.userInfo = res.data.user
                 this.paymentList.push(temp)
               })
-            
+
           })
-          console.log(this.paymentList)
+
+          console.log("------------segklusehgklhu")
+          console.log(this.cancelList)
+          console.log("------------segklusehgklhu")
+
         })
         .catch( err=> {
           console.log(err)
+        })
+    },
+    getGuideCancel(guideId) {
+      this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
+        .then( res => {
+          res.data.cancel.forEach( cancel => {
+            const temp = {}
+              const userId = cancel.user
+              this.$http.get(`/api/user/search/${userId}`)
+                .then( res => {
+                  console.log(res)
+                  temp.payment = cancel
+                  temp.userInfo = res.data.user
+                  this.cancelList.push(temp)
+                })
+          })
         })
     },
 
@@ -596,6 +728,13 @@ export default {
 
     },
 
+    cancelPayment(serviceId) {
+      this.$http.post(`/api/paymentstore/realcancel/${serviceId}`)
+        .then( res => {
+          console.log(res)
+        })
+    },
+
   },
   data (){
     return{
@@ -605,6 +744,7 @@ export default {
 
       // 결제 내역
       paymentList: [],
+      cancelList: [],
 
       // 이번 달 수익 관련 변수
       profit: 0,
@@ -656,7 +796,8 @@ export default {
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
-    this.getPaymentsByGuide(this.guideId)   
+    this.getPaymentsByGuide(this.guideId)
+    this.getGuideCancel(this.guideId)
 
 
   },
