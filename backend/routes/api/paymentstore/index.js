@@ -67,6 +67,7 @@ router.post('/real/:id', (req, res) => {
 router.post('/realcancle/:paymentId', (req, res) => {
     PaymentStore.findById(req.params.paymentId)
     .then( payment => {
+        if (payment.status !== '결제') return res.status(406).json({success:false, message:'결제들만 취소할 수 있습니다'})
         PaymentStore.create({
             user: payment.user,
             guide: payment.guide,
