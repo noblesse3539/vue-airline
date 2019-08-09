@@ -42,7 +42,8 @@ router.post('/real/:id', (req, res) => {
             PaymentStore.create({
                 user: new mongoose.Types.ObjectId(id),
                 guide: new mongoose.Types.ObjectId(gs.guide),
-                service:service
+                service:service,
+                status: '결제'
             })
             .then( ps => {
                 res.json({success: true, ps})
@@ -63,6 +64,30 @@ router.post('/real/:id', (req, res) => {
     })
 })
 
+router.post('/realcancle/:paymentId', (req, res) => {
+    PaymentStore.findById(req.params.paymentId)
+    .then( payment => {
+        PaymentStore.create({
+            user: payment.user,
+            guide: payment.guide,
+            paymentRef: payment._id,
+            service: payment.service,
+            status: '결제취소'
+        })
+        .then( cancle => {
+            res.json({cancle})
+        })
+        .catch( err => {
+            console.log(err)
+            res.json({success: false})
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.json({success: false})
+    })
+})
+
 router.get('/findByGuide/:guideId', (req, res) => {
     PaymentStore.find({guide: req.params.guideId})
     .then( payments => {
@@ -77,11 +102,15 @@ router.get('/findByGuide/:guideId', (req, res) => {
 router.get('/findByUser/:userId/:optionId', (req, res) => {
     PaymentStore.find({user: req.params.userId})
     .then( payments => {
+        console.log('얍얍')
+        console.log(payments)
+        console.log('얍얍')
         return payments.filter( payment => {
             return payment.service.options[0] === req.params.optionId
         })
     })
     .then( payments => {
+        console.log(payments)
         res.status(200).json({payment: payments[0], success: true})
     })
     .catch( err => {
