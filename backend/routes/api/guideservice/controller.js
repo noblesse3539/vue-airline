@@ -75,26 +75,17 @@ exports.updateGuideService = (req, res) => {
       }
     )
     .then((output)=>{
-      for (let i = 0; i < newTags.length; i++) {
-        GuideService.findById(gsId)
-        .then((gs)=>{
+      GuideService.findById(gsId)
+      .then((gs)=>{
+        for (let i = 0; i < newTags.length; i++) {
           gs.tags.push(newTags[i]._id)
-          gs.save()
-        })
-      }
+        }
+        return gs.save()
+      })
     })
     .catch((err)=>{
       res.status(500).json({err})
     })
-    // .then(gs=>{
-    //   Tag.find({guideservice:gs._id},tags)
-    // })
-    // .then(tags=>{
-    //   console.log(tags);
-    //   // for (let i = 0; i < tags.length; i++) {
-    //   //   array[i]
-    //   // }
-    // })
 }
 
 exports.findGSAll=(req,res)=>{
