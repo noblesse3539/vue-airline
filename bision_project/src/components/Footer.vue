@@ -3,10 +3,10 @@
 		<meta name="description" content="">
 		<meta name="keywords" content="">
 		<meta name="author" content="">
-		<div id="footer-inner">
+		<!-- <div id="footer-inner">
 			<p>
 			Bision © 2019</p>
-		</div>
+		</div> -->
 	</v-footer>
 </template>
 

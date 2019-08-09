@@ -4,6 +4,7 @@
         <div class="flight-search-wrapper">
             <div class="flight-search-pannel">
                     <div class="flight-search-radio">
+                        <p class="guide-search-userinput-quote">Belong anywhere.</p>
                         <label class="radio-container" v-for="label in RadioLabels">
                             <input type="radio" :aria-label="label" name="radio" class="radioBtn">
                             <span class="checkmark">{{label}}</span>
