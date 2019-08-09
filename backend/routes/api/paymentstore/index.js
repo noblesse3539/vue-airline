@@ -92,13 +92,19 @@ router.post('/realcancel/:paymentId', (req, res) => {
 router.get('/findByGuide/:guideId', (req, res) => {
     PaymentStore.find({guide: req.params.guideId})
     .then( payments => {
+        let cancelPayment = payments.filter( payment => {
+            return payment.status==='결제취소'
+        })
+        let realPayment = payments.filter( payment => {
+            for (let i=0; i<cancelPayment.length; i++) {
+                if (cancelPayment[i].paymentRef.equals(payment._id)) return false
+            }
+            return payment.status==='결제'
+        })
+        
         res.status(200).json( {
-            payments: payments.filter( payment => {
-                return payment.status==='결제'
-            }),
-            cancel: payments.filter( payment => {
-                return payment.status==='결제취소'
-            }),
+            payments: realPayment,
+            cancel: cancelPayment,
             success: true
         })
     })
