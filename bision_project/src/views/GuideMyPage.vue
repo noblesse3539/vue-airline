@@ -204,22 +204,62 @@
         </v-tab-item>
         
         <!-- Reservation -->
-        <v-tab-item key="RESERVATION">
+        <v-tab-item key="RESERVATION" class="reservation-box-mother">
           <div class="reservation-box" v-for="(payment, idx) in paymentList" v-if="payment.userInfo" :key="idx">
             <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
-              <div :class="`reserve-user-face-${idx} reserve-user-face`">
-                <!-- {{payment}} -->
-                <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+              <div class="reservation-user-payment-info-box">
+                <div class="reservation-status-confirmed">
+                  CONFIRMED
+                </div>
+                <!-- <div class="reservation-status-pending">
+                  PENDING
+                </div>
+                <div class="reservation-status-cancelled">
+                  CANCELELD
+                </div> -->
+                <div :class="`reserve-user-face-${idx} reserve-user-face`">
+                  <!-- {{payment}} -->
+                  <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+                </div>
+                <div class="reserve-user-name">
+                  {{payment.userInfo.nickname}}<br>
+                  {{payment.userInfo.email}}
+                </div>
+                <div class="reserve-user-pick-service">
+                  {{payment.payment.service.title}}<br>
+                  예약날짜: {{payment.payment.created_at.slice(0, 10)}}
+                </div>
+                <div class="reserve-user-pick-price">
+                  ₩ {{payment.payment.service.totalAmount}}
+                </div>
               </div>
-              <div class="reserve-user-pick-service">{{payment.payment.service.title}}<br>
-                {{payment.payment.created_at.slice(0, 10)}}
-              </div>
-              <div class="reserve-user-pick-price"></div>
+              <div class="reverse-guide-to-push-down"></div>
             </div>
             <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
-              <p>
-                
-              </p>
+              <div class="res-collap-inside-box">
+                <div class="res-collap-inside-box-content">
+                  <div>상품명: {{payment.payment.service.title}}</div>
+                  <div>날짜: {{payment.payment.service.date}}</div>
+                  <div class="res-collap-inside-peoople">
+                    인원: 
+                    <table>
+                      <tr>
+                        <th>성인</th>
+                        <th>아동</th>
+                        <th>유아</th>
+                        <th>노인</th>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div>총 결제액: </div>
+                </div>
+              </div>
             </div>
           </div>
         
