@@ -4,6 +4,7 @@
         <div class="flight-search-wrapper">
             <div class="flight-search-pannel">
                     <div class="flight-search-radio">
+                        <p class="guide-search-userinput-quote">Belong anywhere.</p>
                         <label class="radio-container" v-for="label in RadioLabels">
                             <input type="radio" :aria-label="label" name="radio" class="radioBtn">
                             <span class="checkmark">{{label}}</span>
@@ -107,7 +108,7 @@
                         </div>
                         <div class="passengers" @click="openClassPicker('right-end-input')">
                             <label> 좌석 등급 및 승객
-                                <input type="text" placeholder="" :value="`${adults} 승객, ${flightClass}`" class="right-end-input" disabled>
+                                <input type="text" placeholder="" :value="`${adults + infants} 승객, ${flightClass}`" class="right-end-input" disabled>
                                 <div class="psg-triangle-box">
                                         <div class="psg-triangle"></div>
                                 </div>
@@ -369,7 +370,6 @@ export default {
                 const roundTrip = document.querySelector("input")
                 // this.comingDate = new Date().toISOString().substr(0, 10)
                 roundTrip.checked = true
-
             }
 
             const leavingDataPicker = document.querySelector(data)
@@ -547,3 +547,9 @@ export default {
     }
 }
 </script>
+
+<style >
+    ::-webkit-scrollbar { 
+        display: none !important; 
+    }   
+</style>

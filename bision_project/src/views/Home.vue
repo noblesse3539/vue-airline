@@ -1,7 +1,7 @@
 <template>
     <div className="home" style="height: 100%;">
         <FlightSearch></FlightSearch>
-        <Recommendation></Recommendation>
+        <!-- <Recommendation></Recommendation> -->
         <Api></Api>
     </div>
 </template>
@@ -22,3 +22,9 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    ::-webkit-scrollbar { 
+        display: none !important; 
+    }
+</style>

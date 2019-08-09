@@ -42,7 +42,8 @@ router.post('/real/:id', (req, res) => {
             PaymentStore.create({
                 user: new mongoose.Types.ObjectId(id),
                 guide: new mongoose.Types.ObjectId(gs.guide),
-                service:service
+                service:service,
+                status: '결제'
             })
             .then( ps => {
                 res.json({success: true, ps})
@@ -63,10 +64,49 @@ router.post('/real/:id', (req, res) => {
     })
 })
 
+router.post('/realcancel/:paymentId', (req, res) => {
+    PaymentStore.findById(req.params.paymentId)
+    .then( payment => {
+        if (payment.status !== '결제') return res.status(406).json({success:false, message:'결제들만 취소할 수 있습니다'})
+        PaymentStore.create({
+            user: payment.user,
+            guide: payment.guide,
+            paymentRef: payment._id,
+            service: payment.service,
+            status: '결제취소'
+        })
+        .then( cancle => {
+            res.json({cancle})
+        })
+        .catch( err => {
+            console.log(err)
+            res.json({success: false})
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.json({success: false})
+    })
+})
+
 router.get('/findByGuide/:guideId', (req, res) => {
     PaymentStore.find({guide: req.params.guideId})
     .then( payments => {
-        res.status(200).json({success: true, payments})
+        let cancelPayment = payments.filter( payment => {
+            return payment.status==='결제취소'
+        })
+        let realPayment = payments.filter( payment => {
+            for (let i=0; i<cancelPayment.length; i++) {
+                if (cancelPayment[i].paymentRef.equals(payment._id)) return false
+            }
+            return payment.status==='결제'
+        })
+        
+        res.status(200).json( {
+            payments: realPayment,
+            cancel: cancelPayment,
+            success: true
+        })
     })
     .catch(err => {
         console.log(err)
@@ -77,11 +117,15 @@ router.get('/findByGuide/:guideId', (req, res) => {
 router.get('/findByUser/:userId/:optionId', (req, res) => {
     PaymentStore.find({user: req.params.userId})
     .then( payments => {
+        console.log('얍얍')
+        console.log(payments)
+        console.log('얍얍')
         return payments.filter( payment => {
             return payment.service.options[0] === req.params.optionId
         })
     })
     .then( payments => {
+        console.log(payments)
         res.status(200).json({payment: payments[0], success: true})
     })
     .catch( err => {
