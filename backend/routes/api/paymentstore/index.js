@@ -64,7 +64,7 @@ router.post('/real/:id', (req, res) => {
     })
 })
 
-router.post('/realcancle/:paymentId', (req, res) => {
+router.post('/realcancel/:paymentId', (req, res) => {
     PaymentStore.findById(req.params.paymentId)
     .then( payment => {
         if (payment.status !== '결제') return res.status(406).json({success:false, message:'결제들만 취소할 수 있습니다'})
@@ -92,7 +92,15 @@ router.post('/realcancle/:paymentId', (req, res) => {
 router.get('/findByGuide/:guideId', (req, res) => {
     PaymentStore.find({guide: req.params.guideId})
     .then( payments => {
-        res.status(200).json({success: true, payments})
+        res.status(200).json( {
+            payments: payments.filter( payment => {
+                return payment.status==='결제'
+            }),
+            cancel: payments.filter( payment => {
+                return payment.status==='결제취소'
+            }),
+            success: true
+        })
     })
     .catch(err => {
         console.log(err)
