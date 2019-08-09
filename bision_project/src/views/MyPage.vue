@@ -101,6 +101,7 @@
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
+          <p v-if="!guideService.service.date" style="font-size: 1.25rem;">&nbsp;</p>
           <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
@@ -365,6 +366,7 @@
         this.isImgModalOpen = false
         if(imgUrl) {
           this.userImage = imgUrl
+          console.log("이미지", imgUrl)
           this.updateUserInfo()
         }
       },
@@ -391,6 +393,7 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
+            console.log("userInfo",res.data.userInfo)
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
@@ -459,11 +462,11 @@
         const data = {
             'intro' : this.userIntro,
             'languages' : this.userLanguage,
-            'profileImg' : this.userImage,
+            'profileImageUrl' : this.userImage,
         }
         this.$http.put('/api/user/username', data, config)
           .then( res => {
-            // console.log(res)
+            console.log("유저인포 업뎃!!!", res)
           })
           .catch( err => {
             console.log(err)
