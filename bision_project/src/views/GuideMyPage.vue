@@ -70,7 +70,7 @@
           </div>
         </div>
     </div>
-    
+
     <v-container>    
     <!-- tab 영역 -->
     <v-sheet color="white" class="tab-section" >
@@ -223,7 +223,8 @@
                 </div>
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
-                  {{payment.userInfo.email}}
+                  {{payment.userInfo.email}}<br>
+                  
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -238,10 +239,25 @@
             <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
               <div class="res-collap-inside-box">
                 <div class="res-collap-inside-box-content">
-                  <div>
-                    <h2 class="res-h2">상품명</h2>
-                    {{payment.payment.service.title}}
+                  <div style="display: flex; justify-content: space-between">
+                    <div>
+                      <h2 class="res-h2" style="margin-top: 0;">상품명</h2>
+                      {{payment.payment.service.title}}
+                    </div>
+                    <button @click="dialog = !dialog" class="reserve-cancel-btn">예약 취소하기</button>
                   </div>
+                  <v-dialog v-model="dialog" max-width="500px">
+                    <v-card>
+                      <v-card-text>
+                        <v-text-field label="예약 취소 사유를 입력해주세요."></v-text-field>
+                        <small class="grey--text">* 상품 등록시 설정한 판매자의 환불 정책에 따라 예약 구매자에게 일정 금액이 환불됩니다.</small>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="#F44336" @click="dialog = false" style="color: white;">예약 취소 확정</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                   <div>
                     <h2 class="res-h2">날짜</h2>
                     {{payment.payment.service.date}}
@@ -583,6 +599,9 @@ export default {
   },
   data (){
     return{
+
+      // 결제 취소 관련
+      dialog: false,
 
       // 결제 내역
       paymentList: [],
