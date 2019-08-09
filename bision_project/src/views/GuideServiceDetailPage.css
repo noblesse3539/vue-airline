@@ -582,10 +582,10 @@
     padding-bottom: 5px;
 }
 
-.GS-service-reivew-userReview>p::after {
+/* .GS-service-reivew-userReview>p::after {
     content: 'Readc THIS!!!!!!!!!!!!!';
-    /* absolute: */
-}
+    absolute:
+} */
 
 .GS-service-review-userReview-expand {
     width: 100%;
