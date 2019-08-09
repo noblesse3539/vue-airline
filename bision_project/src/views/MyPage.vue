@@ -72,9 +72,6 @@
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
-          <div class="RWButtonOver">
-            <div class="RWButton" @click="showRW(id)">후기 작성 하기</div>
-          </div>
         </div>
       </swiper-slide>
       <!-- Optional controls -->
@@ -109,8 +106,8 @@
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
-          <div class="RWButtonOver">
-            <div v-if="reviews[guideService._id]" class="RWButton" @click="showMyReview(guideService._id)">내가 쓴 후기</div>
+          <div class="RWButtonOver" v-if="loaded">
+            <div v-if="reviews[guideService._id]" class="RWButton" @click="showMR(guideService._id)">내가 쓴 후기</div>
             <div v-else class="RWButton" @click="showRW(id)">후기 작성 하기</div>
           </div>
         </div>
@@ -124,6 +121,7 @@
         <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
       </div>
     </swiper>
+
     <div v-if="isRWVisible" class="HR__Modal">
       <div class="HR__ModalContent">
         <div class="HR__ModalHeader">
@@ -145,7 +143,28 @@
         </div>
       </div>
     </div>
-    <div v-if="isMyReviewVisible" class="HR__Modal"></div>
+
+    <div v-if="isMyReviewVisible" class="HR__Modal">
+      <div class="HR__ModalContent">
+        <div class="HR__ModalHeader">
+          <div>내가 쓴 댓글 관리</div>
+          <i @click="closeMR" style="cursor:pointer;" class="fas fa-times"></i>
+        </div>
+        <div class="HR__ModalBody">
+          <div class="rate">
+            <div>만족도 &nbsp; : &nbsp; </div>
+            <v-rating  v-model="reviews[paymentId].rating"  color="yellow darken-3"  background-color="grey lighten-2"
+              empty-icon="$vuetify.icons.ratingFull"  half-increments hover></v-rating>&nbsp;( {{reviews[paymentId].rating}} )
+          </div>
+         <div class="RW__Title">한줄평 &nbsp; : &nbsp; <input type="text" placeholder="한줄로 표현해주세요." v-model="reviews[paymentId].title"></div>
+          <textarea placeholder="후기를 작성해주세요."  v-model="reviews[paymentId].content" class="RW__Input" type="text" name="review"></textarea>
+        </div>
+        <div class="HR__ModalAction">
+          <div class="clear" @click="deleteReview">댓글삭제</div>
+          <div class="submit" @click="updateReview">수정</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -181,13 +200,14 @@
       return {
         isMyReviewVisible: false,
         paymentId:'',
-        reviews: [],
+        reviews: {},
         guideServiceId : '',
         subcomment:'',
         comment:'',
         rating: 3,
         isRWButtonVisible: false,
         isRWVisible: false,
+        loaded: false,
         items: [
           {
             src: 'https://new-image.withvolo.com/travel/423019/6-673h2it7pauB3D0naoffsjGMM=/0x0:900x900/809x/45e57a94c3a3f93db7ea5c6301aabc5d/76fb18f3-64cf-45df-9382-30c8afd42a97-cac8cd93c784d871aa3d1cac20ea67ea0a422222.jpg'
@@ -256,7 +276,10 @@
         this.$http.post('/api/review/create/'+this.guideServiceId+'/'+this.paymentId, review)
          .then( res => {
              console.log("성공", res.data)
-             alert('리뷰가 작성되었습니다.')
+             alert('후기가 작성되었습니다.')
+             // this.reviews[this.paymentId] = {'id'
+             //
+             // }
              this.closeRW()
          })
          .catch( err => {
@@ -265,29 +288,77 @@
            this.closeRW()
          })
       },
+      deleteReview(){
+        var really = confirm("삭제하시겠습니까?")
+        console.log(this.reviews[this.paymentId])
+        if(really){
+          console.log('삭제')
+          console.log(this.reviews[this.paymentId].id)
+          this.$http.delete('/api/review/delete/'+this.reviews[this.paymentId].id)
+          .then( res => {
+            alert('후기가 삭제되었습니다.')
+            // this.reviews[this.paymentId] = ''
+            // this.paymentId = ''
+            this.closeMR()
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      },
+      updateReview(){
+        var really = confirm("수정하시겠습니까?")
+        if(really) {
+          this.$http.put('/api/review/update/'+this.reviews[this.paymentId].id, this.reviews[this.paymentId])
+          .then( res => {
+            alert('후기가 수정되었습니다.')
+            console.log("수정성공", this.reviews[this.paymentId])
+            this.paymentId = ''
+            this.closeMR()
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      },
+      isModalVisible(v){
+        if(v){
+          const navBarZIndex = document.querySelector('#navbox')
+          const footerZIndex = document.querySelector('#footer')
+          footerZIndex.style.zIndex = 0
+          navBarZIndex.style.zIndex = 0
+          document.documentElement.style.overflow='hidden'
+          document.body.scroll="no"
+        }else{
+          document.documentElement.style.overflow='scroll';
+          document.body.scroll="yes";
+          const navBarZIndex = document.querySelector('#navbox')
+          const footerZIndex = document.querySelector('#footer')
+          navBarZIndex.style.zIndex = 1000
+          footerZIndex.style.zIndex = 1000
+        }
+      },
       showRW(idx) {
-        const navBarZIndex = document.querySelector('#navbox')
-        const footerZIndex = document.querySelector('#footer')
-        footerZIndex.style.zIndex = 0
-        navBarZIndex.style.zIndex = 0
-        document.documentElement.style.overflow='hidden'
-        document.body.scroll="no";
-        this.isRWVisible = true;
         this.guideServiceId = this.userGuideServices[idx].guide
         this.paymentId=this.userGuideServices[idx]._id
+        this.isModalVisible(true)
+        this.isRWVisible = true
       },
       closeRW() {
         this.guideServiceId = ''
         this.rating = 3
         this.comment=''
         this.subcomment=''
-        document.documentElement.style.overflow='scroll';
-        document.body.scroll="yes";
-        const navBarZIndex = document.querySelector('#navbox')
-        const footerZIndex = document.querySelector('#footer')
-        navBarZIndex.style.zIndex = 1000;
-        footerZIndex.style.zIndex = 1000;
-        this.isRWVisible = false;
+        this.isModalVisible(false)
+        this.isRWVisible = false
+      },
+      showMR(id) {
+        this.paymentId=id
+        this.isModalVisible(true)
+        this.isMyReviewVisible = true
+      },
+      closeMR() {
+        this.paymentId=''
+        this.isModalVisible(false)
+        this.isMyReviewVisible = false
       },
       closeHeader: function() {
         this.$store.commit("closeHeader")
@@ -326,6 +397,8 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             this.userId = res.data.userInfo._id
+
+            console.log(this.guideServices);
             const today = new Date().toISOString().slice(0, 10)
 
             this.currentGuideServices = res.data.paymentRecords.filter( record => {
@@ -336,7 +409,6 @@
             this.userGuideServices = res.data.paymentRecords.filter( record => {
               return record.service.date < today
             })
-
             console.log("userGuideServices", this.userGuideServices)
             this.userInfo = res.data.userInfo
             this.userName = this.userInfo.username
@@ -347,20 +419,21 @@
             console.log("==============================")
             console.log(this.userName)
             console.log("==============================")
-
           }).catch( err => {
             console.log(err)
           }).then( () => {
-            console.log(this.userId)
+            console.log("id",this.userId)
             this.$http.get('/api/review/findReviewByUser/'+this.userId)
               .then( res => {
                 console.log(res.data.reviews)
                 for(var item of res.data.reviews) {
-                  this.reviews[item.payment] = {'content' : item.content,
+                  this.reviews[item.payment] = {'id' : item._id,
+                                                'content' : item.content,
                                                 'title' : item.title,
                                                 'rating' : item.rating}
                 }
               console.log("리뷰",  this.reviews)
+              this.loaded=true;
             })
           })
 
