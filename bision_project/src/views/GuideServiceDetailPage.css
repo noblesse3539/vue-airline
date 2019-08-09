@@ -266,16 +266,28 @@
 }
 
 .userinfo-used-this-service {
-    width: 50%;
+    width: 70%;
     display: flex;
     /* align-items: center; */
     justify-content: flex-start;
     margin-left: 20px;
 }
 
-.userinfo-used-this-service>p {
+/* .userinfo-used-this-service>p {
     margin: 0 !important;
     margin-left: 20px !important;
+} */
+
+.userinfo-used-this-service-date {
+  margin-left: 40px;
+  margin-bottom: 0px;
+  color: 	#8c8c8c;
+}
+
+.userinfo-used-this-service-name {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 0px;
 }
 
 .user-comment {
@@ -550,6 +562,8 @@
 
 .GS-service-review-top-userInfo {
     display: flex;
+    display: grid;
+    grid-template-columns: 60% 40%
 }
 
 .Gs-service-review-top-option {
@@ -773,4 +787,8 @@
 
 .fix-icon {
   margin-left: 0px !important;
+}
+
+.GS-service-review-rating-and-username {
+  display: flex;
 }

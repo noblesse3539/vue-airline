@@ -48,7 +48,7 @@
             </div>
             <div class="GS-payment-GSTotalprice GS-payment-info-toCheck">
                 <h3>총 금액</h3>
-                KRW {{serviceInfo.totalAmount}}
+                KRW {{this.priceTransfer(serviceInfo.totalAmount)}}
             </div>
         </div>
     </div>
@@ -113,6 +113,24 @@ export default {
                 .then( res => {
                     // console.log(res)
                 })
+        },
+        priceTransfer: function (price) {
+          price = price.toString()
+          for (let i=0; i<price.length; i++) {
+            if (price[i] == ".")
+              price = price.slice(0,i)
+          }
+          let result = ''
+          for (let i=0; i<price.length; i++) {
+            if (i>0 && i%3 == 0)
+              result += ","
+            result += price[price.length-i-1]
+          }
+          let reverse = ''
+          for (let i=result.length-1; i>=0; i--) {
+            reverse += result[i]
+          }
+          return reverse
         },
     },
 }
