@@ -53,7 +53,7 @@
 
     <!-- 현재 예약한 상품 -->
     <h2 style="margin-top: 48px; margin-bottom: 24px;">현재 예약한 상품</h2>
-    <!-- <GuideList :load-more="true" :userGuideServices="userGuideServices"></GuideList> -->
+    <!-- <GuideList :load-more="true" :usedGuideServices="usedGuideServices"></GuideList> -->
     <swiper
       :options="swiperOption"
       ref="mySwiper"
@@ -67,8 +67,8 @@
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
-          <p style="font-size: 1.25rem;">{{id}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
@@ -94,21 +94,20 @@
     >
       <!-- slides -->
       <swiper-slide class="myProduct"
-        v-for="(guideService, id) in userGuideServices"
-        :key="id"
-      >
+        v-for="(guideService, idx) in usedGuideServices"
+        :key="idx">
         <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
-          <p style="font-size: 1.25rem;">{{id}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
           <div class="RWButtonOver" v-if="loaded">
-            <div v-if="reviews[guideService._id]" class="RWButton" @click="showMR(guideService._id)">내가 쓴 후기</div>
-            <div v-else class="RWButton" @click="showRW(id)">후기 작성 하기</div>
+            <div v-if="reviews[guideService.paymentId]" class="RWButton" @click="showMR(idx)">내가 쓴 후기</div>
+            <div v-else class="RWButton" @click="showRW(idx)">후기 작성 하기</div>
           </div>
         </div>
       </swiper-slide>
@@ -191,7 +190,7 @@
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
       // this.addGuideServiceToUser()
-      // console.log(this.userGuideServices)
+      // console.log(this.usedGuideServices)
     },
     beforeDestroy() {
       this.openHeader()
@@ -229,7 +228,7 @@
         userName : "",
         userIntro: "",
         userLanguage: [],
-        userGuideServices: [],
+        usedGuideServices: [],
         currentGuideServices: [],
         swiperOption: {
           slidesPerView: 4,
@@ -254,11 +253,11 @@
       }
     },
     methods: {
-      showMyReview(PMid){
+      showMyReview(idx){
+        this.paymentId = this.usedGuideServices[idx].paymentId
         this.isMyReviewVisible = PMid
       },
       clearReview() {
-        console.log(this.userGuideServices)
         this.subcomment=''
         this.comment=''
         this.rating = 0
@@ -266,26 +265,23 @@
       submitReview(){
         var review = {
           'user' : this.userId,
-          'title' : this.comment,
-          'content' : this.subcomment,
+          'title' : this.subcomment,
+          'content' : this.comment,
           'rating' : this.rating,
         }
-        console.log("g", this.userId)
-        console.log("gg", this.guideServiceId)
-        console.log(review)
         this.$http.post('/api/review/create/'+this.guideServiceId+'/'+this.paymentId, review)
          .then( res => {
              console.log("성공", res.data)
+             this.reviews[this.paymentId] = {'id' : res.data._id,
+                                           'content' : res.data.content,
+                                           'title' : res.data.title,
+                                           'rating' : res.data.rating}
              alert('후기가 작성되었습니다.')
-             // this.reviews[this.paymentId] = {'id'
-             //
-             // }
              this.closeRW()
          })
          .catch( err => {
            console.log(err)
            alert('잠시 후 다시 시도해주세요.')
-           this.closeRW()
          })
       },
       deleteReview(){
@@ -297,8 +293,7 @@
           this.$http.delete('/api/review/delete/'+this.reviews[this.paymentId].id)
           .then( res => {
             alert('후기가 삭제되었습니다.')
-            // this.reviews[this.paymentId] = ''
-            // this.paymentId = ''
+            this.reviews[this.paymentId] = false
             this.closeMR()
           }).catch(err => {
             console.log(err)
@@ -312,7 +307,6 @@
           .then( res => {
             alert('후기가 수정되었습니다.')
             console.log("수정성공", this.reviews[this.paymentId])
-            this.paymentId = ''
             this.closeMR()
           }).catch(err => {
             console.log(err)
@@ -337,27 +331,28 @@
         }
       },
       showRW(idx) {
-        this.guideServiceId = this.userGuideServices[idx].guide
-        this.paymentId=this.userGuideServices[idx]._id
         this.isModalVisible(true)
+        this.guideServiceId = this.usedGuideServices[idx].guideServiceId
+        this.paymentId = this.usedGuideServices[idx].paymentId
         this.isRWVisible = true
       },
       closeRW() {
-        this.guideServiceId = ''
+        this.isModalVisible(false)
         this.rating = 3
         this.comment=''
         this.subcomment=''
-        this.isModalVisible(false)
+        this.paymentId = ''
+        this.guideServiceId = ''
         this.isRWVisible = false
       },
-      showMR(id) {
-        this.paymentId=id
+      showMR(idx) {
         this.isModalVisible(true)
+        this.paymentId = this.usedGuideServices[idx].paymentId
         this.isMyReviewVisible = true
       },
       closeMR() {
-        this.paymentId=''
         this.isModalVisible(false)
+        this.paymentId = ''
         this.isMyReviewVisible = false
       },
       closeHeader: function() {
@@ -398,18 +393,34 @@
           .then( res => {
             this.userId = res.data.userInfo._id
 
-            console.log(this.guideServices);
             const today = new Date().toISOString().slice(0, 10)
 
-            this.currentGuideServices = res.data.paymentRecords.filter( record => {
-              // console.log(record.service.date)
-              return record.service.date >= today
-            })
+            for(var idx in res.data.options ) {
+              if(res.data.paymentRecords[idx].date >= today){
+                this.currentGuideServices.push({
+                  'guideServiceId' : res.data.options[idx].guideservice,
+                  'paymentId' : res.data.paymentRecords[idx]._id,
+                  'service' : res.data.paymentRecords[idx].service
+              })}else{
+                console.log("du", res.data.options[idx][0])
+                this.usedGuideServices.push({
+                  'guideServiceId' : res.data.options[idx][0].guideservice,
+                  'paymentId' : res.data.paymentRecords[idx]._id,
+                  'service' : res.data.paymentRecords[idx].service
+                })
+              }
+            }
+            console.log("usedGuideServices", this.usedGuideServices)
 
-            this.userGuideServices = res.data.paymentRecords.filter( record => {
-              return record.service.date < today
-            })
-            console.log("userGuideServices", this.userGuideServices)
+
+            // this.currentGuideServices = res.data.paymentRecords.filter( record => {
+            //   console.log("여기", record.service.date)
+            //   return record.service.date >= today
+            // })
+            //
+            // this.usedGuideServices = res.data.paymentRecords.filter( record => {
+            //   return record.service.date < today
+            // })
             this.userInfo = res.data.userInfo
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
