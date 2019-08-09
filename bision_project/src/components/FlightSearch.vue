@@ -369,7 +369,6 @@ export default {
                 const roundTrip = document.querySelector("input")
                 // this.comingDate = new Date().toISOString().substr(0, 10)
                 roundTrip.checked = true
-
             }
 
             const leavingDataPicker = document.querySelector(data)
