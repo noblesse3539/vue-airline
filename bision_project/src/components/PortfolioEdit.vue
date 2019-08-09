@@ -746,7 +746,6 @@ export default {
         delete newProgram.guide
         delete newProgram.options
         delete newProgram.reviews
-        delete newProgram.tags
         this.$http.put(`/api/guideservice/update/${this.$props.serviceInfoFuck._id}`, newProgram)
           .then( res => {
             console.log("fuck yeah")

@@ -4,7 +4,8 @@
         :plugins="calendarPlugins" 
         :events="events"
         themeSystem="minty"
-        @eventClick="handleDateClick"
+        @eventClick="handleDateClick(events)"
+        @eventRender="eventRender"
     />
 </template>
 
@@ -27,8 +28,8 @@ export default {
         }
     },
     methods: {
-        handleDateClick(url) {
-            alert(url)
+        handleDateClick(info) {
+            console.log(info)
         },
     },
 }

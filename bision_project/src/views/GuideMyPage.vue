@@ -70,7 +70,7 @@
           </div>
         </div>
     </div>
-
+    
     <v-container>    
     <!-- tab 영역 -->
     <v-sheet color="white" class="tab-section" >
@@ -78,7 +78,7 @@
         <v-tab key="Now" class="tab-name">Dashboard</v-tab>
         <v-tab key="ALL" class="tab-name" >ALL SERVICES</v-tab>
         <v-tab key="RESERVATION" class="tab-name"  v-if="guideId == getUserId">RESERVATION</v-tab>
-        
+
         <!-- Dashboard -->
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
@@ -522,7 +522,7 @@ export default {
             temp.date  = payment.service.date
             temp.textColor = 'red'
             temp.backgroundColor = '#1e90ff'
-            temp.url   = payment.service._id   // 해당 결제 상품의 고유 id값
+            temp.serviceId   = payment._id   // 해당 결제 상품의 고유 id값
             this.events.push(temp)
             this.profit += parseInt(payment.service.totalAmount)
 
