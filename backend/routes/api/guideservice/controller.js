@@ -7,7 +7,8 @@ const Option = require('../../../models/option')
 exports.findReview = (req, res) => {
   console.log('findReview');
     GuideService.findOne({ _id : req.params.id })
-      .populate('reviews')
+      .populate({ path: 'reviews', populate: {path: 'payment'}, model: Review})
+      .populate({ path: 'reviews', populate: {path: 'user'}, model: Review})
       .select('reviews')
       .then((result) => {
         res.json(result);

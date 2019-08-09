@@ -43,12 +43,10 @@
                     <!-- <input placeholder="# 태그별 검색" class="result-body__search-by-tag-search" type="text"> -->
                     <!-- <span class="result-body_search-by-tag-search-icon"><i class="fas fa-search"></i></span> -->
                 </div>
-                <div class="result-body__search-by-language">
+                <!-- <div class="result-body__search-by-language">
                     <div class="result-body__search-by-lang-title">
                         <div>가이드 언어</div>
                         <div><i class="far fa-caret-square-up"></i></div>
-                        <!-- On-off에 사용 -->
-                        <!-- <i class="far fa-caret-square-down"></i> -->
                     </div>
                     <ul class="result-body__search-by-lang-body">
                         <li>
@@ -75,7 +73,7 @@
                             </v-checkbox>
                         </li>
                     </ul>
-                </div>
+                </div> -->
                 <div class="result-body__search-by-price">
                     <p class="result-body__search-by-price-title">금액 (KRW)</p>
                     <p class="result-body__search-by-price-price">{{price[0]}} ~ {{price[1]}}</p>
@@ -392,7 +390,7 @@ export default {
 
         // 여행 기간 선택 시
         selectDuration : function (idx) {
-          // console.log(this.duration)
+          console.log(this.duration)
           if (this.duration.indexOf(idx) != -1) {
             this.searchChips.push(this.periodList[idx][0])
           } else {
@@ -417,12 +415,13 @@ export default {
 
         // 검색 칩 삭제
         deletechip (chip) {
+          console.log("칩 삭제")
           this.searchChips.splice(this.searchChips.indexOf(chip),1)
           // 날짜 삭제
           if (isNaN(this.dateCalculate(chip)) == false) {
             this.leavingDates.splice(this.leavingDates.indexOf(chip),1)
             // 여행기간 삭제
-          } else if (chip.indexOf("시간") != -1 && chip.indexOf("~") != -1) {
+          } else if (chip.indexOf("시간 ~") != -1 || chip.indexOf("일 ~") != -1 || chip.indexOf("일 이상") != -1) {
             for (let i=0; i<this.periodList.length; i++) {
               if (this.periodList[i][0] == chip) {
                 this.duration.splice(this.duration.indexOf(i),1)
@@ -433,6 +432,7 @@ export default {
           } else {
             this.selectedTags.splice(this.selectedTags.indexOf(chip),1)
           }
+          console.log(this.duration)
           this.updateResult()
         },
 
@@ -518,15 +518,15 @@ export default {
             return parseInt(duration.slice(0, duration.indexOf('시'))) * 3600
           }
         },
-        languageCheckbox : function () {
-          this.guideServiceList = []
-          console.log(this.selected)
-          // for (let i=0; i<this.fixedguideServiceList.length; i++) {
-          //   if (this.selected.indexOf(this.fixedguideServiceList[i].lang) != -1) {
-          //     this.guideServiceList.push(this.this.fixedguideServiceList[i])
-          //   }
-          // }
-        },
+        // languageCheckbox : function () {
+        //   this.guideServiceList = []
+        //   console.log(this.selected)
+        //   for (let i=0; i<this.fixedguideServiceList.length; i++) {
+        //     if (this.selected.indexOf(this.fixedguideServiceList[i].lang) != -1) {
+        //       this.guideServiceList.push(this.this.fixedguideServiceList[i])
+        //     }
+        //   }
+        // },
         openCalender : function() {
           if (this.isCalenderOpen == true) {
             this.isCalenderOpen = false

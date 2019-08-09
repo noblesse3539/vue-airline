@@ -66,19 +66,32 @@
                   style="background: url('https://i.imgur.com/gB9Ooj4.jpg')"
                 ></div>
                 <div class="GS-guide-detail-best-review-right">
+
+<!--
                   <div class="text-center GS-guide-detail-best-review-right-inside">
-                    <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="17.4"></v-rating>
+                    <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="17.4" style="width: 100px"></v-rating>
                     <div class="userinfo-used-this-service">
-                      <p class="userinfo-used-this-service-name">{{reviews[maxratingReviewIdx].user}}</p>
-                      <p class="userinfo-used-this-service-date">이용날짜</p>
+                      <p class="userinfo-used-this-service-name">정**</p>
+                      <p class="userinfo-used-this-service-date">이용날짜 : {{reviews[maxratingReviewIdx].payment.service.date}}</p>
                     </div>
+                  </div> -->
+
+                  <div class="GS-service-review-top">
+                    <div class="GS-service-review-top-userInfo">
+                      <div class="GS-service-review-rating-and-username">
+                        <div class="GS-service-review-userScore GS-service-review-info">
+                          <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="14.7" readonly></v-rating>
+                        </div>
+                        <div class="GS-service-review-userName GS-service-review-info">{{reviews[maxratingReviewIdx].user.nickname}}</div>
+                        <!-- <div class="GS-service-review-info">·</div> -->
+                      </div>
+                      <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[maxratingReviewIdx].payment.service.date}}</div>
+                    </div>
+                    <div class="Gs-service-review-top-option">옵션: {{reviews[maxratingReviewIdx].payment.service.itemName}}</div>
                   </div>
+
                   <div class="user-comment">
                     {{reviews[maxratingReviewIdx].content}}
-                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
                   </div>
                 </div>
               </div>
@@ -402,18 +415,20 @@
                 style="border-radius: 50%;"
               />
             </div>
-            <div class="GS-service-reivew-content">
+            <div class="GS-service-reivew-content" v-if="reviewsLoaded">
               <div v-for="i in reviews.length">
                 <div class="GS-service-review-top">
                   <div class="GS-service-review-top-userInfo">
-                    <div class="GS-service-review-userScore GS-service-review-info">
-                      <v-rating v-model="reviews[i-1].rating" dense size="14.7" readonly></v-rating>
+                    <div class="GS-service-review-rating-and-username">
+                      <div class="GS-service-review-userScore GS-service-review-info">
+                        <v-rating v-model="reviews[i-1].rating" dense size="14.7" readonly></v-rating>
+                      </div>
+                      <div class="GS-service-review-userName GS-service-review-info">{{reviews[i-1].user.nickname}}</div>
+                      <!-- <div class="GS-service-review-info">·</div> -->
                     </div>
-                    <div class="GS-service-review-userName GS-service-review-info">{{reviews[i-1].user}}</div>
-                    <div class="GS-service-review-info">·</div>
-                    <div class="GS-service-review-userDate GS-service-review-info">이용날짜: 2019/07/29</div>
+                    <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[i-1].payment.service.date}}</div>
                   </div>
-                  <div class="Gs-service-review-top-option">옵션:</div>
+                  <div class="Gs-service-review-top-option">옵션: {{reviews[i-1].payment.service.itemName}}</div>
                 </div>
                 <div class="GS-service-reivew-userReview">
                   <p>
@@ -554,6 +569,7 @@ export default {
       maxrationgReviewLoaded: false,
       flagLoaded: false,
       guideImgLoaded: false,
+      reviewsLoaded: false,
     };
 
   },
@@ -665,6 +681,7 @@ export default {
           this.getNationFlag()
           this.getGuideInfo()
           this.getReviews()
+          this.test()
         })
     },
 
@@ -711,16 +728,7 @@ export default {
           this.average = (sum/this.reviews.length).toFixed(1)
           this.maxratingReviewIdx = idx
           this.maxrationgReviewLoaded = true
-        }
-      })
-      .then( () => {
-        console.log("불러와")
-        console.log(this.reviews)
-        for (let j=0; j<this.reviews.length; j++) {
-          this.$http.get(`/api/paymentstore/findByUser/${this.reviews[j]._id}/${this.reviews[j]._id}`)
-          .then( res => {
-            console.log(res)
-          })
+          this.reviewsLoaded = true
         }
       })
     },
@@ -800,7 +808,6 @@ export default {
     getNationFlag() {
       this.$http.get(`/api/nation/search/${this.nation_kor}`)
         .then( res => {
-            console.log("국가", res)
 
             if (res.data.nation) {
               this.nationFlag = res.data.nation.flagImgUrl
@@ -930,6 +937,13 @@ export default {
 
   dateCalculate : function (date) {
     return date = parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
+  },
+
+  dashtoslash : function (date) {
+    console.log(date)
+    return 1
+    // console.log(date.slice(0,4) + "/" + date.slice(5,7) + "/" + date.slice(8,10))
+    // return date.slice(0,4) + "/" + date.slice(5,7) + "/" + date.slice(8,10)
   },
 
   computed: {
