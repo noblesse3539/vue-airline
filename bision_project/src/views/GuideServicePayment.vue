@@ -20,11 +20,10 @@
             <div class="GS-payment-GSTitle GS-payment-info-toCheck">
                 {{serviceInfo.title}}
             </div>
-            <div calss="GS-payment-GSOption GS-payment-info-toCheck" v-if="serviceInfo.options.length > 1">
-                <div>
-                    <h3>옵션</h3>
-                    <span>{{serviceInfo.options[0]}}</span>
-                </div>
+            <!-- <div calss="GS-payment-GSOption GS-payment-info-toCheck" v-if="serviceInfo.options.length > 1"> -->
+            <div class="GS-payment-GSOption GS-payment-info-toCheck">
+                <h3>옵션</h3>
+                <span>{{serviceInfo.itemName}}</span>
             </div>
             <div class="GS-payment-GSDate GS-payment-info-toCheck">
                 <h3>날짜</h3>
@@ -32,7 +31,20 @@
             </div>
             <div class="GS-payment-GSPrice GS-payment-info-toCheck">
                 <h3>인원</h3>
-                {{serviceInfo.people}} 명
+                <div class="">
+                  {{serviceInfo.people}} 명
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-icon color="primary" dark v-on="on" style="margin-bottom: 5px;">(자세히)</v-icon>
+                    </template>
+                    <span>
+                      <div v-if="serviceInfo.senior > 0">경로 : {{serviceInfo.senior}} 명</div>
+                      <div v-if="serviceInfo.adult > 0">성인 : {{serviceInfo.adult}} 명</div>
+                      <div v-if="serviceInfo.child > 0">아동 : {{serviceInfo.child}} 명</div>
+                      <div v-if="serviceInfo.infant > 0">유아 : {{serviceInfo.infant}} 명</div>
+                    </span>
+                  </v-tooltip>
+                </div>
             </div>
             <div class="GS-payment-GSTotalprice GS-payment-info-toCheck">
                 <h3>총 금액</h3>

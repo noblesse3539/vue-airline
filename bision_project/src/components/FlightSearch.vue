@@ -107,7 +107,7 @@
                         </div>
                         <div class="passengers" @click="openClassPicker('right-end-input')">
                             <label> 좌석 등급 및 승객
-                                <input type="text" placeholder="" :value="`${adults} 승객, ${flightClass}`" class="right-end-input" disabled>
+                                <input type="text" placeholder="" :value="`${adults + infants} 승객, ${flightClass}`" class="right-end-input" disabled>
                                 <div class="psg-triangle-box">
                                         <div class="psg-triangle"></div>
                                 </div>

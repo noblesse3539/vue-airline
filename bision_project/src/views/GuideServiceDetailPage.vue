@@ -4,7 +4,7 @@
       <p>
         {{city_kor[0]}} in {{nation_kor}}
       </p>
-      <img :src="nationFlag" width="60" height="60"/>
+      <img :src="nationFlag" width="60" height="60" v-if="flagLoaded"/>
     </div>
     <div class="GS-hero"></div>
     <section class="GS-body-1">
@@ -15,7 +15,7 @@
           <div class="GS-guide-detail-guideDetail">
             <div class="GS-guide-detail-guideImg">
               <router-link :to="`${'/guide/'+guideId}`">
-              <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!">
+              <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!"  v-if="guideImgLoaded">
               </router-link>
             </div>
             <div class="GS-guide-detail-guideName">
@@ -47,41 +47,45 @@
               <span style="margin-left: 10px;" v-else>환불 불가</span>
             </div>
           </div>
-          <div class="GS-guide-detail-description" v-if="maxrationgReviewLoaded">
-            <div class="GS-guide-detail-simple-description">
-              <span>{{desc}}</span>
-            </div>
-            <div class="GS-guide-detail-best-review">
-              <h3>최고 평점 이용후기</h3>
-              <a class="see-more-review" href="#GS-service-intro-title">
-                리뷰 더보기
-                <i class="fas fa-sign-in-alt"></i>
-              </a>
-            </div>
-            <div class="GS-guide-detail-best-review-content">
-              <div
-                class="GS-guide-detail-best-review-user-img"
-                style="background: url('https://i.imgur.com/gB9Ooj4.jpg')"
-              ></div>
-              <div class="GS-guide-detail-best-review-right">
-                <div class="text-center GS-guide-detail-best-review-right-inside">
-                  <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="17.4"></v-rating>
-                  <div class="userinfo-used-this-service">
-                    <p class="userinfo-used-this-service-name">{{reviews[maxratingReviewIdx].user}}</p>
-                    <p class="userinfo-used-this-service-date">이용날짜</p>
+
+          <div v-if="maxrationgReviewLoaded">
+            <div class="GS-guide-detail-description" >
+              <div class="GS-guide-detail-simple-description">
+                <span>{{desc}}</span>
+              </div>
+              <div class="GS-guide-detail-best-review">
+                <h3>최고 평점 이용후기</h3>
+                <a class="see-more-review" href="#GS-service-intro-title">
+                  리뷰 더보기
+                  <i class="fas fa-sign-in-alt"></i>
+                </a>
+              </div>
+              <div class="GS-guide-detail-best-review-content">
+                <div
+                  class="GS-guide-detail-best-review-user-img"
+                  style="background: url('https://i.imgur.com/gB9Ooj4.jpg')"
+                ></div>
+                <div class="GS-guide-detail-best-review-right">
+                  <div class="text-center GS-guide-detail-best-review-right-inside">
+                    <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="17.4"></v-rating>
+                    <div class="userinfo-used-this-service">
+                      <p class="userinfo-used-this-service-name">{{reviews[maxratingReviewIdx].user}}</p>
+                      <p class="userinfo-used-this-service-date">이용날짜</p>
+                    </div>
                   </div>
-                </div>
-                <div class="user-comment">
-                  {{reviews[maxratingReviewIdx].content}}
-                  <!-- 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                  어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                  어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
-                  어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 -->
+                  <div class="user-comment">
+                    {{reviews[maxratingReviewIdx].content}}
+                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
+                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
+                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
+                    어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘 어쩌구 저쩌구 로렘 로렘
+                  </div>
                 </div>
               </div>
             </div>
-
           </div>
+
+
         </div>
       </div>
       <!-- 결제용 following side-bar -->
@@ -142,9 +146,9 @@
     </section>
     <!-- 상품 결제 전 옵션 고르기-->
     <section class="GS-body-2">
-      <div class="GS-body-2-left" >
+      <div class="GS-body-2-left" v-if="optionsLoaded" >
         <h3 class="GS-body-2-left-title" style="font-size: 2rem; margin-bottom: 15px;">옵션 선택하기</h3>
-        <div class="GS-option-box" v-if="options">
+        <div class="GS-option-box">
           <!-- 각 상품에 대한 옵션 리스트 v-for로 출력할 것 -->
           <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
           <div v-for="(option, idx) in options" :key="idx" class="GS-individual-option GS-individual-option-1">
@@ -214,13 +218,13 @@
                   <input v-if="serviceInfo.date" :placeholder="serviceInfo.date" disabled class="result-body__search-by-date-input" type="text" />
                   <input v-else placeholder="날짜 선택" disabled class="result-body__search-by-date-input" type="text" />
                   <div v-if="isCalenderOpen" class="GS-date-picker">
-                    <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="serviceInfo.date" :reactive="reactive" color="#45CE30"></v-date-picker>
+                    <v-date-picker :allowed-dates="option.allowedDatesFunc" :min="minDate" locale="ko-KR"  v-model="serviceInfo.date" :reactive="reactive" color="#45CE30" style="z-index: 1000;"></v-date-picker>
                   </div>
                 </div>
 
                 <div class="GS-individual-option-detail-option-select" v-if="option.times.length > 0">
                     <v-select
-                      v-model="select"
+                      v-model="serviceInfo.time"
                       :items="option.times"
                       item-text="state"
                       item-value="abbr"
@@ -353,7 +357,7 @@
       <h3 class="GS-service-intro-title">상품 소개</h3>
       <div class="GS-service-user-content" v-html="detail"></div>
     </section>
-    
+
     <section class="GS-body-3">
       <h3 class="GS-service-intro-title">환불 규정</h3>
       <div class="GS-service-user-refund">
@@ -382,7 +386,8 @@
             <div class="GS-service-review-score-stars">
               <v-rating v-model="average" dense size="24.7" readonly></v-rating>
             </div>
-            <div class="GS-service-review-count">100개의 진심 가득한 후기</div>
+            <div class="GS-service-review-count" v-if="reviews.length > 0">{{reviews.length}}개의 진심 가득한 후기</div>
+            <div class="GS-service-review-count" v-else>작성된 후기가 없습니다.</div>
           </div>
         </div>
 
@@ -408,7 +413,7 @@
                     <div class="GS-service-review-info">·</div>
                     <div class="GS-service-review-userDate GS-service-review-info">이용날짜: 2019/07/29</div>
                   </div>
-                  <div class="Gs-service-review-top-option">옵션:</div>{{reviews[i-1].content}}
+                  <div class="Gs-service-review-top-option">옵션:</div>
                 </div>
                 <div class="GS-service-reivew-userReview">
                   <p>
@@ -493,6 +498,7 @@ export default {
 
       // 결제 관련 정보
       serviceInfo: {
+        time: 0,
         // people: 0,
         adult: 0,
         senior: 0,
@@ -542,7 +548,12 @@ export default {
       // 레이팅 관련 변수
       average: 0,
       maxratingReviewIdx: 0,
+
+      // 로딩완료 후 화면 보여지도록
+      optionsLoaded: false,
       maxrationgReviewLoaded: false,
+      flagLoaded: false,
+      guideImgLoaded: false,
     };
 
   },
@@ -555,6 +566,7 @@ export default {
     increasePeople: function(select) {
       // this.serviceInfo.people += 1
       this.serviceInfo[select] += 1
+      console.log(this.serviceInfo.time)
     },
 
     hideElements: function(e) {
@@ -566,7 +578,7 @@ export default {
 
     },
     openCalender: function() {
-
+      console.log("오픈")
       if (this.isCalenderOpen == true) {
         this.isCalenderOpen = false
       } else {
@@ -662,6 +674,8 @@ export default {
         this.guideInfo.guideName = res.data.guide.username
         this.guideInfo.guideImg = res.data.guide.profileImageUrl
         this.guideInfo.guideId = res.data.guide._id
+
+        this.guideImgLoaded = true
       })
     },
 
@@ -672,30 +686,42 @@ export default {
         console.log("리뷰", res.data.reviews)
       })
       .then( () => {
-        let sum = 0
-        let maxrating = 0
-        let idx = 0
-        let latestdate = 0
-        for (let i=0; i<this.reviews.length; i++) {
-          sum += this.reviews[i].rating
-          if (this.reviews[i].rating > maxrating) {
-            idx = i
-            maxrating = this.reviews[i].rating
+        if (this.reviews.length > 0) {
+          let sum = 0
+          let maxrating = 0
+          let idx = 0
+          let latestdate = 0
+          for (let i=0; i<this.reviews.length; i++) {
+            sum += this.reviews[i].rating
+            if (this.reviews[i].rating > maxrating) {
+              idx = i
+              maxrating = this.reviews[i].rating
+            }
+              // latestdate = this.dateCalculate(this.reviews[i].created_at)
+              // console.log("여기다")
+              // console.log(latestdate)
+            // } else if (this.reviews[i].rating == maxrating) {
+            //   if (this.dateCalculate(this.reviews[i].created_at) > latestdate) {
+            //     idx = i
+            //     maxrating = this.reviews[i].rating
+            //     latestdate = this.dateCalculate(this.reviews[i].created_at)
+            //   }
+            // }
           }
-            // latestdate = this.dateCalculate(this.reviews[i].created_at)
-            // console.log("여기다")
-            // console.log(latestdate)
-          // } else if (this.reviews[i].rating == maxrating) {
-          //   if (this.dateCalculate(this.reviews[i].created_at) > latestdate) {
-          //     idx = i
-          //     maxrating = this.reviews[i].rating
-          //     latestdate = this.dateCalculate(this.reviews[i].created_at)
-          //   }
-          // }
+          this.average = (sum/this.reviews.length).toFixed(1)
+          this.maxratingReviewIdx = idx
+          this.maxrationgReviewLoaded = true
         }
-        this.average = (sum/this.reviews.length).toFixed(1)
-        this.maxratingReviewIdx = idx
-        this.maxrationgReviewLoaded = true
+      })
+      .then( () => {
+        console.log("불러와")
+        console.log(this.reviews)
+        for (let j=0; j<this.reviews.length; j++) {
+          this.$http.get(`/api/paymentstore/findByUser/${this.reviews[j]._id}/${this.reviews[j]._id}`)
+          .then( res => {
+            console.log(res)
+          })
+        }
       })
     },
 
@@ -755,7 +781,7 @@ export default {
       this.serviceInfo.seniorprice = this.options[idx].senior.cost
       this.serviceInfo.childprice = this.options[idx].child.cost
       this.serviceInfo.infantprice = this.options[idx].infant.cost
-      this.serviceInfo.itemName = this.options[idx].list__tile__title
+      this.serviceInfo.itemName = this.options[idx].title
       console.log(this.serviceInfo)
 
     },
@@ -767,7 +793,6 @@ export default {
 
     },
     cancelPaymentReady() {
-      console.log("들어오니")
       this.isPaymentReady = false
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "block"
       // document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
@@ -775,7 +800,7 @@ export default {
     getNationFlag() {
       this.$http.get(`/api/nation/search/${this.nation_kor}`)
         .then( res => {
-            // console.log(res)
+            console.log("국가", res)
 
             if (res.data.nation) {
               this.nationFlag = res.data.nation.flagImgUrl
@@ -787,6 +812,8 @@ export default {
                 }
               this.nationFlag = res.data.nations[0].flagImgUrl
             }
+            // console.log(this.nationFlag)
+            this.flagLoaded = true
 
         })
     },
@@ -816,8 +843,18 @@ export default {
           })
         }).then(() => {
           console.log(this.options)
+          this.optionsLoaded = true
         })
     },
+
+    allowedDates: function (val) {
+      if (this.dateCalculate(val) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {
+        if (this.leavingDates.indexOf(val) == -1) {
+          return val
+        }
+      }
+    },
+
     getAllDays(goalDay) {
 
       let day = new Date()
