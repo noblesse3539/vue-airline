@@ -72,7 +72,22 @@ router.get('/findByGuide/:guideId', (req, res) => {
         console.log(err)
         res.json({success: false})
     })
-    
+})
+
+router.get('/findByUser/:userId/:optionId', (req, res) => {
+    PaymentStore.find({user: req.params.userId})
+    .then( payments => {
+        return payments.filter( payment => {
+            return payment.service.options[0] === req.params.optionId
+        })
+    })
+    .then( payments => {
+        res.status(200).json({payment: payments[0], success: true})
+    })
+    .catch( err => {
+        console.log(err)
+        res.status(204).json({success: false, msg:'결제정보를 찾을 수 없습니다.'})
+    })
 })
 
 module.exports = router
