@@ -13,6 +13,7 @@
                     @keydown.up="onArrowUp()"
                     @keydown.down="onArrowDown()"
                     @keydown.enter="onEnter()"
+                    @click="onClick()"
                 >
 
                 <!-- 가이드 여행지 검색 결과 리스트 -->
@@ -29,7 +30,7 @@
                         >
                             <div 
                                 class="guide-search-result-each"
-                                @click="saveUserChoiceLocation(`${location.nation_kor}`, `${location.city_kor}`)"
+                                @click="saveUserChoiceLocation(`${location.nation}`, `${location.city_kor}`)"
                             >
                                 <i class="fas fa-map-marker-alt" style="margin-right: 15px;"></i> 
                                 <span>{{location.nation}}</span> - {{location.city_kor}}
@@ -142,6 +143,16 @@ export default {
         },
         onEnter() {
             
+            const searchListTri = document.querySelector(".guide-search-triangle-box")
+            const searchList = document.querySelector(".guide-search-list")
+
+            this.saveUserChoiceLocation(this.guideSearchOuput[this.guideInputArrowCounter].nation,
+                                        this.guideSearchOuput[this.guideInputArrowCounter].city_kor)
+            this.isOpen = false
+            searchListTri.style.display = "none"
+            searchList.style.display = "none"
+        },
+        onClick() {
             const searchListTri = document.querySelector(".guide-search-triangle-box")
             const searchList = document.querySelector(".guide-search-list")
 
