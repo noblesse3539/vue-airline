@@ -8,7 +8,7 @@
 
         <!-- ProfileImg -->
         <v-flex xs3 mr-5>
-          
+
           <!-- if: 본인 아닐 때 -->
           <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
 
@@ -34,7 +34,7 @@
           <h2 class="display-1 mb-3">
             <span class="gs-guidename">
               {{guideName}}</span>
-            
+
             <!-- v-if: 본인일 때 -->
             <v-tooltip right v-if="guideId == getUserId">
               <template v-slot:activator="{ on }">
@@ -71,14 +71,14 @@
         </div>
     </div>
 
-    <v-container>    
+    <v-container>
     <!-- tab 영역 -->
     <v-sheet color="white" class="tab-section" >
       <v-tabs slider-color="rgba(0, 151, 132, 1)" color="white" fixed-tabs>
         <v-tab key="Now" class="tab-name">Dashboard</v-tab>
         <v-tab key="ALL" class="tab-name" >ALL SERVICES</v-tab>
         <v-tab key="RESERVATION" class="tab-name"  v-if="guideId == getUserId">RESERVATION</v-tab>
-        
+
         <!-- Dashboard -->
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
@@ -86,7 +86,7 @@
             <v-card flat v-for="(service, idx) in guideServices" :key="idx">
               <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
               <v-layout mb-4 class="gs-mypage-service-box"
-                
+
               >
               <v-img class="gs-mypage-service-bg" :src="service.mainImg">
               </v-img>
@@ -113,7 +113,7 @@
                       </div>
                     </div>
                     <div class="gs-mypage-service-content-bottom-reserve">
-                      <button 
+                      <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
@@ -121,7 +121,7 @@
                       >
                         삭제하기
                       </button>
-                      <button 
+                      <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
                         style="margin-right: 10px;"
@@ -175,9 +175,9 @@
         <!-- ALL -->
         <v-tab-item key="ALL">
           <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
-          
+
           <div class="gs-ALL-container">
-            <div class="gs-ALL-service-add-btn" 
+            <div class="gs-ALL-service-add-btn"
               @click="showPW"
               v-if="getUserId == guideId"
             >
@@ -185,7 +185,7 @@
                 +
               </div>
               <PortfolioWrite :getGuideService="getGuideService" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
-            
+
             </div>
             <div class="gs-ALL-service-card" v-for="(service, idx) in guideServices" :key="idx">
               <div class="gs-ALL-service-card-bg">
@@ -202,7 +202,7 @@
             </div>
           </div>
         </v-tab-item>
-        
+
         <!-- Reservation -->
         <v-tab-item key="RESERVATION">
           <div class="reservation-box" v-for="(payment, idx) in paymentList" v-if="payment.userInfo" :key="idx">
@@ -218,11 +218,11 @@
             </div>
             <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
               <p>
-                
+
               </p>
             </div>
           </div>
-        
+
         </v-tab-item>
 
       </v-tabs>
@@ -301,7 +301,7 @@ export default {
 
       const footerZIndex = document.querySelector('#footer')
       footerZIndex.style.zIndex = 0;
-      
+
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
@@ -313,7 +313,7 @@ export default {
 
       const footerZIndex = document.querySelector('#footer')
       footerZIndex.style.zIndex = 0;
-      
+
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
@@ -410,7 +410,7 @@ export default {
         })
     },
 
-    // 가이드 결제 내역 
+    // 가이드 결제 내역
     getPaymentsByGuide(guideId) {
       this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
         .then( res => {
@@ -423,7 +423,7 @@ export default {
             const temp = {}
 
             // this입니다. temp아닙니다!
-        
+
             temp.title = payment.service.title
             temp.date  = payment.service.date
             temp.textColor = 'red'
@@ -438,14 +438,14 @@ export default {
           let newProfit = ''
           if (this.profit.toString().length >= 3) {
             const oldProfit = this.profit.toString()
-            
+
             for (let i = 0; i < oldProfit.length; i++) {
-              
-              newProfit += oldProfit[oldProfit.length - 1 - i] 
+
+              newProfit += oldProfit[oldProfit.length - 1 - i]
               if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
                 newProfit += ','
-              } 
-              
+              }
+
             }
           }
           let reversedProfit = newProfit.split("").reverse().join("")
@@ -454,9 +454,9 @@ export default {
           return res.data.payments
         })
         .then( (payments) => {
-          
+
           payments.forEach( payment => {
-            const temp   = {} 
+            const temp   = {}
             const userId = payment.user
             // console.log(userId)
             this.$http.get(`/api/user/search/${userId}`)
@@ -465,7 +465,7 @@ export default {
                 temp.userInfo = res.data.user
                 this.paymentList.push(temp)
               })
-            
+
           })
           console.log(this.paymentList)
         })
@@ -499,7 +499,7 @@ export default {
 
       // calendar로 넘겨줄 events 리스트
       events: [],
-      
+
       // 가이드 상품 수정시 넘겨줄 props 객체
       serviceInfoProp : { 'fuck' : 'fuck you jmotherfucker'},
 
@@ -524,7 +524,7 @@ export default {
       // 현재 가이드 페이지에 접근한 유저가 해당 가이드인지 일반 유저인지 판단 후,
       // 일반 유저일 경우 수정 기능들을 비활성 처리합니다.
       guideId: this.$route.query.guideId,
-      
+
       // 가이드 상품 관련
       guideServices: [],
     }
@@ -542,7 +542,7 @@ export default {
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
-    this.getPaymentsByGuide(this.guideId)   
+    this.getPaymentsByGuide(this.guideId)
 
 
   },
