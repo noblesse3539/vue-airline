@@ -738,7 +738,7 @@ export default {
         .then( res => {
         })
     },
-
+  
     hideComponent(event) {
         if (event.target.classList[1] == 'dialog-delete') {
           // const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)

@@ -146,8 +146,8 @@ SOCKET.IO CONFIGURATION
 ==========================*/
 const SocketIO = require('./socket')
 
-const server = app.listen(3002, function() {
-  console.log('server running on port 3002');
+const server = app.listen(3000, function() {
+  console.log('server running on port 3000');
 });
 
 SocketIO(server,app)

@@ -216,9 +216,9 @@
       UploadImgModal,
     },
     created() {
-      this.getUserInfo()
-    },
+      },
     mounted() {
+      this.getUserInfo()
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
@@ -433,7 +433,7 @@
       closeUserInfoModifier: function() {
         this.isUserInfoOpen = true
       },
-
+      
       getUserInfo: function() {
         const token= this.$getToken('BisionToken')
         const config = {
