@@ -2,7 +2,7 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
+      <div style="width: 70%; background-color: rgba(0, 171, 132, 1); color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
         <div style="display:grid; grid-template-columns: 50% 34% 16%;">
           <div>
             <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
@@ -75,7 +75,7 @@
                 <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
               </template>
             </v-range-slider>
-
+          
             <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
             <span>{{inboundDepartStartTime}} - </span>
             <span>{{inboundDepartEndTime}}</span>

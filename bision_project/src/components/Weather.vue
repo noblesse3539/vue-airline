@@ -28,15 +28,13 @@ export default{
     mounted() {
         this.translate()
         // openweathermap API에서 현재 서울 날씨 가져오기
-
-            
     },
     methods: {
         async translate() {
 
             const taxios = await this.$http.create({
                 baseURL: "https://translation.googleapis.com"
-            });
+            })
             const getTranslate = await taxios.post("/language/translate/v2", null, {
                 params: {
                 source: "ko",
@@ -44,13 +42,19 @@ export default{
                 q: this.$props.city,
                 key: "AIzaSyD9-6TuS5C7IJVWPFv5i10l_Z2JjXyb9zw"
                 }
+
             })
+            console.log(getTranslate)
             this.translatedText = getTranslate.data.data.translations[0].translatedText
             const apiKey  = '79afaa4fcb45087af27c7ef8708f358c'
             const baseUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.translatedText}&APPID=${apiKey}`
-            // const result  = []
-            this.$http.get(baseUrl)
+            // const baseUrl = `http://api.openweathermap.org/data/2.5/weather?q=Daejeon&APPID=${apiKey}`
+            
+            const result  = []
+
+            this.$http.get(baseUrl, null)
                 .then( (res) => {
+                    console.log(res)
                     let tempResult = {}
                     tempResult.city       = res.data.names
                     tempResult.temp       = Math.floor(res.data.main.temp - 273.15)
@@ -60,6 +64,9 @@ export default{
                     tempResult.cod        = `wi wi-owm-${res.data.weather[0].id}`
                     this.result.push(tempResult)
                     this.isApiDone = true
+                })
+                .catch( err => {
+                    console.log(err)
                 })
         }
     },

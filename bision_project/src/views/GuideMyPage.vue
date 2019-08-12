@@ -117,7 +117,7 @@
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
-                        @click="showPW"
+                        @click="deleteGuideService(service)"
                       >
                         삭제하기
                       </button>
@@ -168,8 +168,8 @@
              </v-list>
 
           </v-flex>
-          <h1 class="gs-guidemypage-section-divider">예약 일정</h1>
-          <GuideCalendar :events="events"></GuideCalendar>
+          <h1 class="gs-guidemypage-section-divider" v-if="guideId == getUserId">예약 일정</h1>
+          <GuideCalendar :events="events" v-if="guideId == getUserId"></GuideCalendar>
         </v-tab-item>
 
         <!-- ALL -->
@@ -624,12 +624,12 @@ export default {
     },
     deleteGuideService(service) {
       alert("정말 삭제하시겠어요?")
-
-      this.$http.delete(`/api/guideservice/delete/${service._id}`)
-        .then( res => {
-          alert("삭제되었습니다!")
-          this.getGuideService()
-        })
+      
+      // this.$http.delete(`/api/guideservice/delete/${service._id}`)
+      //   .then( res => {
+      //     alert("삭제되었습니다!")
+      //     this.getGuideService()
+      //   })
     },
 
     // 가이드 결제 내역
