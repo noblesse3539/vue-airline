@@ -521,10 +521,10 @@ width: 100%;
 }
 
 .reserve-chat {
-  position: absolute;
+  position: relative;
   top: 0;
   right: 0;
-  z-index: 5000;
+  z-index: 99999999;
 }
 
 .reserve-chat:hover {
