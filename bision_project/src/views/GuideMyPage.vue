@@ -490,6 +490,7 @@ export default {
         const config = {
           'profileImg': this.imgurl
         }
+        console.log("config", config)
         const header = {
           'x-access-token': this.$getToken("BisionToken")
         }
@@ -565,8 +566,8 @@ export default {
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
         this.guideName = guide.nickname
-        this.imgurl = guide.profileImg? guide.profileImg : guide.profileImageUrl
-
+        this.imgurl = guide.profileImg
+        console.log("img", guide.profileImg)
         // 가이드 평균 평점 구하기
         if (res.data.guide.starRatingList.length) {
           sum = res.data.guide.starRatingList.reduce(function(acc, each) { return acc + each})

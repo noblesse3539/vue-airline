@@ -64,7 +64,7 @@
         v-for="(guideService, idx) in currentGuideServices"
         :key="id"
       >
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
@@ -93,7 +93,7 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in likedGuideServices"
         :key="id">
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService._id)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
         <div class="likeTooltip">좋아요 취소</div>
         <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
         <div class="myTourExperience-description">
@@ -128,7 +128,7 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in usedGuideServices"
         :key="idx">
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
@@ -287,10 +287,9 @@
       }
     },
     methods: {
-      goToDetail(GS) {
-        console.log(GS.service)
-        console.log(GS.guideServiceId)
-        const query = {serviceId: GS.guideServiceId}
+      goToDetail(GSID) {
+        console.log(GSID)
+        const query = {serviceId: GSID}
         this.$router.push({name: 'GuideServiceDetailPage', query: query})
       },
       linktoGS() {
@@ -449,7 +448,7 @@
             for(var idx in res.data.paymentRecords) {
               if(res.data.paymentRecords[idx].service.date >= today){
                 this.currentGuideServices.push({
-                  'guideServiceId' : res.data.options[idx].guideservice,
+                  'guideServiceId' : res.data.options[idx][0].guideservice,
                   'paymentId' : res.data.paymentRecords[idx]._id,
                   'service' : res.data.paymentRecords[idx].service
               })}else{
@@ -460,8 +459,6 @@
                 })
               }
             }
-            console.log("usedGuideServices", this.usedGuideServices)
-
             for(var liked of res.data.userInfo.likeGuideServices){
               this.$http.get('/api/guideservice/findGSById/'+liked)
               .then( res => {
