@@ -117,7 +117,7 @@
                 <div class="result-body__result-list"
                     v-for=" (service, idx) in guideServiceList.slice( (page-1)*10, page*10)"
                     :key = idx
-                    @click="goToDetail(idx + (page-1)*10, $event)"
+                    @click="goToDetail(idx + (page-1)*10, service.likeUsers.indexOf(getuserId), $event)"
                 >
                     <div class="result-body-card" :id="service._id">
                         <div class="result-body-card-imgbox">
@@ -159,8 +159,8 @@
                               </div>
                             </div>
                             <div class="result-body-card-bottom">
-                                <p>
-                                    <v-rating v-model="guideRating" size="5" dense></v-rating>
+                                <p>                           
+                                    <v-rating v-model="service.rateAvg" size="5" dense></v-rating>
                                 </p>
                                 <p class="result-body-card-bottom-price">
                                     <span class="currency">KRW</span>
@@ -263,7 +263,7 @@ export default {
             const keyword = this.city_kor || this.nation_kor
             this.$http.get(`/api/guideservice/search/${keyword}`)
             .then( res=> {
-                console.log(res.data)
+                console.log("데이터", res.data)
                 res.data.guideservices.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text
                         const temp = {}
@@ -273,6 +273,7 @@ export default {
                         temp.rawDetail  = eachService.detail
                         temp.image      = eachService.mainImg
                         temp.duration   = eachService.duration
+                        temp.rateAvg    = eachService.rateAvg
                         if (eachService.options.length != 0) {
                           temp.cost = eachService.options[0].adult.cost
                         } else {
@@ -358,13 +359,14 @@ export default {
               })
 
         },
-        goToDetail: function(serviceIdx, event) {
+        goToDetail: function(serviceIdx, like, event) {
           // console.log(event.target)
 
             if (event.target.classList[0] != 'likeBtn') {
 
               const params = this.guideServiceList[serviceIdx]
-              const query = {serviceId: this.guideServiceList[serviceIdx].serviceId}
+              const query = {serviceId: this.guideServiceList[serviceIdx].serviceId,
+                              like: like}
               this.$router.push({ name: "GuideServiceDetailPage", params: params, query: query})
             }
             // {name: "GuideListPage", params: params}
