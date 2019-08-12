@@ -7,8 +7,9 @@
                 <div class="toggle-btn">
                 </div>
             </label> -->
-              <v-switch v-model="isGuide" :label="welcomeMessage"
-                @click="changeWelcomeMsg"
+              <v-switch 
+                v-model="isGuide" 
+                :label="welcomeMessage"
                 style="color: grey;"
                 class="whyisthis"
               >
@@ -49,11 +50,9 @@ export default {
     destroyed() {
         this.checkUserLoginStatus()
     },
-    methods: {
-      changeWelcomeMsg() {
-
-          const googleLoginBtn = document.querySelector(".google-login-btn-box")
-          if (this.isGuide) {
+    watch: {
+      isGuide: function() {
+        if (this.isGuide) {
             this.welcomeMessage = "가이드 모드 ON"
 
             googleLoginBtn.style.borderColor = "#8c9eff"
@@ -63,6 +62,8 @@ export default {
             googleLoginBtn.style.borderColor = "#9f9f9f"
           }
       },
+    },
+    methods: {
         doLogin() {
           let curentURL = window.location.href
           curentURL = curentURL.split('&').join('%26')
