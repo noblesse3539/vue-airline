@@ -36,7 +36,7 @@
             <div class="GS-guide-duration GS-guide-detail-icon">
               <i class="far fa-clock"></i>
               <span style="margin-left: 10px;">소요시간 : {{duration}}</span>
-            </div>            
+            </div>
             <div class="GS-guide-refund GS-guide-detail-icon">
               <i class="fas fa-coins"></i>
               <span style="margin-left: 10px;" v-if="serviceInfo.refund[0].refund100 > 0">{{serviceInfo.refund[0].refund100}}일 전 전액 환불</span>
@@ -56,7 +56,7 @@
                   <i class="fas fa-sign-in-alt"></i>
                 </a>
               </div>
-              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">                
+              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">
                 <div class="GS-service-review-userImage">
                   <img
                     :src="reviews[maxratingReviewIdx].user.profileImageUrl"
@@ -73,7 +73,7 @@
                           <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="14.7" readonly></v-rating>
                         </div>
                         <div class="GS-service-review-userName GS-service-review-info">{{reviews[maxratingReviewIdx].user.nickname}}</div>
-                       
+
                       </div>
                       <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[maxratingReviewIdx].payment.service.date}}</div>
                     </div>
@@ -725,7 +725,7 @@ export default {
               idx = i
               maxrating = this.reviews[i].rating
             }
-            
+
             var name = this.reviews[i].user.nickname
             if (pattern_kor.test(name.slice(0,1))) this.reviews[i].user.nickname =  name.slice(0,1) + star.slice(0,name.length - 1)
             else this.reviews[i].user.nickname = name.slice(0,3) + star.slice(0,name.length - 3)
@@ -744,7 +744,7 @@ export default {
           this.maxratingReviewIdx = idx
           this.maxrationgReviewLoaded = true
           this.reviewsLoaded = true
-          
+
         }
         // console.log("리뷰", res.data.reviews)
       })
@@ -774,45 +774,45 @@ export default {
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
       if (this.selectOption.length == 0 || this.selectOption == idx) {
-       
+
         const toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
         const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
         const payBtn = document.querySelector('.GS-payment-choose-option')
 
-        if (toShow.style.display == "none") {       
+        if (toShow.style.display == "none") {
           payBtn.classList.add('animated')
           payBtn.classList.add('flash')
           // payBtn.classList.add('delay-0.1s')
-          
+
           this.setPaymentReady()
           toDrawBorder.classList.add('option-selected')
           // toHide.style.display = "none"
           toShow.style.display = "flex"
-          this.selectOption = idx       
-        } else {        
-          toShow.style.display = "none"          
-          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"          
-          toDrawBorder.classList.remove('option-selected')       
+          this.selectOption = idx
+        } else {
+          toShow.style.display = "none"
+          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
+          toDrawBorder.classList.remove('option-selected')
           payBtn.classList.remove('flash')
           payBtn.classList.remove('animated')
-          this.selectOption = ''     
-          this.cancelPaymentReady()         
+          this.selectOption = ''
+          this.cancelPaymentReady()
         }
-        
+
         this.selectOption = idx
 
-      } else {      
+      } else {
         let pre_idx = this.selectOption
-      
+
         let toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + pre_idx) || ''
-        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)     
-        toShow.style.display = "none"      
-        toDrawBorder.classList.remove('option-selected')         
+        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)
+        toShow.style.display = "none"
+        toDrawBorder.classList.remove('option-selected')
 
         toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
-        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)    
-        toDrawBorder.classList.add('option-selected')     
-        toShow.style.display = "flex"       
+        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)
+        toDrawBorder.classList.add('option-selected')
+        toShow.style.display = "flex"
 
         this.selectOption = idx
       }
@@ -822,8 +822,8 @@ export default {
       this.serviceInfo.seniorprice = this.options[idx].senior.cost
       this.serviceInfo.childprice = this.options[idx].child.cost
       this.serviceInfo.infantprice = this.options[idx].infant.cost
-      this.serviceInfo.itemName = this.options[idx].title 
-     
+      this.serviceInfo.itemName = this.options[idx].title
+
 
     },
     setPaymentReady() {
