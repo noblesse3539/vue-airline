@@ -1,0 +1,163 @@
+.chat{
+  padding-top : 130px;
+  padding-bottom: 50px;
+}
+
+#chatTextDiv{
+  width:80%;
+  border-top: 10px solid moccasin;
+  border-left: 8px solid moccasin;
+  border-right: 8px solid moccasin;
+  padding: 10px;
+  border-radius: 15px 15px 0px 0px;
+}
+
+#chatText{
+  width:100%;
+  height: 100px;
+  border-radius: 15px;
+  font-size: 1.2rem
+}
+
+#chatText::placeholder {
+  font-size: 1.2rem;
+}
+
+#chatBtn{
+  padding:10px;
+  border: 3px solid lightgray;
+  border-radius: 10px;
+  background-color: lightgray;
+}
+
+#chatBtnDiv{
+  width:80%;
+  padding:10px;
+  margin-bottom: 2%;
+  text-align:right;
+  background-color: moccasin;
+  border-radius: 0px 0px 15px 15px;
+}
+
+.my_name{
+    position: relative;
+    display: block;
+    margin-left: 5%;
+    border-radius: 10px;
+    padding: 5px;
+    color: black;
+    font-size:1.2rem;
+    font-weight:bold;
+}
+
+.my_message{
+    position: relative;
+    display: block;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    color: black;
+}
+
+.my_message_text{
+  background-color: lemonchiffon;
+  border-radius: 10px;
+  padding: 10px;
+  display:inline-block;
+}
+
+.you_name{
+    position: relative;
+    display: block;
+    margin-left:auto;
+    margin-right: 5%;
+    border-radius: 10px;
+    padding: 5px;
+    color: black;
+    text-align:right;
+    font-size:1.2rem;
+    font-weight:bold;
+}
+
+.you_message{
+    position: relative;
+    display: block;
+    margin-left:auto;
+    margin-right: 5%;
+    margin-bottom: 2%;
+    border-radius: 10px;
+    color: black;
+    text-align:right;
+}
+
+.you_message_text{
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  display: inline-block;
+}
+
+.chatMessage{
+  font-size:1.2rem;
+}
+
+.message_time{
+  background-color: #b2cee9;
+  border-radius: 10px;
+  padding: 5px;
+  display: inline-block;
+  font-size:0.9rem;
+}
+
+#messageBox{
+  margin-right:20%;
+  background-color:#ddeeff;
+  border:10px solid #ddeeff;
+  border-radius: 20px;
+}
+
+.chatInfo{
+  padding:20px;
+}
+
+.chatInfoImg{
+  width:60%;
+  margin:auto
+}
+
+.chatInfoUsername{
+  font-size:1.5rem;
+  font-weight:bold;
+  text-align:center;
+  padding:10px
+}
+
+.chatInfoEmail{
+  font-size:1.2rem;
+  font-weight:bold;
+  text-align:center;
+}
+
+
+.chatInfoOthers{
+  padding:20px;
+}
+
+.chatInfoOthersImg{
+  width:30%;
+  padding:10px;
+  margin:auto;
+}
+
+.chatInfoOthersUsername{
+  font-size:1.2rem;
+  font-weight:bold;
+  text-align:center;
+  padding:3px
+}
+
+.chatInfoOthersEmail{
+  font-size:1rem;
+  font-weight:bold;
+  text-align:center;
+  padding:5px
+}
