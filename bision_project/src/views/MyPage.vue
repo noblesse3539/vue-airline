@@ -93,7 +93,8 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in likedGuideServices"
         :key="id">
-        <img click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <div class="likeTooltip">좋아요 취소</div>
         <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
         <div class="myTourExperience-description">
 
