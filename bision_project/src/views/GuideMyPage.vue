@@ -113,14 +113,55 @@
                       </div>
                     </div>
                     <div class="gs-mypage-service-content-bottom-reserve">
-                      <button
+                      <!-- <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
                         @click="deleteGuideService(service)"
+                        href="#popup1"  
                       >
                         삭제하기
-                      </button>
+                      </button> -->
+                      <v-btn
+                        v-if="getUserId == guideId"
+                        color="primary"
+                        dark
+                        @click.stop="dialog = true"
+                      >
+                        삭제하기
+                      </v-btn>
+                      <v-dialog
+                        v-model="dialog"
+                        max-width="290"
+                      >
+                        <v-card>
+                          <v-card-title class="headline">Use Google's location service?</v-card-title>
+
+                          <v-card-text>
+                            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                              color="green darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              Disagree
+                            </v-btn>
+
+                            <v-btn
+                              color="green darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              Agree
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
                       <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
@@ -623,7 +664,6 @@ export default {
 
     },
     deleteGuideService(service) {
-      alert("정말 삭제하시겠어요?")
       
       // this.$http.delete(`/api/guideservice/delete/${service._id}`)
       //   .then( res => {
