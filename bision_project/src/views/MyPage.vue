@@ -62,7 +62,7 @@
       <!-- slides -->
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in currentGuideServices"
-        :key="id"
+        :key="idx"
       >
         <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
@@ -441,22 +441,28 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
+            console.log(res.data)
             console.log("userInfo",res.data.userInfo)
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
             for(var idx in res.data.paymentRecords) {
-              if(res.data.paymentRecords[idx].service.date >= today){
-                this.currentGuideServices.push({
-                  'guideServiceId' : res.data.options[idx][0].guideservice,
-                  'paymentId' : res.data.paymentRecords[idx]._id,
-                  'service' : res.data.paymentRecords[idx].service
-              })}else{
-                this.usedGuideServices.push({
-                  'guideServiceId' : res.data.options[idx][0].guideservice,
-                  'paymentId' : res.data.paymentRecords[idx]._id,
-                  'service' : res.data.paymentRecords[idx].service
-                })
+
+              // 결제 취소 항목 제외하고 보여주기
+              if (res.data.paymentRecords[idx].status != '결제취소') {
+  
+                if(res.data.paymentRecords[idx].service.date >= today){
+                  this.currentGuideServices.push({
+                    'guideServiceId' : res.data.options[idx][0].guideservice,
+                    'paymentId' : res.data.paymentRecords[idx]._id,
+                    'service' : res.data.paymentRecords[idx].service
+                })}else{
+                  this.usedGuideServices.push({
+                    'guideServiceId' : res.data.options[idx][0].guideservice,
+                    'paymentId' : res.data.paymentRecords[idx]._id,
+                    'service' : res.data.paymentRecords[idx].service
+                  })
+                }
               }
             }
             for(var liked of res.data.userInfo.likeGuideServices){

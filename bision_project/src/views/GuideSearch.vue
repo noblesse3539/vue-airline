@@ -64,7 +64,7 @@ export default {
     name: 'GuideSearch',
     data() {
         return {
-
+            
             // 스크롤 시 검색 결과 더 보여주기를 위한 변수
             loadMoreOnScroll: 10,
             scrollTopOfInput: 0,
