@@ -140,8 +140,10 @@
 
 .guide-search-result-wrapper {
     width: 75% !important;
+    
     /* z-index: 6000 !important; */
-    /* position: relative; */
+    margin-top: 100px;
+    position: absolute;
     /* overflow: auto; */
     /* overflow: hidden; */
 }

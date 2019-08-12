@@ -293,6 +293,7 @@
 .user-comment {
     width: 100%;
     margin-top: 20px;
+    margin-bottom: 20px;
     padding: 20px;
     border-radius: 10px;
     background: #1d1d56 !important;
@@ -683,13 +684,22 @@
     font-weight: 700;
     font-size: 2.25rem;
     align-items: center;
+    align-content: center;
+    align-self: center;
     /* justify-content: center; */
 }
 
 .GS-guide-detail-guideImg {
     width: 100px;
+    height: auto;
     margin-right: 20px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.GS-guide-detail-guideImg > a {
+    display: flex; 
     align-items: center;
 }
 
@@ -703,8 +713,9 @@
 
 .GS-guide-detail-guideImg-image {
     border-radius: 50%;
-    width: 100%;
-    height: auto;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
 }
 
 .GS-date-picker {
@@ -812,4 +823,12 @@
     height:20%; 
     display: flex; 
     justify-content: center;
+}
+
+.GS-payment-disabled {
+    background: grey !important;
+}
+
+.GS-payment-disabled:hover {
+    cursor: not-allowed;
 }

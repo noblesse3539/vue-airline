@@ -21,14 +21,28 @@
             <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
+              <v-btn @click="chat" color="#1e90ff" style="color: white;">메시지 보내기</v-btn>
             </div>
           </div>
 
           <div class="GS-guide-detail-title">
             <div style="margin-right: 10px;">{{title}}</div>
 
-            <!-- 좋아요 기능 추후 구현 -->
-            <i class="far fa-heart"></i>
+            <!-- 좋아요 기능 추후 구현 -->            
+            <!-- <v-tooltip right>
+              <template v-slot:activator="{ on }" v-if="this.like == -1">
+                <i @click="serviceLike" class="far fa-heart" v-on="on"></i>            
+              </template>
+              <span>찜하기</span>
+            </v-tooltip>
+            <v-tooltip right>
+              <template v-slot:activator="{ off }" v-if="this.like != -1">
+                <i @click="serviceLike" class="fas fa-heart" v-on="off"  style="color: red;"></i>            
+              </template>
+              <span>찜 하기 취소</span>
+            </v-tooltip>             -->
+            <i @click="serviceLike" v-if="this.like != -1" class="fas fa-heart" style="color: red;"></i>
+            <i @click="serviceLike" v-else class="far fa-heart"></i>            
             <!-- <i class="fas fa-heart guide-list-page-like-btn-active"></i> -->
           </div>
 
@@ -36,7 +50,7 @@
             <div class="GS-guide-duration GS-guide-detail-icon">
               <i class="far fa-clock"></i>
               <span style="margin-left: 10px;">소요시간 : {{duration}}</span>
-            </div>            
+            </div>
             <div class="GS-guide-refund GS-guide-detail-icon">
               <i class="fas fa-coins"></i>
               <span style="margin-left: 10px;" v-if="serviceInfo.refund[0].refund100 > 0">{{serviceInfo.refund[0].refund100}}일 전 전액 환불</span>
@@ -56,6 +70,7 @@
                   <i class="fas fa-sign-in-alt"></i>
                 </a>
               </div>
+              <!-- 최고 평점 있을 시 -->
               <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">                
                 <div class="GS-service-review-userImage">
                   <img
@@ -73,7 +88,7 @@
                           <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="14.7" readonly></v-rating>
                         </div>
                         <div class="GS-service-review-userName GS-service-review-info">{{reviews[maxratingReviewIdx].user.nickname}}</div>
-                       
+
                       </div>
                       <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[maxratingReviewIdx].payment.service.date}}</div>
                     </div>
@@ -85,6 +100,35 @@
                   </div>
                 </div>
               </div>
+
+              <!-- 평점 하나도 없을 시 -->
+              <div class="GS-guide-detail-best-review-content" v-else>                
+                <div class="GS-service-review-userImage">
+                  <img
+                    src="https://i.pinimg.com/236x/43/59/f3/4359f3d05221af09e7ec7f498afa502b.jpg"
+                    class="GS-service-review-userImage-src"
+                    alt="our user's beautiful face"
+                    style="border-radius: 50%;"
+                  />
+                </div>
+                <div class="GS-guide-detail-best-review-right">
+                  <div class="GS-service-review-top">
+                    <div class="GS-service-review-top-userInfo">
+                      <div class="GS-service-review-rating-and-username">
+                        <div class="GS-service-review-userScore GS-service-review-info">
+                          <v-rating dense size="14.7" readonly></v-rating>
+                        </div>
+                        <div class="GS-service-review-userName GS-service-review-info"></div>                       
+                      </div>                      
+                    </div>                    
+                  </div>
+
+                  <div class="user-comment" style="margin-top: 0px;">
+                    아직 작성된 리뷰가 없어요.
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -119,7 +163,8 @@
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
+            <button v-if="isGuide" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
+            <button v-else class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -197,7 +242,7 @@
                 <span>{{cost}}</span>
               </div> -->
             </div>
-            <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->           
+            <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
@@ -400,8 +445,8 @@
                 style="border-radius: 50%;"
               />
             </div> -->
-            <div class="GS-service-reivew-content" v-if="reviewsLoaded">
-              <div v-for="i in reviews.length > limits ? limits : reviews.length">               
+            <div class="GS-service-reivew-content" v-if="reviewsLoaded">     
+              <div v-for=" (i) in reviews.length > limits ? limits : reviews.length" :key="i">                           
                 <div class="GS-service-review-image-and-content">
                   <div class="GS-service-review-userImage">
                     <img
@@ -428,7 +473,7 @@
                     <div :class="'GS-service-reivew-userReview-' + i" class="GS-service-reivew-userReview">
                       <!-- <p>
                         {{reviews[i-1].content}}
-                      </p> -->
+                      </p> -->               
                       <p style="height: 80%">
                         혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
                         단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
@@ -440,18 +485,18 @@
                         직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
                         해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
                         일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
-                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!                      
+                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
                       </p>
-                      <div class="GS-service-review-content-morebutton">
-                        <button @click="loadReviewMore(i)" v-if="isLoadMore[i-1]">
-                          닫기
+                      <div class="GS-service-review-content-morebutton">                                                        
+                        <button :class="`gs-service-close-${i}`" style="display: none;" @click="loadReviewMore(i)">
+                          닫기 
                           <i class="fa fa-angle-up"></i>
                         </button>
-                        <button @click="loadReviewMore(i)" v-else>
-                          {{isLoadMore}}
+                        <button :class="`gs-service-open-${i}`" @click="loadReviewMore(i)">              
                           더 읽어보기
                           <i class="fa fa-angle-down"></i>
                         </button>
+                       
                       </div>
                     </div>
                   </div>
@@ -471,6 +516,7 @@
 <script>
 import "./GuideServiceDetailPage.css";
 import PayBtn from "../components/kakaopaycpn/PayBtn";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "GuideServiceDetailPage",
@@ -481,6 +527,11 @@ export default {
 
   },
   mounted() {
+
+    if (this.isGuide === false) {
+
+    }
+
     this.getServiceInformation()
     window.addEventListener("scroll", this.dragDownSideBar)
     window.addEventListener('click', this.hideElements)
@@ -490,6 +541,7 @@ export default {
   },
   data() {
     return {
+      like: 0,
       isOptionsAvailable: false,
       isSideBarSticky: false,
       // guideServiceUserWrote: this.thisPostInfo.rawDetail || '',
@@ -555,10 +607,15 @@ export default {
       },
 
       // 달력 관련 변수
-      isCalenderOpen: false,      
+      isCalenderOpen: false,
       isPaymentReady: false,
       leavingDate: '',
       leavingDates: [],
+      room:{
+        user:'',
+        guide:''
+      },
+    
 
       // 레이팅 관련 변수
       average: 0,
@@ -570,6 +627,7 @@ export default {
       flagLoaded: false,
       guideImgLoaded: false,
       reviewsLoaded: false,
+      guideImageLoaded: false,
 
       // 옵션 박스
       selectOption: '',
@@ -577,10 +635,30 @@ export default {
       // 리뷰 관련 변수
       limits: 5,
       isLoadMore: [],
+
     };
 
   },
   methods: {
+    serviceLike : function() {
+
+            let userId  = this.getuserId
+
+            this.$http.post(`/api/guideservice/${this.$route.query.serviceId}/${userId}`)
+              .then( res => {
+                return res.data.added
+              })
+              .then( added => {
+                this.$http.get(`/api/guideservice/findGSById/${this.$route.query.serviceId}`)
+                  .then( res => {
+                    this.like = res.data.likeUsers.indexOf(userId)
+                    console.log(this.like)
+                    console.log("요기", res.data.likeUsers)
+                    console.log("user", userId)
+                  })
+              })
+
+        },
 
     decreasePeople: function(select) {
       // this.serviceInfo.people -= 1
@@ -696,18 +774,20 @@ export default {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then( res => {
         this.guideInfo.guideName = res.data.guide.username
-        this.guideInfo.guideImg = res.data.guide.profileImageUrl
+        this.guideInfo.guideImg = res.data.guide.profileImg? res.data.guide.profileImg : res.data.guide.profileImageUrl
         this.guideInfo.guideId = res.data.guide._id
 
         this.guideImgLoaded = true
+        console.log("가이드인포", this.guideInfo)
       })
     },
 
     getReviews : function () {
+      this.like = this.$route.query.like
       this.$http.get(`/api/guideservice/findReview/${this.$route.query.serviceId}`)
       .then( res => {
         this.reviews = res.data.reviews
-        console.log("리뷰", res.data.reviews)
+        // console.log("리뷰", res.data.reviews)
       })
       .then( () => {
         if (this.reviews.length > 0) {
@@ -724,7 +804,7 @@ export default {
               idx = i
               maxrating = this.reviews[i].rating
             }
-            
+
             var name = this.reviews[i].user.nickname
             if (pattern_kor.test(name.slice(0,1))) this.reviews[i].user.nickname =  name.slice(0,1) + star.slice(0,name.length - 1)
             else this.reviews[i].user.nickname = name.slice(0,3) + star.slice(0,name.length - 3)
@@ -738,87 +818,104 @@ export default {
             //     latestdate = this.dateCalculate(this.reviews[i].created_at)
             //   }
             // }
-          }
+          }         
+
           this.average = (sum/this.reviews.length).toFixed(1)
           this.maxratingReviewIdx = idx
           this.maxrationgReviewLoaded = true
           this.reviewsLoaded = true
-          
+
         }
+        this.maxrationgReviewLoaded = true
 
         for (let i=0; i<this.reviews.length; i++) {
-          this.isLoadMore.push("false")
+          this.isLoadMore.push(false)
         }
-        console.log("로드모어", this.isLoadMore)
-        // console.log("리뷰", res.data.reviews)
+        // console.log("로드모어", this.isLoadMore)
+        // console.log("리뷰", this.reviews)
       })
     },
 
-    loadReviewMore: function(i) {     
+    loadReviewMore: function(i) {
       const loadReviewMore = document.querySelector(".GS-service-reivew-userReview-" + i)
-      const loadReiveMoreBtn = document.querySelector(
-        ".GS-service-reivew-userReview"
-      );
-      const loadReviewMoreBtn2 = document.querySelector(
-        ".GS-service-review-userReview-expand"
-      );
-      // console.log(loadReiveMoreBtn);      
+      const reviewopen = document.querySelector(`.gs-service-open-${i}`)
+      const reviewclose = document.querySelector(`.gs-service-close-${i}`)
+      
+      
+      // const loadReiveMoreBtn = document.querySelector(
+      //   ".GS-service-reivew-userReview"
+      // );
+      // const loadReviewMoreBtn2 = document.querySelector(
+      //   ".GS-service-review-userReview-expand"
+      // );
+      // console.log(loadReiveMoreBtn);     
+      console.log(this.isLoadMore[i-1])
 
-      if (this.isLoadMore[i-1] == "true") {
-        console.log("닫았어")
+
+      // if (this.isLoadMore[i-1] == "true") {
+      if (this.isLoadMore[i-1]) {       
+        console.log("닫힘")
         loadReviewMore.classList.add("GS-service-reivew-userReview");
         loadReviewMore.classList.remove("GS-service-review-userReview-expand");
-        this.isLoadMore[i-1] = "false";
+        this.isLoadMore[i-1] = false
+        reviewopen.style.display = "flex"
+        reviewclose.style.display = "none"
+        console.log(isLoadMore[i-1])
+        console.log("닫힘")
+  
       } else {
-        console.log("열었어")
         loadReviewMore.classList.add("GS-service-review-userReview-expand");
         loadReviewMore.classList.remove("GS-service-reivew-userReview");
-        this.isLoadMore[i-1] = "true";
+        this.isLoadMore[i-1] = true
+
+        reviewopen.style.display = "none"
+        reviewclose.style.display = "flex"
+        console.log("열림")
       }
-      console.log(this.isLoadMore)
+     
     },
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
       if (this.selectOption.length == 0 || this.selectOption == idx) {
-       
+
         const toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
         const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
         const payBtn = document.querySelector('.GS-payment-choose-option')
 
-        if (toShow.style.display == "none") {       
+        if (toShow.style.display == "none") {
           payBtn.classList.add('animated')
           payBtn.classList.add('flash')
           // payBtn.classList.add('delay-0.1s')
-          
+
           this.setPaymentReady()
           toDrawBorder.classList.add('option-selected')
           // toHide.style.display = "none"
           toShow.style.display = "flex"
-          this.selectOption = idx       
-        } else {        
-          toShow.style.display = "none"          
-          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"          
-          toDrawBorder.classList.remove('option-selected')       
+          this.selectOption = idx
+        } else {
+          toShow.style.display = "none"
+          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
+          toDrawBorder.classList.remove('option-selected')
           payBtn.classList.remove('flash')
           payBtn.classList.remove('animated')
-          this.selectOption = ''     
-          this.cancelPaymentReady()         
+          this.selectOption = ''
+          this.cancelPaymentReady()
         }
-        
+
         this.selectOption = idx
 
-      } else {      
+      } else {
         let pre_idx = this.selectOption
-      
+
         let toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + pre_idx) || ''
-        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)     
-        toShow.style.display = "none"      
-        toDrawBorder.classList.remove('option-selected')         
+        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)
+        toShow.style.display = "none"
+        toDrawBorder.classList.remove('option-selected')
 
         toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
-        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)    
-        toDrawBorder.classList.add('option-selected')     
-        toShow.style.display = "flex"       
+        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)
+        toDrawBorder.classList.add('option-selected')
+        toShow.style.display = "flex"
 
         this.selectOption = idx
       }
@@ -828,8 +925,8 @@ export default {
       this.serviceInfo.seniorprice = this.options[idx].senior.cost
       this.serviceInfo.childprice = this.options[idx].child.cost
       this.serviceInfo.infantprice = this.options[idx].infant.cost
-      this.serviceInfo.itemName = this.options[idx].title 
-     
+      this.serviceInfo.itemName = this.options[idx].title
+
 
     },
     setPaymentReady() {
@@ -839,7 +936,7 @@ export default {
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
 
     },
-    cancelPaymentReady() {     
+    cancelPaymentReady() {
       this.isPaymentReady = false
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "block"
       // document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
@@ -872,10 +969,10 @@ export default {
 
           this.options.forEach( option => {
 
-            // option.day    
+            // option.day
             option.allowedDates = []
             option.dayOfWeek.forEach( day => {
-              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))                    
+              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))
             })
             // console.log(option.allowedDates)
 
@@ -932,8 +1029,8 @@ export default {
       // console.log(days)
       // 최종 년도 및 월까지 모든 월요일 구하기
       while (day.getFullYear() < endYear || day.getMonth() != endMonth) {
-        let anotherDay = new Date(day.setDate(day.getDate() + 7))        
-        
+        let anotherDay = new Date(day.setDate(day.getDate() + 7))
+
         days.push(anotherDay.toISOString().slice(0, 10))
       }
       // 오늘 이전 날짜 제외
@@ -970,7 +1067,17 @@ export default {
       }
       return reverse
     },
-
+    chat(){
+      this.room.guide=this.guideId
+      this.room.user=this.getuserId
+      console.log(1,this.guideId);
+      console.log(2,this.getuserId);
+      this.$http.post('/api/room/create',this.room)
+      .then((res)=>{
+        console.log(res.data);
+        window.location.replace("http://localhost:8080/room/"+res.data._id)
+      })
+    },
     dateCalculate : function (date) {
       return parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
     },
@@ -987,7 +1094,7 @@ export default {
       let sum = 0
       for (let i=0; i<idx; i++) {
         sum += days[i]
-      } 
+      }
       return sum
     },
   },
@@ -995,7 +1102,11 @@ export default {
 
 
   computed: {
-
+    ...mapState({
+        getIsLoggedIn : state => state.User.isLoggedIn,
+        getuserId : state => state.User.userId,
+        isGuide : state => state.User.isGuide
+    })
   },
 };
 </script>

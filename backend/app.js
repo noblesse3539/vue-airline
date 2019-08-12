@@ -31,11 +31,6 @@ const app = express()
 
 
 app.use(cors())
-/* =======================
-    SOCKET.IO CONFIGURATION
-==========================*/
-const server = require('http').createServer(app)
-app.io = require('socket.io')(server)
 
 
 const db = require('./db.js')
@@ -146,16 +141,15 @@ app.use(function(err, req, res, next) {
   res.render('error')
 })
 
-app.io.on('connection', function ( socket) {
-  socket.on('new_notification', function(data) {
-    console.log(data.title, data.message)
-    app.io.sockets.emit('show_notification', {
-      title: data.title,
-      message: data.message,
-    })
-  })
+/* =======================
+SOCKET.IO CONFIGURATION
+==========================*/
+const SocketIO = require('./socket')
 
-})
-app.io.origins('*:*')
+const server = app.listen(3000, function() {
+  console.log('server running on port 3000');
+});
+
+SocketIO(server,app)
 
 module.exports = app

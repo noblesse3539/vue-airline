@@ -2,7 +2,7 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="width: 70%; background-color: rgba(0, 171, 132, 1); color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
+      <div style="width: 100%; background-color: rgba(0, 171, 132, 1); color: white; height: 150px; padding: 2.5rem 5rem; margin-right:30px; border-radius: 0 0 15px 0;">
         <div style="display:grid; grid-template-columns: 50% 34% 16%;">
           <div>
             <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
@@ -75,7 +75,7 @@
                 <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
               </template>
             </v-range-slider>
-          
+
             <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
             <span>{{inboundDepartStartTime}} - </span>
             <span>{{inboundDepartEndTime}}</span>
@@ -142,8 +142,9 @@
           <div class="container" style="width: 100%;  padding: 0px;" v-if="!loading">
             <div v-if="!error">
               <!-- 정렬메뉴바 -->
+
               <div style="display:grid; grid-template-columns: 68% 12% 20%">
-                <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
+                <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
                 <div><div style="margin-top: 13px;">정렬 기준 : </div></div>
                 <div>
                   <v-menu offset-y style="display: inline-block">
@@ -198,7 +199,13 @@
           </div>
         </div>
         <div class="sidegrid-a sidegrid-b" style="height: 100px; width: 100%; margin-top: 50px;">
-          <img src="https://user-images.githubusercontent.com/46305309/62179669-42d9b980-b388-11e9-9837-ec79eb289c04.png" alt="" style="width: 90%">
+          <div v-if="GSload">
+            <div  @click="goToDetail(guideService.id)" v-for="guideService in guideServices">
+              <div>{{guideService.title}}</div>
+              <img :src="guideService.mainImg" style="width: 90%">
+              <div>{{guideService.desc}}</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -235,6 +242,9 @@ export default {
     },
     data: function() {
         return {
+          GSload : false,
+          guideServices: [],
+          destinationCity:'',
           loading: false,
           inboundDate: '',
           selected: ['0', '1', '2'],
@@ -292,8 +302,39 @@ export default {
       this.getFlights(2, 0)
       this.getFlights(3, 0)
       this.getFlights(4, 0)
+      this.getad()
     },
     methods: {
+      goToDetail(id) {
+        console.log(id)
+        const query = {serviceId: id}
+        this.$router.push({name: 'GuideServiceDetailPage', query: query})
+      },
+      getad(){
+        // console.log(1)
+        console.log(this.$route.query.destinationCity)
+        this.destinationCity = this.$route.query.destinationCity
+        this.$http.get(`/api/guideservice/search/${this.destinationCity}`)
+        .then( res => {
+          console.log("비엔나나오니", res.data)
+          for(var i = 0; i < 2; i++){
+            if(i <= res.data.guideservices.length-1){
+              this.guideServices.push({
+                'mainImg': res.data.guideservices[i].mainImg,
+                'id' : res.data.guideservices[i]._id,
+                'title' : res.data.guideservices[i].title,
+                'desc' : res.data.guideservices[i].desc,
+
+              })
+            }
+          }
+          console.log("가이드서비스", this.guideServices)
+          this.GSload = true
+          console.log("여기", this.GSload)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
         getFlights: function(optionTypeIndex, s =  0){
             if (optionTypeIndex == 0) {
               this.loading = true
@@ -301,7 +342,6 @@ export default {
             var minDuration = 10000
             var maxDuration = 0
             console.log("실행")
-
             this.pageIndex = 0
             this.pageSize = 1000
             const baseUrl = 'https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0'
@@ -502,7 +542,7 @@ export default {
                                     let totalDuration = OutDuration + InDuration
                                     if (optionTypeIndex == 0) {
                                       if (totalDuration > maxDuration) maxDuration = totalDuration
-                                      if (totalDuration < minDuration) minDuration = totalDuration                                      
+                                      if (totalDuration < minDuration) minDuration = totalDuration
                                     }
                                     OutDuration = this.durationTransfer(OutDuration)
                                     InDuration = this.durationTransfer(InDuration)
