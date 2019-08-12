@@ -47,9 +47,11 @@ router.get('/search/:keyword',controller.SearchGS)
 router.post('/create/', authMiddle, compareGuideIdwithLoginId, controller.createGuideService)
 router.delete('/delete/:id', authMiddle, compareGSGuideIdwithLoginId, controller.deleteGuideService)
 router.put('/update/:id', authMiddle, compareGSGuideIdwithLoginId, controller.updateGuideService)
+router.put('/cancel/:id', authMiddle, compareGSGuideIdwithLoginId, controller.cancelGuideService)
 
 router.post('/:guideServiceId/:userId', authMiddle, compareUserwithLoginId, controller.likeGuideService)
 
 // router.delete('/alltags', controller.deleteAllTags)
+
 
 module.exports = router

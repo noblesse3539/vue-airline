@@ -106,6 +106,7 @@ exports.SearchGS=(req,res)=>{
   const keyword = req.params.keyword
   console.log(keyword);
   GuideService.find()
+  .where('canceled').ne(true)
   .populate('tags')
   .populate('options')
   .populate({path:'reviews',model:Review})
@@ -279,16 +280,28 @@ exports.cancelGuideService = (req, res) => {
   GuideService.findById(guideServiceId)
   .then(gs => {
     if(gs.canceled) return res.status(412).json({success:false, msg:'이미 상품이 취소되어 있습니다.'})
-    // gs.canceled = true
-    // gs.save()
+    gs.canceled = true
+    gs.save()
     return gs
   })
-  .then(gs => {
-    PaymentStore.find({})
-    .then( payments => {
-      console.log(payments[0].getGS())
-      res.json({ok:true})
+  .then(gs => { 
+    PaymentStore.find()
+    .where('status').equals('결제')
+    .populate('user')
+    .then(async payments => { // 해당 서비스의 결제목록 필터링 및 결제 상태를 취소로 변경
+      let list = []
+      for(let i=0; i< payments.length; i++) {
+        const gsid = await payments[i].getGSId()
+        if (gsid && gsid.equals(guideServiceId)) {
+          payments[i].status = "결제취소"
+          payments[i].save()
+          list.push(payments[i].user)
+        }
+      }
+      return list
     })
-    
+    .then( users => { // 결제 상태를 결제 취소로 변경
+      res.json({ok:true, users:users})
+    })
   })
 }
