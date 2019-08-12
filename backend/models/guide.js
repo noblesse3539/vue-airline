@@ -8,6 +8,7 @@ const Guide = new Schema({
     nickname: String,
     username: String,
     profileImageUrl: String,
+    profileImg: String,
     email: {type: String, unique: true},
     intro: String,
     // user: { type: Schema.Types.ObjectId, ref: 'User'},

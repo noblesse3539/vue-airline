@@ -490,7 +490,10 @@ export default {
         const config = {
           'profileImg': this.imgurl
         }
-        this.$http.put(`/api/guide/${guideId}`, config)
+        const header = {
+          'x-access-token': this.$getToken("BisionToken")
+        }
+        this.$http.put(`/api/guide/${guideId}`, config, {headers: header})
           .then( res => {
             console.log("프로필 이미지수정 완료", res.data)
           })

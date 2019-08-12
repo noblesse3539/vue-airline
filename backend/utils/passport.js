@@ -27,6 +27,7 @@ module.exports = (passport) => {
                     id: profile.id,
                     nickname : profile.displayName,
                     profileImageUrl : profile.photos[0].value,
+                    profileImg : profile.photos[0].value,
                     email : profile.emails[0].value
                 },
                 function (err, user) {
@@ -51,6 +52,7 @@ module.exports = (passport) => {
                     id: profile.id,
                     nickname : profile.displayName,
                     profileImageUrl : profile.photos[0].value,
+                    profileImg : profile.photos[0].value,
                     email : profile.emails[0].value
                 },
                 function (err, user) {

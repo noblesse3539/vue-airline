@@ -34,9 +34,11 @@ exports.createReview = (req,res)=>{
 exports.deleteReview = (req,res)=>{
   let newReview
   let reviewId
+  const userId = req.decoded._id
   Review.findById(req.params.id,(err,review)=>{
     if(err) res.status(500).json({err})
     if(review) {
+      if (!compareReviewerWithUser(userId, review.user)) return res.status(403).json({success: false, msg:'수정할 권한이 없습니다.'})
       newReview=new Review(review)
       reviewId=review._id
       console.log(review);
@@ -100,18 +102,24 @@ exports.deleteReviewByGSTitleContent = (req,res)=>{
 }
 
 exports.updateReview=(req,res)=>{
+    const userId = req.decoded._id
     Review.findById(req.params.id, (err,review) => {
         if (review) {
               console.log(review)
+              if (!compareReviewerWithUser(userId, review.user)) return res.status(403).json({success: false, msg:'수정할 권한이 없습니다.'})
               let id=review._id
               Review.update({ _id: id }, { $set: req.body }, function(err, output){
                   if(err) res.status(500).json({ error: 'database failure' });
                   console.log(output);
                   if(!output.n) return res.status(404).json({ error: 'review not found' });
-                  res.json( { message: 'reivew updated' } );
+                  res.json( {success: true, message: 'reivew updated' } );
               })
           if(err) res.status(500).json({err})
         }
         if(err) res.status(500).json({err})
       })
   }
+
+const compareReviewerWithUser = (userId, reviewer) => {
+  return reviewer.equals(userId)
+}
