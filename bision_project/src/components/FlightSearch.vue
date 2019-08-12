@@ -29,7 +29,7 @@
                                             <div class="country-triangle"></div>
                                     </div>
                                     <div class="dep-country-list">
-                                        <div v-for="(airport, id) in departureOutput.slice(0, 10)"
+                                        <div v-for="(airport, id) in departureOutput.slice(0, scrollToLoadMore)"
                                             :key="id"
                                             class="country-name"
                                             :class="{ 'is-active' : id === departureArrowCounter }"
@@ -70,7 +70,7 @@
                                             <div class="country-triangle"></div>
                                     </div>
                                     <div class="dst-country-list">
-                                        <div v-for="(airport, id) in destinationOutput.slice(0, 10)"
+                                        <div v-for="(airport, id) in destinationOutput.slice(0, scrollToLoadMore)"
                                             :key="id"
                                             class="country-name"
                                             :class="{ 'is-active' : id === destinationArrowCounter }"
@@ -176,6 +176,11 @@ export default {
     data() {
         return {
 
+            // 검색 결과 스크롤시 더 보여주기
+            scrollToLoadMore: 10,
+            scrollOfResultBox: 0,
+            scrollOfResultBoxDst: 0,
+
             RadioLabels: ["왕복", "편도", ],
             classes: ['economy', 'business', 'first'],
 
@@ -221,6 +226,12 @@ export default {
         // this.getAirportList()
     },
     mounted() {
+
+        this.scrollOfResultBox = document.querySelector('.dep-country-list')
+        this.scrollOfResultBox.addEventListener('scroll', this.scrollDetection)
+        this.scrollOfResultBoxDst = document.querySelector('.dst-country-list')
+        this.scrollOfResultBoxDst.addEventListener('scroll', this.scrollDetection)
+
         const roundTrip = document.querySelector("input")
         roundTrip.checked = true
 
@@ -235,6 +246,8 @@ export default {
         // 검색창 바깥 부분 클릭 시 출발지 및 도착지 검색 모달 숨기기
         document.body.addEventListener("click",  this.hideSearchResult)
         document.body.addEventListener('keyup', this.showSearchResult)
+    },
+    updated() {
     },
     destroyed() {
         document.body.removeEventListener("click",  this.hideSearchResult)
@@ -260,7 +273,7 @@ export default {
             const leftInput = document.querySelector('.searchListWrapper')
             const rightInput = document.querySelector('.searchListWrapper-dst')
 
-            console.log(e.target.classList[0])
+            // console.log(e.target.classList[0])
             // left-end-input
             if (e.key !== 'Enter' && e.target.classList[0] === 'left-end-input') {
                 leftInput.style.display = "block"
@@ -269,6 +282,10 @@ export default {
             }
         },
         hideSearchResult : function(e) {
+
+            console.log(e.target)
+            // 검색 결과 리스트 초기화
+            this.scrollToLoadMore = 10
 
             const leavingDatePicker = document.querySelector('.leavingDate-picker')
             const comingDatePicker = document.querySelector('.comingDate-picker')
@@ -310,6 +327,11 @@ export default {
                 && e.target.classList[0] !== 'container'
                 && e.target.classList[0] !== 'className'
                 && e.target.classList[0] !== 'vBtn'
+                && e.target.classList[0] !== 'psg-adults-picker-inside'
+                && e.target.classList[0] !== 'increaseInfants'
+                && e.target.classList[0] !== 'decreaseInfants'
+                // && e.target.classList[0] !== 'classSubmit'
+                && e.target.classList[0] !== 'confirm'
                 ) {
                 flightSearchBtn.style.display = "block"
                 psgTriangleBox.style.display = "none"
@@ -425,7 +447,7 @@ export default {
             }
         },
         decreaseInfants: function() {
-            if (this.infants != 1) {
+            if (this.infants != 0) {
                 this.infants -= 1
             }
         },
@@ -477,10 +499,19 @@ export default {
                     return airport
                 }
             })
-            //  console.log(this.destinationOutput)
         },
         focusOnSubmit() {
 
+        },
+        scrollDetection: function() {
+
+            if (this.scrollOfResultBox.scrollTop  > 500 * (this.scrollToLoadMore/10) ) {
+                this.scrollToLoadMore += 10
+            }
+
+            if (this.scrollOfResultBoxDst.scrollTop  > 500 * (this.scrollToLoadMore/10) ) {
+                this.scrollToLoadMore += 10
+            }
         },
     },
     // 공항 출발지 및 도착지 Autocomplete 방식으로 검색
@@ -491,7 +522,7 @@ export default {
     },
     watch: {
         departureInput: function() {
-
+            
             const leftInput = document.querySelector('.searchListWrapper')
             const countryList = document.querySelector(".dep-country-list")
             const triangle    = document.querySelector(".dep-triangle-box")
@@ -499,9 +530,6 @@ export default {
             countryList.style.position = "absolute"
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
-            // this.getDepartureOutput()
-            // this.departureOutput = this.airportDepartureSearch()
-            // console.log(this.departureOutput)
         },
         destinationInput: function(userInput) {
 
@@ -511,7 +539,6 @@ export default {
             countryList.style.position = "absolute"
             countryList.style.zIndex = "1000"
             triangle.style.display = 'block'
-            // this.getDestinationOutput()
 
         },
         adults: function() {
@@ -541,6 +568,36 @@ export default {
                 decreaseAdults.disabled = false
                 decreaseAdults.style.curosr = "not-pointer"
                 decreaseAdults.style.backgronud = "rgba(47, 250, 62, 1)"
+            }
+        },
+        infants: function() {
+            const increaseInfants = document.body.querySelector(".increaseInfants")
+            const decreaseInfants = document.body.querySelector(".decreaseInfants")
+
+            if (this.infants >= 8) {
+                // console.log(increaseAdults)
+                increaseInfants.disabled = true
+                increaseInfants.style.cursor = "not-allowed"
+                increaseInfants.style.background = "grey"
+                // decreaseAdults.style.cursor = "pointer"
+                // decreaseAdults.style.background = "rgba(47, 250, 62, 1)"
+            } else if ( this.infants > 0) {
+                decreaseInfants.disabled = false
+                decreaseInfants.style.cursor = "pointer"
+                decreaseInfants.style.background = "rgba(47, 250, 62, 1)"
+            } else if ( this.infants == 0) {
+                decreaseInfants.style.background = "grey"
+                decreaseInfants.style.cursor = "not-allowed"
+                increaseInfants.disabled = false
+                increaseInfants.style.cursor = "pointer"
+                increaseInfants.style.background = "rgba(47, 250, 62, 1)"
+            } else {
+                increaseInfants.disabled = false
+                increaseInfants.style.cursor = "pointer"
+                increaseInfants.style.background = "rgba(47, 250, 62, 1)"
+                decreaseInfants.disabled = false
+                decreaseInfants.style.curosr = "not-pointer"
+                decreaseInfants.style.backgronud = "rgba(47, 250, 62, 1)"
             }
         },
         deep: true,

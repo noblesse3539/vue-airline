@@ -24,7 +24,7 @@
                     <div class="dep-country-list guide-search-list">
                         <div 
                             class="guide-search-result" 
-                            v-for=" (location, id) in guideSearchOuput.slice(0, 4)"
+                            v-for=" (location, id) in guideSearchOuput.slice(0, loadMoreOnScroll)"
                             :key="id"
                             :class="{ 'is-active-guide' : id === guideInputArrowCounter }"
                         >
@@ -54,6 +54,11 @@ export default {
     name: 'GuideSearch',
     data() {
         return {
+
+            // 스크롤 시 검색 결과 더 보여주기를 위한 변수
+            loadMoreOnScroll: 10,
+            scrollTopOfInput: 0,
+
             locationList: cities.cities,
             guideSearchOuput: [],
             guideSearchInput: '',
@@ -65,6 +70,10 @@ export default {
         }
     },
     mounted() {
+
+        this.scrollTopOfInput = document.querySelector('.guide-search-list')
+        this.scrollTopOfInput.addEventListener('scroll', this.loadMore)
+
         document.body.addEventListener("click",  this.hideSearchResult)
     },
     destroyed() {
@@ -81,6 +90,7 @@ export default {
         },
         hideSearchResult() {
             this.isOpen = false
+            this.loadMoreOnScroll = 10
         },
         getGuideSearchOutput: function(e) {
         
@@ -161,6 +171,13 @@ export default {
             this.isOpen = false
             searchListTri.style.display = "none"
             searchList.style.display = "none"
+        },
+        loadMore() {
+            console.log(this.scrollTopOfInput.scrollTop)
+            if (this.scrollTopOfInput.scrollTop  > 200 * (this.loadMoreOnScroll/ 10) ) {
+                this.loadMoreOnScroll += 10
+            }
+
         },
     },
     watch() {

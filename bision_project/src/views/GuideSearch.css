@@ -20,7 +20,7 @@
 }
 
 .guide-search {
-    
+    overflow: hidden;
     height: 100% !important;
     /* margin-top: 110px; */
     /* overflow: scroll !important; */
@@ -157,8 +157,24 @@
 
 .guide-search-list {
     width: 30%;
+    overflow: scroll;
+    min-height: 45px;
+    max-height: 255px;
+    /* margin-bottom: 110px !important;  */
     /* height: 100%; */
     /* overflow: hidden; */
+}
+
+.guide-search-list::-webkit-scrollbar { 
+    display: block !important; 
+    /* background: #aaa; */
+    /* width: 1em; */
+    /* overflow: auto;
+    height: 2em; */
+}
+
+.guide-search-list::-webkit-scrollbar-thumb{
+    background: rgba(0, 171, 132, 0.5) !important;
 }
 
 .guide-search-result-each {
