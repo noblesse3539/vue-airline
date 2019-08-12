@@ -28,8 +28,21 @@
           <div class="GS-guide-detail-title">
             <div style="margin-right: 10px;">{{title}}</div>
 
-            <!-- 좋아요 기능 추후 구현 -->
-            <i class="far fa-heart"></i>
+            <!-- 좋아요 기능 추후 구현 -->            
+            <!-- <v-tooltip right>
+              <template v-slot:activator="{ on }" v-if="this.like == -1">
+                <i @click="serviceLike" class="far fa-heart" v-on="on"></i>            
+              </template>
+              <span>찜하기</span>
+            </v-tooltip>
+            <v-tooltip right>
+              <template v-slot:activator="{ off }" v-if="this.like != -1">
+                <i @click="serviceLike" class="fas fa-heart" v-on="off"  style="color: red;"></i>            
+              </template>
+              <span>찜 하기 취소</span>
+            </v-tooltip>             -->
+            <i @click="serviceLike" v-if="this.like != -1" class="fas fa-heart" style="color: red;"></i>
+            <i @click="serviceLike" v-else class="far fa-heart"></i>            
             <!-- <i class="fas fa-heart guide-list-page-like-btn-active"></i> -->
           </div>
 
@@ -57,7 +70,8 @@
                   <i class="fas fa-sign-in-alt"></i>
                 </a>
               </div>
-              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">
+              <!-- 최고 평점 있을 시 -->
+              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">                
                 <div class="GS-service-review-userImage">
                   <img
                     :src="reviews[maxratingReviewIdx].user.profileImageUrl"
@@ -86,6 +100,35 @@
                   </div>
                 </div>
               </div>
+
+              <!-- 평점 하나도 없을 시 -->
+              <div class="GS-guide-detail-best-review-content" v-else>                
+                <div class="GS-service-review-userImage">
+                  <img
+                    src="https://i.pinimg.com/236x/43/59/f3/4359f3d05221af09e7ec7f498afa502b.jpg"
+                    class="GS-service-review-userImage-src"
+                    alt="our user's beautiful face"
+                    style="border-radius: 50%;"
+                  />
+                </div>
+                <div class="GS-guide-detail-best-review-right">
+                  <div class="GS-service-review-top">
+                    <div class="GS-service-review-top-userInfo">
+                      <div class="GS-service-review-rating-and-username">
+                        <div class="GS-service-review-userScore GS-service-review-info">
+                          <v-rating dense size="14.7" readonly></v-rating>
+                        </div>
+                        <div class="GS-service-review-userName GS-service-review-info"></div>                       
+                      </div>                      
+                    </div>                    
+                  </div>
+
+                  <div class="user-comment" style="margin-top: 0px;">
+                    아직 작성된 리뷰가 없어요.
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -401,8 +444,8 @@
                 style="border-radius: 50%;"
               />
             </div> -->
-            <div class="GS-service-reivew-content" v-if="reviewsLoaded">
-              <div v-for="i in reviews.length > limits ? limits : reviews.length">
+            <div class="GS-service-reivew-content" v-if="reviewsLoaded">     
+              <div v-for=" (i) in reviews.length > limits ? limits : reviews.length" :key="i">                           
                 <div class="GS-service-review-image-and-content">
                   <div class="GS-service-review-userImage">
                     <img
@@ -429,7 +472,7 @@
                     <div :class="'GS-service-reivew-userReview-' + i" class="GS-service-reivew-userReview">
                       <!-- <p>
                         {{reviews[i-1].content}}
-                      </p> -->
+                      </p> -->               
                       <p style="height: 80%">
                         혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
                         단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
@@ -443,16 +486,16 @@
                         일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
                         하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
                       </p>
-                      <div class="GS-service-review-content-morebutton">
-                        <button @click="loadReviewMore(i)" v-if="isLoadMore[i-1]">
-                          닫기
+                      <div class="GS-service-review-content-morebutton">                                                        
+                        <button :class="`gs-service-close-${i}`" style="display: none;" @click="loadReviewMore(i)">
+                          닫기 
                           <i class="fa fa-angle-up"></i>
                         </button>
-                        <button @click="loadReviewMore(i)" v-else>
-                          {{isLoadMore}}
+                        <button :class="`gs-service-open-${i}`" @click="loadReviewMore(i)">              
                           더 읽어보기
                           <i class="fa fa-angle-down"></i>
                         </button>
+                       
                       </div>
                     </div>
                   </div>
@@ -470,6 +513,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import "./GuideServiceDetailPage.css";
 import PayBtn from "../components/kakaopaycpn/PayBtn";
 import { mapGetters, mapState } from "vuex";
@@ -492,6 +536,7 @@ export default {
   },
   data() {
     return {
+      like: 0,
       isOptionsAvailable: false,
       isSideBarSticky: false,
       // guideServiceUserWrote: this.thisPostInfo.rawDetail || '',
@@ -577,6 +622,7 @@ export default {
       flagLoaded: false,
       guideImgLoaded: false,
       reviewsLoaded: false,
+      guideImageLoaded: false,
 
       // 옵션 박스
       selectOption: '',
@@ -584,10 +630,30 @@ export default {
       // 리뷰 관련 변수
       limits: 5,
       isLoadMore: [],
+
     };
 
   },
   methods: {
+    serviceLike : function() {
+
+            let userId  = this.getuserId
+
+            this.$http.post(`/api/guideservice/${this.$route.query.serviceId}/${userId}`)
+              .then( res => {
+                return res.data.added
+              })
+              .then( added => {
+                this.$http.get(`/api/guideservice/findGSById/${this.$route.query.serviceId}`)
+                  .then( res => {
+                    this.like = res.data.likeUsers.indexOf(userId)
+                    console.log(this.like)
+                    console.log("요기", res.data.likeUsers)
+                    console.log("user", userId)
+                  })
+              })
+
+        },
 
     decreasePeople: function(select) {
       // this.serviceInfo.people -= 1
@@ -703,18 +769,20 @@ export default {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then( res => {
         this.guideInfo.guideName = res.data.guide.username
-        this.guideInfo.guideImg = res.data.guide.profileImageUrl
+        this.guideInfo.guideImg = res.data.guide.profileImg? res.data.guide.profileImg : res.data.guide.profileImageUrl
         this.guideInfo.guideId = res.data.guide._id
 
         this.guideImgLoaded = true
+        console.log("가이드인포", this.guideInfo)
       })
     },
 
     getReviews : function () {
+      this.like = this.$route.query.like
       this.$http.get(`/api/guideservice/findReview/${this.$route.query.serviceId}`)
       .then( res => {
         this.reviews = res.data.reviews
-        console.log("리뷰", res.data.reviews)
+        // console.log("리뷰", res.data.reviews)
       })
       .then( () => {
         if (this.reviews.length > 0) {
@@ -745,44 +813,61 @@ export default {
             //     latestdate = this.dateCalculate(this.reviews[i].created_at)
             //   }
             // }
-          }
+          }         
+
           this.average = (sum/this.reviews.length).toFixed(1)
           this.maxratingReviewIdx = idx
           this.maxrationgReviewLoaded = true
           this.reviewsLoaded = true
 
         }
+        this.maxrationgReviewLoaded = true
 
         for (let i=0; i<this.reviews.length; i++) {
-          this.isLoadMore.push("false")
+          this.isLoadMore.push(false)
         }
-        console.log("로드모어", this.isLoadMore)
-        // console.log("리뷰", res.data.reviews)
+        // console.log("로드모어", this.isLoadMore)
+        // console.log("리뷰", this.reviews)
       })
     },
 
     loadReviewMore: function(i) {
       const loadReviewMore = document.querySelector(".GS-service-reivew-userReview-" + i)
-      const loadReiveMoreBtn = document.querySelector(
-        ".GS-service-reivew-userReview"
-      );
-      const loadReviewMoreBtn2 = document.querySelector(
-        ".GS-service-review-userReview-expand"
-      );
-      // console.log(loadReiveMoreBtn);
+      const reviewopen = document.querySelector(`.gs-service-open-${i}`)
+      const reviewclose = document.querySelector(`.gs-service-close-${i}`)
+      
+      
+      // const loadReiveMoreBtn = document.querySelector(
+      //   ".GS-service-reivew-userReview"
+      // );
+      // const loadReviewMoreBtn2 = document.querySelector(
+      //   ".GS-service-review-userReview-expand"
+      // );
+      // console.log(loadReiveMoreBtn);     
+      console.log(this.isLoadMore[i-1])
 
-      if (this.isLoadMore[i-1] == "true") {
-        console.log("닫았어")
+
+      // if (this.isLoadMore[i-1] == "true") {
+      if (this.isLoadMore[i-1]) {       
+        console.log("닫힘")
         loadReviewMore.classList.add("GS-service-reivew-userReview");
         loadReviewMore.classList.remove("GS-service-review-userReview-expand");
-        this.isLoadMore[i-1] = "false";
+        this.isLoadMore[i-1] = false
+        reviewopen.style.display = "flex"
+        reviewclose.style.display = "none"
+        console.log(isLoadMore[i-1])
+        console.log("닫힘")
+  
       } else {
-        console.log("열었어")
         loadReviewMore.classList.add("GS-service-review-userReview-expand");
         loadReviewMore.classList.remove("GS-service-reivew-userReview");
-        this.isLoadMore[i-1] = "true";
+        this.isLoadMore[i-1] = true
+
+        reviewopen.style.display = "none"
+        reviewclose.style.display = "flex"
+        console.log("열림")
       }
-      console.log(this.isLoadMore)
+     
     },
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
@@ -1013,9 +1098,8 @@ export default {
 
   computed: {
     ...mapState({
-        getIsLoggedIn : state => state.User.isLoggedIn,
-        getuserId : state => state.User.userId,
-    })
+            getuserId : state => state.User.userId,
+        }),
   },
 };
 </script>
