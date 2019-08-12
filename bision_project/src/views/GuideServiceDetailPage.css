@@ -695,6 +695,12 @@
     margin-right: 20px;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.GS-guide-detail-guideImg > a {
+    display: flex; 
+    align-items: center;
 }
 
 .GS-guide-detail-guideImg:hover, .GS-guide-detail-guideName:hover {
@@ -819,10 +825,10 @@
     justify-content: center;
 }
 
-.fas:hover {
-    cursor: pointer;
+.GS-payment-disabled {
+    background: grey !important;
 }
 
-.far:hover {
-    cursor: pointer;
+.GS-payment-disabled:hover {
+    cursor: not-allowed;
 }

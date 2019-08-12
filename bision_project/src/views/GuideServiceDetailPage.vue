@@ -21,7 +21,7 @@
             <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
-              <v-btn @click="chat">메시지보내기</v-btn>
+              <v-btn @click="chat" color="#1e90ff" style="color: white;">메시지 보내기</v-btn>
             </div>
           </div>
 
@@ -163,7 +163,8 @@
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
+            <button v-if="isGuide" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
+            <button v-else class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -526,6 +527,11 @@ export default {
 
   },
   mounted() {
+
+    if (this.isGuide === false) {
+
+    }
+
     this.getServiceInformation()
     window.addEventListener("scroll", this.dragDownSideBar)
     window.addEventListener('click', this.hideElements)
@@ -1097,8 +1103,10 @@ export default {
 
   computed: {
     ...mapState({
-            getuserId : state => state.User.userId,
-        }),
+        getIsLoggedIn : state => state.User.isLoggedIn,
+        getuserId : state => state.User.userId,
+        isGuide : state => state.User.isGuide
+    })
   },
 };
 </script>

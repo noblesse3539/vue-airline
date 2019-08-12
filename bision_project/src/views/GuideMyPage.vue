@@ -61,7 +61,7 @@
         <div class="gs-money-made" v-if="guideId == getUserId">
           <div style="display: flex;">
             <span style="font-size: 2vw;">₩</span>
-            <span style="font-size: 100%; font-weight: 1000;">{{profit}}</span>
+            <span style="font-size: 100%; font-weight: 1000;">{{separateDigit(profit)}}</span>
           </div>
           <div>
             <div style="font-size: 50%;">
@@ -738,7 +738,7 @@ export default {
         .then( res => {
         })
     },
-  
+
     hideComponent(event) {
         if (event.target.classList[1] == 'dialog-delete') {
           // const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)

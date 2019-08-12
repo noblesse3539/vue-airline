@@ -130,7 +130,7 @@
                             <h1 class="result-body-card-title">
                                 <div v-if="service.title.length > 20">{{service.title.slice(0, 20)}} ...</div>
                                 <div v-else>{{service.title.slice(0, 20)}}</div>
-                                <div class="likeBtn-box">
+                                <div class="likeBtn-box" v-if="getIsGuide !== true">
                                   <i v-if="service.likeUsers.indexOf(getuserId) != -1" @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn fas fa-heart guide-list-page-like-btn-active" :id="`fas-heart-${idx}`"></i>
                                   <i v-else @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn far fa-heart guide-list-page-like-btn" :id="`fa-heart-${idx}`"></i>
                                 </div>
