@@ -7,7 +7,7 @@
 }
 
 .user-metainfo {
-    font-size: 1.74rem;
+    font-size: 1.4rem;
 }
 
 .user-profileinfo {
@@ -33,12 +33,13 @@
 }
 
 .user-metainfo__modifier {
-    color: rgb(34,139,34);
+    color: rgb(128,102,231);
 }
 
 .user-line__section-divider {
     height: 100%;
     width: 100%;
+    margin-bottom: 3rem;
 }
 
 .user-line__section-divider > .divider {
@@ -47,9 +48,11 @@
 }
 
 .user-metainfo__modifier:hover {
-    text-decoration: underline;
+    /* text-decoration: underline; */
     cursor: pointer;
-    color: rgb(34,139,34);
+    color: 	#ff35ff;
+    /* font-size: 2rem; */
+    /* border:  */
 }
 
 .user-image__modifier {
@@ -71,11 +74,14 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
+    margin-bottom: 3rem;
 }
 
 .user-image {
     width: 200px;
     height: 200px;
+    display: flex;
+    margin-top: 1rem;
     background-repeat: no-repeat !important;
     background-size: cover !important;
     background-position: center center !important;
@@ -127,7 +133,7 @@
 
 .user-info__modifier input:focus {
     outline: none;
-    box-shadow: 0 0 0 1px rgba(47, 90, 62, 1);
+    box-shadow: 0 0 0 1px rgba(128,102,231, 0.4);
 }
 
 .user-intro-box {
@@ -153,27 +159,23 @@
 }
 
 .user-info-button-box {
-    margin-bottom: 16px;
+    margin-bottom: 2rem;
 }
 
 .user-info-button-box button:first-child {
-    padding-top: 16px;
-    padding-bottom: 16px;
-    margin-right: 16px;
-    width: 100px;
+    padding: .5rem 1rem;
+    margin-right: 3rem;
+    /* width: 100px; */
     color: white;
-    font-size: 1.25rem;
+    /* font-size: 1rem; */
     font-weight: 600;
-    background: rgb(34,139,34);
-    border: 1px solid white;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
+    background:  	#756adf;
+    border: 1px solid 	#756adf;
+    border-radius: 13px;
 }
 
 .user-info-button-box button:first-child:hover {
-    background: rgba(34,139,34, 0.8);
+    opacity:.8;
 }
 
 .user-info-button-box button {
@@ -233,7 +235,54 @@
     position: relative !important;
     z-index: 1 !important;
 }
+.myTourExperience-Icon {
+  z-index: 6 !important;
+  top: 15px;
+  right: 15px;
+  font-size: 2.5rem;
+  opacity: 0.75;
+  color: crimson;
+  position: absolute !important;
+}
+.myTourExperience-empty  {
+  display: flex;
+  align-self: center;
+  z-index: 10 !important;
+  margin: auto;
+  font-size: 1.7rem;
+  border-radius: 10px;
+  padding: 1rem 2rem !important;
+}
+.GSSearchBtn {
+  cursor: pointer;
+  background: linear-gradient(	#99bfe3, #8895df);
+  box-shadow: 0 1px 2px rgba(0,0,0,.3);
+  color: white;
 
+}
+.GSSearchBtn:hover {
+  box-shadow: 0 2px 3px rgba(0,0,0,.3);
+  opacity: .8;
+}
+.likeTooltip {
+  position: absolute !important;
+
+  z-index: 10 !important;
+  top: 60px;
+  right: -15px;
+  color: white;
+  background-color: rgba(0,0,0,.6);
+  padding: .5rem 1rem;
+  border-radius: 5px;
+}
+.myTourExperience-Icon:hover .likeTooltip {
+}
+.myTourExperience-Icon:hover {
+  font-size: 3rem;
+  top: 12px;
+  opacity: 0.9;
+  right: 12px;
+}
 .swiper-button-prev, .swiper-button-next {
     background: none !important;
 }
@@ -288,13 +337,13 @@
 
 .swiper-button-next:hover {
     cursor: pointer !important;
-    background: rgba(34,250,34, 0.4) !important;
+    background: rgba(255,53,255, 0.4) !important;
     color: white !important;
 }
 
 .swiper-button-prev:hover {
     cursor: pointer !important;
-    background: rgba(34,250,34, 0.4) !important;
+    background: rgba(255,53,255, 0.4) !important;
     color: white !important;
 }
 

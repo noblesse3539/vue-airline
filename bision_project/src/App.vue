@@ -7,7 +7,7 @@
         <router-view></router-view>
       </v-app>
     </v-content>
-    <Footer style="z-index: 2000 !important;"></Footer>
+    <Footer style="z-index: 0 !important;"></Footer>
   </div>
 </template>
 
@@ -82,6 +82,7 @@ export default {
               userName: res.data.info.username,
               isGuideNow: res.data.info.isGuide
             });
+            this.$http.defaults.headers.common["x-access-token"] = token
           }
         })
         .catch(err => {

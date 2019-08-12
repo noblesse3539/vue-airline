@@ -34,7 +34,7 @@
                   <!-- <div v-for="i in tags.length" :key="i">
                     <v-chip color="#5CE75C" text-color="white" @click="findTag('액티비티')">{{tags[i-1]}}</v-chip>
                   </div> -->
-
+                  
                   <!-- 2안 -->
                   <div v-for="i in tags.length > 10 ? 10 : tags.length" :key="i">
                     <v-chip color="#5CE75C" text-color="white" style="font-weight: 300;" @click="selectTags(tags[i-1])" v-if="selectedTags.indexOf(tags[i-1]) != -1">{{tags[i-1]}}</v-chip>
@@ -43,12 +43,10 @@
                     <!-- <input placeholder="# 태그별 검색" class="result-body__search-by-tag-search" type="text"> -->
                     <!-- <span class="result-body_search-by-tag-search-icon"><i class="fas fa-search"></i></span> -->
                 </div>
-                <div class="result-body__search-by-language">
+                <!-- <div class="result-body__search-by-language">
                     <div class="result-body__search-by-lang-title">
                         <div>가이드 언어</div>
                         <div><i class="far fa-caret-square-up"></i></div>
-                        <!-- On-off에 사용 -->
-                        <!-- <i class="far fa-caret-square-down"></i> -->
                     </div>
                     <ul class="result-body__search-by-lang-body">
                         <li>
@@ -75,7 +73,7 @@
                             </v-checkbox>
                         </li>
                     </ul>
-                </div>
+                </div> -->
                 <div class="result-body__search-by-price">
                     <p class="result-body__search-by-price-title">금액 (KRW)</p>
                     <p class="result-body__search-by-price-price">{{price[0]}} ~ {{price[1]}}</p>
@@ -130,14 +128,16 @@
                         </div>
                         <div class="result-body-card-content">
                             <h1 class="result-body-card-title">
-                                {{service.title.slice(0, 20)}} ...
+                                <div v-if="service.title.length > 20">{{service.title.slice(0, 20)}} ...</div>
+                                <div v-else>{{service.title.slice(0, 20)}}</div>
                                 <div class="likeBtn-box">
                                   <i v-if="service.likeUsers.indexOf(getuserId) != -1" @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn fas fa-heart guide-list-page-like-btn-active" :id="`fas-heart-${idx}`"></i>
                                   <i v-else @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn far fa-heart guide-list-page-like-btn" :id="`fa-heart-${idx}`"></i>
                                 </div>
                             </h1>
                             <p class="result-body-card-detail">
-                                {{service.detail.slice(0, 120)}} ... {{service.index}}
+                                <div v-if="service.title.length > 120">{{service.desc.slice(0, 120)}} ...</div>
+                                <div>{{service.desc.slice(0, 120)}}</div>
                             </p>
                             <div style="display: flex; flex-direction: row;">
                               <p class="result-body-card-city" style="padding-right: 20px;">
@@ -267,7 +267,8 @@ export default {
                 res.data.guideservices.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text
                         const temp = {}
-                        temp.title      = eachService.desc
+                        temp.title      = eachService.title
+                        temp.desc       = eachService.desc
                         temp.detail     = parsedDetail
                         temp.rawDetail  = eachService.detail
                         temp.image      = eachService.mainImg
@@ -299,8 +300,7 @@ export default {
                         // console.log(this.dateCalculate(temp.toDate))
                         // console.log(this.dateCalculate(new Date().toISOString().substr(0, 10)))
 
-                        if (this.dateCalculate(temp.toDate) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {
-                          // console.log("인")
+                        if (this.dateCalculate(temp.toDate) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {                     
                           this.guideServiceList.push(temp)
                           this.fixedguideServiceList.push(temp)
 
@@ -392,7 +392,7 @@ export default {
 
         // 여행 기간 선택 시
         selectDuration : function (idx) {
-          // console.log(this.duration)
+          console.log(this.duration)
           if (this.duration.indexOf(idx) != -1) {
             this.searchChips.push(this.periodList[idx][0])
           } else {
@@ -417,12 +417,13 @@ export default {
 
         // 검색 칩 삭제
         deletechip (chip) {
+          console.log("칩 삭제")
           this.searchChips.splice(this.searchChips.indexOf(chip),1)
           // 날짜 삭제
           if (isNaN(this.dateCalculate(chip)) == false) {
             this.leavingDates.splice(this.leavingDates.indexOf(chip),1)
             // 여행기간 삭제
-          } else if (chip.indexOf("시간") != -1 && chip.indexOf("~") != -1) {
+          } else if (chip.indexOf("시간 ~") != -1 || chip.indexOf("일 ~") != -1 || chip.indexOf("일 이상") != -1) {
             for (let i=0; i<this.periodList.length; i++) {
               if (this.periodList[i][0] == chip) {
                 this.duration.splice(this.duration.indexOf(i),1)
@@ -433,6 +434,7 @@ export default {
           } else {
             this.selectedTags.splice(this.selectedTags.indexOf(chip),1)
           }
+          console.log(this.duration)
           this.updateResult()
         },
 
@@ -518,15 +520,15 @@ export default {
             return parseInt(duration.slice(0, duration.indexOf('시'))) * 3600
           }
         },
-        languageCheckbox : function () {
-          this.guideServiceList = []
-          console.log(this.selected)
-          // for (let i=0; i<this.fixedguideServiceList.length; i++) {
-          //   if (this.selected.indexOf(this.fixedguideServiceList[i].lang) != -1) {
-          //     this.guideServiceList.push(this.this.fixedguideServiceList[i])
-          //   }
-          // }
-        },
+        // languageCheckbox : function () {
+        //   this.guideServiceList = []
+        //   console.log(this.selected)
+        //   for (let i=0; i<this.fixedguideServiceList.length; i++) {
+        //     if (this.selected.indexOf(this.fixedguideServiceList[i].lang) != -1) {
+        //       this.guideServiceList.push(this.this.fixedguideServiceList[i])
+        //     }
+        //   }
+        // },
         openCalender : function() {
           if (this.isCalenderOpen == true) {
             this.isCalenderOpen = false

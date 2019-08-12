@@ -2,7 +2,7 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="width: 70%; background-color: #45CE30; color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
+      <div style="width: 70%; background-color: rgba(0, 171, 132, 1); color: white; border-radius: 0px 0px 10px 10px; margin-left: 12.5%;">
         <div style="display:grid; grid-template-columns: 50% 34% 16%;">
           <div>
             <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
@@ -22,7 +22,9 @@
               <div>{{this.$route.query.comingDate}}</div>
             </div>
           </div>
-          <div style="padding-top: 10px;">
+
+          <!-- 다른 조건 검색 -->
+          <!-- <div style="padding-top: 10px;">
             <v-btn class="mx-2" fab small color="grey lighten-3" v-on:click="searchPannel=!searchPannel">
               <i class="fas fa-search fa-2x"></i>
             </v-btn>
@@ -32,7 +34,7 @@
             <div style="font-size: 10px; margin-bottom: 10px;">
               검색해보세요.
             </div>
-          </div>
+          </div> -->
         </div>
         <div v-if="searchPannel">
           <FlightSearchPannel></FlightSearchPannel>
@@ -73,7 +75,7 @@
                 <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
               </template>
             </v-range-slider>
-
+          
             <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
             <span>{{inboundDepartStartTime}} - </span>
             <span>{{inboundDepartEndTime}}</span>
@@ -243,7 +245,7 @@ export default {
           len: 0,
 
           // 정렬에 따른 결과 저장
-          flights: [0],
+          flights: [],
           flightsSorted : [
             [], // SortbyPrice
             [], // SortbyDuration
@@ -500,10 +502,10 @@ export default {
                                     let totalDuration = OutDuration + InDuration
                                     if (optionTypeIndex == 0) {
                                       if (totalDuration > maxDuration) maxDuration = totalDuration
-                                      if (totalDuration < minDuration) minDuration = totalDuration
-                                      OutDuration = this.durationTransfer(OutDuration)
-                                      InDuration = this.durationTransfer(InDuration)
+                                      if (totalDuration < minDuration) minDuration = totalDuration                                      
                                     }
+                                    OutDuration = this.durationTransfer(OutDuration)
+                                    InDuration = this.durationTransfer(InDuration)
 
                                     // 경유지 정보(추가)
                                     let stop

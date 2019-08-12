@@ -40,7 +40,7 @@ width: 100%;
 
 .gs-mypage-kyeword-each {
   margin-right: 15px;
-  background: rgba(53, 194, 53, 0.8);
+  background: rgba(0, 151, 132, 0.8);
   padding: 10px;
   border-radius: 10%;
 }
@@ -106,7 +106,7 @@ width: 100%;
 }
 
 .gs-mypage-service-content-bottom-reserve-btn {
-  background: rgb(69, 206, 48);
+  background: rgba(0, 151, 132, 1);
   color: #fff;
   padding: 10px;
   font-weight: 700;
@@ -120,7 +120,7 @@ width: 100%;
 
 .gs-mypage-service-content-bottom-reserve-btn:hover {
   /* transform: translateY(-5px); */
-  background: #1e90ff;
+  /* background: #1e90ff; */
   transition: 0.5s;
 }
 
@@ -163,11 +163,11 @@ width: 100%;
 }
 
 .gs-btn-revise {
-  background: rgba(30, 144, 255, 1);
+  background: rgba(114, 111, 111, 1);
 }
 
 .gs-btn-delete {
-  background: hotpink;
+  background: rgb(255, 0, 128);
 }
 
 .gs-ALL-container {
@@ -248,6 +248,7 @@ width: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border: 10px solid transparent;
 }
 
 .gs-ALL-service-card-date {
@@ -280,22 +281,53 @@ width: 100%;
   background: white;
 }
 
-.reservation-box {
+.reservation-box-mother {
   margin-bottom: 110px;
 }
 
-.reservation-collapsible-box {
-  width: 100%;
-  min-height: 100px;
-  background: grey;
+.reservation-user-payment-info-box {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-around;
+  align-items: center;
 }
+
+.reservation-collapsible-box {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 24px;
+  padding-bottom: 0;
+  width: 100%;
+  height: 100px;
+  min-height: 200px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  /* background: grey; */
+  -webkit-box-shadow: 0 8px 6px -10px rgba(0, 0, 0, 0.5);
+	   -moz-box-shadow: 0 8px 6px -10px rgba(0, 0, 0, 0.5);;
+	        box-shadow: 0 12px 6px -15px rgba(0, 0, 0, 0.5);;
+}
+
+.reservation-collapsible-box:hover {
+  cursor: pointer;
+  background: rgba(0, 171, 132, 0.74);
+  color: white;
+  font-weight: 1000;
+}
+
 
 .res-collapsible-inside {
   /* padding: 0 18px; */
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.2s ease-out;
+  transition: 0.2s ease-out;
   background-color: #f1f1f1;
+  /* padding: 20px; */
 }
 
 .gs-profile-hero {
@@ -327,6 +359,7 @@ width: 100%;
 
 .gs-money-made {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: 2.74vw;
@@ -341,4 +374,122 @@ width: 100%;
   padding: 5% 0;
   display: flex;
   align-items: center;
+}
+
+.reserve-user-face {
+  width: 10%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.reserve-user-face > img {
+  border-radius: 50%;
+  width: 100% !important;
+  height: auto !important;
+}
+
+.reverse-guide-to-push-down {
+  width: 50px;
+  height: 2.5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: rgba(0, 171, 132, 0.74);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.reverse-guide-to-push-down:hover {
+  cursor: pointer;
+}
+
+.reserve-user-name {
+  font-size: 1vw;
+  /* font-weight: 600; */
+}
+
+.reserve-user-pick-service {
+  font-size: 1vw;
+  /* font-weight: 700; */
+}
+
+.reserve-user-pick-price {
+  font-size: 1vw;
+  font-weight: 700;
+}
+
+.reservation-status-confirmed {
+  width: 5%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 1000;
+  color: green;
+}
+
+.reservation-status-cancelled {
+  width: 5%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 1000;
+  color: red;
+}
+
+.res-collap-inside-box-content {
+  padding: 20px;
+}
+
+.res-collap-table th, .res-collap-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 15px !important; 
+}
+
+.res-collap-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+
+.res-h2 { 
+  margin-bottom: 10px;
+  /* padding-bottom: 10px; */
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.25); */
+}
+
+.res-price-divider {
+  margin: 25px 0;
+  background: rgba(0, 171, 132, 0.74);
+  border: 1px solid rgba(0, 171, 132, 0.74);
+}
+
+.res-total-price {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reserve-cancel-btn {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: red;
+  color: white;
+  font-size: 0.74vw;
+  font-weight: 700;
+  padding: 0 20px;
+  min-height: 24px !important;
+  max-height: 24px; 
+  /* min-width: 300px; */
+  /* height: 24px; */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.reserve-cancel-btn:hover {
+  background: rgba(255, 0, 0, 0.5);
 }

@@ -3,7 +3,9 @@
         defaultView="dayGridMonth"
         :plugins="calendarPlugins" 
         :events="events"
-        @eventClick="handleDateClick"
+        themeSystem="minty"
+        @eventClick="handleDateClick(events)"
+        @eventRender="eventRender"
     />
 </template>
 
@@ -26,8 +28,8 @@ export default {
         }
     },
     methods: {
-        handleDateClick(url) {
-            alert(url)
+        handleDateClick(info) {
+            console.log(info)
         },
     },
 }
@@ -37,5 +39,22 @@ export default {
 
 @import '~@fullcalendar/core/main.css';
 @import '~@fullcalendar/daygrid/main.css';
+
+.fc-today {
+    background: rgba(0, 171, 132, 0.5) !important;
+}
+
+.fc-day-number {
+    font-weight: 700 !important;
+}
+
+.fc-today-button {
+    background: rgba(30, 144, 255, 1) !important;
+    height: 100% !important;
+}
+
+.fc-title {
+    font-size: 1vw !important;
+}
 
 </style>

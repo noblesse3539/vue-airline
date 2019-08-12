@@ -1,17 +1,29 @@
+
+
+.flight-search {
+    height: 100%;
+}
+
 .flight-search-bg {
     background: linear-gradient( rgba(0,0,0,0.2), rgba(0, 0, 0, 0.8 )), url("http://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjEyMDd9") no-repeat center center;
     background-size: cover;
     background-position: center;
     width: 100%;
-    height: 500px;
+    height: 100% !important;
     position: absolute;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     /* opacity: 0.5; */
 }
 
 .flight-search-wrapper {
     width: 100%;
-    height: 500px;
+    height: 100% !important;
     position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .flight-search-pannel {
@@ -19,13 +31,16 @@
     flex-direction: column;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 110px;
     /* padding: 1%; */
+    padding: 0 !important;
     width: 75%;
     height: 100%;
     color: white;
     font-weight: bold;
     vertical-align: middle;
+    display: flex !important;
+    /* align-items: center !important; */
+    justify-content: center !important;
     /* background-color: rgba(255, 0, 2, 0.1); */
 }
 
@@ -94,7 +109,7 @@ input[type=radio]:checked {
 
 .checkmark {
     display: inline-block;
-    font-size: 2rem;
+    font-size: 2.5vw !important;
     margin-right: 20px;
 }
 
@@ -211,6 +226,9 @@ input {
 
     width: 500px;
     min-height: 50px;
+    max-height: 500px;
+    overflow: scroll;
+    margin-bottom: 110px;
     /* margin-top: px; */
     background: white;
     border-top-right-radius: 5px !important;
@@ -222,6 +240,18 @@ input {
     /* border-left: 30px solid transparent;
     border-right: 5px solid transparent;
     border-bottom: 5px solid black; */
+}
+
+.dep-country-list::-webkit-scrollbar { 
+    display: block !important; 
+    /* background: #aaa; */
+    /* width: 1em; */
+    /* overflow: auto;
+    height: 2em; */
+}
+
+.dep-country-list::-webkit-scrollbar-thumb{
+    background: rgba(0, 171, 132, 0.5) !important;
 }
 
 .dep-country-item {
@@ -237,6 +267,9 @@ input {
     display: none;
     width: 500px;
     min-height: 100px;
+    max-height: 500px;
+    overflow: scroll;
+    margin-bottom: 110px;
     /* margin-top: px; */
     background: white;
     border-top-right-radius: 5px !important;
@@ -244,6 +277,18 @@ input {
     border-top-left-radius: 5px !important;
     border-bottom-left-radius: 5px !important;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.dst-country-list::-webkit-scrollbar { 
+    display: block !important; 
+    /* background: #aaa; */
+    /* width: 1em; */
+    /* overflow: auto;
+    height: 2em; */
+}
+
+.dst-country-list::-webkit-scrollbar-thumb{
+    background: rgba(0, 171, 132, 0.5) !important;
 }
 
 .passengers {
@@ -343,6 +388,10 @@ input {
     text-align: right;
 }
 
+.classSubmit:hover {
+    cursor: pointer;
+}
+
 .airportList {
     min-height: 50px;
     font-size: 1.75rem;
@@ -386,4 +435,8 @@ input {
 .decreaseAdults {
     background: grey;
     cursor: not-allowed;
+}
+
+.flight-search-submitBtn {
+    font-size: 2vw !important;
 }

@@ -53,14 +53,13 @@ router.use('/airport', airport)
 router.use('/city', city)
 router.use('/nation', nation)
 
-router.use('/voc',voc)
+router.use('/voc', authMiddleware, voc)
 router.use('/currency',currency)
 
 router.use('/room',room)
 router.use('/chat',chat)
 
-router.use('/kakaopay', kakaopay)
-
+router.use('/kakaopay', authMiddleware, kakaopay)
 router.use('/paymentstore', paymentstore)
 
 module.exports = router

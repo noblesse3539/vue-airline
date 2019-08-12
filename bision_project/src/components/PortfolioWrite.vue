@@ -8,7 +8,7 @@
          <v-toolbar-title>{{this.title}}</v-toolbar-title>
          <v-spacer></v-spacer>
          <v-toolbar-items>
-           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기</v-btn>
+           <v-btn dark flat v-if="isProps()"  @click="checkSave">수정하기 {{isProps()}}</v-btn>
            <v-btn dark flat v-else  @click="checkSave">Save</v-btn>
          </v-toolbar-items>
        </v-toolbar>
@@ -16,7 +16,7 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-btn @click="makeDummy(61)">DUMMY만들기</v-btn>
+              <!-- <v-btn @click="makeDummy(61)">DUMMY만들기</v-btn> -->
               <h2>제목 입력</h2>
               <v-flex mt-3 xs12>
                 <v-text-field height="80px" style="font-weight:bold; font-size: 2rem;"
@@ -225,7 +225,7 @@
               </v-flex>
 
               <!-- 인원 구분 -->
-              <v-flex xs6>
+              <v-flex xs5>
                 <v-autocomplete width="50px" label="통화 선택   ex)KRW, USD..." :items="currency" prepend-icon="fa-globe-asia" no-data-text v-model="option.costType"></v-autocomplete>
               </v-flex>
                 <!-- <v-flex xs12 v-for="(item, idx) in peopleType" class="PW__cost">
@@ -234,8 +234,12 @@
                   <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option[item.name_eng].minAge" label="최소 나이 제한"/></v-text-field>
                   <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option[item.name_eng].maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex> -->
-              <v-flex xs6>
-                <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
+              <v-flex xs3 class="PW__checkOption">
+                <div class="PW__chkbox" :class="{ PW__checked : ptypeOption }" @click="ispType"><i v-if="ptypeOption" class="fas fa-check"></i></div>
+                인원 구분
+              </v-flex>
+              <v-flex xs4>
+                <v-select  :disabled="!ptypeOption" prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
                 </v-select>
               </v-flex>
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
@@ -268,7 +272,7 @@
                 </v-flex>
               </template>
 
-              <template v-if="option.peopleTypeOpt.indexOf('adult')!==-1 || option.peopleTypeOpt.indexOf('none')!==-1">
+              <template v-if="option.peopleTypeOpt.indexOf('adult')!==-1">
                 <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">성인</h3>
                 </v-flex>
@@ -402,6 +406,7 @@ export default {
   },
   data (){
     return{
+      ptypeOption : true,
       refOpt:[false, false, false, false],
       selectMore: false,
       currency: [],
@@ -429,8 +434,6 @@ export default {
       refPeopleOpt:[{desc:'이상(최소인원에서 1씩 차례로 증가)',val:'more'},
                     {desc:'배수(최소인원에서 배수로 증가)',val:'multiple'}],
       peopleType:[
-                  {name_kor:'없음',
-                  name_eng:'none'},
                   {name_kor:'유아',
                   name_eng:'infant'},
                   {name_kor:'아동',
@@ -556,6 +559,22 @@ export default {
     console.log("-----------------------")
  },
   methods : {
+    ispType() {
+      if(this.ptypeOption){
+        for(var i in this.option.peopleTypeOpt){
+          this.option[this.option.peopleTypeOpt[i]].cost = 0
+          this.option[this.option.peopleTypeOpt[i]].minAge = 0
+          this.option[this.option.peopleTypeOpt[i]].maxAge = 0
+        }
+        this.option.peopleTypeOpt = ['adult']
+      }else{
+        this.option.adult.cost = 0
+        this.option.adult.minAge = 0
+        this.option.adult.maxAge = 0
+        this.option.peopleTypeOpt = []
+      }
+      this.ptypeOption = !this.ptypeOption
+    },
     selectRefPeopleOpt(v){
       this.selectMore = !v
       if(v) this.option.refPeople.opt =  'multiple'
@@ -574,7 +593,7 @@ export default {
     },
     isProps() {
       if (this.$props.serviceInfo !== undefined) {
-
+        console.log( function(){this.$props.serviceInfo ? true : false}() )
         console.log("ok")
         return true
       } else {
@@ -587,85 +606,6 @@ export default {
       if(v == 'child') return '아동'
       if(v == 'adult') return '성인'
       if(v == 'senior') return '고령자'
-    },
-    // setOptDate() {
-    //   if(this.dateOption) {
-    //     this.dateOption = false;
-    //   } else{
-    //     this.dateOption = true;
-    //   }
-    // },
-    makeDummy(v) {
-      var i = v
-      this.$http(this.settings).then(res=>{
-        this.tourProgram.guide = this.getUserId
-        this.tourProgram.mainImg = res.data.data.link
-        this.tourProgram.nation_kor = this.tempCountry[parseInt(i%8)]
-        this.tourProgram.city_kor = this.tempCity[parseInt(i%8)][parseInt(i%8%2)]
-        this.tourProgram.title = i + ' 번째 테스트 상품'
-        this.tourProgram.desc = i + this.tourProgram.nation_kor + ' ' + this.tourProgram.city_kor + ' 상품 '
-        this.tourProgram.detail ='테스트 데이터입니다.'
-        this.tourProgram.fromDate = '2019-08-05'
-        this.tourProgram.toDate = '2019-11-05'
-        this.tourProgram.duration = '1박2일'
-        this.tourProgram.refund = {
-          'refund100' : 30,
-          'refund50' : 10,
-          'refund30' : 3
-        }
-        this.tourProgram.options = [{
-          'guideservice' : '',
-          'fromDate' : '2019-08-05',
-          'toDate' : '2020-11-05',
-          'costType' : 'KRW',
-          'dayOfWeek' : this.tempDayofWeek[parseInt(i%2)],
-          'adult' : {
-            'cost' : 500*i,
-            'minAge' :  0,
-            'maxAge' : 0
-          },
-          'peopleTypeOpt' : ['none'],
-        }]
-        this.tourProgram.tags = [this.tempTags[i%5], this.tourProgram.city_kor]
-      }).catch(err =>{
-          this.tourProgram.mainImg = 'https://source.unsplash.com/category/travel'
-          this.tourProgram.nation_kor = this.tempCountry[parseInt(i%8)]
-          this.tourProgram.city_kor = this.tempCity[parseInt(i%8)][parseInt(i%8%2)]
-          this.tourProgram.title = i + ' 번째 테스트 상품'
-          this.tourProgram.desc = this.tourProgram.nation_kor + ' ' + this.tourProgram.city_kor + ' 상품 ' + i
-          this.tourProgram.detail ='테스트 데이터입니다.'
-          this.tourProgram.fromDate = '2019-08-05'
-          this.tourProgram.toDate = '2019-11-05'
-          this.tourProgram.duration = '1박2일'
-          this.tourProgram.refund = {
-            'refund100' : 30,
-            'refund50' : 10,
-            'refund30' : 3
-
-          }
-          this.tourProgram.options = [{
-            'guideservice' : '',
-            'fromDate' : '2019-08-05',
-            'toDate' : '2019-11-05',
-            'costType' : 'KRW',
-            'dayOfWeek' :  this.tempDayofWeek[parseInt(i%2)],
-            'adult' : {
-              'cost' : 500*i,
-              'minAge' :  0,
-              'maxAge' : 0
-            },
-            'peopleTypeOpt' : ['none'],
-          }]
-        this.tourProgram.tags = [this.tempTags[i%5], this.tourProgram.city_kor]
-          console.log(err.status, err.data.error.message)
-        }).then(() =>{
-          this.$http.post('/api/guideservice/create', this.tourProgram)
-          .then( res => {
-            console.log(i, res.status)
-            console.log(res.data)
-            if(i<70) this.makeDummy(i+1)
-          })
-        })
     },
     addTag(newTag) {
       this.dbTags.push(newTag)
@@ -680,6 +620,7 @@ export default {
       }
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+       delete this.$http.defaults.headers.common["x-access-token"]
        var formData = new FormData()
        formData.append("image", file)
        var settings = {
@@ -700,6 +641,21 @@ export default {
          resetUploader();
          console.log("res.data.data.link")
 
+       }).then(() =>{
+         this.$http
+        .get("/api/auth/check", config)
+        .then(res => {
+          console.log(res.data)
+          if (res.status == 200) {
+            this.$store.commit("setIsLoggedIn");
+            this.$store.commit("setUserInfo", {
+              userId: res.data.info._id,
+              userName: res.data.info.username,
+              isGuideNow: res.data.info.isGuide
+            });
+            this.$http.defaults.headers.common["x-access-token"] = token
+          }
+        })
        }).catch(err=>{
          console.log(err)
        })

@@ -7,12 +7,12 @@
     <div class="user-profileinfo">
       <div class="user-imagebox">
         <div @click="openImgModal" class="user-image" :style="{ 'background' : 'url(' + userImage + ')'}"></div>
-        <p class="user-image__modifier" @click="openImgModal">사진 수정하기</p>
+        <!-- <p class="user-image__modifier" @click="openImgModal">사진 수정하기</p> -->
       </div>
       <div class="user-infobox">
         <p style="font-size: 3rem; font-weight: 1000; margin-bottom: 0.5rem;">안녕하세요, {{userName}}입니다.</p>
         <p class="user-metainfo">
-          가입일: 2019 · <span class="user-metainfo__modifier" @click="showUserInfoModifier">회원정보 수정하기</span>
+          가입일: 2019 &nbsp; <span class="user-metainfo__modifier" @click="showUserInfoModifier">&nbsp;소개수정&nbsp;<i class="fas fa-user-edit"></i></span>
         </p>
 
         <!-- 사용자 정보 -->
@@ -20,13 +20,13 @@
           <p class="user-quote-symbol">“</p>
           <p class="user-description">{{userIntro}}</p>
           <div class="user-line__section-divider"><div class="divider"></div></div>
-          <p class="user-langauge">
+          <!-- <p class="user-langauge">
             <i class="fas fa-language"></i>
               구사 언어:
               <span v-for=" (language, idx) in userLanguage" :key="idx">
                 {{language}}
               </span>
-          </p>
+          </p> -->
         </div>
 
         <!-- 사용자 정보 수정 섹션 -->
@@ -35,12 +35,12 @@
             <label for="user-intro">소개</label>
             <input type="text" id="userIntro"  v-model="userIntro" autofocus>
           </div>
-          <div class="user-language-box">
+          <!-- <div class="user-language-box">
             <label for="userLanguage">구사 언어</label>
             <input type="text" id="userLangauge" v-model="userLanguage">
-          </div>
+          </div> -->
           <div class="user-info-button-box">
-            <button @click="updateUserInfo">수정하기</button>
+            <button  @click="updateUserInfo">수정</button>
             <button @click="closeUserInfoModifier">취소</button>
           </div>
         </div>
@@ -53,28 +53,56 @@
 
     <!-- 현재 예약한 상품 -->
     <h2 style="margin-top: 48px; margin-bottom: 24px;">현재 예약한 상품</h2>
-    <!-- <GuideList :load-more="true" :userGuideServices="userGuideServices"></GuideList> -->
+    <!-- <GuideList :load-more="true" :usedGuideServices="usedGuideServices"></GuideList> -->
     <swiper
       :options="swiperOption"
       ref="mySwiper"
     >
+    <div class="myTourExperience-empty GSSearchBtn" v-if="!currentGuideServices.length" @click="linktoGS"><div>Bision과 함께 여행하기</div></div>
       <!-- slides -->
       <swiper-slide class="myProduct"
-        v-for="(guideService, id) in currentGuideServices"
-        :key="id"
+        v-for="(guideService, idx) in currentGuideServices"
+        :key="idx"
       >
-        <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
-          <p style="font-size: 1.25rem;">{{id}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
+        </div>
+      </swiper-slide>
+      <!-- Optional controls -->
+      <div class="swiper-pagination"  slot="pagination"></div>
+      <div class="swiper-button-prev" slot="button-prev">
+        <svg viewBox="0 0 18 18" role="img" aria-label="이전" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m13.7 16.29a1 1 0 1 1 -1.42 1.41l-8-8a1 1 0 0 1 0-1.41l8-8a1 1 0 1 1 1.42 1.41l-7.29 7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+      <div class="swiper-button-next" slot="button-next">
+        <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
+      </div>
+    </swiper>
 
-<!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
-          <div class="RWButtonOver">
-            <div class="RWButton" @click="showRW(id)">후기 작성 하기</div>
-          </div>
+    <!-- 찜한 상품 -->
+    <h2 style="margin-top: 5rem; margin-bottom: 24px;">내가 찜한 상품</h2>
+    <swiper
+      :options="swiperOption"
+      ref="mySwiper" >
+      <div class="myTourExperience-empty GSSearchBtn" v-if="!likedGuideServices.length" @click="linktoGS"><div>Bision상품 둘러보기</div></div>
+      <!-- slides -->
+      <swiper-slide class="myProduct"
+        v-for="(guideService, idx) in likedGuideServices"
+        :key="id">
+        <img @click="goToDetail(guideService._id)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <div class="likeTooltip">좋아요 취소</div>
+        <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
+        <div class="myTourExperience-description">
+
+          <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.title}}</p>
+          <!-- <p style="font-size: 1.25rem;">{{guideService.date}}</p> -->
+          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
+          <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
         </div>
       </swiper-slide>
       <!-- Optional controls -->
@@ -88,29 +116,31 @@
     </swiper>
 
     <!-- 내가 이용했던 가이드 상품 -->
-    <h2 style="margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
+    <h2 style="margin-top: 5rem; margin-bottom: 24px;">내가 이용했던 여행 상품</h2>
 
     <!-- Swiper -->
     <swiper
       :options="swiperOption"
       ref="mySwiper"
     >
+    <div class="myTourExperience-empty" v-if="!usedGuideServices.length"><div>아직 여행한 상품이 없어요</div></div>
       <!-- slides -->
       <swiper-slide class="myProduct"
-        v-for="(guideService, id) in userGuideServices"
-        :key="id"
-      >
-        <img class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        v-for="(guideService, idx) in usedGuideServices"
+        :key="idx">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.service.totalAmount}}</p>
-          <p style="font-size: 1.25rem;">{{id}}</p>
+          <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
+          <p v-if="!guideService.service.date" style="font-size: 1.25rem;">&nbsp;</p>
+          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
 <!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
-          <div class="RWButtonOver">
-            <div class="RWButton" @click="showRW(id)">후기 작성 하기</div>
+          <div class="RWButtonOver" v-if="loaded">
+            <div v-if="reviews[guideService.paymentId]" class="RWButton" @click="showMR(idx)">내가 쓴 후기</div>
+            <div v-else class="RWButton" @click="showRW(idx)">후기 작성 하기</div>
           </div>
         </div>
       </swiper-slide>
@@ -123,6 +153,7 @@
         <svg viewBox="0 0 18 18" role="img" aria-label="다음" focusable="false" style="height: 20px; width: 20px; display: block; fill: currentcolor;"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
       </div>
     </swiper>
+
     <div v-if="isRWVisible" class="HR__Modal">
       <div class="HR__ModalContent">
         <div class="HR__ModalHeader">
@@ -141,6 +172,28 @@
         <div class="HR__ModalAction">
           <div class="clear" @click="clearReview">초기화</div>
           <div class="submit" @click="submitReview">확인</div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="isMyReviewVisible" class="HR__Modal">
+      <div class="HR__ModalContent">
+        <div class="HR__ModalHeader">
+          <div>내가 쓴 댓글 관리</div>
+          <i @click="closeMR" style="cursor:pointer;" class="fas fa-times"></i>
+        </div>
+        <div class="HR__ModalBody">
+          <div class="rate">
+            <div>만족도 &nbsp; : &nbsp; </div>
+            <v-rating  v-model="reviews[paymentId].rating"  color="yellow darken-3"  background-color="grey lighten-2"
+              empty-icon="$vuetify.icons.ratingFull"  half-increments hover></v-rating>&nbsp;( {{reviews[paymentId].rating}} )
+          </div>
+         <div class="RW__Title">한줄평 &nbsp; : &nbsp; <input type="text" placeholder="한줄로 표현해주세요." v-model="reviews[paymentId].title"></div>
+          <textarea placeholder="후기를 작성해주세요."  v-model="reviews[paymentId].content" class="RW__Input" type="text" name="review"></textarea>
+        </div>
+        <div class="HR__ModalAction">
+          <div class="clear" @click="deleteReview">댓글삭제</div>
+          <div class="submit" @click="updateReview">수정</div>
         </div>
       </div>
     </div>
@@ -163,29 +216,31 @@
       UploadImgModal,
     },
     created() {
+      this.getUserInfo()
     },
     mounted() {
-      this.getUserInfo()
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
       // this.addGuideServiceToUser()
-      // console.log(this.userGuideServices)
+      // console.log(this.usedGuideServices)
     },
     beforeDestroy() {
       this.openHeader()
     },
     data: function () {
       return {
-        guideServices : [],
+        likedGuideServices: [],
+        isMyReviewVisible: false,
         paymentId:'',
-        review: [],
+        reviews: {},
         guideServiceId : '',
         subcomment:'',
         comment:'',
         rating: 3,
         isRWButtonVisible: false,
         isRWVisible: false,
+        loaded: false,
         items: [
           {
             src: 'https://new-image.withvolo.com/travel/423019/6-673h2it7pauB3D0naoffsjGMM=/0x0:900x900/809x/45e57a94c3a3f93db7ea5c6301aabc5d/76fb18f3-64cf-45df-9382-30c8afd42a97-cac8cd93c784d871aa3d1cac20ea67ea0a422222.jpg'
@@ -207,7 +262,7 @@
         userName : "",
         userIntro: "",
         userLanguage: [],
-        userGuideServices: [],
+        usedGuideServices: [],
         currentGuideServices: [],
         swiperOption: {
           slidesPerView: 4,
@@ -232,8 +287,26 @@
       }
     },
     methods: {
+      goToDetail(GSID) {
+        console.log(GSID)
+        const query = {serviceId: GSID}
+        this.$router.push({name: 'GuideServiceDetailPage', query: query})
+      },
+      linktoGS() {
+        this.$router.push({name: 'GuideSearch'})
+      },
+      dislike(idx){
+        this.$http.post(`/api/guideservice/${this.likedGuideServices[idx]._id}/${this.userId}`)
+        .then( res => {
+          this.likedGuideServices.splice(idx, 1)
+          console.log(res.data)
+        })
+      },
+      showMyReview(idx){
+        this.paymentId = this.usedGuideServices[idx].paymentId
+        this.isMyReviewVisible = PMid
+      },
       clearReview() {
-        console.log(this.userGuideServices)
         this.subcomment=''
         this.comment=''
         this.rating = 0
@@ -241,48 +314,95 @@
       submitReview(){
         var review = {
           'user' : this.userId,
-          'title' : this.comment,
-          'content' : this.subcomment,
+          'title' : this.subcomment,
+          'content' : this.comment,
           'rating' : this.rating,
         }
-        console.log(this.userId)
-        console.log(this.guideServiceId)
-        console.log(review)
         this.$http.post('/api/review/create/'+this.guideServiceId+'/'+this.paymentId, review)
          .then( res => {
              console.log("성공", res.data)
-             alert('리뷰가 작성되었습니다.')
+             this.reviews[this.paymentId] = {'id' : res.data._id,
+                                           'content' : res.data.content,
+                                           'title' : res.data.title,
+                                           'rating' : res.data.rating}
+             alert('후기가 작성되었습니다.')
              this.closeRW()
          })
          .catch( err => {
            console.log(err)
            alert('잠시 후 다시 시도해주세요.')
-           this.closeRW()
          })
       },
+      deleteReview(){
+        var really = confirm("삭제하시겠습니까?")
+        console.log(this.reviews[this.paymentId])
+        if(really){
+          console.log('삭제')
+          console.log(this.reviews[this.paymentId].id)
+          this.$http.delete('/api/review/delete/'+this.reviews[this.paymentId].id)
+          .then( res => {
+            alert('후기가 삭제되었습니다.')
+            this.reviews[this.paymentId] = false
+            this.closeMR()
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      },
+      updateReview(){
+        var really = confirm("수정하시겠습니까?")
+        if(really) {
+          this.$http.put('/api/review/update/'+this.reviews[this.paymentId].id, this.reviews[this.paymentId])
+          .then( res => {
+            alert('후기가 수정되었습니다.')
+            console.log("수정성공", this.reviews[this.paymentId])
+            this.closeMR()
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      },
+      isModalVisible(v){
+        if(v){
+          const navBarZIndex = document.querySelector('#navbox')
+          const footerZIndex = document.querySelector('#footer')
+          footerZIndex.style.zIndex = 0
+          navBarZIndex.style.zIndex = 0
+          document.documentElement.style.overflow='hidden'
+          document.body.scroll="no"
+        }else{
+          document.documentElement.style.overflow='scroll';
+          document.body.scroll="yes";
+          const navBarZIndex = document.querySelector('#navbox')
+          const footerZIndex = document.querySelector('#footer')
+          navBarZIndex.style.zIndex = 1000
+          footerZIndex.style.zIndex = 1000
+        }
+      },
       showRW(idx) {
-        const navBarZIndex = document.querySelector('#navbox')
-        const footerZIndex = document.querySelector('#footer')
-        footerZIndex.style.zIndex = 0
-        navBarZIndex.style.zIndex = 0
-        document.documentElement.style.overflow='hidden'
-        document.body.scroll="no";
-        this.isRWVisible = true;
-        this.guideServiceId = this.guideServices[idx]
-        this.paymentId=this.userGuideServices[idx]._id
+        this.isModalVisible(true)
+        this.guideServiceId = this.usedGuideServices[idx].guideServiceId
+        this.paymentId = this.usedGuideServices[idx].paymentId
+        this.isRWVisible = true
       },
       closeRW() {
-        this.guideServiceId = ''
+        this.isModalVisible(false)
         this.rating = 3
         this.comment=''
         this.subcomment=''
-        document.documentElement.style.overflow='scroll';
-        document.body.scroll="yes";
-        const navBarZIndex = document.querySelector('#navbox')
-        const footerZIndex = document.querySelector('#footer')
-        navBarZIndex.style.zIndex = 1000;
-        footerZIndex.style.zIndex = 1000;
-        this.isRWVisible = false;
+        this.paymentId = ''
+        this.guideServiceId = ''
+        this.isRWVisible = false
+      },
+      showMR(idx) {
+        this.isModalVisible(true)
+        this.paymentId = this.usedGuideServices[idx].paymentId
+        this.isMyReviewVisible = true
+      },
+      closeMR() {
+        this.isModalVisible(false)
+        this.paymentId = ''
+        this.isMyReviewVisible = false
       },
       closeHeader: function() {
         this.$store.commit("closeHeader")
@@ -294,6 +414,7 @@
         this.isImgModalOpen = false
         if(imgUrl) {
           this.userImage = imgUrl
+          console.log("이미지", imgUrl)
           this.updateUserInfo()
         }
       },
@@ -320,6 +441,7 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
+<<<<<<< HEAD
             console.log(1, res)
             for (let i = 0; i < res.data.options.length; i++) {
               this.guideServices.push(res.data.options[i][0].guideservice)
@@ -337,31 +459,67 @@
             this.userGuideServices = res.data.paymentRecords.filter( record => {
               return record.service.date < today
             })
+=======
+            console.log(res.data)
+            console.log("userInfo",res.data.userInfo)
+            this.userId = res.data.userInfo._id
+>>>>>>> a529b371535df7fa8565f4022f9ca85145dca393
 
+            const today = new Date().toISOString().slice(0, 10)
+            for(var idx in res.data.paymentRecords) {
 
-            console.log(2, this.userGuideServices)
+              // 결제 취소 항목 제외하고 보여주기
+              if (res.data.paymentRecords[idx].status != '결제취소') {
+                
+                if(res.data.paymentRecords[idx].service.date >= today){
+                  this.currentGuideServices.push({
+                    'guideServiceId' : res.data.options[idx][0].guideservice,
+                    'paymentId' : res.data.paymentRecords[idx]._id,
+                    'service' : res.data.paymentRecords[idx].service
+                })}else{
+                  this.usedGuideServices.push({
+                    'guideServiceId' : res.data.options[idx][0].guideservice,
+                    'paymentId' : res.data.paymentRecords[idx]._id,
+                    'service' : res.data.paymentRecords[idx].service
+                  })
+                }
+              }
+            }
+            for(var liked of res.data.userInfo.likeGuideServices){
+              this.$http.get('/api/guideservice/findGSById/'+liked)
+              .then( res => {
+                this.likedGuideServices.push(res.data)
+              }).catch(err => {
+                console.log("찜데이터 에러", err)
+              })
+            }
+            console.log("likedData", this.likedGuideServices)
             this.userInfo = res.data.userInfo
-            // console.log(this.userInfo)
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
-            this.userImage = this.userInfo.profileImageUrl
+            this.userImage = this.userInfo.profileImg? this.userInfo.profileImg : this.userInfo.profileImageUrl
 
             console.log("==============================")
             console.log(this.userName)
             console.log("==============================")
-
           }).catch( err => {
-              console.log(err)
+            console.log(err)
           }).then( () => {
-              this.$http.get('/api/review/findReviewByUser/'+this.userId)
+            this.$http.get('/api/review/findReviewByUser/'+this.userId)
               .then( res => {
-                console.log(3, res)
-              })
-            // this.userGuideServices  = this.userInfo.UsedGuideServices
+                for(var item of res.data.reviews) {
+                  this.reviews[item.payment] = {'id' : item._id,
+                                                'content' : item.content,
+                                                'title' : item.title,
+                                                'rating' : item.rating}
+                }
+              console.log("Reviews",  this.reviews)
+              this.loaded=true;
+            })
           })
-      },
 
+      },
       updateUserInfo: function() {
         // api/user/:username
         this.isUserInfoOpen = true
@@ -376,7 +534,7 @@
         }
         this.$http.put('/api/user/username', data, config)
           .then( res => {
-            // console.log(res)
+            console.log("유저인포 업뎃!!!", res)
           })
           .catch( err => {
             console.log(err)

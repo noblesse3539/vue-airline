@@ -13,8 +13,19 @@
                     @keydown.up="onArrowUp()"
                     @keydown.down="onArrowDown()"
                     @keydown.enter="onEnter()"
+                    @click="onClick()"
                 >
-
+                <button @click="goToUrl()" class="guide-search-submit">가이드 검색</button>
+                <!-- 검색 input 값 없을 시 보여주기 -->
+                <div class="guide-input-tooltip guide-tooltip">
+                    <h3>검색어를 입력해주세요.</h3>
+                    <!-- <ul>
+                        <li>Aliquam ac odio ut est</li>
+                        <li>Cras porttitor orci</li>
+                    </ul> -->
+                    <i></i>
+                </div>
+                
                 <!-- 가이드 여행지 검색 결과 리스트 -->
                 <div class="guide-search-result-wrapper" v-show="isOpen">
                     <div class="dep-triangle-box guide-search-triangle-box">
@@ -23,13 +34,13 @@
                     <div class="dep-country-list guide-search-list">
                         <div 
                             class="guide-search-result" 
-                            v-for=" (location, id) in guideSearchOuput.slice(0, 4)"
+                            v-for=" (location, id) in guideSearchOuput.slice(0, loadMoreOnScroll)"
                             :key="id"
                             :class="{ 'is-active-guide' : id === guideInputArrowCounter }"
                         >
                             <div 
                                 class="guide-search-result-each"
-                                @click="saveUserChoiceLocation(`${location.nation_kor}`, `${location.city_kor}`)"
+                                @click="saveUserChoiceLocation(`${location.nation}`, `${location.city_kor}`)"
                             >
                                 <i class="fas fa-map-marker-alt" style="margin-right: 15px;"></i> 
                                 <span>{{location.nation}}</span> - {{location.city_kor}}
@@ -38,7 +49,7 @@
                     </div>
                 </div>
                 
-                <button @click="goToUrl()" class="guide-search-submit">가이드 검색</button>
+                <!-- <button @click="goToUrl()" class="guide-search-submit">가이드 검색</button> -->
 
             </div>
         </section>
@@ -53,6 +64,11 @@ export default {
     name: 'GuideSearch',
     data() {
         return {
+            
+            // 스크롤 시 검색 결과 더 보여주기를 위한 변수
+            loadMoreOnScroll: 10,
+            scrollTopOfInput: 0,
+
             locationList: cities.cities,
             guideSearchOuput: [],
             guideSearchInput: '',
@@ -64,25 +80,40 @@ export default {
         }
     },
     mounted() {
+
+        this.scrollTopOfInput = document.querySelector('.guide-search-list')
+        this.scrollTopOfInput.addEventListener('scroll', this.loadMore)
+
+        document.body.addEventListener('keydown', this.hideTooltip)
         document.body.addEventListener("click",  this.hideSearchResult)
     },
     destroyed() {
         document.body.addEventListener("click",  this.hideSearchResult)
     },
     methods: {
+        hideTooltip: function() {
+            const tooltip = document.querySelector('.guide-input-tooltip')
+            tooltip.style.display = 'none'
+        },
         goToUrl : function() {
+            const tooltip = document.querySelector('.guide-input-tooltip')
             const params = {}
             params.city_kor = this.userChoice.city_kor // 도시이름
             params.nation_kor = this.userChoice.nation_kor // 국가이름
 
-            this.$router.push({name: "GuideListPage", params: params, query: params})
-
+            if (params.city_kor != null && params.nation_kor != null) {
+                this.$router.push({name: "GuideListPage", params: params, query: params})
+            } else {
+                tooltip.classList.add('animated', 'flash')
+                tooltip.style.display = "block"
+            }
         },
         hideSearchResult() {
             this.isOpen = false
+            this.loadMoreOnScroll = 10
         },
         getGuideSearchOutput: function(e) {
-        
+
             if (e.key !== "Enter") {
                 const searchListTri = document.querySelector(".guide-search-triangle-box")
                 const searchList = document.querySelector(".guide-search-list")
@@ -150,6 +181,23 @@ export default {
             this.isOpen = false
             searchListTri.style.display = "none"
             searchList.style.display = "none"
+        },
+        onClick() {
+            const searchListTri = document.querySelector(".guide-search-triangle-box")
+            const searchList = document.querySelector(".guide-search-list")
+
+            this.saveUserChoiceLocation(this.guideSearchOuput[this.guideInputArrowCounter].nation,
+                                        this.guideSearchOuput[this.guideInputArrowCounter].city_kor)
+            this.isOpen = false
+            searchListTri.style.display = "none"
+            searchList.style.display = "none"
+        },
+        loadMore() {
+            console.log(this.scrollTopOfInput.scrollTop)
+            if (this.scrollTopOfInput.scrollTop  > 200 * (this.loadMoreOnScroll/ 10) ) {
+                this.loadMoreOnScroll += 10
+            }
+
         },
     },
     watch() {

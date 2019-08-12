@@ -266,16 +266,28 @@
 }
 
 .userinfo-used-this-service {
-    width: 50%;
+    width: 70%;
     display: flex;
     /* align-items: center; */
     justify-content: flex-start;
     margin-left: 20px;
 }
 
-.userinfo-used-this-service>p {
+/* .userinfo-used-this-service>p {
     margin: 0 !important;
     margin-left: 20px !important;
+} */
+
+.userinfo-used-this-service-date {
+  margin-left: 40px;
+  margin-bottom: 0px;
+  color: 	#8c8c8c;
+}
+
+.userinfo-used-this-service-name {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 0px;
 }
 
 .user-comment {
@@ -402,6 +414,7 @@
     /* display: flex; */
     /* justify-content: space-between; */
     padding: 15px;
+    margin-bottom: 10px;
     font-size: 1.0rem;
     font-weight: 700;
     display: grid;
@@ -511,9 +524,11 @@
     border-bottom: 1px solid #e6e6e6;
 }
 
+/* 수정 */
 .GS-service-review-userImage {
     padding: 20px;
     padding-top: 0 !important;
+    padding-right: 0 !important;
     min-width: 50px !important;
     height: 5% !important;
     /* height: 100% !important; */
@@ -550,6 +565,8 @@
 
 .GS-service-review-top-userInfo {
     display: flex;
+    display: grid;
+    grid-template-columns: 60% 40%
 }
 
 .Gs-service-review-top-option {
@@ -564,7 +581,7 @@
     max-height: 100px;
     overflow: hidden;
     background: #f6f6f6;
-    padding: 20px;
+    padding: 15px;
     font-size: 1rem;
     font-weight: 600;
     word-break: break-word;
@@ -582,10 +599,10 @@
     padding-bottom: 5px;
 }
 
-.GS-service-reivew-userReview>p::after {
+/* .GS-service-reivew-userReview>p::after {
     content: 'Readc THIS!!!!!!!!!!!!!';
-    /* absolute: */
-}
+    absolute:
+} */
 
 .GS-service-review-userReview-expand {
     width: 100%;
@@ -656,6 +673,7 @@
     border: solid;
     /* background: red !important; */
     box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+    margin-bottom: 10px;
 }
 
 .GS-guide-detail-guideDetail {
@@ -773,4 +791,25 @@
 
 .fix-icon {
   margin-left: 0px !important;
+}
+
+.GS-service-review-rating-and-username {
+  display: flex;
+}
+
+.GS-service-review-image-and-content {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.GS-service-review-morebutton {
+    display: flex;
+    justify-content: center;
+    font-weight: bold !important;
+}
+
+.GS-service-review-content-morebutton {
+    height:20%; 
+    display: flex; 
+    justify-content: center;
 }

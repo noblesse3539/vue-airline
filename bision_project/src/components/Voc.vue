@@ -1,5 +1,5 @@
 <template>
-  <div class="voc">
+  <div class="voc" v-if="getUserId">
     <div class="HR__Modal" v-if="isVocVisible">
       <div class="HR__ModalContent">
         <div class="HR__ModalHeader">
@@ -27,6 +27,10 @@ import './Voc.css'
 
 export default {
   name: 'Voc',
+  mounted() {
+    // const isLoggedIn = this.$http.defaults.headers.common["x-access-token"]
+    // console.log(isLoggedIn)
+  },
   computed: {
     ...mapState({
        getUserId: state => state.User.userId
@@ -46,24 +50,29 @@ export default {
       this.content = ''
     },
     submitVOC() {
-      const token = this.$getToken("BisionToken")
-      const config = {
-        headers: { 'x-access-token': token }
-      }
-      const data = {
-        subject: this.selectedSubject,
-        content: this.content
-      }
-      this.$http.post('/api/voc/create', data, config)
-        .then( res => {
-          console.log(res)
-          this.clearVOC()
-          this.isVocVisible=false
-        })
-        .catch( err => {
-          console.log(err)
-        })
-    }
+
+      // if (getUserId) {
+
+        const token = this.$getToken("BisionToken")
+        const config = {
+          headers: { 'x-access-token': token }
+        }
+        const data = {
+          subject: this.selectedSubject,
+          content: this.content
+        }
+        this.$http.post('/api/voc/create', data, config)
+          .then( res => {
+            console.log(res)
+            this.clearVOC()
+            this.isVocVisible=false
+              alert('전송을 완료하였습니다.')
+          })
+          .catch( err => {
+            console.log(err)
+          })
+
+    },
 
   }
 }

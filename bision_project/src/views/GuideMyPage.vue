@@ -8,7 +8,7 @@
 
         <!-- ProfileImg -->
         <v-flex xs3 mr-5>
-          
+
           <!-- if: 본인 아닐 때 -->
           <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
 
@@ -34,7 +34,7 @@
           <h2 class="display-1 mb-3">
             <span class="gs-guidename">
               {{guideName}}</span>
-            
+
             <!-- v-if: 본인일 때 -->
             <v-tooltip right v-if="guideId == getUserId">
               <template v-slot:activator="{ on }">
@@ -58,21 +58,27 @@
         </v-flex>
       </v-layout>
       <!-- 현재 수익 -->
-        <div class="gs-money-made">
-          <span style="font-size: 1.25vw; margin-right: 5px;">$</span>
-          {{thisMonth}}
-          2000
+        <div class="gs-money-made" v-if="guideId == getUserId">
+          <div style="display: flex;">
+            <span style="font-size: 2vw;">₩</span>
+            <span style="font-size: 100%; font-weight: 1000;">{{profit}}</span>
+          </div>
+          <div>
+            <div style="font-size: 50%;">
+              {{monthList[thisMonth]}}
+            </div>
+          </div>
         </div>
     </div>
 
-    <v-container>    
+    <v-container>
     <!-- tab 영역 -->
     <v-sheet color="white" class="tab-section" >
-      <v-tabs slider-color="#45CE30" color="white" fixed-tabs>
+      <v-tabs slider-color="rgba(0, 151, 132, 1)" color="white" fixed-tabs>
         <v-tab key="Now" class="tab-name">Dashboard</v-tab>
         <v-tab key="ALL" class="tab-name" >ALL SERVICES</v-tab>
         <v-tab key="RESERVATION" class="tab-name"  v-if="guideId == getUserId">RESERVATION</v-tab>
-        
+
         <!-- Dashboard -->
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
@@ -80,7 +86,7 @@
             <v-card flat v-for="(service, idx) in guideServices" :key="idx">
               <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
               <v-layout mb-4 class="gs-mypage-service-box"
-                
+
               >
               <v-img class="gs-mypage-service-bg" :src="service.mainImg">
               </v-img>
@@ -107,15 +113,56 @@
                       </div>
                     </div>
                     <div class="gs-mypage-service-content-bottom-reserve">
-                      <button 
+                      <!-- <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
                         @click="deleteGuideService(service)"
+                        href="#popup1"  
                       >
                         삭제하기
-                      </button>
-                      <button 
+                      </button> -->
+                      <v-btn
+                        v-if="getUserId == guideId"
+                        color="primary"
+                        dark
+                        @click.stop="dialog = true"
+                      >
+                        삭제하기
+                      </v-btn>
+                      <v-dialog
+                        v-model="dialog"
+                        max-width="290"
+                      >
+                        <v-card>
+                          <v-card-title class="headline">Use Google's location service?</v-card-title>
+
+                          <v-card-text>
+                            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                              color="green darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              Disagree
+                            </v-btn>
+
+                            <v-btn
+                              color="green darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              Agree
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                      <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
                         style="margin-right: 10px;"
@@ -123,7 +170,7 @@
                       >
                         수정하기
                       </button>
-                      <PortfolioWrite :getGuideService="getGuideService" :serviceInfo="serviceInfoProp" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+                      <PortfolioEdit :getGuideService="getGuideService" :serviceInfoFuck="serviceInfoProp" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioEdit>
                       <!-- 수정 시 Portfoliowrite 컴포넌트에 props 넘겨줍니다. -->
                       <!-- <PortfolioWrite class="`portfilo-write-${idx}`" :serviceInfo="guideServices[idx]" v-if="isPWEditVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite> -->
                       <button
@@ -162,22 +209,24 @@
              </v-list>
 
           </v-flex>
-          <h1 class="gs-guidemypage-section-divider">예약 일정</h1>
-          <GuideCalendar :events="events"></GuideCalendar>
+          <h1 class="gs-guidemypage-section-divider" v-if="guideId == getUserId">예약 일정</h1>
+          <GuideCalendar :events="events" v-if="guideId == getUserId"></GuideCalendar>
         </v-tab-item>
 
         <!-- ALL -->
         <v-tab-item key="ALL">
           <!-- <v-btn v-if="getUserId == guideId"  @click="showPW" color="white">여행 상품 등록</v-btn> -->
-          
+
           <div class="gs-ALL-container">
-            <div class="gs-ALL-service-add-btn" 
+            <div class="gs-ALL-service-add-btn"
               @click="showPW"
+              v-if="getUserId == guideId"
             >
-              <div class="gs-ALL-service-add-btn-inside" v-if="getUserId == guideId" >
+              <div class="gs-ALL-service-add-btn-inside" >
                 +
               </div>
-              <PortfolioWrite v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+              <PortfolioWrite :getGuideService="getGuideService" v-if="isPWVisible" title="여행 상품 등록" @close="closePW"></PortfolioWrite>
+
             </div>
             <div class="gs-ALL-service-card" v-for="(service, idx) in guideServices" :key="idx">
               <div class="gs-ALL-service-card-bg">
@@ -196,17 +245,229 @@
         </v-tab-item>
 
         <!-- Reservation -->
-        <v-tab-item key="RESERVATION">
-          <div class="reservation-box">
-            <div class="reservation-collapsible-box" @click="openCollapsible()">
+        <v-tab-item key="RESERVATION" class="reservation-box-mother">
+          <!-- 예약 내역 -->
+          <div class="reservation-box" v-for="(payment, idx) in paymentList" v-if="payment.userInfo" :key="idx">
+            <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
+              <div class="reservation-user-payment-info-box">
+                <div class="reservation-status-confirmed">
+                  CONFIRMED
+                </div>
+                <!-- <div class="reservation-status-pending">
+                  PENDING
+                </div>
+                <div class="reservation-status-cancelled">
+                  CANCELELD
+                </div> -->
+                <div :class="`reserve-user-face-${idx} reserve-user-face`">
+                  <!-- {{payment}} -->
+                  <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+                </div>
+                <div class="reserve-user-name">
+                  {{payment.userInfo.nickname}}<br>
+                  {{payment.userInfo.email}}<br>
+
+                </div>
+                <div class="reserve-user-pick-service">
+                  {{payment.payment.service.title}}<br>
+                  예약날짜: {{payment.payment.created_at.slice(0, 10)}}
+                </div>
+                <div class="reserve-user-pick-price">
+                  ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                </div>
+              </div>
+              <div class="reverse-guide-to-push-down"></div>
             </div>
-            <div class="res-collapsible-inside">
-              <p>
-                오오오오오오오오옹오오오오오오옹
-              </p>
+            <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
+              <div class="res-collap-inside-box">
+                <div class="res-collap-inside-box-content">
+                  <div style="display: flex; justify-content: space-between">
+                    <div>
+                      <h2 class="res-h2" style="margin-top: 0;">상품명</h2>
+                      {{payment.payment.service.title}}
+                    </div>
+                    <button @click="cancelPayment(payment.payment._id)" class="reserve-cancel-btn">예약 취소하기</button>
+                  </div>
+                  <!-- <v-dialog v-model="dialog" max-width="500px">
+                    <v-card>
+                      <v-card-text>
+                        <v-text-field label="예약 취소 사유를 입력해주세요."></v-text-field>
+                        <small class="grey--text">* 상품 등록시 설정한 판매자의 환불 정책에 따라 예약 구매자에게 일정 금액이 환불됩니다.</small>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="#F44336" @click="dialog = false" style="color: white;">예약 취소 확정</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog> -->
+                  <div>
+                    <h2 class="res-h2">날짜</h2>
+                    {{payment.payment.service.date}}
+                  </div>
+                  <div class="res-collap-inside-peoople">
+                    <h2 class="res-h2">결제 금액</h2>
+                    <table class="res-collap-table">
+                      <tr>
+                        <th>구분</th>
+                        <th>1인당 가격</th>
+                        <th>인원</th>
+                        <th>금액</th>
+                      </tr>
+                      <tr>
+                        <td>성인</td>
+                        <td>{{payment.payment.service.adultprice}}</td>
+                        <td>{{payment.payment.service.adult}}</td>
+                        <td>{{payment.payment.service.adult ? separateDigit(payment.payment.service.adultprice * payment.payment.service.adult) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>아동</td>
+                        <td>{{payment.payment.service.childprice}}</td>
+                        <td>{{payment.payment.service.child}}</td>
+                        <td>{{payment.payment.service.child ? separateDigit(payment.payment.service.childprice * payment.payment.service.child) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>유아</td>
+                        <td>{{payment.payment.service.infantprice}}</td>
+                        <td>{{payment.payment.service.infant}}</td>
+                        <td>{{payment.payment.service.infant ? separateDigit(payment.payment.service.infantprice * payment.payment.service.infant) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>노인</td>
+                        <td>{{payment.payment.service.seniorprice}}</td>
+                        <td>{{payment.payment.service.senior}}</td>
+                        <td>{{payment.payment.service.senior ? separateDigit(payment.payment.service.seniorprice * payment.payment.service.senior) : 0}}</td>
+                      </tr>
+                      <!-- <tr>
+                        <td>{{payment.payment.service.adult ? payment.payment.service.adult : 0 }}명</td>
+                        <td>{{payment.payment.service.child ? payment.payment.service.child : 0}}명</td>
+                        <td>{{payment.payment.service.infant ? payment.payment.service.infant : 0}}명</td>
+                        <td>{{payment.payment.service.senior ? payment.payment.service.senior : 0}}명</td>
+                        <td>{{payment.payment.service.people}}명</td>
+                      </tr> -->
+                    </table>
+                  </div>
+                  <hr class="res-price-divider">
+                  <div class="res-total-price">
+                    <div style="font-size: 2vw; font-weight: 1000;">Total Price:</div>
+                    <div style="font-size: 2vw; font-weight: 1000;">
+                      ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        
+          <!-- 취소 내역 -->
+          <div class="reservation-box" v-for="(payment, idx) in cancelList" v-if="payment.userInfo" :key="idx">
+            <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
+              <div class="reservation-user-payment-info-box">
+                <div class="reservation-status-cancelled">
+                  CANCELLED
+                </div>
+                <!-- <div class="reservation-status-pending">
+                  PENDING
+                </div>
+                <div class="reservation-status-cancelled">
+                  CANCELELD
+                </div> -->
+                <div :class="`reserve-user-face-${idx} reserve-user-face`">
+                  <!-- {{payment}} -->
+                  <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+                </div>
+                <div class="reserve-user-name">
+                  {{payment.userInfo.nickname}}<br>
+                  {{payment.userInfo.email}}<br>
+
+                </div>
+                <div class="reserve-user-pick-service">
+                  {{payment.payment.service.title}}<br>
+                  결제 취소 날짜: {{payment.payment.created_at.slice(0, 10)}}
+                </div>
+                <div class="reserve-user-pick-price">
+                  ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                </div>
+              </div>
+              <div class="reverse-guide-to-push-down"></div>
+            </div>
+            <div :class="`res-collapsible-inside-${idx} res-collapsible-inside`">
+              <div class="res-collap-inside-box">
+                <div class="res-collap-inside-box-content">
+                  <div style="display: flex; justify-content: space-between">
+                    <div>
+                      <h2 class="res-h2" style="margin-top: 0;">상품명</h2>
+                      {{payment.payment.service.title}}
+                    </div>
+                    <!-- <button @click="cancelPayment(payment.payment._id)" class="reserve-cancel-btn">예약 취소하기</button> -->
+                  </div>
+                  <!-- <v-dialog v-model="dialog" max-width="500px">
+                    <v-card>
+                      <v-card-text>
+                        <v-text-field label="예약 취소 사유를 입력해주세요."></v-text-field>
+                        <small class="grey--text">* 상품 등록시 설정한 판매자의 환불 정책에 따라 예약 구매자에게 일정 금액이 환불됩니다.</small>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="#F44336" @click="dialog = false" style="color: white;">예약 취소 확정</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog> -->
+                  <div>
+                    <h2 class="res-h2">날짜</h2>
+                    {{payment.payment.service.date}}
+                  </div>
+                  <div class="res-collap-inside-peoople">
+                    <h2 class="res-h2">결제 금액</h2>
+                    <table class="res-collap-table">
+                      <tr>
+                        <th>구분</th>
+                        <th>1인당 가격</th>
+                        <th>인원</th>
+                        <th>금액</th>
+                      </tr>
+                      <tr>
+                        <td>성인</td>
+                        <td>{{payment.payment.service.adultprice}}</td>
+                        <td>{{payment.payment.service.adult}}</td>
+                        <td>{{payment.payment.service.adult ? separateDigit(payment.payment.service.adultprice * payment.payment.service.adult) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>아동</td>
+                        <td>{{payment.payment.service.childprice}}</td>
+                        <td>{{payment.payment.service.child}}</td>
+                        <td>{{payment.payment.service.child ? separateDigit(payment.payment.service.childprice * payment.payment.service.child) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>유아</td>
+                        <td>{{payment.payment.service.infantprice}}</td>
+                        <td>{{payment.payment.service.infant}}</td>
+                        <td>{{payment.payment.service.infant ? separateDigit(payment.payment.service.infantprice * payment.payment.service.infant) : 0}}</td>
+                      </tr>
+                      <tr>
+                        <td>노인</td>
+                        <td>{{payment.payment.service.seniorprice}}</td>
+                        <td>{{payment.payment.service.senior}}</td>
+                        <td>{{payment.payment.service.senior ? separateDigit(payment.payment.service.seniorprice * payment.payment.service.senior) : 0}}</td>
+                      </tr>
+                      <!-- <tr>
+                        <td>{{payment.payment.service.adult ? payment.payment.service.adult : 0 }}명</td>
+                        <td>{{payment.payment.service.child ? payment.payment.service.child : 0}}명</td>
+                        <td>{{payment.payment.service.infant ? payment.payment.service.infant : 0}}명</td>
+                        <td>{{payment.payment.service.senior ? payment.payment.service.senior : 0}}명</td>
+                        <td>{{payment.payment.service.people}}명</td>
+                      </tr> -->
+                    </table>
+                  </div>
+                  <hr class="res-price-divider">
+                  <div class="res-total-price">
+                    <div style="font-size: 2vw; font-weight: 1000;">Total Price:</div>
+                    <div style="font-size: 2vw; font-weight: 1000;">
+                      ₩ {{separateDigit(payment.payment.service.totalAmount)}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </v-tab-item>
 
       </v-tabs>
@@ -219,6 +480,7 @@
 import UploadImg from '../components/UploadImg'
 import UploadImgModal from '../components/UploadImgModal'
 import PortfolioWrite from '../components/PortfolioWrite'
+import PortfolioEdit from '../components/PortfolioEdit'
 import Weather from '../components/Weather'
 import GuideCalendar from '../components/GuideCalendar'
 import './GuideMyPage.css'
@@ -229,18 +491,33 @@ export default {
     UploadImg,
     UploadImgModal,
     PortfolioWrite,
+    PortfolioEdit,
     Weather,
     GuideCalendar,
   },
   props: ['guideId'],
   methods: {
+    separateDigit(profit) {
+      let newProfit = ''
+      if (profit.toString().length >= 3) {
+        const oldProfit = profit.toString()
+
+        for (let i = 0; i < oldProfit.length; i++) {
+
+          newProfit += oldProfit[oldProfit.length - 1 - i]
+          if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
+            newProfit += ','
+          }
+
+        }
+      }
+      let reversedProfit = newProfit.split("").reverse().join("")
+      return reversedProfit
+    },
     goToServiceDetail(guideServiceId) {
       console.log(guideServiceId)
       // `/user/${getuserId}`
       this.$router.push({path: `/guideServiceDetailPage`, query: {serviceId : guideServiceId}})
-    },
-    getImgUrl(img){
-      return require('../assets/' + img)
     },
     showIU() {
       this.isIUVisible = true;
@@ -252,11 +529,15 @@ export default {
         this.imgurl=value;
         const guideId = this.getUserId
         const config = {
-          'profileImageUrl': this.imgurl
+          'profileImg': this.imgurl
         }
-        this.$http.put(`/api/guide/${guideId}`, config)
+        console.log("config", config)
+        const header = {
+          'x-access-token': this.$getToken("BisionToken")
+        }
+        this.$http.put(`/api/guide/${guideId}`, config, {headers: header})
           .then( res => {
-            // console.log(res.data)
+            console.log("프로필 이미지수정 완료", res.data)
           })
 
 
@@ -283,50 +564,51 @@ export default {
 
       const footerZIndex = document.querySelector('#footer')
       footerZIndex.style.zIndex = 0;
-      
+
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
-      this.isPWVisible = true;
       this.serviceInfoProp = {}
+      this.isPWVisible = true;
     },
     showPWEdit() {
       const navBarZIndex = document.querySelector('#navbox')
 
       const footerZIndex = document.querySelector('#footer')
       footerZIndex.style.zIndex = 0;
-      
+
       navBarZIndex.style.zIndex = 0;
       document.documentElement.style.overflow='hidden';
       document.body.scroll="no";
-      this.isPWVisible = true;
+      this.isPWEditVisible = true;
     },
     closePW(){
       document.documentElement.style.overflow='scroll';
       document.body.scroll="yes";
       this.isPWVisible = false;
-      // this.isPWEditVisible = false;
+      this.isPWEditVisible = false;
     },
     updateIntro() {
       const guideId = this.getUserId
       const config = {
         'intro': this.intro,
-        'profileImageUrl' : this.imgurl,
+        // 'profileImg' : this.imgurl,
       }
       this.$http.put(`/api/guide/${guideId}`, config)
         .then( res => {
-          // console.log(res.data)
+          console.log("인트로 수정 완료", res.data)
         })
     },
     GuideDataRequest() {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then(res => {
-        console.log(res.data)
+        console.log("가이드데이터",res.data)
 
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
         this.guideName = guide.nickname
-
+        this.imgurl = guide.profileImg
+        console.log("img", guide.profileImg)
         // 가이드 평균 평점 구하기
         if (res.data.guide.starRatingList.length) {
           sum = res.data.guide.starRatingList.reduce(function(acc, each) { return acc + each})
@@ -334,7 +616,6 @@ export default {
           this.rating = avg
         }
 
-        this.imgurl = res.data.guide.profileImageUrl
 
       })
     },
@@ -367,24 +648,31 @@ export default {
     },
 
     editGuideService(service) {
-      console.log("------------------------------")
-      console.log(service)
-      console.log("------------------------------")
       this.serviceInfoProp = service
-      console.log(this.serviceInfoProp)
-      this.showPWEdit()
+      const navBarZIndex = document.querySelector('#navbox')
+
+      const footerZIndex = document.querySelector('#footer')
+      footerZIndex.style.zIndex = 0;
+
+      navBarZIndex.style.zIndex = 0;
+      document.documentElement.style.overflow='hidden';
+      document.body.scroll="no";
+
+      this.serviceInfoProp = service
+      this.isPWEditVisible = true;
+      // this.showPWEdit()
+
     },
     deleteGuideService(service) {
-      alert("정말 삭제하시겠어요?")
-
-      this.$http.delete(`/api/guideservice/delete/${service._id}`)
-        .then( res => {
-          alert("삭제되었습니다!")
-          this.getGuideService()
-        })
+      
+      // this.$http.delete(`/api/guideservice/delete/${service._id}`)
+      //   .then( res => {
+      //     alert("삭제되었습니다!")
+      //     this.getGuideService()
+      //   })
     },
 
-    // 가이드 결제 내역 
+    // 가이드 결제 내역
     getPaymentsByGuide(guideId) {
       this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
         .then( res => {
@@ -392,27 +680,87 @@ export default {
           console.log(res.data)
           console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 
+          const cancelled = res.data.cancel
           const payments = res.data.payments
           payments.forEach( payment => {
             const temp = {}
+
+            // this입니다. temp아닙니다!
+
             temp.title = payment.service.title
             temp.date  = payment.service.date
             temp.textColor = 'red'
             temp.backgroundColor = '#1e90ff'
-            temp.url   = payment.service._id   // 해당 결제 상품의 고유 id값
+            temp.serviceId   = payment._id   // 해당 결제 상품의 고유 id값
             this.events.push(temp)
+            this.profit += parseInt(payment.service.totalAmount)
+
           })
+
+          // 3자리 이상 수 일시에 쉼표로 구분해주기
+          let newProfit = ''
+          if (this.profit.toString().length >= 3) {
+            const oldProfit = this.profit.toString()
+
+            for (let i = 0; i < oldProfit.length; i++) {
+
+              newProfit += oldProfit[oldProfit.length - 1 - i]
+              if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
+                newProfit += ','
+              }
+
+            }
+          }
+          let reversedProfit = newProfit.split("").reverse().join("")
+          this.profit = reversedProfit
+
+          return res.data
+        })
+        .then( (data) => {
+
+          data.payments.forEach( payment => {
+            const temp   = {}
+            const userId = payment.user
+            // console.log(userId)
+            this.$http.get(`/api/user/search/${userId}`)
+              .then( res => {
+                temp.payment = payment
+                temp.userInfo = res.data.user
+                this.paymentList.push(temp)
+              })
+
+          })
+
+          console.log("------------segklusehgklhu")
+          console.log(this.cancelList)
+          console.log("------------segklusehgklhu")
 
         })
         .catch( err=> {
           console.log(err)
         })
     },
+    getGuideCancel(guideId) {
+      this.$http.get(`/api/paymentstore/findByGuide/${guideId}`)
+        .then( res => {
+          res.data.cancel.forEach( cancel => {
+            const temp = {}
+              const userId = cancel.user
+              this.$http.get(`/api/user/search/${userId}`)
+                .then( res => {
+                  console.log(res)
+                  temp.payment = cancel
+                  temp.userInfo = res.data.user
+                  this.cancelList.push(temp)
+                })
+          })
+        })
+    },
 
-    openCollapsible() {
-      const collapsible = document.querySelector(".reservation-collapsible-box")
+    openCollapsible(idx) {
+      const collapsible = document.querySelector(`.reservation-collapsible-box-${idx}`)
       const content = collapsible.nextElementSibling
-      console.log(content)
+      // console.log(collapsible)
       if (content.style.maxHeight) {
         content.style.maxHeight = null
       } else {
@@ -420,19 +768,35 @@ export default {
       }
 
     },
+
+    cancelPayment(serviceId) {
+      this.$http.post(`/api/paymentstore/realcancel/${serviceId}`)
+        .then( res => {
+          console.log(res)
+        })
+    },
+
   },
   data (){
     return{
 
+      // 결제 취소 관련
+      dialog: false,
+
+      // 결제 내역
+      paymentList: [],
+      cancelList: [],
+
       // 이번 달 수익 관련 변수
-      profit: '',
+      profit: 0,
       thisMonth: new Date().getMonth(),
+      monthList: ['January', 'February', 'March', 'April', 'March', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
       // calendar로 넘겨줄 events 리스트
       events: [],
-      
+
       // 가이드 상품 수정시 넘겨줄 props 객체
-      serviceInfoProp : {},
+      serviceInfoProp : { 'fuck' : 'fuck you jmotherfucker'},
 
       guideName: '',
       rating: 1,
@@ -455,7 +819,7 @@ export default {
       // 현재 가이드 페이지에 접근한 유저가 해당 가이드인지 일반 유저인지 판단 후,
       // 일반 유저일 경우 수정 기능들을 비활성 처리합니다.
       guideId: this.$route.query.guideId,
-      
+
       // 가이드 상품 관련
       guideServices: [],
     }
@@ -466,14 +830,16 @@ export default {
       getIsLoggedIn: state => state.User.isLoggedIn,
       isFooterOpen : state => state.Footer.isFooterOpen,
       isHeaderOpen : state => state.Header.isHeaderOpen,
-    })
+    }),
   },
   mounted() {
     this.GuideDataRequest()
     this.closeFooter()
     this.getGuideService()
     this.blurHeader()
-    this.getPaymentsByGuide(this.guideId)    
+    this.getPaymentsByGuide(this.guideId)
+    this.getGuideCancel(this.guideId)
+
 
   },
   updaetd() {
