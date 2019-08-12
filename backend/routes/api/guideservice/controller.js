@@ -108,18 +108,28 @@ exports.SearchGS=(req,res)=>{
   GuideService.find()
   .populate('tags')
   .populate('options')
+  .populate({path:'reviews',model:Review})
   .or([{city_eng: { $regex: '.*' + keyword + '.*' }},
       {city_kor: { $regex: '.*' + keyword + '.*' }},
       {nation_eng: { $regex: '.*' + keyword + '.*' }},
       {nation_kor: { $regex: '.*' + keyword + '.*' }}])
-  .then(
-      guideservices => {
-          console.log(guideservices);
-          res.json({guideservices})
-      }
-  )
-  // res.json({message:'message'})
+  .lean()
+  .then( guideservices => {
+    guideservices = guideservices.map( gs => {
+      let reviews = gs.reviews
+      let rateAvg = 0
+      reviews.forEach( review => {
+        rateAvg += review.rating
+      })
+      rateAvg = reviews.length === 0 ? 0 : rateAvg/reviews.length
+      gs.rateAvg = rateAvg
+      return gs
+    })  
+    console.log(guideservices);
+    res.json({guideservices})
+  })
 }
+
 
 exports.findGSById=(req,res)=>{
   console.log(req.params);
