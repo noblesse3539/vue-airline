@@ -117,51 +117,16 @@
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
-                        @click="deleteGuideService(service)"
-                        href="#popup1"  
+                        @click="deleteGuideService(service, idx)"
                       >
                         삭제하기
                       </button> -->
-                      <v-btn
-                        v-if="getUserId == guideId"
-                        color="primary"
-                        dark
-                        @click.stop="dialog = true"
-                      >
-                        삭제하기
-                      </v-btn>
-                      <v-dialog
-                        v-model="dialog"
-                        max-width="290"
-                      >
-                        <v-card>
-                          <v-card-title class="headline">Use Google's location service?</v-card-title>
-
-                          <v-card-text>
-                            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-                          </v-card-text>
-
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-
-                            <v-btn
-                              color="green darken-1"
-                              text
-                              @click="dialog = false"
-                            >
-                              Disagree
-                            </v-btn>
-
-                            <v-btn
-                              color="green darken-1"
-                              text
-                              @click="dialog = false"
-                            >
-                              Agree
-                            </v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
+                      <div :class="`dialog-delete-${idx} dialog-delete`">
+                        <div class="dialog-card">
+                          <h3>정말 삭제하시겠어요?</h3>
+                          <p style="margin-top: 10px; font-size: 1vw;">상품명: {{service.title}}</p>
+                        </div>
+                      </div>
                       <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
@@ -266,7 +231,7 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
-
+                  
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -377,7 +342,7 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
-
+                  <div class="reserve-chat" @click="openChat()">대화하기</div>
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -399,18 +364,6 @@
                     </div>
                     <!-- <button @click="cancelPayment(payment.payment._id)" class="reserve-cancel-btn">예약 취소하기</button> -->
                   </div>
-                  <!-- <v-dialog v-model="dialog" max-width="500px">
-                    <v-card>
-                      <v-card-text>
-                        <v-text-field label="예약 취소 사유를 입력해주세요."></v-text-field>
-                        <small class="grey--text">* 상품 등록시 설정한 판매자의 환불 정책에 따라 예약 구매자에게 일정 금액이 환불됩니다.</small>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn text color="#F44336" @click="dialog = false" style="color: white;">예약 취소 확정</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog> -->
                   <div>
                     <h2 class="res-h2">날짜</h2>
                     {{payment.payment.service.date}}
@@ -515,7 +468,7 @@ export default {
       return reversedProfit
     },
     goToServiceDetail(guideServiceId) {
-      console.log(guideServiceId)
+      // console.log(guideServiceId)
       // `/user/${getuserId}`
       this.$router.push({path: `/guideServiceDetailPage`, query: {serviceId : guideServiceId}})
     },
@@ -622,9 +575,14 @@ export default {
     getGuideService() {
       this.$http.get(` /api/guideservice/findGSByGuideId/${this.guideId}`)
         .then( res => {
-          console.log("ok")
+          console.log("guideService", res.data)
           this.guideServices = res.data.reverse()
-          // console.log(this.guideServices)
+        })
+        .then( () => {
+          for (let i = 0; i <= this.guideServices.length; i++) {
+            this.dialogNew.push(false)
+          }
+          console.log(this.dialogNew)
         })
     },
     closeFooter() {
@@ -663,8 +621,13 @@ export default {
       // this.showPWEdit()
 
     },
-    deleteGuideService(service) {
-      
+    deleteGuideService(service, idx) {
+
+      const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)
+      dialogDelete.style.display = "flex"
+      console.log(dialogDelete)
+
+      // this.dialog = true
       // this.$http.delete(`/api/guideservice/delete/${service._id}`)
       //   .then( res => {
       //     alert("삭제되었습니다!")
@@ -712,7 +675,7 @@ export default {
             }
           }
           let reversedProfit = newProfit.split("").reverse().join("")
-          this.profit = reversedProfit
+          this.profit = reversedProfi
 
           return res.data
         })
@@ -727,6 +690,7 @@ export default {
                 temp.payment = payment
                 temp.userInfo = res.data.user
                 this.paymentList.push(temp)
+                console.log('paymentList', this.paymentList)
               })
 
           })
@@ -772,16 +736,29 @@ export default {
     cancelPayment(serviceId) {
       this.$http.post(`/api/paymentstore/realcancel/${serviceId}`)
         .then( res => {
-          console.log(res)
         })
     },
+  
+    hideComponent(event) {
+        if (event.target.classList[1] == 'dialog-delete') {
+          // const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)
+          const dialogDelete = document.querySelectorAll(`.dialog-delete`)
+          
+          dialogDelete.forEach( each => {
+            each.style.display = "none"
+          })
 
+        }
+    },
+    openChat() {
+      this.$router.push({path: '/room'})
+    },
   },
   data (){
     return{
 
       // 결제 취소 관련
-      dialog: false,
+      dialogNew: new Array(),
 
       // 결제 내역
       paymentList: [],
@@ -831,6 +808,9 @@ export default {
       isFooterOpen : state => state.Footer.isFooterOpen,
       isHeaderOpen : state => state.Header.isHeaderOpen,
     }),
+    dialogNewCatch: function() {
+      return this.dialogNew
+    },
   },
   mounted() {
     this.GuideDataRequest()
@@ -840,7 +820,7 @@ export default {
     this.getPaymentsByGuide(this.guideId)
     this.getGuideCancel(this.guideId)
 
-
+    window.addEventListener('click', this.hideComponent)
   },
   updaetd() {
   },

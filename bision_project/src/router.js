@@ -16,6 +16,8 @@ import PayApproval from './views/kakaopay/PayApproval'
 import payCancel from './views/kakaopay/payCancel'
 import PayFail from './views/kakaopay/PayFail'
 import GuideServicePayment from './views/GuideServicePayment'
+import Chat from './components/Chat'
+import Room from './components/Room'
 
 Vue.use(Router)
 
@@ -112,6 +114,18 @@ export default new Router({
             path: '/payfail',
             name: 'PayFail',
             component: PayFail
+        },
+        {
+            path: '/room',
+            name: 'Room',
+            component: Room,
+            props:true
+        },
+        {
+            path: '/room/:roomId',
+            name: 'Chat',
+            component: Chat,
+            props:true
         },
     ]
 })

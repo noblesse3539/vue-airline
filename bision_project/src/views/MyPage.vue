@@ -91,8 +91,7 @@
       <div class="myTourExperience-empty GSSearchBtn" v-if="!likedGuideServices.length" @click="linktoGS"><div>Bision상품 둘러보기</div></div>
       <!-- slides -->
       <swiper-slide class="myProduct"
-        v-for="(guideService, idx) in likedGuideServices"
-        :key="id">
+        v-for="(guideService, idx) in likedGuideServices">
         <img @click="goToDetail(guideService._id)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
         <div class="likeTooltip">좋아요 취소</div>
         <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
@@ -100,9 +99,6 @@
 
           <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.title}}</p>
-          <!-- <p style="font-size: 1.25rem;">{{guideService.date}}</p> -->
-          <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
-          <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
         </div>
       </swiper-slide>
       <!-- Optional controls -->
@@ -216,9 +212,9 @@
       UploadImgModal,
     },
     created() {
-      this.getUserInfo()
-    },
+      },
     mounted() {
+      this.getUserInfo()
       // this.closeHeader()
       this.swiper.slideTo(3, 1000, false)
       // this.deleteGuideServiceToUser()
@@ -433,7 +429,7 @@
       closeUserInfoModifier: function() {
         this.isUserInfoOpen = true
       },
-
+      
       getUserInfo: function() {
         const token= this.$getToken('BisionToken')
         const config = {
@@ -441,16 +437,15 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
-            console.log(res.data)
-            console.log("userInfo",res.data.userInfo)
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
+
             for(var idx in res.data.paymentRecords) {
 
               // 결제 취소 항목 제외하고 보여주기
               if (res.data.paymentRecords[idx].status != '결제취소') {
-                
+
                 if(res.data.paymentRecords[idx].service.date >= today){
                   this.currentGuideServices.push({
                     'guideServiceId' : res.data.options[idx][0].guideservice,

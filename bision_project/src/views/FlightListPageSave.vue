@@ -12,7 +12,6 @@
             {{this.$route.params.adults}} 성인 <span v-if="this.$route.params.children">{{this.$route.params.children}} 아동</span> <span v-if="this.$route.params.infants">{{this.$route.params.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.params.cabinClass"></span><span v-else>없음</span>
           </div>
         </div>
-
         <div style="font-size: 15px; padding-top: 4%;">
           <div style="width: 50%; display: inline-block;">
             <div>가는 날</div>
@@ -140,6 +139,7 @@
               <div style="display:grid; grid-template-columns: 68% 12% 20%">
                 <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총 {{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
                 <div><div style="margin-top: 13px;">정렬 기준 : </div></div>
+
                 <div>
                   <v-menu offset-y style="display: inline-block">
                     <template v-slot:activator="{ on }" >

@@ -15,6 +15,8 @@ const option=require('./option')
 const paidOption=require('./paidOption')
 const voc=require('./voc')
 const currency=require('./currency')
+const room=require('./room')
+const chat=require('./chat')
 
 const kakaopay = require('./kakaopay')
 const paymentstore = require('./paymentstore')
@@ -43,7 +45,7 @@ router.use('/review',review)
 router.use('/tag',tag)
 
 //Option
-router.use('/option',option)
+router.use('/option', authMiddleware, option)
 router.use('/paidOption',paidOption)
 
 router.use('/airport', airport)
@@ -54,7 +56,10 @@ router.use('/nation', nation)
 router.use('/voc', authMiddleware, voc)
 router.use('/currency',currency)
 
-router.use('/kakaopay', authMiddleware, kakaopay)
+router.use('/room',room)
+router.use('/chat',chat)
 
+router.use('/kakaopay', authMiddleware, kakaopay)
 router.use('/paymentstore', paymentstore)
+
 module.exports = router

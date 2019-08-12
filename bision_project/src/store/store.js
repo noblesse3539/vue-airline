@@ -7,7 +7,6 @@ import Header from './modules/header'
 import Footer from './modules/footer'
 import User from './modules/user'
 import Guideservice from './modules/guideservice'
-
 // import createLogger from '../../../src/plugins/logger'
 
 Vue.use(Vuex)

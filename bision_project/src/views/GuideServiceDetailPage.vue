@@ -21,6 +21,7 @@
             <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
+              <v-btn @click="chat">메시지보내기</v-btn>
             </div>
           </div>
 
@@ -49,7 +50,7 @@
             <div class="GS-guide-duration GS-guide-detail-icon">
               <i class="far fa-clock"></i>
               <span style="margin-left: 10px;">소요시간 : {{duration}}</span>
-            </div>            
+            </div>
             <div class="GS-guide-refund GS-guide-detail-icon">
               <i class="fas fa-coins"></i>
               <span style="margin-left: 10px;" v-if="serviceInfo.refund[0].refund100 > 0">{{serviceInfo.refund[0].refund100}}일 전 전액 환불</span>
@@ -87,7 +88,7 @@
                           <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="14.7" readonly></v-rating>
                         </div>
                         <div class="GS-service-review-userName GS-service-review-info">{{reviews[maxratingReviewIdx].user.nickname}}</div>
-                       
+
                       </div>
                       <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[maxratingReviewIdx].payment.service.date}}</div>
                     </div>
@@ -240,7 +241,7 @@
                 <span>{{cost}}</span>
               </div> -->
             </div>
-            <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->           
+            <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
@@ -483,7 +484,7 @@
                         직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
                         해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
                         일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
-                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!                      
+                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
                       </p>
                       <div class="GS-service-review-content-morebutton">                                                        
                         <button :class="`gs-service-close-${i}`" style="display: none;" @click="loadReviewMore(i)">
@@ -515,6 +516,7 @@
 import { mapState } from 'vuex'
 import "./GuideServiceDetailPage.css";
 import PayBtn from "../components/kakaopaycpn/PayBtn";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "GuideServiceDetailPage",
@@ -600,10 +602,15 @@ export default {
       },
 
       // 달력 관련 변수
-      isCalenderOpen: false,      
+      isCalenderOpen: false,
       isPaymentReady: false,
       leavingDate: '',
       leavingDates: [],
+      room:{
+        user:'',
+        guide:''
+      },
+    
 
       // 레이팅 관련 변수
       average: 0,
@@ -792,7 +799,7 @@ export default {
               idx = i
               maxrating = this.reviews[i].rating
             }
-            
+
             var name = this.reviews[i].user.nickname
             if (pattern_kor.test(name.slice(0,1))) this.reviews[i].user.nickname =  name.slice(0,1) + star.slice(0,name.length - 1)
             else this.reviews[i].user.nickname = name.slice(0,3) + star.slice(0,name.length - 3)
@@ -812,7 +819,7 @@ export default {
           this.maxratingReviewIdx = idx
           this.maxrationgReviewLoaded = true
           this.reviewsLoaded = true
-          
+
         }
         this.maxrationgReviewLoaded = true
 
@@ -824,7 +831,7 @@ export default {
       })
     },
 
-    loadReviewMore: function(i) {     
+    loadReviewMore: function(i) {
       const loadReviewMore = document.querySelector(".GS-service-reivew-userReview-" + i)
       const reviewopen = document.querySelector(`.gs-service-open-${i}`)
       const reviewclose = document.querySelector(`.gs-service-close-${i}`)
@@ -865,45 +872,45 @@ export default {
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
       if (this.selectOption.length == 0 || this.selectOption == idx) {
-       
+
         const toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
         const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
         const payBtn = document.querySelector('.GS-payment-choose-option')
 
-        if (toShow.style.display == "none") {       
+        if (toShow.style.display == "none") {
           payBtn.classList.add('animated')
           payBtn.classList.add('flash')
           // payBtn.classList.add('delay-0.1s')
-          
+
           this.setPaymentReady()
           toDrawBorder.classList.add('option-selected')
           // toHide.style.display = "none"
           toShow.style.display = "flex"
-          this.selectOption = idx       
-        } else {        
-          toShow.style.display = "none"          
-          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"          
-          toDrawBorder.classList.remove('option-selected')       
+          this.selectOption = idx
+        } else {
+          toShow.style.display = "none"
+          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
+          toDrawBorder.classList.remove('option-selected')
           payBtn.classList.remove('flash')
           payBtn.classList.remove('animated')
-          this.selectOption = ''     
-          this.cancelPaymentReady()         
+          this.selectOption = ''
+          this.cancelPaymentReady()
         }
-        
+
         this.selectOption = idx
 
-      } else {      
+      } else {
         let pre_idx = this.selectOption
-      
+
         let toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + pre_idx) || ''
-        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)     
-        toShow.style.display = "none"      
-        toDrawBorder.classList.remove('option-selected')         
+        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)
+        toShow.style.display = "none"
+        toDrawBorder.classList.remove('option-selected')
 
         toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
-        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)    
-        toDrawBorder.classList.add('option-selected')     
-        toShow.style.display = "flex"       
+        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)
+        toDrawBorder.classList.add('option-selected')
+        toShow.style.display = "flex"
 
         this.selectOption = idx
       }
@@ -913,8 +920,8 @@ export default {
       this.serviceInfo.seniorprice = this.options[idx].senior.cost
       this.serviceInfo.childprice = this.options[idx].child.cost
       this.serviceInfo.infantprice = this.options[idx].infant.cost
-      this.serviceInfo.itemName = this.options[idx].title 
-     
+      this.serviceInfo.itemName = this.options[idx].title
+
 
     },
     setPaymentReady() {
@@ -924,7 +931,7 @@ export default {
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
 
     },
-    cancelPaymentReady() {     
+    cancelPaymentReady() {
       this.isPaymentReady = false
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "block"
       // document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
@@ -957,10 +964,10 @@ export default {
 
           this.options.forEach( option => {
 
-            // option.day    
+            // option.day
             option.allowedDates = []
             option.dayOfWeek.forEach( day => {
-              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))                    
+              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))
             })
             // console.log(option.allowedDates)
 
@@ -1017,8 +1024,8 @@ export default {
       // console.log(days)
       // 최종 년도 및 월까지 모든 월요일 구하기
       while (day.getFullYear() < endYear || day.getMonth() != endMonth) {
-        let anotherDay = new Date(day.setDate(day.getDate() + 7))        
-        
+        let anotherDay = new Date(day.setDate(day.getDate() + 7))
+
         days.push(anotherDay.toISOString().slice(0, 10))
       }
       // 오늘 이전 날짜 제외
@@ -1055,7 +1062,17 @@ export default {
       }
       return reverse
     },
-
+    chat(){
+      this.room.guide=this.guideId
+      this.room.user=this.getuserId
+      console.log(1,this.guideId);
+      console.log(2,this.getuserId);
+      this.$http.post('/api/room/create',this.room)
+      .then((res)=>{
+        console.log(res.data);
+        window.location.replace("http://localhost:8080/room/"+res.data._id)
+      })
+    },
     dateCalculate : function (date) {
       return parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
     },
@@ -1072,7 +1089,7 @@ export default {
       let sum = 0
       for (let i=0; i<idx; i++) {
         sum += days[i]
-      } 
+      }
       return sum
     },
   },

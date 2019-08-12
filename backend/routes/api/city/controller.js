@@ -7,6 +7,7 @@ exports.cityList = (req, res) => {
     City.find({})
     .populate('nation')
     .lean()
+    .sort('city_kor')
     .then( cities => {
         res.json({cities})
     })
