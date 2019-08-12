@@ -513,7 +513,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import "./GuideServiceDetailPage.css";
 import PayBtn from "../components/kakaopaycpn/PayBtn";
 import { mapGetters, mapState } from "vuex";
