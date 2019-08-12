@@ -561,13 +561,11 @@ export default {
       isPaymentReady: false,
       leavingDate: '',
       leavingDates: [],
-<<<<<<< HEAD
       room:{
         user:'',
         guide:''
-      }
-    }
-=======
+      },
+    
 
       // 레이팅 관련 변수
       average: 0,
@@ -588,7 +586,6 @@ export default {
       isLoadMore: [],
     };
 
->>>>>>> a529b371535df7fa8565f4022f9ca85145dca393
   },
   methods: {
 

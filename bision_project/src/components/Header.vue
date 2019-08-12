@@ -20,20 +20,10 @@
                 font-size: 1rem;
                 font-weight: 600;"
                 >
-<<<<<<< HEAD
-
-=======
-                
->>>>>>> a529b371535df7fa8565f4022f9ca85145dca393
                 </span>
                 <router-link :to="{ path : `/room/` }" class="mypageBtn"><span class="mypageBtnInner">Chat</span></router-link>
                 <router-link :to="{ path : `/user/${getuserId}` }" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
-<<<<<<< HEAD
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
-=======
-                <router-link to="/" style="margin-right: 15px;"><span @click="">메세지</span></router-link>
-                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
->>>>>>> a529b371535df7fa8565f4022f9ca85145dca393
             </span>
             <span v-if="getIsLoggedIn && getIsGuide == true">
                 <span style=
@@ -46,12 +36,7 @@
                 <router-link :to="{ path : `/room/` }" class="mypageBtn"><span class="mypageBtnInner">Chat</span></router-link>
                 <router-link :to="{ path : `/guide/${getuserId}` }"
                                     class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
-<<<<<<< HEAD
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
-=======
-                <router-link to="/" style="margin-right: 15px;"><span @click="">메세지</span></router-link>
-                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
->>>>>>> a529b371535df7fa8565f4022f9ca85145dca393
             </span>
 
             <div v-if="getIsLoggedIn == false" class="hvr-underline-from-center">

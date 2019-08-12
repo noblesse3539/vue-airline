@@ -117,7 +117,7 @@ export default {
             messages: [],
             roomId:'',
             roomInfo:{},
-            socket : io('localhost:3002/chat'),
+            socket : io('localhost:3000/chat'),
             chatList:[],
         }
     },

@@ -441,7 +441,6 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
-<<<<<<< HEAD
             console.log(1, res)
             for (let i = 0; i < res.data.options.length; i++) {
               this.guideServices.push(res.data.options[i][0].guideservice)
@@ -459,13 +458,7 @@
             this.userGuideServices = res.data.paymentRecords.filter( record => {
               return record.service.date < today
             })
-=======
-            console.log(res.data)
-            console.log("userInfo",res.data.userInfo)
-            this.userId = res.data.userInfo._id
->>>>>>> a529b371535df7fa8565f4022f9ca85145dca393
 
-            const today = new Date().toISOString().slice(0, 10)
             for(var idx in res.data.paymentRecords) {
 
               // 결제 취소 항목 제외하고 보여주기
