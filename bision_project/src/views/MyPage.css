@@ -264,6 +264,19 @@
   box-shadow: 0 2px 3px rgba(0,0,0,.3);
   opacity: .8;
 }
+.likeTooltip {
+  position: absolute !important;
+
+  z-index: 10 !important;
+  top: 60px;
+  right: -15px;
+  color: white;
+  background-color: rgba(0,0,0,.6);
+  padding: .5rem 1rem;
+  border-radius: 5px;
+}
+.myTourExperience-Icon:hover .likeTooltip {
+}
 .myTourExperience-Icon:hover {
   font-size: 3rem;
   top: 12px;

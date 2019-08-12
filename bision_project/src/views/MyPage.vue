@@ -62,9 +62,9 @@
       <!-- slides -->
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in currentGuideServices"
-        :key="id"
+        :key="idx"
       >
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
@@ -93,7 +93,8 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in likedGuideServices"
         :key="id">
-        <img click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService._id)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <div class="likeTooltip">좋아요 취소</div>
         <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
         <div class="myTourExperience-description">
 
@@ -127,7 +128,7 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in usedGuideServices"
         :key="idx">
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
@@ -286,10 +287,9 @@
       }
     },
     methods: {
-      goToDetail(GS) {
-        console.log(GS.service)
-        console.log(GS.guideServiceId)
-        const query = {serviceId: GS.guideServiceId}
+      goToDetail(GSID) {
+        console.log(GSID)
+        const query = {serviceId: GSID}
         this.$router.push({name: 'GuideServiceDetailPage', query: query})
       },
       linktoGS() {
@@ -441,30 +441,31 @@
         }
         this.$http.get('/api/user/mypage', config)
           .then( res => {
+            console.log(res.data)
             console.log("userInfo",res.data.userInfo)
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
-            for(var idx in res.data.options ) {
-              console.log(res.data.options[idx])
-              if(res.data.paymentRecords[idx].date >= today){
-                this.currentGuideServices.push({
-                  'guideServiceId' : res.data.options[idx].guideservice,
-                  'paymentId' : res.data.paymentRecords[idx]._id,
-                  'service' : res.data.paymentRecords[idx].service
-              })}else{
-                console.log("du", res.data.options[idx][0])
-                this.usedGuideServices.push({
-                  'guideServiceId' : res.data.options[idx][0].guideservice,
-                  'paymentId' : res.data.paymentRecords[idx]._id,
-                  'service' : res.data.paymentRecords[idx].service
-                })
+            for(var idx in res.data.paymentRecords) {
+
+              // 결제 취소 항목 제외하고 보여주기
+              if (res.data.paymentRecords[idx].status != '결제취소') {
+                
+                if(res.data.paymentRecords[idx].service.date >= today){
+                  this.currentGuideServices.push({
+                    'guideServiceId' : res.data.options[idx][0].guideservice,
+                    'paymentId' : res.data.paymentRecords[idx]._id,
+                    'service' : res.data.paymentRecords[idx].service
+                })}else{
+                  this.usedGuideServices.push({
+                    'guideServiceId' : res.data.options[idx][0].guideservice,
+                    'paymentId' : res.data.paymentRecords[idx]._id,
+                    'service' : res.data.paymentRecords[idx].service
+                  })
+                }
               }
             }
-            console.log("usedGuideServices", this.usedGuideServices)
-
             for(var liked of res.data.userInfo.likeGuideServices){
-              console.log("좋아", liked)
               this.$http.get('/api/guideservice/findGSById/'+liked)
               .then( res => {
                 this.likedGuideServices.push(res.data)
@@ -472,7 +473,7 @@
                 console.log("찜데이터 에러", err)
               })
             }
-            console.log("찜데이터", this.likedGuideServices)
+            console.log("likedData", this.likedGuideServices)
             this.userInfo = res.data.userInfo
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
@@ -485,17 +486,15 @@
           }).catch( err => {
             console.log(err)
           }).then( () => {
-            console.log("id",this.userId)
             this.$http.get('/api/review/findReviewByUser/'+this.userId)
               .then( res => {
-                console.log(res.data.reviews)
                 for(var item of res.data.reviews) {
                   this.reviews[item.payment] = {'id' : item._id,
                                                 'content' : item.content,
                                                 'title' : item.title,
                                                 'rating' : item.rating}
                 }
-              console.log("리뷰",  this.reviews)
+              console.log("Reviews",  this.reviews)
               this.loaded=true;
             })
           })

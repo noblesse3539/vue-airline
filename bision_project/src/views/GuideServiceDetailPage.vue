@@ -142,6 +142,7 @@
             <div class="GS-payment-current-info-each">
               평점:
               <v-rating class="serviceRating" v-model="average" dense size="17.4" readonly></v-rating>
+              ({{average}}/{{reviews.length}}명)
             </div>
           </div>
         </div>
@@ -196,16 +197,7 @@
                 <span>{{cost}}</span>
               </div> -->
             </div>
-            <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-            <!-- <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
-
-              <button
-                class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
-                @click="openOptionSelectingModal(`.GS-individual-option-1`)"
-              >
-                선택
-              </button>
-            </div> -->
+            <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->           
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
@@ -409,7 +401,7 @@
               />
             </div> -->
             <div class="GS-service-reivew-content" v-if="reviewsLoaded">
-              <div v-for="i in reviews.length">
+              <div v-for="i in reviews.length > limits ? limits : reviews.length">               
                 <div class="GS-service-review-image-and-content">
                   <div class="GS-service-review-userImage">
                     <img
@@ -433,11 +425,11 @@
                       </div>
                       <div class="Gs-service-review-top-option">옵션: {{reviews[i-1].payment.service.itemName}}</div>
                     </div>
-                    <div class="GS-service-reivew-userReview">
-                      <p>
-                        {{reviews[i-1].content}}
-                      </p>
+                    <div :class="'GS-service-reivew-userReview-' + i" class="GS-service-reivew-userReview">
                       <!-- <p>
+                        {{reviews[i-1].content}}
+                      </p> -->
+                      <p style="height: 80%">
                         혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
                         단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
                         운이 좋아야 있을정도 그리고 되게 말할사람도 없어서 외로워요 ( 유리박물관에서
@@ -448,22 +440,26 @@
                         직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
                         해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
                         일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
-                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
-                      </p> -->
-                      <button @click="loadReviewMore" v-if="isLoadMore">
-                        닫기
-                        <i class="fa fa-angle-up"></i>
-                      </button>
-                      <button @click="loadReviewMore" v-else>
-                        더 읽어보기
-                        <i class="fa fa-angle-down"></i>
-                      </button>
+                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!                      
+                      </p>
+                      <div class="GS-service-review-content-morebutton">
+                        <button @click="loadReviewMore(i)" v-if="isLoadMore[i-1]">
+                          닫기
+                          <i class="fa fa-angle-up"></i>
+                        </button>
+                        <button @click="loadReviewMore(i)" v-else>
+                          {{isLoadMore}}
+                          더 읽어보기
+                          <i class="fa fa-angle-down"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-
+              <div class="GS-service-review-morebutton" v-if="limits < reviews.length">
+                <v-btn @click="limits += 5">후기 더 보기</v-btn>
+              </div>
             </div>
           </div>
         </div>
@@ -559,8 +555,7 @@ export default {
       },
 
       // 달력 관련 변수
-      isCalenderOpen: false,
-      isLoadMore: false,
+      isCalenderOpen: false,      
       isPaymentReady: false,
       leavingDate: '',
       leavingDates: [],
@@ -578,6 +573,10 @@ export default {
 
       // 옵션 박스
       selectOption: '',
+
+      // 리뷰 관련 변수
+      limits: 5,
+      isLoadMore: [],
     };
 
   },
@@ -746,30 +745,37 @@ export default {
           this.reviewsLoaded = true
           
         }
+
+        for (let i=0; i<this.reviews.length; i++) {
+          this.isLoadMore.push("false")
+        }
+        console.log("로드모어", this.isLoadMore)
         // console.log("리뷰", res.data.reviews)
       })
     },
 
-    loadReviewMore: function() {
+    loadReviewMore: function(i) {     
+      const loadReviewMore = document.querySelector(".GS-service-reivew-userReview-" + i)
       const loadReiveMoreBtn = document.querySelector(
         ".GS-service-reivew-userReview"
       );
       const loadReviewMoreBtn2 = document.querySelector(
         ".GS-service-review-userReview-expand"
       );
-      // console.log(loadReiveMoreBtn);
+      // console.log(loadReiveMoreBtn);      
 
-      if (this.isLoadMore == true) {
-        loadReviewMoreBtn2.classList.add("GS-service-reivew-userReview");
-        loadReviewMoreBtn2.classList.remove(
-          "GS-service-review-userReview-expand"
-        );
-        this.isLoadMore = false;
+      if (this.isLoadMore[i-1] == "true") {
+        console.log("닫았어")
+        loadReviewMore.classList.add("GS-service-reivew-userReview");
+        loadReviewMore.classList.remove("GS-service-review-userReview-expand");
+        this.isLoadMore[i-1] = "false";
       } else {
-        loadReiveMoreBtn.classList.add("GS-service-review-userReview-expand");
-        loadReiveMoreBtn.classList.remove("GS-service-reivew-userReview");
-        this.isLoadMore = true;
+        console.log("열었어")
+        loadReviewMore.classList.add("GS-service-review-userReview-expand");
+        loadReviewMore.classList.remove("GS-service-reivew-userReview");
+        this.isLoadMore[i-1] = "true";
       }
+      console.log(this.isLoadMore)
     },
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
@@ -833,8 +839,7 @@ export default {
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "none"
 
     },
-    cancelPaymentReady() {
-      console.log("결제 레디")
+    cancelPaymentReady() {     
       this.isPaymentReady = false
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "block"
       // document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
@@ -867,11 +872,10 @@ export default {
 
           this.options.forEach( option => {
 
-            // option.day
+            // option.day    
             option.allowedDates = []
             option.dayOfWeek.forEach( day => {
-
-              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))
+              option.allowedDates = option.allowedDates.concat(this.getAllDays(day))                    
             })
             // console.log(option.allowedDates)
 
@@ -886,14 +890,6 @@ export default {
           console.log(this.options)
           this.optionsLoaded = true
         })
-    },
-
-    allowedDates: function (val) {
-      if (this.dateCalculate(val) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {
-        if (this.leavingDates.indexOf(val) == -1) {
-          return val
-        }
-      }
     },
 
     getAllDays(goalDay) {
@@ -936,13 +932,20 @@ export default {
       // console.log(days)
       // 최종 년도 및 월까지 모든 월요일 구하기
       while (day.getFullYear() < endYear || day.getMonth() != endMonth) {
-        let anotherDay = new Date(day.setDate(day.getDate() + 7))
+        let anotherDay = new Date(day.setDate(day.getDate() + 7))        
+        
         days.push(anotherDay.toISOString().slice(0, 10))
+      }
+      // 오늘 이전 날짜 제외
+      let result = []
+      for (let i=0; i<days.length; i++) {
+        if (this.dateCalculate(days[i]) >= this.dateCalculate(new Date().toISOString().substr(0, 10)))
+        result.push(days[i])
       }
 
       // getDate: 일요일을 0을 시작으로 요일의 번호를 나타냄
       // console.log(days)
-      return days
+      return result
     },
 
     checkAllowedDates: val => {
@@ -967,18 +970,29 @@ export default {
       }
       return reverse
     },
+
+    dateCalculate : function (date) {
+      return parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
+    },
+
+    dashtoslash : function (date) {
+      console.log(date)
+      return 1
+      // console.log(date.slice(0,4) + "/" + date.slice(5,7) + "/" + date.slice(8,10))
+      // return date.slice(0,4) + "/" + date.slice(5,7) + "/" + date.slice(8,10)
+    },
+
+    sum : function (idx) {
+      let days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+      let sum = 0
+      for (let i=0; i<idx; i++) {
+        sum += days[i]
+      } 
+      return sum
+    },
   },
 
-  dateCalculate : function (date) {
-    return date = parseInt(date.slice(0, 4)) * 365 + this.sum(parseInt(date.slice(5, 7))) + parseInt(date.slice(8, 10))
-  },
 
-  dashtoslash : function (date) {
-    console.log(date)
-    return 1
-    // console.log(date.slice(0,4) + "/" + date.slice(5,7) + "/" + date.slice(8,10))
-    // return date.slice(0,4) + "/" + date.slice(5,7) + "/" + date.slice(8,10)
-  },
 
   computed: {
 

@@ -113,14 +113,55 @@
                       </div>
                     </div>
                     <div class="gs-mypage-service-content-bottom-reserve">
-                      <button
+                      <!-- <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
-                        @click="showPW"
+                        @click="deleteGuideService(service)"
+                        href="#popup1"  
                       >
                         삭제하기
-                      </button>
+                      </button> -->
+                      <v-btn
+                        v-if="getUserId == guideId"
+                        color="primary"
+                        dark
+                        @click.stop="dialog = true"
+                      >
+                        삭제하기
+                      </v-btn>
+                      <v-dialog
+                        v-model="dialog"
+                        max-width="290"
+                      >
+                        <v-card>
+                          <v-card-title class="headline">Use Google's location service?</v-card-title>
+
+                          <v-card-text>
+                            Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+                          </v-card-text>
+
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                              color="green darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              Disagree
+                            </v-btn>
+
+                            <v-btn
+                              color="green darken-1"
+                              text
+                              @click="dialog = false"
+                            >
+                              Agree
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
                       <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-revise"
@@ -168,8 +209,8 @@
              </v-list>
 
           </v-flex>
-          <h1 class="gs-guidemypage-section-divider">예약 일정</h1>
-          <GuideCalendar :events="events"></GuideCalendar>
+          <h1 class="gs-guidemypage-section-divider" v-if="guideId == getUserId">예약 일정</h1>
+          <GuideCalendar :events="events" v-if="guideId == getUserId"></GuideCalendar>
         </v-tab-item>
 
         <!-- ALL -->
@@ -490,6 +531,7 @@ export default {
         const config = {
           'profileImg': this.imgurl
         }
+        console.log("config", config)
         const header = {
           'x-access-token': this.$getToken("BisionToken")
         }
@@ -565,8 +607,8 @@ export default {
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
         this.guideName = guide.nickname
-        this.imgurl = guide.profileImg? guide.profileImg : guide.profileImageUrl
-
+        this.imgurl = guide.profileImg
+        console.log("img", guide.profileImg)
         // 가이드 평균 평점 구하기
         if (res.data.guide.starRatingList.length) {
           sum = res.data.guide.starRatingList.reduce(function(acc, each) { return acc + each})
@@ -622,13 +664,12 @@ export default {
 
     },
     deleteGuideService(service) {
-      alert("정말 삭제하시겠어요?")
-
-      this.$http.delete(`/api/guideservice/delete/${service._id}`)
-        .then( res => {
-          alert("삭제되었습니다!")
-          this.getGuideService()
-        })
+      
+      // this.$http.delete(`/api/guideservice/delete/${service._id}`)
+      //   .then( res => {
+      //     alert("삭제되었습니다!")
+      //     this.getGuideService()
+      //   })
     },
 
     // 가이드 결제 내역

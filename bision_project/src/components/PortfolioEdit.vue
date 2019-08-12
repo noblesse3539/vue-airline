@@ -677,6 +677,8 @@ export default {
       }
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+      delete this.$http.defaults.headers.common["x-access-token"]
+
        var formData = new FormData()
        formData.append("image", file)
        var settings = {
@@ -697,7 +699,24 @@ export default {
          resetUploader();
          console.log("res.data.data.link")
 
-       }).catch(err=>{
+       })
+       .then( () => {
+         this.$http
+        .get("/api/auth/check", config)
+        .then(res => {
+          console.log(res.data)
+          if (res.status == 200) {
+            this.$store.commit("setIsLoggedIn");
+            this.$store.commit("setUserInfo", {
+              userId: res.data.info._id,
+              userName: res.data.info.username,
+              isGuideNow: res.data.info.isGuide
+            });
+            this.$http.defaults.headers.common["x-access-token"] = token
+          }
+        })
+       })
+       .catch(err=>{
          console.log(err)
        })
     },
