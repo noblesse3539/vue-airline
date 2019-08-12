@@ -445,8 +445,8 @@
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
-
             for(var idx in res.data.options ) {
+              console.log(res.data.options[idx])
               if(res.data.paymentRecords[idx].date >= today){
                 this.currentGuideServices.push({
                   'guideServiceId' : res.data.options[idx].guideservice,
@@ -477,7 +477,7 @@
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
-            this.userImage = this.userInfo.profileImageUrl
+            this.userImage = this.userInfo.profileImg? this.userInfo.profileImg : this.userInfo.profileImageUrl
 
             console.log("==============================")
             console.log(this.userName)
@@ -511,7 +511,7 @@
         const data = {
             'intro' : this.userIntro,
             'languages' : this.userLanguage,
-            'profileImageUrl' : this.userImage,
+            'profileImg' : this.userImage,
         }
         this.$http.put('/api/user/username', data, config)
           .then( res => {
