@@ -20,9 +20,10 @@
                 font-size: 1rem;
                 font-weight: 600;"
                 >
-                 
+                
                 </span>
                 <router-link :to="{ path : `/user/${getuserId}` }" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
+                <router-link to="/" style="margin-right: 15px;"><span @click="">메세지</span></router-link>
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
             </span>
             <span v-if="getIsLoggedIn && getIsGuide == true">
@@ -35,6 +36,7 @@
                 </span>
                 <router-link :to="{ path : `/guide/${getuserId}` }" 
                                     class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
+                <router-link to="/" style="margin-right: 15px;"><span @click="">메세지</span></router-link>
                 <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
             </span>
 
