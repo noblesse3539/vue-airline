@@ -36,11 +36,7 @@
             <div class="GS-guide-duration GS-guide-detail-icon">
               <i class="far fa-clock"></i>
               <span style="margin-left: 10px;">소요시간 : {{duration}}</span>
-            </div>
-            <div class="GS-guide-language GS-guide-detail-icon">
-              <i class="fas fa-language"></i>
-              <span style="margin-left: 10px;">가이드 언어 : 영어/프랑스어</span>
-            </div>
+            </div>            
             <div class="GS-guide-refund GS-guide-detail-icon">
               <i class="fas fa-coins"></i>
               <span style="margin-left: 10px;" v-if="serviceInfo.refund[0].refund100 > 0">{{serviceInfo.refund[0].refund100}}일 전 전액 환불</span>
@@ -60,22 +56,16 @@
                   <i class="fas fa-sign-in-alt"></i>
                 </a>
               </div>
-              <div class="GS-guide-detail-best-review-content">
-                <div
-                  class="GS-guide-detail-best-review-user-img"
-                  style="background: url('https://i.imgur.com/gB9Ooj4.jpg')"
-                ></div>
+              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">                
+                <div class="GS-service-review-userImage">
+                  <img
+                    :src="reviews[maxratingReviewIdx].user.profileImageUrl"
+                    class="GS-service-review-userImage-src"
+                    alt="our user's beautiful face"
+                    style="border-radius: 50%;"
+                  />
+                </div>
                 <div class="GS-guide-detail-best-review-right">
-
-<!--
-                  <div class="text-center GS-guide-detail-best-review-right-inside">
-                    <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="17.4" style="width: 100px"></v-rating>
-                    <div class="userinfo-used-this-service">
-                      <p class="userinfo-used-this-service-name">정**</p>
-                      <p class="userinfo-used-this-service-date">이용날짜 : {{reviews[maxratingReviewIdx].payment.service.date}}</p>
-                    </div>
-                  </div> -->
-
                   <div class="GS-service-review-top">
                     <div class="GS-service-review-top-userInfo">
                       <div class="GS-service-review-rating-and-username">
@@ -83,7 +73,7 @@
                           <v-rating v-model="reviews[maxratingReviewIdx].rating" dense size="14.7" readonly></v-rating>
                         </div>
                         <div class="GS-service-review-userName GS-service-review-info">{{reviews[maxratingReviewIdx].user.nickname}}</div>
-                        <!-- <div class="GS-service-review-info">·</div> -->
+                       
                       </div>
                       <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[maxratingReviewIdx].payment.service.date}}</div>
                     </div>
@@ -164,7 +154,7 @@
         <div class="GS-option-box">
           <!-- 각 상품에 대한 옵션 리스트 v-for로 출력할 것 -->
           <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-          <div v-for="(option, idx) in options" :key="idx" class="GS-individual-option GS-individual-option-1">
+          <div v-for="(option, idx) in options" :key="idx" class="GS-individual-option" :class="'GS-individual-option-' + idx">
             <div class="GS-individual-option-title-box">
               <div>
                 <div style="display: flex; font-size: 20px; padding-bottom: 20px;">
@@ -190,12 +180,14 @@
                 </div>
               </div>
 
-              <div class="GS-individual-option-loadmoreBtn GS-individual-option-loadmoreBtn-1">
+              <!-- <div :class="GS-individual-option-loadmoreBtn `'GS-individual-option-loadmoreBtn-'idx`"> -->
+              <div :class="'GS-individual-option-loadmoreBtn-' + idx" class="GS-individual-option-loadmoreBtn">
                 <button
-                  class="GS-individual-option-selectBtn GS-individual-option-selectBtn-1"
-                  @click="openOptionSelectingModal(`.GS-individual-option-1`, idx)"
+                  class="GS-individual-option-selectBtn" :class="'GS-individual-option-selectBtn-' + idx"
+                  @click="openOptionSelectingModal('.GS-individual-option-' + idx, idx)"
                 >
-                  선택
+                  <div v-if="selectOption.length == 0 || selectOption != idx">선택</div>
+                  <div v-else>접기</div>
                 </button>
               </div>
               <!-- <div class="GS-individual-option-title">{{option.title.slice(0, 25)}}...</div> -->
@@ -218,8 +210,8 @@
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
             <!-- active on loadmore -->
             <!-- 클래스에 v-for에서 인덱스로 가져오는 값을 넣어줘야합니다. -->
-            <div class="GS-individual-option-detail-loadmore
-                        GS-individual-option-detail-loadmore-1"
+            <div class="GS-individual-option-detail-loadmore"
+                        :class="'GS-individual-option-detail-loadmore-' + idx"
                         style="display: none;">
 
               <div class="GS-individual-options-detail">
@@ -276,7 +268,7 @@
                   </div>
                 </div>
 
-                <div class="GS-individual-option-detail-adult-select" v-if="option.child.maxAge != 0">
+                <div class="GS-individual-option-detail-adult-select" v-if="option.child.maxAge > 0">
                   <!-- 아동 -->
                   <div class="num-of-customers" style="min-width: 200px;">
                     <div class="num-of-customers__increaseBtn">
@@ -303,7 +295,7 @@
                   </div>
                 </div>
 
-                <div class="GS-individual-option-detail-adult-select" v-if="option.infant.maxAge != 0">
+                <div class="GS-individual-option-detail-adult-select" v-if="option.infant.maxAge > 0">
                   <!-- 유아 -->
                   <div class="num-of-customers" style="min-width: 200px;">
                     <div class="num-of-customers__increaseBtn">
@@ -330,7 +322,7 @@
                   </div>
                 </div>
 
-                <div class="GS-individual-option-detail-adult-select" v-if="option.senior.maxAge != 0">
+                <div class="GS-individual-option-detail-adult-select" v-if="option.senior.maxAge > 0">
                   <!-- 유아 -->
                   <div class="num-of-customers" style="min-width: 200px;">
                     <div class="num-of-customers__increaseBtn">
@@ -360,6 +352,7 @@
 
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -407,54 +400,66 @@
         <!-- 리뷰 리스트 v-for로 바인딩해서 출력하세요! -->
         <div class="GS-service-review-list">
           <div class="GS-service-review-individual">
-            <div class="GS-service-review-userImage">
+            <!-- <div class="GS-service-review-userImage">
               <img
                 src="https://i.imgur.com/HBxagM5.jpg"
                 class="GS-service-review-userImage-src"
                 alt="our user's beautiful face"
                 style="border-radius: 50%;"
               />
-            </div>
+            </div> -->
             <div class="GS-service-reivew-content" v-if="reviewsLoaded">
               <div v-for="i in reviews.length">
-                <div class="GS-service-review-top">
-                  <div class="GS-service-review-top-userInfo">
-                    <div class="GS-service-review-rating-and-username">
-                      <div class="GS-service-review-userScore GS-service-review-info">
-                        <v-rating v-model="reviews[i-1].rating" dense size="14.7" readonly></v-rating>
-                      </div>
-                      <div class="GS-service-review-userName GS-service-review-info">{{reviews[i-1].user.nickname}}</div>
-                      <!-- <div class="GS-service-review-info">·</div> -->
-                    </div>
-                    <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[i-1].payment.service.date}}</div>
+                <div class="GS-service-review-image-and-content">
+                  <div class="GS-service-review-userImage">
+                    <img
+                      :src="reviews[i-1].user.profileImageUrl"
+                      class="GS-service-review-userImage-src"
+                      alt="our user's beautiful face"
+                      style="border-radius: 50%;"
+                    />
                   </div>
-                  <div class="Gs-service-review-top-option">옵션: {{reviews[i-1].payment.service.itemName}}</div>
-                </div>
-                <div class="GS-service-reivew-userReview">
-                  <p>
-                    {{reviews[i-1].content}}
-                  </p>
-                  <!-- <p>
-                    혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
-                    단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
-                    운이 좋아야 있을정도 그리고 되게 말할사람도 없어서 외로워요 ( 유리박물관에서
-                    한국 여행사 차량봤을때 갑자기 울컥했어요 ㅠㅜ) 솔직히 미국에서도 외국인입
-                    장이라 나빼고 출발하면 어쩌지..? 이런 생각도 많이했었고 (영어도 못하는데ㅠㅜ)그
-                    런데 전혀 그런거없고 오히려 영어못하는 저를 배려많이 해주셨어요!(감사해요😘)그리고
-                    한국여행사는 전일정이 다포함된 가격으로 움직이지만 여기는 선택한 관광만 골라서 거기서
-                    직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
-                    해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
-                    일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
-                    하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
-                  </p> -->
-                  <button @click="loadReviewMore" v-if="isLoadMore">
-                    닫기
-                    <i class="fa fa-angle-up"></i>
-                  </button>
-                  <button @click="loadReviewMore" v-else>
-                    더 읽어보기
-                    <i class="fa fa-angle-down"></i>
-                  </button>
+                  <div class="container" style="padding-top: 0px;">
+                    <div class="GS-service-review-top">
+                      <div class="GS-service-review-top-userInfo">
+                        <div class="GS-service-review-rating-and-username">
+                          <div class="GS-service-review-userScore GS-service-review-info">
+                            <v-rating v-model="reviews[i-1].rating" dense size="14.7" readonly></v-rating>
+                          </div>
+                          <div class="GS-service-review-userName GS-service-review-info">{{reviews[i-1].user.nickname}}</div>
+                          <!-- <div class="GS-service-review-info">·</div> -->
+                        </div>
+                        <div class="GS-service-review-userDate GS-service-review-info">이용날짜: {{reviews[i-1].payment.service.date}}</div>
+                      </div>
+                      <div class="Gs-service-review-top-option">옵션: {{reviews[i-1].payment.service.itemName}}</div>
+                    </div>
+                    <div class="GS-service-reivew-userReview">
+                      <p>
+                        {{reviews[i-1].content}}
+                      </p>
+                      <!-- <p>
+                        혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
+                        단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
+                        운이 좋아야 있을정도 그리고 되게 말할사람도 없어서 외로워요 ( 유리박물관에서
+                        한국 여행사 차량봤을때 갑자기 울컥했어요 ㅠㅜ) 솔직히 미국에서도 외국인입
+                        장이라 나빼고 출발하면 어쩌지..? 이런 생각도 많이했었고 (영어도 못하는데ㅠㅜ)그
+                        런데 전혀 그런거없고 오히려 영어못하는 저를 배려많이 해주셨어요!(감사해요😘)그리고
+                        한국여행사는 전일정이 다포함된 가격으로 움직이지만 여기는 선택한 관광만 골라서 거기서
+                        직접 돈을 주시면되요(저는 이게 불편..) 저는 편하게 여행하면서 한국분이 가이드
+                        해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
+                        일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
+                        하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
+                      </p> -->
+                      <button @click="loadReviewMore" v-if="isLoadMore">
+                        닫기
+                        <i class="fa fa-angle-up"></i>
+                      </button>
+                      <button @click="loadReviewMore" v-else>
+                        더 읽어보기
+                        <i class="fa fa-angle-down"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -570,6 +575,9 @@ export default {
       flagLoaded: false,
       guideImgLoaded: false,
       reviewsLoaded: false,
+
+      // 옵션 박스
+      selectOption: '',
     };
 
   },
@@ -708,12 +716,19 @@ export default {
           let maxrating = 0
           let idx = 0
           let latestdate = 0
+          var pattern_eng = /[a-zA-Z]/;
+          var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+          var star = "**************************************************"
           for (let i=0; i<this.reviews.length; i++) {
             sum += this.reviews[i].rating
             if (this.reviews[i].rating > maxrating) {
               idx = i
               maxrating = this.reviews[i].rating
             }
+            
+            var name = this.reviews[i].user.nickname
+            if (pattern_kor.test(name.slice(0,1))) this.reviews[i].user.nickname =  name.slice(0,1) + star.slice(0,name.length - 1)
+            else this.reviews[i].user.nickname = name.slice(0,3) + star.slice(0,name.length - 3)
               // latestdate = this.dateCalculate(this.reviews[i].created_at)
               // console.log("여기다")
               // console.log(latestdate)
@@ -729,7 +744,9 @@ export default {
           this.maxratingReviewIdx = idx
           this.maxrationgReviewLoaded = true
           this.reviewsLoaded = true
+          
         }
+        // console.log("리뷰", res.data.reviews)
       })
     },
 
@@ -756,41 +773,57 @@ export default {
     },
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
+      if (this.selectOption.length == 0 || this.selectOption == idx) {
+       
+        const toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
+        const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
+        const payBtn = document.querySelector('.GS-payment-choose-option')
 
-      const toShow = document.querySelector('.GS-individual-option-detail-loadmore-1') || ''
-      const toDrawBorder = document.querySelector(`${optionDetailToOpen}`)
-      const payBtn = document.querySelector('.GS-payment-choose-option')
+        if (toShow.style.display == "none") {       
+          payBtn.classList.add('animated')
+          payBtn.classList.add('flash')
+          // payBtn.classList.add('delay-0.1s')
+          
+          this.setPaymentReady()
+          toDrawBorder.classList.add('option-selected')
+          // toHide.style.display = "none"
+          toShow.style.display = "flex"
+          this.selectOption = idx       
+        } else {        
+          toShow.style.display = "none"          
+          document.querySelector('.GS-payment-choose-option-pay').style.display = "none"          
+          toDrawBorder.classList.remove('option-selected')       
+          payBtn.classList.remove('flash')
+          payBtn.classList.remove('animated')
+          this.selectOption = ''     
+          this.cancelPaymentReady()         
+        }
+        
+        this.selectOption = idx
 
+      } else {      
+        let pre_idx = this.selectOption
+      
+        let toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + pre_idx) || ''
+        let toDrawBorder = document.querySelector('.GS-individual-option-' + pre_idx)     
+        toShow.style.display = "none"      
+        toDrawBorder.classList.remove('option-selected')         
 
-      if (toShow.style.display == "none") {
-        payBtn.classList.add('animated')
-        payBtn.classList.add('flash')
-        // payBtn.classList.add('delay-0.1s')
+        toShow = document.querySelector('.GS-individual-option-detail-loadmore-' + idx) || ''
+        toDrawBorder = document.querySelector('.GS-individual-option-' + idx)    
+        toDrawBorder.classList.add('option-selected')     
+        toShow.style.display = "flex"       
 
-        // console.log(toDrawBorder)
-        this.setPaymentReady()
-        toDrawBorder.classList.add('option-selected')
-        // toHide.style.display = "none"
-        toShow.style.display = "flex"
-      } else {
-        toShow.style.display = "none"
-        document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
-        toDrawBorder.classList.remove('option-selected')
-        this.cancelPaymentReady()
-        payBtn.classList.remove('flash')
-        payBtn.classList.remove('animated')
+        this.selectOption = idx
       }
-
-
-
 
       // 선택한 옵션이 결제정보로 넘어가야 한다
       this.serviceInfo.adultprice = this.options[idx].adult.cost
       this.serviceInfo.seniorprice = this.options[idx].senior.cost
       this.serviceInfo.childprice = this.options[idx].child.cost
       this.serviceInfo.infantprice = this.options[idx].infant.cost
-      this.serviceInfo.itemName = this.options[idx].title
-      console.log(this.serviceInfo)
+      this.serviceInfo.itemName = this.options[idx].title 
+     
 
     },
     setPaymentReady() {
@@ -801,6 +834,7 @@ export default {
 
     },
     cancelPaymentReady() {
+      console.log("결제 레디")
       this.isPaymentReady = false
       document.querySelector('.GS-payment-choose-option-reserve').style.display = "block"
       // document.querySelector('.GS-payment-choose-option-pay').style.display = "none"
