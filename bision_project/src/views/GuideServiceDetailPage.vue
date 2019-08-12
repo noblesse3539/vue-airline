@@ -18,9 +18,10 @@
               <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!">
               </router-link>
             </div>
-            <div class="GS-guide-detail-guideName">    
+            <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
+              <v-btn @click="chat">메시지보내기</v-btn>
             </div>
           </div>
 
@@ -442,6 +443,7 @@
 <script>
 import "./GuideServiceDetailPage.css";
 import PayBtn from "../components/kakaopaycpn/PayBtn";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "GuideServiceDetailPage",
@@ -526,7 +528,11 @@ export default {
       isPaymentReady: false,
       leavingDate: '',
       leavingDates: [],
-    };
+      room:{
+        user:'',
+        guide:''
+      }
+    }
   },
   methods: {
 
@@ -822,9 +828,24 @@ export default {
       }
       return reverse
     },
+
+    chat(){
+      this.room.guide=this.guideId
+      this.room.user=this.getuserId
+      console.log(1,this.guideId);
+      console.log(2,this.getuserId);
+      this.$http.post('/api/room/create',this.room)
+      .then((res)=>{
+        console.log(res.data);
+        window.location.replace("http://localhost:8080/room/"+res.data._id)
+      })
+    }
   },
   computed: {
-
+    ...mapState({
+        getIsLoggedIn : state => state.User.isLoggedIn,
+        getuserId : state => state.User.userId,
+    })
   },
 };
 </script>

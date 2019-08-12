@@ -2,6 +2,8 @@ const router = require('express').Router()
 const controller = require('./controller')
 
 router.get('/list', controller.list)
+
+router.get('/search/:userid', controller.getByUserId)
 // router.post('/assign-admin/:username', controller.assignAdmin)
 router.delete('/:username', controller.userDelete)
 

@@ -15,27 +15,29 @@
             <span v-if="getIsLoggedIn && getIsGuide == false">
                 <span style=
                 "color: black;
-                margin-right: 20px; font-family: 
+                margin-right: 20px; font-family:
                 'Gothic A1', sans-serif;
                 font-size: 1rem;
                 font-weight: 600;"
                 >
-                 
+
                 </span>
+                <router-link :to="{ path : `/room/` }" class="mypageBtn"><span class="mypageBtnInner">Chat</span></router-link>
                 <router-link :to="{ path : `/user/${getuserId}` }" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
-                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
+                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
             </span>
             <span v-if="getIsLoggedIn && getIsGuide == true">
                 <span style=
-                "color: black; 
-                margin-right: 20px; 
+                "color: black;
+                margin-right: 20px;
                 font-family: 'Gothic A1', sans-serif;"
                 >
-  
+
                 </span>
-                <router-link :to="{ path : `/guide/${getuserId}` }" 
+                <router-link :to="{ path : `/room/` }" class="mypageBtn"><span class="mypageBtnInner">Chat</span></router-link>
+                <router-link :to="{ path : `/guide/${getuserId}` }"
                                     class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
-                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>    
+                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
             </span>
             <router-link v-if="getIsLoggedIn == false" to="/" class="hvr-underline-from-center">
                 <span class="loginBtn" @click="open()">로그인 🌴</span>

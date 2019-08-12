@@ -321,19 +321,19 @@
         this.$http.get('/api/user/mypage', config)
           .then( res => {
             console.log(1, res)
-            // for (let i = 0; i < res.data.options.length; i++) {
-            //   this.guideServices.push(res.data.options[i][0].guideservice)
-            // }
+            for (let i = 0; i < res.data.options.length; i++) {
+              this.guideServices.push(res.data.options[i][0].guideservice)
+            }
             console.log(this.guideServices);
             this.userId = res.data.userInfo._id
-            
+
             const today = new Date().toISOString().slice(0, 10)
 
             this.currentGuideServices = res.data.paymentRecords.filter( record => {
               // console.log(record.service.date)
-              return record.service.date >= today 
+              return record.service.date >= today
             })
-            
+
             this.userGuideServices = res.data.paymentRecords.filter( record => {
               return record.service.date < today
             })
