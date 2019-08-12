@@ -27,7 +27,8 @@ const GuideService = new Schema({
     'refund50':Number,
     'refund30':Number
   }],
-  likeUsers: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  likeUsers: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  canceled : Boolean
 })
 
 GuideService.statics.updateByTitle = function(guide,title,title,mainImg,nation,city,fromDate,toDate,duration,cost,minTrav,maxTrav,desc,detail,reviewList){

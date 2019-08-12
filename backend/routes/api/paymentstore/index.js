@@ -64,23 +64,18 @@ router.post('/real/:id', (req, res) => {
     })
 })
 
-router.post('/realcancel/:paymentId', (req, res) => {
+router.put('/realcancel/:paymentId', (req, res) => {
     PaymentStore.findById(req.params.paymentId)
     .then( payment => {
         if (payment.status !== '결제') return res.status(406).json({success:false, message:'결제들만 취소할 수 있습니다'})
-        PaymentStore.create({
-            user: payment.user,
-            guide: payment.guide,
-            paymentRef: payment._id,
-            service: payment.service,
-            status: '결제취소'
+        payment.status = "결제취소"
+        payment.save()
+        .then( result => {
+            res.status(200).json({success: true, payment:payment})
         })
-        .then( cancle => {
-            res.json({cancle})
-        })
-        .catch( err => {
+        .catch (err => {
             console.log(err)
-            res.json({success: false})
+            res.status(500).json({success: false, msg:"수정에 실패했습니다."})
         })
     })
     .catch(err => {
@@ -89,6 +84,31 @@ router.post('/realcancel/:paymentId', (req, res) => {
     })
 })
 
+// router.post('/realcancel/:paymentId', (req, res) => {
+//     PaymentStore.findById(req.params.paymentId)
+//     .then( payment => {
+//         if (payment.status !== '결제') return res.status(406).json({success:false, message:'결제들만 취소할 수 있습니다'})
+//         PaymentStore.create({
+//             user: payment.user,
+//             guide: payment.guide,
+//             paymentRef: payment._id,
+//             service: payment.service,
+//             status: '결제취소'
+//         })
+//         .then( cancle => {
+//             res.json({cancle})
+//         })
+//         .catch( err => {
+//             console.log(err)
+//             res.json({success: false})
+//         })
+//     })
+//     .catch(err => {
+//         console.log(err)
+//         res.json({success: false})
+//     })
+// })
+
 router.get('/findByGuide/:guideId', (req, res) => {
     PaymentStore.find({guide: req.params.guideId})
     .then( payments => {
@@ -96,9 +116,6 @@ router.get('/findByGuide/:guideId', (req, res) => {
             return payment.status==='결제취소'
         })
         let realPayment = payments.filter( payment => {
-            for (let i=0; i<cancelPayment.length; i++) {
-                if (cancelPayment[i].paymentRef.equals(payment._id)) return false
-            }
             return payment.status==='결제'
         })
         
