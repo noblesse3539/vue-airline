@@ -325,7 +325,6 @@
           <!-- 취소 내역 -->
           <div class="reservation-box" v-for="(payment, idx) in cancelList" v-if="payment.userInfo" :key="idx">
             <div :class="`reservation-collapsible-box-${idx} reservation-collapsible-box`" @click="openCollapsible(idx)">
-              <div class="reserve-chat">대화하기</div>
               <div class="reservation-user-payment-info-box">
                 <div class="reservation-status-cancelled">
                   CANCELLED
@@ -343,6 +342,7 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
+                  <div class="reserve-chat" @click="openChat()">대화하기</div>
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -749,6 +749,9 @@ export default {
           })
 
         }
+    },
+    openChat() {
+      this.$router.push({path: '/room'})
     },
   },
   data (){
