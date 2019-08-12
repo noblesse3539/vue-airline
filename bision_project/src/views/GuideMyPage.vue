@@ -770,7 +770,7 @@ export default {
     },
 
     cancelPayment(serviceId) {
-      this.$http.post(`/api/paymentstore/realcancel/${serviceId}`)
+      this.$http.put(`/api/paymentstore/realcancel/${serviceId}`)
         .then( res => {
           console.log(res)
         })
