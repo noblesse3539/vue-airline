@@ -67,6 +67,8 @@ exports.userDelete = (req, res) => {
     })
 }
 
+// 유저가 권한을 갖고 마음대로 수정할 위험이 있어서 수정해야함.
+// ex) 헤더에 토큰을 넣고 put요청으로 자신의 usedguide를 수정할 수 있음.
 exports.update = (req, res) => {
     const {_id } = req.decoded
 
@@ -99,6 +101,7 @@ exports.mypage = (req, res) => {
                 return await Option.find({_id: {$in: op}})
             }))
             .then(values => {
+            
                 console.log(values)
                 res.status(200).json({userInfo, paymentRecords, options: values})
             })
