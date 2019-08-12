@@ -1,7 +1,7 @@
 <template>
     <div class="pay-btn" v-on:click="payment">
         <!-- 결제하기 -->
-        <img 
+        <img
             src="../../assets/kakaopay/kakaopay/payment_icon_yellow_large.png"
             v-on:click="payment"
         />
@@ -26,7 +26,7 @@ export default {
         'people'
     ],
     mounted() {
-        
+
     },
     computed: {
         ...mapState({
@@ -43,7 +43,7 @@ export default {
                 'item_name'         : this.title,
                 'quantity'          : this.people,
                 'total_amount'      : this.totalAmount,
-                'tax_free_amount'   : this.totalAmount*0.01,
+                'tax_free_amount'   : parseInt(this.totalAmount*0.01),
                 // 'item_name'         : 'hello',
                 // 'quantity'          : 3,
                 // 'total_amount'      : 10000,
@@ -59,7 +59,7 @@ export default {
                 })
         },
         goToNext() {
-            
+
         },
     }
 }
@@ -68,7 +68,7 @@ export default {
     .pay-btn {
         text-align: center;
     }
-    
+
     .pay-btn:hover {
         cursor: pointer;
     }

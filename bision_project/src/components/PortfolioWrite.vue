@@ -225,7 +225,7 @@
               </v-flex>
 
               <!-- 인원 구분 -->
-              <v-flex xs6>
+              <v-flex xs5>
                 <v-autocomplete width="50px" label="통화 선택   ex)KRW, USD..." :items="currency" prepend-icon="fa-globe-asia" no-data-text v-model="option.costType"></v-autocomplete>
               </v-flex>
                 <!-- <v-flex xs12 v-for="(item, idx) in peopleType" class="PW__cost">
@@ -234,8 +234,12 @@
                   <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option[item.name_eng].minAge" label="최소 나이 제한"/></v-text-field>
                   <v-text-field min="0" max="99" class="peopleType" type="number" suffix="세" v-model="option[item.name_eng].maxAge" label="최대 나이 제한"/></v-text-field>
                 </v-flex> -->
-              <v-flex xs6>
-                <v-select prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
+              <v-flex xs3 class="PW__checkOption">
+                <div class="PW__chkbox" :class="{ PW__checked : ptypeOption }" @click="ispType"><i v-if="ptypeOption" class="fas fa-check"></i></div>
+                인원 구분
+              </v-flex>
+              <v-flex xs4>
+                <v-select  :disabled="!ptypeOption" prepend-icon="fa-users" label="인원 구분 선택*" :items="peopleType" v-model="option.peopleTypeOpt" item-text="name_kor" item-value="name_eng" attach small-chips multiple>
                 </v-select>
               </v-flex>
               <template v-if="option.peopleTypeOpt.indexOf('infant')!==-1">
@@ -268,7 +272,7 @@
                 </v-flex>
               </template>
 
-              <template v-if="option.peopleTypeOpt.indexOf('adult')!==-1 || option.peopleTypeOpt.indexOf('none')!==-1">
+              <template v-if="option.peopleTypeOpt.indexOf('adult')!==-1">
                 <v-flex xs3 d-flex align-self-center>
                   <h3 style="text-align:center">성인</h3>
                 </v-flex>
@@ -402,6 +406,7 @@ export default {
   },
   data (){
     return{
+      ptypeOption : true,
       refOpt:[false, false, false, false],
       selectMore: false,
       currency: [],
@@ -429,8 +434,6 @@ export default {
       refPeopleOpt:[{desc:'이상(최소인원에서 1씩 차례로 증가)',val:'more'},
                     {desc:'배수(최소인원에서 배수로 증가)',val:'multiple'}],
       peopleType:[
-                  {name_kor:'없음',
-                  name_eng:'none'},
                   {name_kor:'유아',
                   name_eng:'infant'},
                   {name_kor:'아동',
@@ -541,10 +544,6 @@ export default {
     }
 
   },
-  created() {
-  },
-  destroyed() {
-  },
   mounted:function(){
     // this.citySelect()
     this.currencySelect()
@@ -560,6 +559,22 @@ export default {
     console.log("-----------------------")
  },
   methods : {
+    ispType() {
+      if(this.ptypeOption){
+        for(var i in this.option.peopleTypeOpt){
+          this.option[this.option.peopleTypeOpt[i]].cost = 0
+          this.option[this.option.peopleTypeOpt[i]].minAge = 0
+          this.option[this.option.peopleTypeOpt[i]].maxAge = 0
+        }
+        this.option.peopleTypeOpt = ['adult']
+      }else{
+        this.option.adult.cost = 0
+        this.option.adult.minAge = 0
+        this.option.adult.maxAge = 0
+        this.option.peopleTypeOpt = []
+      }
+      this.ptypeOption = !this.ptypeOption
+    },
     selectRefPeopleOpt(v){
       this.selectMore = !v
       if(v) this.option.refPeople.opt =  'multiple'
@@ -592,13 +607,6 @@ export default {
       if(v == 'adult') return '성인'
       if(v == 'senior') return '고령자'
     },
-    // setOptDate() {
-    //   if(this.dateOption) {
-    //     this.dateOption = false;
-    //   } else{
-    //     this.dateOption = true;
-    //   }
-    // },
     addTag(newTag) {
       this.dbTags.push(newTag)
       this.tourProgram.tags.push(newTag)
@@ -612,8 +620,7 @@ export default {
       }
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
-      delete this.$http.defaults.headers.common["x-access-token"]
-
+       delete this.$http.defaults.headers.common["x-access-token"]
        var formData = new FormData()
        formData.append("image", file)
        var settings = {
@@ -634,8 +641,7 @@ export default {
          resetUploader();
          console.log("res.data.data.link")
 
-       })
-       .then( () => {
+       }).then(() =>{
          this.$http
         .get("/api/auth/check", config)
         .then(res => {
@@ -650,8 +656,7 @@ export default {
             this.$http.defaults.headers.common["x-access-token"] = token
           }
         })
-       })
-       .catch(err=>{
+       }).catch(err=>{
          console.log(err)
        })
     },

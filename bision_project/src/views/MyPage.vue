@@ -64,7 +64,7 @@
         v-for="(guideService, idx) in currentGuideServices"
         :key="id"
       >
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
@@ -93,7 +93,8 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in likedGuideServices"
         :key="id">
-        <img click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService._id)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
+        <div class="likeTooltip">좋아요 취소</div>
         <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
         <div class="myTourExperience-description">
 
@@ -127,7 +128,7 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in usedGuideServices"
         :key="idx">
-        <img @click="goToDetail(guideService)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
+        <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
         <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
@@ -286,10 +287,9 @@
       }
     },
     methods: {
-      goToDetail(GS) {
-        console.log(GS.service)
-        console.log(GS.guideServiceId)
-        const query = {serviceId: GS.guideServiceId}
+      goToDetail(GSID) {
+        console.log(GSID)
+        const query = {serviceId: GSID}
         this.$router.push({name: 'GuideServiceDetailPage', query: query})
       },
       linktoGS() {
@@ -445,15 +445,13 @@
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
-
-            for(var idx in res.data.options ) {
-              if(res.data.paymentRecords[idx].date >= today){
+            for(var idx in res.data.paymentRecords) {
+              if(res.data.paymentRecords[idx].service.date >= today){
                 this.currentGuideServices.push({
-                  'guideServiceId' : res.data.options[idx].guideservice,
+                  'guideServiceId' : res.data.options[idx][0].guideservice,
                   'paymentId' : res.data.paymentRecords[idx]._id,
                   'service' : res.data.paymentRecords[idx].service
               })}else{
-                console.log("du", res.data.options[idx][0])
                 this.usedGuideServices.push({
                   'guideServiceId' : res.data.options[idx][0].guideservice,
                   'paymentId' : res.data.paymentRecords[idx]._id,
@@ -461,10 +459,7 @@
                 })
               }
             }
-            console.log("usedGuideServices", this.usedGuideServices)
-
             for(var liked of res.data.userInfo.likeGuideServices){
-              console.log("좋아", liked)
               this.$http.get('/api/guideservice/findGSById/'+liked)
               .then( res => {
                 this.likedGuideServices.push(res.data)
@@ -472,12 +467,12 @@
                 console.log("찜데이터 에러", err)
               })
             }
-            console.log("찜데이터", this.likedGuideServices)
+            console.log("likedData", this.likedGuideServices)
             this.userInfo = res.data.userInfo
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
             this.userLanguage = this.userInfo.languages
-            this.userImage = this.userInfo.profileImageUrl
+            this.userImage = this.userInfo.profileImg? this.userInfo.profileImg : this.userInfo.profileImageUrl
 
             console.log("==============================")
             console.log(this.userName)
@@ -485,17 +480,15 @@
           }).catch( err => {
             console.log(err)
           }).then( () => {
-            console.log("id",this.userId)
             this.$http.get('/api/review/findReviewByUser/'+this.userId)
               .then( res => {
-                console.log(res.data.reviews)
                 for(var item of res.data.reviews) {
                   this.reviews[item.payment] = {'id' : item._id,
                                                 'content' : item.content,
                                                 'title' : item.title,
                                                 'rating' : item.rating}
                 }
-              console.log("리뷰",  this.reviews)
+              console.log("Reviews",  this.reviews)
               this.loaded=true;
             })
           })
@@ -511,7 +504,7 @@
         const data = {
             'intro' : this.userIntro,
             'languages' : this.userLanguage,
-            'profileImageUrl' : this.userImage,
+            'profileImg' : this.userImage,
         }
         this.$http.put('/api/user/username', data, config)
           .then( res => {

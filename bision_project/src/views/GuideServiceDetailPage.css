@@ -414,6 +414,7 @@
     /* display: flex; */
     /* justify-content: space-between; */
     padding: 15px;
+    margin-bottom: 10px;
     font-size: 1.0rem;
     font-weight: 700;
     display: grid;
@@ -523,9 +524,11 @@
     border-bottom: 1px solid #e6e6e6;
 }
 
+/* 수정 */
 .GS-service-review-userImage {
     padding: 20px;
     padding-top: 0 !important;
+    padding-right: 0 !important;
     min-width: 50px !important;
     height: 5% !important;
     /* height: 100% !important; */
@@ -670,6 +673,7 @@
     border: solid;
     /* background: red !important; */
     box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+    margin-bottom: 10px;
 }
 
 .GS-guide-detail-guideDetail {
@@ -791,4 +795,8 @@
 
 .GS-service-review-rating-and-username {
   display: flex;
+}
+
+.GS-service-review-image-and-content {
+    display: flex;
 }
