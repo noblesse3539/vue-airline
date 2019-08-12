@@ -30,7 +30,7 @@ export default {
   },
   data:function(){
     return{
-      socket : io('localhost:3000/chat'),
+      socket : io('localhost:3002/chat'),
     }
   },
   created() {
