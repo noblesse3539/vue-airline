@@ -72,6 +72,7 @@ export default {
         this.$emit('close',  this.random)
       }
       else{
+        delete this.$http.defaults.headers["x-access-token"]
         let form = new FormData();
         form.append('image', this.imageFile);
 
@@ -90,6 +91,21 @@ export default {
         this.$http(settings).then(res=>{
           this.$emit('close',  res.data.data.link)
 
+        }).then(()=> {
+          this.$http
+        .get("/api/auth/check", config)
+        .then(res => {
+          console.log(res.data)
+          if (res.status == 200) {
+            this.$store.commit("setIsLoggedIn");
+            this.$store.commit("setUserInfo", {
+              userId: res.data.info._id,
+              userName: res.data.info.username,
+              isGuideNow: res.data.info.isGuide
+            });
+            this.$http.defaults.headers.common["x-access-token"] = token
+          }
+        })
         }).catch(err=>{
           alert('잠시 후 다시 시도해주세요')
           console.log(err)
