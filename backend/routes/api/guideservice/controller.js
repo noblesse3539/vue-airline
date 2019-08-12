@@ -3,7 +3,7 @@ const Tag = require('../../../models/tag')
 const Review = require('../../../models/review')
 const User = require('../../../models/user')
 const Option = require('../../../models/option')
-
+const PaymentStore = require('../../../models/paymentStore')
 exports.findReview = (req, res) => {
   console.log('findReview');
     GuideService.findOne({ _id : req.params.id })
@@ -223,37 +223,36 @@ exports.createGuideService = (req,res) =>{
 }
 
 exports.likeGuideService = (req, res) => {
-  res.send('짝짝')
-  // User.findById(req.params.userId)
-  // .then( user => {
-  //   GuideService.findById(req.params.guideServiceId)
-  //   .then( async (guideService) => {
-  //     user.likeGuideServices.forEach(service => {
-  //       console.log(service.toString())
-  //     })
-  //     if(user.likeGuideServices.filter( service => service.toString() === guideService._id.toString()).length !== 0) { // 좋아요 삭제
-  //       user.likeGuideServices = await user.likeGuideServices.filter( likeService => {
-  //         return likeService.toString() !== guideService._id.toString()
-  //       })
-  //       guideService.likeUsers = await guideService.likeUsers.filter( likeUser => {
-  //         return likeUser.toString() !== user._id.toString()
-  //       })
-  //       user.save()
-  //       guideService.save()
-  //       res.status(200).json({message:"삭제 완료", added:false})
-  //     }
-  //     else {
-  //       await user.likeGuideServices.push(guideService)
-  //       await guideService.likeUsers.push(user)
-  //       user.save()
-  //       guideService.save()
-  //       res.status(200).json({message:"추가 완료", added:true})
-  //     }
-  //   })
-  // })
-  // .catch( err => {
-  //   res.status(500).json({error: err})
-  // })
+  User.findById(req.params.userId)
+  .then( user => {
+    GuideService.findById(req.params.guideServiceId)
+    .then( async (guideService) => {
+      user.likeGuideServices.forEach(service => {
+        console.log(service.toString())
+      })
+      if(user.likeGuideServices.filter( service => service.toString() === guideService._id.toString()).length !== 0) { // 좋아요 삭제
+        user.likeGuideServices = await user.likeGuideServices.filter( likeService => {
+          return likeService.toString() !== guideService._id.toString()
+        })
+        guideService.likeUsers = await guideService.likeUsers.filter( likeUser => {
+          return likeUser.toString() !== user._id.toString()
+        })
+        user.save()
+        guideService.save()
+        res.status(200).json({message:"삭제 완료", added:false})
+      }
+      else {
+        await user.likeGuideServices.push(guideService)
+        await guideService.likeUsers.push(user)
+        user.save()
+        guideService.save()
+        res.status(200).json({message:"추가 완료", added:true})
+      }
+    })
+  })
+  .catch( err => {
+    res.status(500).json({error: err})
+  })
 }
 
 
@@ -272,3 +271,24 @@ exports.likeGuideService = (req, res) => {
 //     res.json({얍얍:'얍얍'})
 //   })
 // }
+
+
+exports.cancelGuideService = (req, res) => {
+  const guideServiceId = req.params.id
+
+  GuideService.findById(guideServiceId)
+  .then(gs => {
+    if(gs.canceled) return res.status(412).json({success:false, msg:'이미 상품이 취소되어 있습니다.'})
+    // gs.canceled = true
+    // gs.save()
+    return gs
+  })
+  .then(gs => {
+    PaymentStore.find({})
+    .then( payments => {
+      console.log(payments[0].getGS())
+      res.json({ok:true})
+    })
+    
+  })
+}
