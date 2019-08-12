@@ -39,6 +39,7 @@ export default {
            reader.onload = (e) => {
              var formData = new FormData()
              formData.append("image", file)
+             delete this.$http.defaults.headers["x-access-token"]
              var settings = {
                "url": "https://api.imgur.com/3/image",
                "method": "POST",
@@ -57,6 +58,21 @@ export default {
               // this.imgUrl = res.data.data.link
            }).catch(err=>{
              this.$emit('getMain',false)
+           }).then(() => {
+             this.$http
+               .get("/api/auth/check", config)
+               .then(res => {
+                 console.log(res.data)
+                 if (res.status == 200) {
+                   this.$store.commit("setIsLoggedIn");
+                   this.$store.commit("setUserInfo", {
+                     userId: res.data.info._id,
+                     userName: res.data.info.username,
+                     isGuideNow: res.data.info.isGuide
+                   });
+                   this.$http.defaults.headers.common["x-access-token"] = token
+                 }
+               })
            })
          }
          reader.readAsDataURL(file);

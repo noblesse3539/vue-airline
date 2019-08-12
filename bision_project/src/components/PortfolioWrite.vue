@@ -565,7 +565,7 @@ export default {
           this.option[this.option.peopleTypeOpt[i]].cost = 0
           this.option[this.option.peopleTypeOpt[i]].minAge = 0
           this.option[this.option.peopleTypeOpt[i]].maxAge = 0
-        } 
+        }
         this.option.peopleTypeOpt = ['adult']
       }else{
         this.option.adult.cost = 0
