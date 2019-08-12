@@ -34,7 +34,7 @@
                   <!-- <div v-for="i in tags.length" :key="i">
                     <v-chip color="#5CE75C" text-color="white" @click="findTag('액티비티')">{{tags[i-1]}}</v-chip>
                   </div> -->
-
+                  
                   <!-- 2안 -->
                   <div v-for="i in tags.length > 10 ? 10 : tags.length" :key="i">
                     <v-chip color="#5CE75C" text-color="white" style="font-weight: 300;" @click="selectTags(tags[i-1])" v-if="selectedTags.indexOf(tags[i-1]) != -1">{{tags[i-1]}}</v-chip>

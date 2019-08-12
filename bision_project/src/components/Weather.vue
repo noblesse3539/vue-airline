@@ -28,7 +28,6 @@ export default{
     mounted() {
         this.translate()
         // openweathermap API에서 현재 서울 날씨 가져오기
-            
     },
     methods: {
         async translate() {
@@ -46,13 +45,13 @@ export default{
 
             })
             console.log(getTranslate)
-
             this.translatedText = getTranslate.data.data.translations[0].translatedText
             const apiKey  = '79afaa4fcb45087af27c7ef8708f358c'
             const baseUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.translatedText}&APPID=${apiKey}`
             // const baseUrl = `http://api.openweathermap.org/data/2.5/weather?q=Daejeon&APPID=${apiKey}`
-            const result  = []
             
+            const result  = []
+
             this.$http.get(baseUrl, null)
                 .then( (res) => {
                     console.log(res)

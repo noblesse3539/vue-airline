@@ -24,6 +24,15 @@
                                     @keydown.down="onArrowDown('departure')"
                                     @keydown.enter="onEnter('departure')"
                                 >
+                                <!-- 검색 input 값 없을 시 보여주기 -->
+                                <div class="guide-input-tooltip">
+                                    <h3>출발지를 입력해주세요.</h3>
+                                    <!-- <ul>
+                                        <li>Aliquam ac odio ut est</li>
+                                        <li>Cras porttitor orci</li>
+                                    </ul> -->
+                                    <i></i>
+                                </div>
                                 <div class="searchListWrapper" v-show="isOpen">
                                     <div class="dep-triangle-box">
                                             <div class="country-triangle"></div>
@@ -106,8 +115,8 @@
                                 </div>
                             </label>
                         </div>
-                        <div class="passengers" @click="openClassPicker('right-end-input')">
-                            <label> 좌석 등급 및 승객
+                        <div class="passengers" @click="openClassPicker">
+                            <label> <span>좌석 등급 및 승객</span>
                                 <input type="text" placeholder="" :value="`${adults + infants} 승객, ${flightClass}`" class="right-end-input" disabled>
                                 <div class="psg-triangle-box">
                                         <div class="psg-triangle"></div>
@@ -242,10 +251,11 @@ export default {
         // 왕복 버튼 클릭시 <오는날> 버튼 활성화 및 현재 날짜로 되돌리기
         const radioBtnRoundTrip = document.querySelectorAll('.radio-container')[0].children[0]
         radioBtnRoundTrip.addEventListener('click', this.roundTrip)
-
+        
         // 검색창 바깥 부분 클릭 시 출발지 및 도착지 검색 모달 숨기기
         document.body.addEventListener("click",  this.hideSearchResult)
         document.body.addEventListener('keyup', this.showSearchResult)
+        document.body.addEventListener('keydown', this.hideTooltip)
     },
     updated() {
     },
@@ -253,9 +263,13 @@ export default {
         document.body.removeEventListener("click",  this.hideSearchResult)
     },
     methods: {
-
+        hideTooltip: function() {
+            const tooltip = document.querySelector('.guide-input-tooltip')
+            tooltip.style.display = 'none'
+        },
         // 항공권 리스트로 데이터 넘겨주기 (IMPORTANT)
         goToUrl : function() {
+            const tooltip = document.querySelector('.guide-input-tooltip')
             const query = {}
             query.departure = this.departure // ICN
             query.destination = this.destination // NRT
@@ -266,7 +280,17 @@ export default {
             query.infants = this.infants
             query.departureInput = this.departureInput
             query.destinationInput = this.destinationInput
-            this.$router.push({name: "FlightListPage", query: query})
+
+            if (query.departure && query.destination) {
+                this.$router.push({name: "FlightListPage", query: query})
+            } else if (query.departure && query.destination == '') {
+                query.destination = 'DAD'
+                query.destinationInput = '다낭국제공항,'
+                this.$router.push({name: "FlightListPage", query: query})
+            } else {
+                tooltip.classList.add('animated', 'flash')
+                tooltip.style.display = "block"
+            }
 
         },
         showSearchResult : function(e) {
@@ -332,6 +356,8 @@ export default {
                 && e.target.classList[0] !== 'decreaseInfants'
                 // && e.target.classList[0] !== 'classSubmit'
                 && e.target.classList[0] !== 'confirm'
+                && e.target.classList[0] !== 'noOfAdults'
+                && e.target.classList[0] !== 'noOfInfants'
                 ) {
                 flightSearchBtn.style.display = "block"
                 psgTriangleBox.style.display = "none"
@@ -400,17 +426,21 @@ export default {
             this.datePickerFlag[className] = true
 
         },
-        openClassPicker: function() {
-            const psgTriangleBox = document.querySelector(".psg-triangle-box")
-            const psgaAdultsPicker = document.querySelector(".psg-adults-picker")
-            const flightSearchBtn = document.querySelector(".flight-search-submit")
-            const passengers = document.querySelector('.passengers')
-            psgTriangleBox.style.display = "block"
-            psgTriangleBox.style.zIndex = "1010"
-            psgaAdultsPicker.style.display = "block"
-            psgaAdultsPicker.style.zIndex = "1010"
-            flightSearchBtn.style.display = "none"
-            passengers.scrollIntoView({'behavior' : 'smooth'})
+        openClassPicker: function(event) {
+            
+            if (event.target.classList[0] != 'flight-search-submitBtn') {
+
+                const psgTriangleBox = document.querySelector(".psg-triangle-box")
+                const psgaAdultsPicker = document.querySelector(".psg-adults-picker")
+                const flightSearchBtn = document.querySelector(".flight-search-submit")
+                const passengers = document.querySelector('.passengers')
+                psgTriangleBox.style.display = "block"
+                psgTriangleBox.style.zIndex = "1010"
+                psgaAdultsPicker.style.display = "block"
+                psgaAdultsPicker.style.zIndex = "1010"
+                flightSearchBtn.style.display = "none"
+                passengers.scrollIntoView({'behavior' : 'smooth'})
+            }
 
         },
         oneWayTrip: function() {
@@ -532,6 +562,12 @@ export default {
             triangle.style.display = 'block'
         },
         destinationInput: function(userInput) {
+
+            const roundTrip = document.querySelector("input")
+            const comingDatePicker = document.querySelector(".comingDate")
+            this.comingDate = new Date().toISOString().substr(0, 10)
+            roundTrip.checked = true
+            comingDatePicker.style.color = "black"
 
             const countryList = document.querySelector(".dst-country-list")
             const triangle    = document.querySelector(".dst-triangle-box")
