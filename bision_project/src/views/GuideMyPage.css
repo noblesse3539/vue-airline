@@ -493,3 +493,40 @@ width: 100%;
 .reserve-cancel-btn:hover {
   background: rgba(255, 0, 0, 0.5);
 }
+
+.dialog-delete {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999999999999999999;
+  width: 100vw;
+  height: 100vh;
+  background: rgba( 0, 0, 0, 0.5);
+  /* display: flex; */
+  justify-content: center;
+  align-items:center;
+}
+
+.dialog-card {
+  padding: 24px;
+  width: 500px;
+  height: 300px;
+  background: white;
+  color: black;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.reserve-chat {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5000;
+}
+
+.reserve-chat:hover {
+  color: blue;
+}
