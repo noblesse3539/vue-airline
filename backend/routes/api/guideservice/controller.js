@@ -223,48 +223,52 @@ exports.createGuideService = (req,res) =>{
 }
 
 exports.likeGuideService = (req, res) => {
-  User.findById(req.params.userId)
-  .then( user => {
-    GuideService.findById(req.params.guideServiceId)
-    .then( async (guideService) => {
-      user.likeGuideServices.forEach(service => {
-        console.log(service.toString())
-      })
-      if(user.likeGuideServices.filter( service => service.toString() === guideService._id.toString()).length !== 0) { // 좋아요 삭제
-        user.likeGuideServices = await user.likeGuideServices.filter( likeService => {
-          return likeService.toString() !== guideService._id.toString()
-        })
-        guideService.likeUsers = await guideService.likeUsers.filter( likeUser => {
-          return likeUser.toString() !== user._id.toString()
-        })
-        user.save()
-        guideService.save()
-        res.status(200).json({message:"삭제 완료", added:false})
-      }
-      else {
-        await user.likeGuideServices.push(guideService)
-        await guideService.likeUsers.push(user)
-        user.save()
-        guideService.save()
-        res.status(200).json({message:"추가 완료", added:true})
-      }
-    })
-  })
-  .catch( err => {
-    res.status(500).json({error: err})
-  })
+  res.send('짝짝')
+  // User.findById(req.params.userId)
+  // .then( user => {
+  //   GuideService.findById(req.params.guideServiceId)
+  //   .then( async (guideService) => {
+  //     user.likeGuideServices.forEach(service => {
+  //       console.log(service.toString())
+  //     })
+  //     if(user.likeGuideServices.filter( service => service.toString() === guideService._id.toString()).length !== 0) { // 좋아요 삭제
+  //       user.likeGuideServices = await user.likeGuideServices.filter( likeService => {
+  //         return likeService.toString() !== guideService._id.toString()
+  //       })
+  //       guideService.likeUsers = await guideService.likeUsers.filter( likeUser => {
+  //         return likeUser.toString() !== user._id.toString()
+  //       })
+  //       user.save()
+  //       guideService.save()
+  //       res.status(200).json({message:"삭제 완료", added:false})
+  //     }
+  //     else {
+  //       await user.likeGuideServices.push(guideService)
+  //       await guideService.likeUsers.push(user)
+  //       user.save()
+  //       guideService.save()
+  //       res.status(200).json({message:"추가 완료", added:true})
+  //     }
+  //   })
+  // })
+  // .catch( err => {
+  //   res.status(500).json({error: err})
+  // })
 }
 
 
-exports.deleteAllTags = (req, res) => {
-  GuideService.find({})
-  .then( gss => {
-    for( gs of gss) {
-      gs.tags = []
-      gs.save()
-    }
-  })
-  .then( () => {
-    res.json({얍얍:'얍얍'})
-  })
-}
+/**
+ * 모든 태그를 지우고 싶으면 이걸 살리십시오
+ */
+// exports.deleteAllTags = (req, res) => {
+//   GuideService.find({})
+//   .then( gss => {
+//     for( gs of gss) {
+//       gs.tags = []
+//       gs.save()
+//     }
+//   })
+//   .then( () => {
+//     res.json({얍얍:'얍얍'})
+//   })
+// }
