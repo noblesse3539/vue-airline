@@ -225,7 +225,7 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
-                  
+
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -336,7 +336,7 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
-                  
+
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -460,14 +460,14 @@ export default {
       let newProfit = ''
       if (profit.toString().length >= 3) {
         const oldProfit = profit.toString()
-        
+
         for (let i = 0; i < oldProfit.length; i++) {
-          
-          newProfit += oldProfit[oldProfit.length - 1 - i] 
+
+          newProfit += oldProfit[oldProfit.length - 1 - i]
           if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
             newProfit += ','
-          } 
-          
+          }
+
         }
       }
       let reversedProfit = newProfit.split("").reverse().join("")
@@ -477,9 +477,6 @@ export default {
       console.log(guideServiceId)
       // `/user/${getuserId}`
       this.$router.push({path: `/guideServiceDetailPage`, query: {serviceId : guideServiceId}})
-    },
-    getImgUrl(img){
-      return require('../assets/' + img)
     },
     showIU() {
       this.isIUVisible = true;
@@ -491,11 +488,11 @@ export default {
         this.imgurl=value;
         const guideId = this.getUserId
         const config = {
-          'profileImageUrl': this.imgurl
+          'profileImg': this.imgurl
         }
         this.$http.put(`/api/guide/${guideId}`, config)
           .then( res => {
-            // console.log(res.data)
+            console.log("프로필 이미지수정 완료", res.data)
           })
 
 
@@ -550,21 +547,22 @@ export default {
       const guideId = this.getUserId
       const config = {
         'intro': this.intro,
-        'profileImageUrl' : this.imgurl,
+        // 'profileImg' : this.imgurl,
       }
       this.$http.put(`/api/guide/${guideId}`, config)
         .then( res => {
-          // console.log(res.data)
+          console.log("인트로 수정 완료", res.data)
         })
     },
     GuideDataRequest() {
       this.$http.get(`/api/guide/${this.guideId}`)
       .then(res => {
-        console.log(res.data)
+        console.log("가이드데이터",res.data)
 
         const guide = res.data.guide
         if(guide.intro) this.intro = guide.intro
         this.guideName = guide.nickname
+        this.imgurl = guide.profileImg? guide.profileImg : guide.profileImageUrl
 
         // 가이드 평균 평점 구하기
         if (res.data.guide.starRatingList.length) {
@@ -573,7 +571,6 @@ export default {
           this.rating = avg
         }
 
-        this.imgurl = res.data.guide.profileImageUrl
 
       })
     },
@@ -678,7 +675,7 @@ export default {
         .then( (data) => {
 
           data.payments.forEach( payment => {
-            const temp   = {} 
+            const temp   = {}
             const userId = payment.user
             // console.log(userId)
             this.$http.get(`/api/user/search/${userId}`)

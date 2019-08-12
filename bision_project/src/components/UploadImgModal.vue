@@ -72,7 +72,7 @@ export default {
         this.$emit('close',  this.random)
       }
       else{
-        delete this.$http.defaults.headers["x-access-token"]
+        delete this.$http.defaults.headers.common["x-access-token"]
         let form = new FormData();
         form.append('image', this.imageFile);
 
@@ -92,6 +92,10 @@ export default {
           this.$emit('close',  res.data.data.link)
 
         }).then(()=> {
+          const token = this.$getToken("BisionToken");
+          const config = {
+            headers: { "x-access-token": token }
+          };
           this.$http
         .get("/api/auth/check", config)
         .then(res => {
@@ -106,7 +110,7 @@ export default {
             this.$http.defaults.headers.common["x-access-token"] = token
           }
         })
-        }).catch(err=>{
+      }).catch(err=>{
           alert('잠시 후 다시 시도해주세요')
           console.log(err)
         })

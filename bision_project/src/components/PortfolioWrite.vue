@@ -607,78 +607,6 @@ export default {
       if(v == 'adult') return '성인'
       if(v == 'senior') return '고령자'
     },
-    makeDummy(v) {
-      var i = v
-      this.$http(this.settings).then(res=>{
-        this.tourProgram.guide = this.getUserId
-        this.tourProgram.mainImg = res.data.data.link
-        this.tourProgram.nation_kor = this.tempCountry[parseInt(i%8)]
-        this.tourProgram.city_kor = this.tempCity[parseInt(i%8)][parseInt(i%8%2)]
-        this.tourProgram.title = i + ' 번째 테스트 상품'
-        this.tourProgram.desc = i + this.tourProgram.nation_kor + ' ' + this.tourProgram.city_kor + ' 상품 '
-        this.tourProgram.detail ='테스트 데이터입니다.'
-        this.tourProgram.fromDate = '2019-08-05'
-        this.tourProgram.toDate = '2019-11-05'
-        this.tourProgram.duration = '1박2일'
-        this.tourProgram.refund = {
-          'refund100' : 30,
-          'refund50' : 10,
-          'refund30' : 3
-        }
-        this.tourProgram.options = [{
-          'guideservice' : '',
-          'fromDate' : '2019-08-05',
-          'toDate' : '2020-11-05',
-          'costType' : 'KRW',
-          'dayOfWeek' : this.tempDayofWeek[parseInt(i%2)],
-          'adult' : {
-            'cost' : 500*i,
-            'minAge' :  0,
-            'maxAge' : 0
-          },
-          'peopleTypeOpt' : ['adult'],
-        }]
-        this.tourProgram.tags = [this.tempTags[i%5], this.tourProgram.city_kor]
-      }).catch(err =>{
-          this.tourProgram.mainImg = 'https://source.unsplash.com/category/travel'
-          this.tourProgram.nation_kor = this.tempCountry[parseInt(i%8)]
-          this.tourProgram.city_kor = this.tempCity[parseInt(i%8)][parseInt(i%8%2)]
-          this.tourProgram.title = i + ' 번째 테스트 상품'
-          this.tourProgram.desc = this.tourProgram.nation_kor + ' ' + this.tourProgram.city_kor + ' 상품 ' + i
-          this.tourProgram.detail ='테스트 데이터입니다.'
-          this.tourProgram.fromDate = '2019-08-05'
-          this.tourProgram.toDate = '2019-11-05'
-          this.tourProgram.duration = '1박2일'
-          this.tourProgram.refund = {
-            'refund100' : 30,
-            'refund50' : 10,
-            'refund30' : 3
-
-          }
-          this.tourProgram.options = [{
-            'guideservice' : '',
-            'fromDate' : '2019-08-05',
-            'toDate' : '2019-11-05',
-            'costType' : 'KRW',
-            'dayOfWeek' :  this.tempDayofWeek[parseInt(i%2)],
-            'adult' : {
-              'cost' : 500*i,
-              'minAge' :  0,
-              'maxAge' : 0
-            },
-            'peopleTypeOpt' : ['adult'],
-          }]
-        this.tourProgram.tags = [this.tempTags[i%5], this.tourProgram.city_kor]
-          console.log(err.status, err.data.error.message)
-        }).then(() =>{
-          this.$http.post('/api/guideservice/create', this.tourProgram)
-          .then( res => {
-            console.log(i, res.status)
-            console.log(res.data)
-            if(i<70) this.makeDummy(i+1)
-          })
-        })
-    },
     addTag(newTag) {
       this.dbTags.push(newTag)
       this.tourProgram.tags.push(newTag)
@@ -692,6 +620,7 @@ export default {
       }
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+       delete this.$http.defaults.headers.common["x-access-token"]
        var formData = new FormData()
        formData.append("image", file)
        var settings = {
@@ -712,6 +641,21 @@ export default {
          resetUploader();
          console.log("res.data.data.link")
 
+       }).then(() =>{
+         this.$http
+        .get("/api/auth/check", config)
+        .then(res => {
+          console.log(res.data)
+          if (res.status == 200) {
+            this.$store.commit("setIsLoggedIn");
+            this.$store.commit("setUserInfo", {
+              userId: res.data.info._id,
+              userName: res.data.info.username,
+              isGuideNow: res.data.info.isGuide
+            });
+            this.$http.defaults.headers.common["x-access-token"] = token
+          }
+        })
        }).catch(err=>{
          console.log(err)
        })
