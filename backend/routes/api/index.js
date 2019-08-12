@@ -43,7 +43,7 @@ router.use('/review',review)
 router.use('/tag',tag)
 
 //Option
-router.use('/option',option)
+router.use('/option', authMiddleware, option)
 router.use('/paidOption',paidOption)
 
 router.use('/airport', airport)
