@@ -66,11 +66,12 @@ export default {
             console.log(res)
             this.clearVOC()
             this.isVocVisible=false
+              alert('전송을 완료하였습니다.')
           })
           .catch( err => {
             console.log(err)
           })
-          
+
     },
 
   }

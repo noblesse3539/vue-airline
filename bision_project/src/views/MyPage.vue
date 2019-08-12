@@ -445,15 +445,13 @@
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
-            for(var idx in res.data.options ) {
-              console.log(res.data.options[idx])
-              if(res.data.paymentRecords[idx].date >= today){
+            for(var idx in res.data.paymentRecords) {
+              if(res.data.paymentRecords[idx].service.date >= today){
                 this.currentGuideServices.push({
                   'guideServiceId' : res.data.options[idx].guideservice,
                   'paymentId' : res.data.paymentRecords[idx]._id,
                   'service' : res.data.paymentRecords[idx].service
               })}else{
-                console.log("du", res.data.options[idx][0])
                 this.usedGuideServices.push({
                   'guideServiceId' : res.data.options[idx][0].guideservice,
                   'paymentId' : res.data.paymentRecords[idx]._id,
@@ -464,7 +462,6 @@
             console.log("usedGuideServices", this.usedGuideServices)
 
             for(var liked of res.data.userInfo.likeGuideServices){
-              console.log("좋아", liked)
               this.$http.get('/api/guideservice/findGSById/'+liked)
               .then( res => {
                 this.likedGuideServices.push(res.data)
@@ -472,7 +469,7 @@
                 console.log("찜데이터 에러", err)
               })
             }
-            console.log("찜데이터", this.likedGuideServices)
+            console.log("likedData", this.likedGuideServices)
             this.userInfo = res.data.userInfo
             this.userName = this.userInfo.username
             this.userIntro = this.userInfo.intro
@@ -485,17 +482,15 @@
           }).catch( err => {
             console.log(err)
           }).then( () => {
-            console.log("id",this.userId)
             this.$http.get('/api/review/findReviewByUser/'+this.userId)
               .then( res => {
-                console.log(res.data.reviews)
                 for(var item of res.data.reviews) {
                   this.reviews[item.payment] = {'id' : item._id,
                                                 'content' : item.content,
                                                 'title' : item.title,
                                                 'rating' : item.rating}
                 }
-              console.log("리뷰",  this.reviews)
+              console.log("Reviews",  this.reviews)
               this.loaded=true;
             })
           })
