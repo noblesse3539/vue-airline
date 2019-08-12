@@ -450,7 +450,7 @@
 
               // 결제 취소 항목 제외하고 보여주기
               if (res.data.paymentRecords[idx].status != '결제취소') {
-  
+                
                 if(res.data.paymentRecords[idx].service.date >= today){
                   this.currentGuideServices.push({
                     'guideServiceId' : res.data.options[idx][0].guideservice,

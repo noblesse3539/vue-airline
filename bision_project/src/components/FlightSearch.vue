@@ -211,6 +211,8 @@ export default {
             // 항공권 검색에 사용할 6가지 데이터
             departure: '',
             destination: '',
+            departureCity: '',
+            destinationCity: '',
             leavingDate: new Date().toISOString().substr(0, 10),
             comingDate: new Date().toISOString().substr(0, 10),
             flightClass: 'economy',
@@ -280,6 +282,8 @@ export default {
             query.infants = this.infants
             query.departureInput = this.departureInput
             query.destinationInput = this.destinationInput
+            query.departureCity = this.departureCity
+            query.destinationCity = this.destinationCity
 
             if (query.departure && query.destination) {
                 this.$router.push({name: "FlightListPage", query: query})
@@ -401,11 +405,13 @@ export default {
             if (travelType == 'departure') {
                 this.saveUserChoiceAirport(this.departureOutput[this.departureArrowCounter].code,
                                            this.departureOutput[this.departureArrowCounter].name_kor,
+                                           this.departureOutput[this.departureArrowCounter].city_kor,
                                            "departure")
                 leftInput.style.display = "none"
             } else {
                 this.saveUserChoiceAirport(this.destinationOutput[this.destinationArrowCounter].code,
                                            this.destinationOutput[this.destinationArrowCounter].name_kor,
+                                           this.destinationOutput[this.destinationArrowCounter].city_kor,
                                            "destination")
                 rightInput.style.display = "none"
             }
@@ -490,16 +496,18 @@ export default {
         getDestinationOutput() {
             this.DestinationAirportAutoCompleteSearch()
         },
-        saveUserChoiceAirport: function(userChoiceAirport, airportName, travelType) {
+        saveUserChoiceAirport: function(userChoiceAirport, airportName, cityName, travelType) {
 
             const airportNameSplit = airportName.replace(/\s/g, '');
 
             if (travelType == "departure") {
                 this.departure = userChoiceAirport
                 this.departureInput = `${airportNameSplit}, ${this.departure}`
+                this.departureCity = cityName
             } else {
                 this.destination = userChoiceAirport
                 this.destinationInput = `${airportNameSplit}, ${this.destination}`
+                this.destinationCity = cityName
             }
         },
         DepartureAirportAutoCompleteSearch() {
