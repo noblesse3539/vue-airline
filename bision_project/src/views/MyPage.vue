@@ -93,10 +93,12 @@
       <swiper-slide class="myProduct"
         v-for="(guideService, idx) in likedGuideServices">
         <img @click="goToDetail(guideService._id)" class="myTourExperienceImg" :src="guideService.mainImg" alt="myTourExperienceImg">
-        <div class="likeTooltip">좋아요 취소</div>
-        <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon"></i>
-        <div class="myTourExperience-description">
 
+        <i @click="dislike(idx)" class="fas fa-heart myTourExperience-Icon">
+          <div class="likeTooltip">찜 취소</div>
+        </i>
+
+        <div class="myTourExperience-description">
           <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.title}}</p>
         </div>
@@ -133,7 +135,7 @@
           <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
 
-<!---------------------------------------------- 후기 작성 안했으면 조건 추가하기 -->
+        <!-- 후기 -->
           <div class="RWButtonOver" v-if="loaded">
             <div v-if="reviews[guideService.paymentId]" class="RWButton" @click="showMR(idx)">내가 쓴 후기</div>
             <div v-else class="RWButton" @click="showRW(idx)">후기 작성 하기</div>
@@ -429,7 +431,10 @@
       closeUserInfoModifier: function() {
         this.isUserInfoOpen = true
       },
-      
+      // sortByDate(array) {
+      //   return array.sort((a, b) => b.service.date - a.service.date)
+      // },
+
       getUserInfo: function() {
         const token= this.$getToken('BisionToken')
         const config = {
@@ -450,7 +455,7 @@
                   this.currentGuideServices.push({
                     'guideServiceId' : res.data.options[idx][0].guideservice,
                     'paymentId' : res.data.paymentRecords[idx]._id,
-                    'service' : res.data.paymentRecords[idx].service
+                    'service' : res.data.paymentRecords[idx].service,
                 })}else{
                   this.usedGuideServices.push({
                     'guideServiceId' : res.data.options[idx][0].guideservice,
@@ -460,6 +465,9 @@
                 }
               }
             }
+            // console.log("정렬 ")
+            // this.currentGuideServices = this.sortByDate(this.currentGuideServices)
+            // console.log(this.currentGuideServices)
             for(var liked of res.data.userInfo.likeGuideServices){
               this.$http.get('/api/guideservice/findGSById/'+liked)
               .then( res => {
