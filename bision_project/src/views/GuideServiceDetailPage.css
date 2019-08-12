@@ -581,7 +581,7 @@
     max-height: 100px;
     overflow: hidden;
     background: #f6f6f6;
-    padding: 20px;
+    padding: 15px;
     font-size: 1rem;
     font-weight: 600;
     word-break: break-word;
@@ -799,4 +799,17 @@
 
 .GS-service-review-image-and-content {
     display: flex;
+    margin-bottom: 10px;
+}
+
+.GS-service-review-morebutton {
+    display: flex;
+    justify-content: center;
+    font-weight: bold !important;
+}
+
+.GS-service-review-content-morebutton {
+    height:20%; 
+    display: flex; 
+    justify-content: center;
 }

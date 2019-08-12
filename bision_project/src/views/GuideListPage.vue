@@ -128,14 +128,16 @@
                         </div>
                         <div class="result-body-card-content">
                             <h1 class="result-body-card-title">
-                                {{service.title.slice(0, 20)}} ...
+                                <div v-if="service.title.length > 20">{{service.title.slice(0, 20)}} ...</div>
+                                <div v-else>{{service.title.slice(0, 20)}}</div>
                                 <div class="likeBtn-box">
                                   <i v-if="service.likeUsers.indexOf(getuserId) != -1" @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn fas fa-heart guide-list-page-like-btn-active" :id="`fas-heart-${idx}`"></i>
                                   <i v-else @click="serviceLike(service.serviceId, idx + (page-1)*10)" class="likeBtn far fa-heart guide-list-page-like-btn" :id="`fa-heart-${idx}`"></i>
                                 </div>
                             </h1>
                             <p class="result-body-card-detail">
-                                {{service.detail.slice(0, 120)}} ... {{service.index}}
+                                <div v-if="service.title.length > 120">{{service.desc.slice(0, 120)}} ...</div>
+                                <div>{{service.desc.slice(0, 120)}}</div>
                             </p>
                             <div style="display: flex; flex-direction: row;">
                               <p class="result-body-card-city" style="padding-right: 20px;">
@@ -265,7 +267,8 @@ export default {
                 res.data.guideservices.forEach( eachService => {
                         let parsedDetail = new JSSoup(eachService.detail).text
                         const temp = {}
-                        temp.title      = eachService.desc
+                        temp.title      = eachService.title
+                        temp.desc       = eachService.desc
                         temp.detail     = parsedDetail
                         temp.rawDetail  = eachService.detail
                         temp.image      = eachService.mainImg
@@ -297,8 +300,7 @@ export default {
                         // console.log(this.dateCalculate(temp.toDate))
                         // console.log(this.dateCalculate(new Date().toISOString().substr(0, 10)))
 
-                        if (this.dateCalculate(temp.toDate) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {
-                          // console.log("인")
+                        if (this.dateCalculate(temp.toDate) >= this.dateCalculate(new Date().toISOString().substr(0, 10))) {                     
                           this.guideServiceList.push(temp)
                           this.fixedguideServiceList.push(temp)
 
