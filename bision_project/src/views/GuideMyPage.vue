@@ -237,6 +237,14 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
+                  <div class="reserve-chat" @click="openChat(payment.userInfo._id)">
+                    <div class="reverse-chat-icon" style="width: 20%; height: 100%; margin: 0 0px; padding: 0 10px; border-right: 1px solid white; background: rgba(0, 50, 100, 1);">
+                      <i class="far fa-comments"></i>
+                    </div>
+                    <div style="margin-left: 10px; display: flex; justify-content: center; align-items: center;">
+                      메세지 보내기
+                    </div>
+                  </div>
                   
                 </div>
                 <div class="reserve-user-pick-service">
@@ -348,14 +356,14 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
-                  <div class="reserve-chat" @click="openChat()">
+                  <div class="reserve-chat" @click="openChat(payment.userInfo._id)">
                     <div class="reverse-chat-icon" style="width: 20%; height: 100%; margin: 0 0px; padding: 0 10px; border-right: 1px solid white; background: rgba(0, 50, 100, 1);">
                       <i class="far fa-comments"></i>
                     </div>
                     <div style="margin-left: 10px; display: flex; justify-content: center; align-items: center;">
                       메세지 보내기
                     </div>
-                    </div>
+                  </div>
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -771,7 +779,7 @@ export default {
           // this.getGuideCancel(this.guideId)
         })
     },
-
+    
     hideComponent(event) {
         if (event.target.classList[1] == 'dialog-delete') {
           // const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)
@@ -783,8 +791,16 @@ export default {
 
         }
     },
-    openChat() {
-      this.$router.push({path: '/room'})
+    openChat(userId) {
+      let rmInfo={
+        user:userId,
+        guide:this.getUserId
+      }
+      this.$http.post('/api/room/create',rmInfo)
+        .then(res=> {
+          console.log("방 찾아지나요?", res.data)  
+          this.$router.push({path: `/room/${res.data._id}`})
+        })
     },
   },
   data (){

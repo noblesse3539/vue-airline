@@ -255,3 +255,38 @@ a:hover {
     display: flex;
     align-items: center;
 }
+
+.easter-egg {
+
+}
+
+.easter-egg:hover {
+    animation: rotation 2s infinite linear;
+}
+
+
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+
+.our-commitment {
+    display: none;
+    position: fixed;
+    /* margin-right: 12.5% !important; */
+    /* z-index: -1; */
+    top: 110px;
+    bottom: 110px;
+    right: 12.5%;
+    /* left: 5%; */
+    width: 75%;
+    /* left: 40%; */
+}
+
+.easter-egg:hover .our-commitment {
+    visibility: hidden;
+}
