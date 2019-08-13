@@ -118,7 +118,7 @@
                         style="margin-right: 10px;"
                         @click="deleteGuideService(service, idx)"
                       >
-                        삭제하기
+                        종료하기
                       </button>
                       <div :class="`dialog-delete-${idx} dialog-delete`">
                         <div class="dialog-card">
@@ -344,7 +344,14 @@
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
                   {{payment.userInfo.email}}<br>
-                  <div class="reserve-chat" @click="openChat()">대화하기</div>
+                  <div class="reserve-chat" @click="openChat()">
+                    <div class="reverse-chat-icon" style="width: 20%; height: 100%; margin: 0 0px; padding: 0 10px; border-right: 1px solid white; background: rgba(0, 50, 100, 1);">
+                      <i class="far fa-comments"></i>
+                    </div>
+                    <div style="margin-left: 10px; display: flex; justify-content: center; align-items: center;">
+                      메세지 보내기
+                    </div>
+                    </div>
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>

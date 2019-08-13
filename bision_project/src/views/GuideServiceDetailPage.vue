@@ -584,9 +584,9 @@ export default {
         seniorprice: 0,
         childprice: 0,
         infantprice: 0,
-
+        
         // unitPrice: '1000',
-        itemName: "베이징상품",
+        itemName: "",
         quantity: 1,
         taxFreeAmount: 3000,
         date: '',

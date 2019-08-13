@@ -88,7 +88,7 @@ width: 100%;
   font-size: 1vw;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* white-space: nowrap;  */
+  white-space: wrap; 
 }
 
 .gs-mypage-service-content-date {
@@ -316,8 +316,8 @@ width: 100%;
 
 .reservation-collapsible-box:hover {
   cursor: pointer;
-  background: rgba(0, 171, 132, 0.74);
-  color: white;
+  background: rgba(0, 0, 0, 0.2);
+  /* color: white; */
   font-weight: 1000;
 }
 
@@ -529,14 +529,37 @@ width: 100%;
 }
 
 .reserve-chat {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   position: relative;
   top: 0;
   right: 0;
   z-index: 99999999;
+  background:rgba(30, 144, 255, 1) !important;
+  color: #fff;
+  margin-top: 5px;
+  padding: 0 0;
+  display: flex;
+  justify-content: flex-start;
+
+}
+
+.reverse-chat-icon {
+  padding: 10px 0 !important;
+  display: flex;
+  justify-content: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.reserve-chat-icon:hover {
+  background:rgba(30, 144, 255, 0.7) !important;
 }
 
 .reserve-chat:hover {
-  color: blue;
+  background:rgba(30, 144, 255, 0.7) !important;
 }
 
 .gs-ALL-service-show-cancel {
