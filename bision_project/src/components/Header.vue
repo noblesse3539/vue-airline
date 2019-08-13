@@ -1,8 +1,9 @@
 <template>
     <div id="navbox" v-if="getIsHeaderOpen">
         <div class="nav-left"><form action="" method="get"></form>
-                <a href="/" exact class="nav-left-title">
-                    BisionTour
+                <a href="/" exact class="nav-left-title" style="display: flex; align-items: center;">
+                <img style="width: 40%; height: auto; margin-right: 5px;" src="../../public/bisiontour.svg" alt="">
+                BisionTour
                 </a>
             <div class="nav-left-toggle">
                 <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
