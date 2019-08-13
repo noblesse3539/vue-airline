@@ -128,6 +128,7 @@ margin-right: .4rem;
   margin-bottom: 3.5rem;
 }
 .FlightSearchList__Header__date{
+  wdith: max-content;
   margin-left: 5rem;
   font-size: 1.6rem;
 }
