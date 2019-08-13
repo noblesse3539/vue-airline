@@ -13,13 +13,11 @@
             <span>
               {{one.user? one.user.email : ''}}
             </span><br />
-            <!-- <span>
-              메세찌
-            </span> -->
+            <span v-html="lastChatMsg(one._id)">
+            </span>
           </div>
-          <!-- <div class="chatroom-latest-time">
-            18:00
-          </div> -->
+          <div class="chatroom-latest-time" v-html="lastChatTime(one._id)">
+          </div>
         </div>
         <div @click="join(one._id)" v-else class="chatroom-box">
           <div class="chatroom-userimage">
@@ -32,13 +30,11 @@
             <span>
               {{one.guide? one.guide.email : ''}}
             </span><br />
-            <!-- <span>
-              메세지
-            </span> -->
+            <span v-html="lastChatMsg(one._id)">
+            </span>
           </div>
-          <!-- <div class="chatroom-latest-time">
-            18:00
-          </div> -->
+          <div class="chatroom-latest-time" v-html="lastChatTime(one._id)">
+          </div>
         </div>
       </v-flex>
 
@@ -146,6 +142,19 @@ export default {
             })
           }
         },
+        lastChatMsg(lcMsg){
+          this.$http.get('/api/chat/lastChatMsg/'+lcMsg)
+          .then(res=>{
+            console.log('lcMsg',res.data);
+            return res.data
+          })
+        },
+        lastChatTime(lcTime){
+          this.$http.get('/api/chat/lastChatTime/'+lcTime)
+          .then(res=>{
+            return res.data
+          })
+        },
         // getLocalTimezone(msg){
         //   let year=msg.created_at.substring(0,4)
         //   let month=msg.created_at.substring(5,7)
@@ -215,7 +224,7 @@ export default {
               let chatListIds=[]
               let addListIds=[];
               for (let i = 0; i < this.chatList.length; i++) {
-                chatListIds.push(this.chatList[0]._id)
+                chatListIds.push(this.chatList[i]._id)
               }
               for(let i=0; i<res.data.length;i++){
                 if(chatListIds.indexOf(res.data[i]._id)<0){
