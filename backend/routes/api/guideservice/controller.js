@@ -284,7 +284,7 @@ exports.cancelGuideService = (req, res) => {
   .then(gs => {
     if(gs.canceled) return res.status(412).json({success:false, msg:'이미 상품이 취소되어 있습니다.'})
     gs.canceled = true
-    // gs.save()
+    gs.save()
     return gs
   })
   .then(gs => { 
@@ -297,7 +297,7 @@ exports.cancelGuideService = (req, res) => {
         const gsid = await payments[i].getGSId()
         if (gsid && gsid.equals(guideServiceId)) {
           payments[i].status = "결제취소"
-          // payments[i].save()
+          payments[i].save()
           list.push({user: payments[i].user, payment:payments[i]})
         }
       }
