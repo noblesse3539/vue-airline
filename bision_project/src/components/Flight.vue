@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="border-radius: 20px; background-color: white;">
+  <div class="container" style="border-radius: 20px; background-color: white; box-shadow: 6px 4px 10px lightgray;">
     <div class="wrapper">
       <div>
         <div style="height: 50%">

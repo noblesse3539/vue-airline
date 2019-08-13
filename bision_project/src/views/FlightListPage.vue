@@ -2,22 +2,22 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="width: 100%; background-color: rgba(0, 171, 132, 1); color: white; height: 150px; padding: 2.5rem 5rem; margin-right:30px; border-radius: 0 0 15px 0;">
+      <div style="width: 100%; background-color: rgba(0, 171, 132, 1); color: white; height: 170px; padding: 2.5rem 15rem; margin-bottom: 3rem;">
         <div style="display:grid; grid-template-columns: 50% 34% 16%;">
           <div>
-            <div class="container" style="font-size: 20px; height: 50%; padding-top: 10px; padding-bottom: 0;">
+            <div class="container" style="font-size: 1.8rem; height: 50%; padding-top: 10px; padding-bottom: .5rem;">
               {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
             </div>
-            <div class="container" style="height: 50%; padding-top: 4px;">
+            <div class="container" style="font-size: 1.2rem; height: 50%; padding-top: 4px;">
               {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
             </div>
           </div>
-          <div style="font-size: 15px; padding-top: 4%;">
+          <div style="font-size: 1.4rem; padding-top: 1.7rem; padding-left: 3rem;">
             <div style="width: 50%; display: inline-block;">
               <div>가는 날</div>
               <div>{{this.$route.query.leavingDate}}</div>
             </div>
-            <div style="width: 50%; display: inline-block;">
+            <div v-if="this.$route.query.comingDate" style="width: 50%; display: inline-block;">
               <div>오는 날</div>
               <div>{{this.$route.query.comingDate}}</div>
             </div>
@@ -44,7 +44,7 @@
         <div style="margin: 0;" m-0 class="container sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
           <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: #45CE30;">
+            <div style="font-size: 25px !important; color: rgb(0, 171, 132);">
               <i class="fas fa-plane-arrival"></i> 경유
             </div>
             <!-- <hr style="width: 220px"> -->
@@ -54,7 +54,7 @@
           </div>
           <!-- 시간대별 검색 슬라이더 -->
           <div class="container" style="width: 220px; padding: 0px; margin-left: 10%;">
-            <div style="font-size: 25px; color: #45CE30; padding-bottom: 10px;">
+            <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px;">
               <i class="far fa-clock"></i> 시간대별 검색
             </div>
             <!-- <hr style="width: 220px; margin-bottom: 20px;"> -->
@@ -92,7 +92,7 @@
               </template>
             </v-range-slider>
 
-            <div style="font-size: 25px; color: #45CE30; padding-bottom: 10px; padding-top: 20px;">
+            <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 20px;">
               <i class="fas fa-history"></i> 총 소요시간
             </div>
             <!-- <hr style="width: 220px; margin-bottom: 20px;"> -->
@@ -111,7 +111,7 @@
           </div>
           <!-- 항공사별 체크 박스 -->
           <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: #45CE30; padding-bottom: 10px; padding-top: 15px;">
+            <div style="font-size: 25px !important; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 15px;">
               <i class="far fa-paper-plane"></i> 항공사
             </div>
             <!-- <hr style="width: 220px"> -->
@@ -149,7 +149,7 @@
                 <div>
                   <v-menu offset-y style="display: inline-block">
                     <template v-slot:activator="{ on }" >
-                      <v-btn color="#45CE30" dark v-on="on" @click="menuicon=!menuicon">
+                      <v-btn color="rgb(0, 171, 132)" dark v-on="on" @click="menuicon=!menuicon">
                         {{ thisSortType }}
                         <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
                         <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
@@ -199,11 +199,17 @@
           </div>
         </div>
         <div class="sidegrid-a sidegrid-b" style="height: 100px; width: 100%; margin-top: 50px;">
+          <div class="adSection__Title"><span class="decoBision">Bision</span>을 통해 <br>현지 가이드를 만나보세요</div>
           <div v-if="GSload">
-            <div  @click="goToDetail(guideService.id)" v-for="guideService in guideServices">
-              <div>{{guideService.title}}</div>
-              <img :src="guideService.mainImg" style="width: 90%">
-              <div>{{guideService.desc}}</div>
+            <div  class="adGuideServices"  @click="goToDetail(guideService.id)" v-for="(guideService, i) in guideServices"
+            :style="`background-image: url(${guideService.mainImg});`" >
+              <div class="adGuideServices__textBox">
+                <div class="adGuideServices__Title"> &nbsp; {{guideService.title}}</div>
+                <div class="adGuideServices__detail">
+                  <div class="adGuideServices__Desc">{{guideService.desc}}</div>
+                  <div class="adGuideServices__Price">{{guideService.price}}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -214,6 +220,7 @@
     </div>
 </template>
 <script>
+import './FlightListPage.css'
 import qs from 'qs'
 import Flight from '../components/Flight'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
@@ -324,10 +331,15 @@ export default {
                 'id' : res.data.guideservices[i]._id,
                 'title' : res.data.guideservices[i].title,
                 'desc' : res.data.guideservices[i].desc,
+                'price' : res.data.guideservices[i].options[0].costType + ' ' + res.data.guideservices[i].options[0].adult.cost
 
               })
             }
           }
+              //이미지 등록
+
+
+
           console.log("가이드서비스", this.guideServices)
           this.GSload = true
           console.log("여기", this.GSload)
@@ -1009,32 +1021,3 @@ export default {
     },
 }
 </script>
-
-
-
-<style>
-  @media (max-width: 980px) {
-  .maingrid-a {
-    display: grid;
-    grid-template-columns: 100%;
-  }
-  .sidegrid-a {
-    display: none;
-  }
-  }
-  @media (min-width: 981px) and (max-width: 1200px) {
-  .maingrid-b {
-    display: grid;
-    grid-template-columns: 25% 75%;
-  }
-  .sidegrid-b {
-    display: none;
-  }
-  }
-  @media only screen and (min-width: 1200px) {
-  .maingrid-c {
-    display: grid;
-    grid-template-columns: 25% 55% 20%;
-  }
-  }
-</style>
