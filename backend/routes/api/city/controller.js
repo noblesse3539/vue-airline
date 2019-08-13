@@ -20,15 +20,19 @@ exports.cityListByNation = (req, res) => {
     Nation.findOne({nation_kor:req.params.nationKor},(err,nat)=>{
       if(err) res.status(500).json(err)
       if(nat){
-        City.find({nation:nat._id},(err,cities)=>{
-           if(err) res.status(500).json(err)
+        City.find({nation:nat._id})
+        .sort('city_kor')
+        .then(cities=>{
            if(cities){
              return res.status(200).json(cities)
            }
         })
+        .catch(err=>{
+          res.json(err)
+        })
       }
     })
-}
+  }
 
 exports.createCities = (req, res) => {
     Airport.find({})
