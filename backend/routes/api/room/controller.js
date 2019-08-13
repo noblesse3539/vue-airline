@@ -67,3 +67,14 @@ exports.findRoomByUser = (req, res) => {
     return res.json(err)
   })
 }
+
+exports.findRoomOne = (req, res) => {
+  Room.findOne({user:req.params.user,guide:req.params.guide})
+  .then((room)=>{
+    return res.json(room)
+  })
+  .catch((err)=>{
+    return res.json(err)
+  })
+}
+
