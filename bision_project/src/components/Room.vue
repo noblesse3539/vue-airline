@@ -2,9 +2,9 @@
   <v-container class="room-container">
     <v-layout v-if="getIsLoggedIn" class="chat">
       <v-flex xs12>
-        <div @click="join(one._id)" v-if="getIsGuide" v-for="(one, index) in chatList" class="chatroom-box">
+        <div @click="join(one._id)" v-if="getIsGuide" v-for="(one, index) in chatList" :key="index" class="chatroom-box">
           <div class="chatroom-userimage">
-              <v-img fluid :src="one.user? one.user.profileImageUrl : ''" aspect-ratio="1" alt="profile Img"/>
+              <v-img fluid :src="one.user.profileImageUrl" aspect-ratio="1" alt="profile Img"/>
           </div>
           <div class="chatroom-userinfo">
             <span>
@@ -38,7 +38,7 @@
         </div>
       </v-flex>
 
-      <v-flex v-if="chatList ? chatList.length===0 : false" xs12>
+      <v-flex v-if="chatList ? chatList.length===0 : false" xs12 class="no-chat-room">
         <div v-if="getIsGuide">
           채팅방이 존재하지 않습니다. 유저들과 채팅기능을 이용해보세요.
         </div>
@@ -128,6 +128,7 @@ export default {
             this.$http.get('/api/chat/roomListByGuide/'+this.getuserId)
             .then(res=>{
               this.chatList=res.data;
+              console.log("what sithis", res)
             })
             .then(res=>{
               this.getRoomListAdd()

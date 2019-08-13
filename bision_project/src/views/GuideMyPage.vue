@@ -122,8 +122,12 @@
                       </button>
                       <div :class="`dialog-delete-${idx} dialog-delete`">
                         <div class="dialog-card">
-                          <h3>정말 삭제하시겠어요?</h3>
+                          <h3>정말 종료하시겠어요?</h3>
                           <p style="margin-top: 10px; font-size: 1vw;">상품명: {{service.title}}</p>
+                          <div class="agree-box">
+                            <button @click="deleteGuideServiceForReal(service, idx, true)" class="agree-btn agree-terminate">삭제하기</button>
+                            <button @click="deleteGuideServiceForReal(service, idx, false)" class="agree-btn">취소하기</button>
+                          </div>
                         </div>
                       </div>
                       <button
@@ -339,7 +343,7 @@
                 </div> -->
                 <div :class="`reserve-user-face-${idx} reserve-user-face`">
                   <!-- {{payment}} -->
-                  <img :class="`reserve-user-face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
+                  <img :class="`reserve-user- face-img-${idx} reserve-user-face-img`" :src="payment.userInfo ? payment.userInfo.profileImageUrl : require('../assets/guideProfile.png') " alt="wegweg">
                 </div>
                 <div class="reserve-user-name">
                   {{payment.userInfo.nickname}}<br>
@@ -637,12 +641,28 @@ export default {
       console.log(dialogDelete)
 
       this.dialog = true
-      this.$http.put(`/api/guideservice/cancel/${service._id}`)
+      // this.$http.put(`/api/guideservice/cancel/${service._id}`)
+      //   .then( res => {
+      //     console.log("상품 삭제완료", res.data)
+      //     alert("삭제되었습니다!")
+      //     this.getGuideService()
+      //   })
+    },
+    deleteGuideServiceForReal(service, idx, flag) {
+
+      if (flag == true) {
+        this.$http.put(`/api/guideservice/cancel/${service._id}`)
         .then( res => {
           console.log("상품 삭제완료", res.data)
           alert("삭제되었습니다!")
           this.getGuideService()
+          const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)
+          dialogDelete.style.display = "none"
         })
+      } else {
+        const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)
+        dialogDelete.style.display = "none"
+      }
     },
 
     // 가이드 결제 내역

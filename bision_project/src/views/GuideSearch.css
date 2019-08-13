@@ -252,5 +252,6 @@
 }
 
 .guide-tooltip {
-    top: 65% !important;
+    /* position: relative !important; */
+    top: 63% !important;
 }

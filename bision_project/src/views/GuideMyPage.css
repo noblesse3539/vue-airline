@@ -87,8 +87,8 @@ width: 100%;
   color: white;
   font-size: 1vw;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  white-space: wrap; 
 }
 
 .gs-mypage-service-content-date {
@@ -519,13 +519,17 @@ width: 100%;
 .dialog-card {
   padding: 24px;
   width: 500px;
-  height: 300px;
+  height: 200px;
   background: white;
   color: black;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: space-between;
 }
 
 .reserve-chat {
@@ -572,4 +576,26 @@ width: 100%;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+.agree-box {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.agree-btn {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 10px 20px;
+  background: grey;
+  margin-left: 10px;
+  color: white;
+  font-size: 1vw;
+  font-weight: 500;
+}
+
+.agree-terminate {
+  background: rgb(255, 0, 128);
 }
