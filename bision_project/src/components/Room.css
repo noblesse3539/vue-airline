@@ -195,3 +195,9 @@
   right: 0;
   font-size: 1.25vw;
 }
+
+.no-chat-room {
+  display: flex !important;
+  justify-content: center !important;
+  
+}

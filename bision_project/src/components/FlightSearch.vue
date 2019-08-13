@@ -25,12 +25,8 @@
                                     @keydown.enter="onEnter('departure')"
                                 >
                                 <!-- 검색 input 값 없을 시 보여주기 -->
-                                <div class="guide-input-tooltip">
+                                <div class="guide-input-tooltip flight-input-tooltip">
                                     <h3>출발지를 입력해주세요.</h3>
-                                    <!-- <ul>
-                                        <li>Aliquam ac odio ut est</li>
-                                        <li>Cras porttitor orci</li>
-                                    </ul> -->
                                     <i></i>
                                 </div>
                                 <div class="searchListWrapper" v-show="isOpen">

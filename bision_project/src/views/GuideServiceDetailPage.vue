@@ -229,7 +229,7 @@
                   <div style="color: #dcdcdc;">(성인 기준)</div>
                 </div>
               </div>
-
+        
               <!-- <div :class="GS-individual-option-loadmoreBtn `'GS-individual-option-loadmoreBtn-'idx`"> -->
               <div :class="'GS-individual-option-loadmoreBtn-' + idx" class="GS-individual-option-loadmoreBtn">
                 <button

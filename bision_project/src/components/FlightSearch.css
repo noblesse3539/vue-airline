@@ -1,7 +1,7 @@
 
 
 .flight-search {
-    padding-top: 110px;
+    /* padding-top: 110px; */
     height: 100%;
     overflow: hidden;
 }
@@ -441,4 +441,11 @@ input {
 
 .flight-search-submitBtn {
     font-size: 2vw !important;
+}
+
+.flight-input-tooltip {
+    position: relative !important;
+    /* top: 65% !important; */
+    margin-top: 10px;
+    left: 50% !important;
 }
