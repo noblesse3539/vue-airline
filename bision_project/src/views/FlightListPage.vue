@@ -32,95 +32,110 @@
           <FlightSearchPannel></FlightSearchPannel>
         </div> -->
       <!-- </div> -->
-      <div class="maingrid-a maingrid-b maingrid-c" style="">
-        <div style="margin: 0;" m-0 class="container sidegrid-a">
+
+      <div class="FlightSearchList__body maingrid-a maingrid-b maingrid-c">
+        <div class="sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
-          <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: rgb(0, 171, 132);">
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="fas fa-plane-arrival"></i> 경유
             </div>
-            <!-- <hr style="width: 220px"> -->
-            <v-checkbox v-model="selected" label="직항" value="0" @change="updateResult"></v-checkbox>
-            <v-checkbox v-model="selected" label="1회 경유" value="1" @change="updateResult"></v-checkbox>
-            <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="updateResult"></v-checkbox>
+            <div class="flightList__chkBox">
+              <v-checkbox v-model="selected" label="직항" value="0" @change="updateResult"></v-checkbox>
+              <v-checkbox v-model="selected" label="1회 경유" value="1" @change="updateResult"></v-checkbox>
+              <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="updateResult"></v-checkbox>
+            </div>
           </div>
+
+          <div class="sidegrid-a__divider"></div>
+
           <!-- 시간대별 검색 슬라이더 -->
-          <div class="container" style="width: 220px; padding: 0px; margin-left: 10%;">
-            <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px;">
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="far fa-clock"></i> 시간대별 검색
             </div>
             <!-- <hr style="width: 220px; margin-bottom: 20px;"> -->
-            <span style="display: block; font-size: 17px;">가는 날 출발시간</span>
-            <span>{{outboundDepartStartTime}} - </span>
-            <span>{{outboundDepartEndTime}}</span>
-            <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="outrange" @change="onChange($event)">
-              <template>
-                <v-text-field v-model="outrange[0]"  class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template>
-                <v-text-field v-model="outrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template v-slot:thumb-label="props">
-                &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
-                &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
-                <!-- <span>&nbsp&nbsp&nbsp{{ season(props.value) }}</span>
-                <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
-              </template>
-            </v-range-slider>
+            <div class="sidegrid-a__box__time">
+              <span style="display: block; font-size: 17px;">가는 날 출발시간</span>
+              <span>{{outboundDepartStartTime}} - </span>
+              <span>{{outboundDepartEndTime}}</span>
+              <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="outrange" @change="onChange($event)">
+                <template>
+                  <v-text-field v-model="outrange[0]" single-line type="number"></v-text-field>
+                </template>
+                <template>
+                  <v-text-field v-model="outrange[1]" single-line type="number"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+                  <!-- <span>&nbsp&nbsp&nbsp{{ season(props.value) }}</span>
+                  <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
+                </template>
+              </v-range-slider>
+              <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
+              <span>{{inboundDepartStartTime}} - </span>
+              <span>{{inboundDepartEndTime}}</span>
+              <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
+                <template>
+                  <v-text-field v-model="inrange[0]" single-line type="number"></v-text-field>
+                </template>
+                <template>
+                  <v-text-field v-model="inrange[1]" single-line type="number"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+                </template>
+              </v-range-slider>
+            </div>
+          </div>
 
-            <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
-            <span>{{inboundDepartStartTime}} - </span>
-            <span>{{inboundDepartEndTime}}</span>
-            <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
-              <template>
-                <v-text-field v-model="inrange[0]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template>
-                <v-text-field v-model="inrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template v-slot:thumb-label="props">
-                &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
-                &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
-              </template>
-            </v-range-slider>
+          <div class="sidegrid-a__divider"></div>
 
-            <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 20px;">
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="fas fa-history"></i> 총 소요시간
             </div>
             <!-- <hr style="width: 220px; margin-bottom: 20px;"> -->
             <!-- <span style="display: block; font-size: 17px;">총 소요시간</span> -->
-            <span>{{transferedMinDuration}} - </span>
-            <span>{{transferedDuration}}</span>
-            <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="updateResult($event)">
-              <template>
-                <v-text-field v-model="duration" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template v-slot:thumb-label="props">
-                &nbsp&nbsp{{ durationLabelHour(props.value) }}
-                &nbsp&nbsp&nbsp{{ durationLabelMinute(props.value) }}
-              </template>
-            </v-slider>
+            <div class="sidegrid-a__box__time">
+              <span>{{transferedMinDuration}} - </span>
+              <span>{{transferedDuration}}</span>
+              <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="updateResult($event)">
+                <template>
+                  <v-text-field v-model="duration" hide-details single-line type="number"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp{{ durationLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ durationLabelMinute(props.value) }}
+                </template>
+              </v-slider>
+            </div>
           </div>
+
           <!-- 항공사별 체크 박스 -->
-          <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 15px;">
+          <div class="sidegrid-a__divider"></div>
+          
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="far fa-paper-plane"></i> 항공사
             </div>
             <!-- <hr style="width: 220px"> -->
-            <div v-for="i in flightselectedfixed.length" :key="i">
+            <div class="flightList__chkBox" v-for="i in flightselectedfixed.length" :key="i">
               <v-checkbox v-model="flightselectedName" :label="flightselectedfixed[i-1]" :value="flightselectedfixed[i-1]" @change="updateResult()"></v-checkbox>
             </div>
           </div>
         </div>
-        <!-- 항공권 리스트 -->
 
-        <div class="container" style="margin-top: 20px; padding-left: 0px; padding-right: 3px; max-width: 700px;">
-          <div class="container" v-if="error">
+        <!-- 항공권 리스트 -->
+        <div class="flightListGrid">
+          <div v-if="error">
             <v-alert :value="true" type="warning">결과가 존재하지 않습니다.</v-alert>
           </div>
 
           <v-flex v-if="loading" style="width=100px; display: flex; align-items: center; ">
-            <div class="" >
+            <div>
               <!-- <img src="http://cfile221.uf.daum.net/image/256A5E4C579AD7AB18555D" alt=""> -->
               <!-- <img src="https://t1.daumcdn.net/liveboard/emoticon/kakaofriends/v3/mujiandconspecial/emot_019_x3.gif" alt=  ""> -->
               <img src="https://4.bp.blogspot.com/-pnYVXlTcmG0/WFN6xh3pGQI/AAAAAAAACKY/lRtxZ-YDD-MbQ0Mox3xz60KwMRiwZnNLgCLcB/s200/0002.gif" alt="">
@@ -193,7 +208,8 @@
               <v-btn color="rgb(0, 171, 132)" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2 ">fa-plus</v-icon> 더 보기</v-btn>
           </div>
         </div>
-        <div class="sidegrid-a sidegrid-b" style="height: 100px; width: 100%; margin-top: 50px;">
+
+        <div class="sidegrid-b">
           <div class="adSection__Title"><span class="decoBision">Bision</span>을 통해 <br>현지 가이드를 만나보세요</div>
           <div v-if="GSload">
             <div  class="adGuideServices"  @click="goToDetail(guideService.id)" v-for="(guideService, i) in guideServices"

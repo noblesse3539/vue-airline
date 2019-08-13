@@ -3,28 +3,28 @@
   display: grid;
   grid-template-columns: 100%;
 }
-/* .sidegrid-a {
+.sidegrid-a {
   display: none;
-  } */
+  }
 }
 @media (min-width: 981px) and (max-width: 1200px) {
 .maingrid-b {
   display: grid;
   grid-template-columns: 25% 75%;
 }
-/* .sidegrid-b {
+.sidegrid-b {
   display: none;
-  } */
+  }
 }
 @media only screen and (min-width: 1200px) {
 .maingrid-c {
   display: grid;
-  grid-template-columns: 25% 50% 25%;
+  grid-template-columns: 22% 50% 28%;
   }
 }
 .adGuideServices{
   cursor: pointer;
-  margin: 1.5rem  4rem 0rem 1rem;
+  margin: 1.5rem  0 0rem 1rem;
   right: 10rem;
   background: no-repeat center;
   background-size: cover;
@@ -99,13 +99,11 @@
   background-color: rgb(233, 22, 64);
 }
 .adSection__Title{
-
-  font-size: 1.6rem;
+  /* text-align: center; */
+  align-self: center;
+  font-size: 1.7rem;
   font-weight: 550;
-  margin-top: 1rem;
-  /* border: solid 1.8px lightgrey; */
-  width: max-content;
-  padding: 2rem 2rem;
+  padding: 1.3rem 2.5rem;
   padding-bottom: 3rem;
   border-radius: 1rem;
   margin-left: .8rem;
@@ -117,7 +115,6 @@ font-size: 4.3rem;
 background: linear-gradient(to right,rgb(0, 171, 132),  #8066e7, #ff35ff);
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
-/* color: rgb(51, 51, 204); */
 margin-right: .4rem;
 }
 .FlightSearchList__Header {
@@ -128,7 +125,7 @@ margin-right: .4rem;
   align-items: center;
   padding-left: 10rem;
   font-size: 1.3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
 }
 .FlightSearchList__Header__date{
   margin-left: 5rem;
@@ -138,4 +135,51 @@ margin-right: .4rem;
   font-size: 2.4rem;
   font-weight: 550;
   margin-bottom: .8rem;
+}
+.FlightSearchList__body {
+  margin: 0 3rem;
+}
+.sidegrid-a{
+  margin-top: 1rem;
+  margin-right: 2rem;
+  background-color: white;
+  box-shadow: 3px 3px 5px #e5e5e5;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+
+  /* padding-right: 2rem; */
+}
+.sidegrid-a__box {
+  padding: 2rem;
+}
+.sidegrid-a__divider{
+  height: 2px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+  width: 80%;
+  opacity: .2;
+  /* background-color: grey; */
+  background-color: rgb(0, 171, 132);
+  border-radius: 1rem;
+}
+.sidegrid-a__box__title {
+  font-size: 25px !important;
+  margin-bottom: 3rem;
+  color: rgb(0, 171, 132);
+}
+.flightList__chkBox {
+  padding-left: 2rem;
+}
+.flightList__chkBox * {
+  margin: 0;
+  padding: 0;
+  align-self: center;
+  margin-right: 6px;
+}
+.flightListGrid {
+  margin-right: 2rem;
+}
+.sidegrid-a__box__time {
+  padding: 1rem;
 }
