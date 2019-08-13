@@ -445,12 +445,12 @@
             this.userId = res.data.userInfo._id
 
             const today = new Date().toISOString().slice(0, 10)
-
+            console.log(res.data)
             for(var idx in res.data.paymentRecords) {
 
               // 결제 취소 항목 제외하고 보여주기
               if (res.data.paymentRecords[idx].status != '결제취소') {
-
+                
                 if(res.data.paymentRecords[idx].service.date >= today){
                   this.currentGuideServices.push({
                     'guideServiceId' : res.data.options[idx][0].guideservice,

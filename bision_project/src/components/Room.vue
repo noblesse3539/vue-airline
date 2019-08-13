@@ -201,6 +201,7 @@ export default {
         //   return Time
         // },
         getRoomListAdd(){
+          
           let url=''
           if(this.getIsGuide){
             url='/api/room/findByGuide/'
@@ -231,6 +232,7 @@ export default {
               }
             }
           })
+          console.log('roomAdd',this.chatList)
         }
     },
     computed: {

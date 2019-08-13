@@ -32,13 +32,14 @@ const mongoose = require('mongoose')
 }
 
 exports.roomListByUser = (req, res) => {
-    Chat.find({user:{$in:req.params.user}})
+    console.log(req.params.user)
+    Chat.find({user:req.params.user})
     .sort("-created_at")
     .distinct('room',(err,roomIds)=>{
       Room.find({'_id':{$in:roomIds}},(err,rooms)=>{
         res.json(rooms)
       })
-      .populate('guide')
+      .populate('user')
     })
     .catch(err=>{
       res.json(err)
@@ -46,7 +47,7 @@ exports.roomListByUser = (req, res) => {
 }
 
 exports.roomListByGuide = (req, res) => {
-  Chat.find({guide:{$in:req.params.guide}})
+  Chat.find({guide:req.params.guide})
   .sort("-created_at")
   .distinct('room',(err,roomIds)=>{
     Room.find({'_id':{$in:roomIds}},(err,rooms)=>{
