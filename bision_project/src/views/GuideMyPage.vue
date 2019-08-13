@@ -82,7 +82,7 @@
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
             <h1 class="gs-guidemypage-section-divider">현재 진행중인 상품</h1>
-            <v-card flat v-for="(service, idx) in guideServices" v-if="service.canceled == false" :key="idx">
+            <v-card flat v-for="(service, idx) in guideServices" v-if="service.canceled ? !service.canceled : true" :key="idx">
               <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
               <v-layout mb-4 class="gs-mypage-service-box"
 
