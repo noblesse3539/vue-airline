@@ -35,7 +35,9 @@ router.post('/real/:id', (req, res) => {
     const id = req.params.id
     const service = req.body
     Option.findById(service.options[0])
+    .populate('guideservice')
     .then( option => {
+        if(option.guideservice.canceled) return res.status(406).json({success:false, msg:'취소된 상품은 결제할 수 없습니다. ^^'})
         // console.log(option.guideservice)
         GuideService.findById(option.guideservice)
         .then( gs => {
