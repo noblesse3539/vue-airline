@@ -1,7 +1,9 @@
 
 
 .flight-search {
+    padding-top: 110px;
     height: 100%;
+    overflow: hidden;
 }
 
 .flight-search-bg {
@@ -27,7 +29,6 @@
 }
 
 .flight-search-pannel {
-    display: flex;
     flex-direction: column;
     margin-left: auto;
     margin-right: auto;
@@ -38,9 +39,10 @@
     color: white;
     font-weight: bold;
     vertical-align: middle;
+    margin-top: 220px;
     display: flex !important;
     /* align-items: center !important; */
-    justify-content: center !important;
+    justify-content: flex-start !important;
     /* background-color: rgba(255, 0, 2, 0.1); */
 }
 
