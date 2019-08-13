@@ -1,6 +1,5 @@
 <template>
   <div class="guidepage" v-if="getIsLoggedIn">
-
     <div class="gs-profile-hero-curtain"></div>
     <div class="gs-profile-hero">
       <!-- Profile 영역 -->
@@ -8,7 +7,7 @@
 
         <!-- ProfileImg -->
         <v-flex xs3 mr-5>
-
+          
           <!-- if: 본인 아닐 때 -->
           <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
 
@@ -83,7 +82,7 @@
         <v-tab-item key="Now" color="yellow">
           <v-flex xs12 >
             <h1 class="gs-guidemypage-section-divider">현재 진행중인 상품</h1>
-            <v-card flat v-for="(service, idx) in guideServices" :key="idx">
+            <v-card flat v-for="(service, idx) in guideServices" v-if="service.canceled == false" :key="idx">
               <!-- <v-card-title><h2>Plan Title</h2></v-card-title> -->
               <v-layout mb-4 class="gs-mypage-service-box"
 
@@ -113,14 +112,14 @@
                       </div>
                     </div>
                     <div class="gs-mypage-service-content-bottom-reserve">
-                      <!-- <button
+                      <button
                         v-if="getUserId == guideId"
                         class="gs-mypage-service-content-bottom-reserve-btn gs-btn-delete"
                         style="margin-right: 10px;"
                         @click="deleteGuideService(service, idx)"
                       >
                         삭제하기
-                      </button> -->
+                      </button>
                       <div :class="`dialog-delete-${idx} dialog-delete`">
                         <div class="dialog-card">
                           <h3>정말 삭제하시겠어요?</h3>
@@ -203,6 +202,9 @@
                 </div>
                 <div class="gs-ALL-service-card-title-title">
                   {{service.fromDate}}~{{service.toDate}}
+                </div>
+                <div v-if="service.canceled == true" class="gs-ALL-service-show-cancel">
+                  종료된 상품입니다.
                 </div>
               </div>
             </div>
@@ -346,7 +348,7 @@
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
-                  결제 취소 날짜: {{payment.payment.created_at.slice(0, 10)}}
+                  결제 취소 날짜: {{payment.payment.updated_at ? payment.payment.updated_at.slice(0, 10) : payment.payment.created_at.slice(0, 10) }}
                 </div>
                 <div class="reserve-user-pick-price">
                   ₩ {{separateDigit(payment.payment.service.totalAmount)}}
@@ -627,12 +629,13 @@ export default {
       dialogDelete.style.display = "flex"
       console.log(dialogDelete)
 
-      // this.dialog = true
-      // this.$http.delete(`/api/guideservice/delete/${service._id}`)
-      //   .then( res => {
-      //     alert("삭제되었습니다!")
-      //     this.getGuideService()
-      //   })
+      this.dialog = true
+      this.$http.put(`/api/guideservice/cancel/${service._id}`)
+        .then( res => {
+          console.log("상품 삭제완료", res.data)
+          alert("삭제되었습니다!")
+          this.getGuideService()
+        })
     },
 
     // 가이드 결제 내역
@@ -662,25 +665,25 @@ export default {
 
           // 3자리 이상 수 일시에 쉼표로 구분해주기
           let newProfit = ''
-          if (this.profit.toString().length >= 3) {
-            const oldProfit = this.profit.toString()
+          // if (this.profit.toString().length >= 3) {
+          //   const oldProfit = this.profit.toString()
 
-            for (let i = 0; i < oldProfit.length; i++) {
+          //   for (let i = 0; i < oldProfit.length; i++) {
 
-              newProfit += oldProfit[oldProfit.length - 1 - i]
-              if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
-                newProfit += ','
-              }
+          //     newProfit += oldProfit[oldProfit.length - 1 - i]
+          //     if ( (i +1 ) % 3 == 0 && i != oldProfit.length - 1) {
+          //       newProfit += ','
+          //     }
 
-            }
-          }
-          let reversedProfit = newProfit.split("").reverse().join("")
-          this.profit = reversedProfi
+          //   }
+          // }
+          // let reversedProfit = newProfit.split("").reverse().join("")
+          // this.profit = reversedProfit
 
           return res.data
         })
         .then( (data) => {
-
+          console.log("userInfoooo", data)
           data.payments.forEach( payment => {
             const temp   = {}
             const userId = payment.user
@@ -736,6 +739,9 @@ export default {
     cancelPayment(serviceId) {
       this.$http.put(`/api/paymentstore/realcancel/${serviceId}`)
         .then( res => {
+          location.reload()
+          // this.getPaymentsByGuide(this.guideId)
+          // this.getGuideCancel(this.guideId)
         })
     },
 
@@ -822,7 +828,9 @@ export default {
 
     window.addEventListener('click', this.hideComponent)
   },
-  updaetd() {
+  updated() {
+    // this.getPaymentsByGuide(this.guideId)
+    // this.getGuideCancel(this.guideId)
   },
 }
 </script>

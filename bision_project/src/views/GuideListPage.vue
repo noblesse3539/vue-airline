@@ -106,7 +106,7 @@
             </div>
             <div class="result-body-right">
                 <div class="result-body__result-show">
-                    <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과
+                    <span style="color: rgb(34,139,34);">{{guideServiceList.length}}</span> 개 상품 검색 결과 
                 </div>
                 <div class="result-body__result-show" v-if="searchChips.length != 0">
                   <div v-for="i in searchChips.length" :key="i">
@@ -355,6 +355,7 @@ export default {
                   .then( res => {
                     // console.log(res.data.likeUsers)
                     this.guideServiceList[index].likeUsers = res.data.likeUsers
+                    console.log(this.guideServiceList[index].likeUsers)
                   })
               })
 
