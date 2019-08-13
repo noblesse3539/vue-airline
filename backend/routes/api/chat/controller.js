@@ -29,18 +29,33 @@ const mongoose = require('mongoose')
     console.error(error);
     next(error);
   }
-};
+}
 
+exports.roomListByUser = (req, res) => {
+    console.log(req.params.user)
+    Chat.find({user:req.params.user})
+    .sort("-created_at")
+    .distinct('room',(err,roomIds)=>{
+      Room.find({'_id':{$in:roomIds}},(err,rooms)=>{
+        res.json(rooms)
+      })
+      .populate('user')
+    })
+    .catch(err=>{
+      res.json(err)
+    })
+}
 
-
-// exports.cityList = (req, res) => {
-//     City.find({})
-//     .populate('nation')
-//     .lean()
-//     .then( cities => {
-//         res.json({cities})
-//     })
-//     .catch( err => {
-//         res.json({error:err})
-//     })
-// }
+exports.roomListByGuide = (req, res) => {
+  Chat.find({guide:req.params.guide})
+  .sort("-created_at")
+  .distinct('room',(err,roomIds)=>{
+    Room.find({'_id':{$in:roomIds}},(err,rooms)=>{
+      res.json(rooms)
+    })
+    .populate('user')
+  })
+  .catch(err=>{
+    res.json(err)
+  })
+}

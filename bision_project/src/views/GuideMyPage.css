@@ -88,7 +88,7 @@ width: 100%;
   font-size: 1vw;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* white-space: nowrap;  */
+  white-space: wrap; 
 }
 
 .gs-mypage-service-content-date {
@@ -264,7 +264,7 @@ width: 100%;
 
 .gs-ALL-service-card-title:hover {
   cursor: pointer;
-  font-size: 1.5vw;
+  /* font-size: 1.5vw; */
   opacity: 0.8;
   border: 10px solid rgba(30, 144, 255, 1);
 }
@@ -288,8 +288,9 @@ width: 100%;
 .reservation-user-payment-info-box {
   display: flex;
   /* flex-direction: column; */
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
+  
 }
 
 .reservation-collapsible-box {
@@ -315,8 +316,8 @@ width: 100%;
 
 .reservation-collapsible-box:hover {
   cursor: pointer;
-  background: rgba(0, 171, 132, 0.74);
-  color: white;
+  background: rgba(0, 0, 0, 0.2);
+  /* color: white; */
   font-weight: 1000;
 }
 
@@ -381,6 +382,7 @@ width: 100%;
   height: 100%;
   overflow: hidden;
   display: flex;
+  margin: 0 20px;
   align-items: center;
 }
 
@@ -407,21 +409,27 @@ width: 100%;
 
 .reserve-user-name {
   font-size: 1vw;
+  margin: 0 20px;
+  width: 20%;
   /* font-weight: 600; */
 }
 
 .reserve-user-pick-service {
   font-size: 1vw;
+  width: 45%;
   /* font-weight: 700; */
 }
 
 .reserve-user-pick-price {
   font-size: 1vw;
   font-weight: 700;
+  position: absolute !important;
+  right: 0 !important;
+  margin-right: 10px;
 }
 
 .reservation-status-confirmed {
-  width: 5%;
+  width: 10%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -431,7 +439,7 @@ width: 100%;
 }
 
 .reservation-status-cancelled {
-  width: 5%;
+  width: 10%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -521,12 +529,47 @@ width: 100%;
 }
 
 .reserve-chat {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   position: relative;
   top: 0;
   right: 0;
   z-index: 99999999;
+  background:rgba(30, 144, 255, 1) !important;
+  color: #fff;
+  margin-top: 5px;
+  padding: 0 0;
+  display: flex;
+  justify-content: flex-start;
+
+}
+
+.reverse-chat-icon {
+  padding: 10px 0 !important;
+  display: flex;
+  justify-content: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.reserve-chat-icon:hover {
+  background:rgba(30, 144, 255, 0.7) !important;
 }
 
 .reserve-chat:hover {
-  color: blue;
+  background:rgba(30, 144, 255, 0.7) !important;
+}
+
+.gs-ALL-service-show-cancel {
+  color: white;
+  font-size: 1vw;
+  margin-top: 20px;
+  background: red;
+  padding: 5px 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
