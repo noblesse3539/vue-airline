@@ -476,10 +476,10 @@
                       <div class="Gs-service-review-top-option">옵션: {{reviews[i-1].payment.service.itemName}}</div>
                     </div>
                     <div :class="'GS-service-reivew-userReview-' + i" class="GS-service-reivew-userReview">
-                      <!-- <p>
+                      <p>
                         {{reviews[i-1].content}}
-                      </p> -->               
-                      <p style="height: 80%">
+                      </p>           
+                      <!-- <p style="height: 80%">
                         혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
                         단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
                         운이 좋아야 있을정도 그리고 되게 말할사람도 없어서 외로워요 ( 유리박물관에서
@@ -491,7 +491,7 @@
                         해주는곳에가고싶다면 미국동부여행사 치시면 엄청많이 나와요그거 추천하고요(혼자가실려면
                         일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
                         하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
-                      </p>
+                      </p> -->
                       <div class="GS-service-review-content-morebutton">                                                        
                         <button :class="`gs-service-close-${i}`" style="display: none;" @click="loadReviewMore(i)">
                           닫기 
