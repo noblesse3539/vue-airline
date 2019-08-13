@@ -11,7 +11,7 @@
         <div class="FlightSearchList__Header__date">
           <div>가는 날 <br> {{this.$route.query.leavingDate}}</div>
         </div>
-        <div class="FlightSearchList__Header__date" v-if="this.$route.query.comingDate" style="width: 50%; display: inline-block;">
+        <div class="FlightSearchList__Header__date" v-if="this.$route.query.comingDate">
           <div>오는 날 <br> {{this.$route.query.comingDate}}</div>
         </div>
       </div>

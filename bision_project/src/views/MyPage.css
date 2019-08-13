@@ -33,7 +33,7 @@
 }
 
 .user-metainfo__modifier {
-    color: rgb(128,102,231);
+    color: #ef4f91;
 }
 
 .user-line__section-divider {
@@ -50,7 +50,7 @@
 .user-metainfo__modifier:hover {
     /* text-decoration: underline; */
     cursor: pointer;
-    color: 	#ff35ff;
+    color: 	rgb(128,102,231);
     /* font-size: 2rem; */
     /* border:  */
 }
