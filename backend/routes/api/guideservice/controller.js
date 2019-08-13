@@ -305,11 +305,11 @@ exports.cancelGuideService = (req, res) => {
     })
     .then( canceledUserList => { // 결제 상태를 결제 취소로 변경
       return Promise.all(canceledUserList.map( async (info) => {
-        let room = await Room.findOne({user: info.user._id, guide:info.payment.guide})
+        let room = await Room.findOne({user: info.user._id, guide:info.payment.guide._id})
         try {
           if (!room) {
-            console.log(`userid: ${info.user._id}, guideid: ${info.payment.guide}`)
-            room = await Room.create({user: info.user, guide:info.payment.guide._id })
+            console.log(`userid: ${info.user._id}, guideid: ${info.payment.guide._id}`)
+            room = await Room.create({user: info.user._id, guide:info.payment.guide._id })
           }
           console.log(`roomId: ${room._id}`)
           const msg = `여행 상품(${info.payment.service.title})이 가이드의 사정에 의해 최소되었습니다. ${info.payment.created_at}에 요청하신 결제가 취소되었습니다.`

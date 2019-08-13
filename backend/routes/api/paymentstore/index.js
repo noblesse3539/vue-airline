@@ -5,6 +5,8 @@ const PaymentStore = require('../../../models/paymentStore')
 const mongoose = require('mongoose')
 const Option = require('../../../models/option')
 const GuideService = require('../../../models/guideservice')
+const Room = require('../../../models/room')
+const Chat = require('../../../models/chat')
 
 router.post('/tmp/:id', (req, res) => {
     const service = req.body
@@ -47,8 +49,21 @@ router.post('/real/:id', (req, res) => {
                 service:service,
                 status: '결제'
             })
-            .then( ps => {
-                res.status(200).json({success: true, ps})
+            .then( async (ps) => {
+                try {
+                    let room = await Room.findOne({user:ps.user._id, guide:ps.guide._id})
+                    if (!room) {
+                        console.log(`userid: ${ps.user._id}, guideid: ${ps.guide._id}`)
+                        room = await Room.create({user: ps.user._id, guide: ps.guide._id })
+                    }
+                    console.log(`roomId: ${room._id}`)
+                    const msg = `(${ps.service.title}) 여행상품을 이용해주셔서 감사합니다. ${ps.created_at}에 결제가 완료되었습니다.`
+                    const chat = await Chat.create({room: room._id,  guide: ps.guide._id, chat: msg})
+                    res.status(200).json({success: true, sendNoti:true}) 
+                } catch(err) {
+                    console.log(err)
+                    res.status(200).json({success: true, sendNoti:false})
+                }
             })
             .catch( err => {
                 console.log(err)
