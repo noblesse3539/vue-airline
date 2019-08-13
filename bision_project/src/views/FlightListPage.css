@@ -141,6 +141,7 @@ margin-right: .4rem;
   margin: 0 3rem;
 }
 .sidegrid-a{
+  height: max-content;
   margin-top: 1rem;
   margin-right: 2rem;
   background-color: white;
