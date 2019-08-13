@@ -27,7 +27,7 @@
                 </span>
                 <router-link :to="{ path : `/room/` }" class="mypageBtn"><span class="mypageBtnInner">Chat</span></router-link>
                 <router-link :to="{ path : `/user/${getuserId}` }" class="mypageBtn"><span class="mypageBtnInner">My Page</span></router-link>
-                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
+                <div class="logoutBtn"><span @click="logout()">로그아웃</span></div>
             </span>
             <span v-if="getIsLoggedIn && getIsGuide == true">
                 <span style=
@@ -40,7 +40,7 @@
                 <router-link :to="{ path : `/room/` }" class="mypageBtn"><span class="mypageBtnInner">Chat</span></router-link>
                 <router-link :to="{ path : `/guide/${getuserId}` }"
                                     class="mypageBtn"><span class="mypageBtnInner">My Guide Page</span></router-link>
-                <router-link to="/" class="logoutBtn"><span @click="logout()">로그아웃</span></router-link>
+                <div class="logoutBtn"><span @click="logout()">로그아웃</span></div>
             </span>
 
             <div v-if="getIsLoggedIn == false" class="hvr-underline-from-center">
