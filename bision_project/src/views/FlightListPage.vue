@@ -2,26 +2,19 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="width: 100%; background-color: rgba(0, 171, 132, 1); color: white; height: 170px; padding: 2.5rem 15rem; margin-bottom: 3rem;">
-        <div style="display:grid; grid-template-columns: 50% 34% 16%;">
-          <div>
-            <div class="container" style="font-size: 1.8rem; height: 50%; padding-top: 10px; padding-bottom: .5rem;">
-              {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
-            </div>
-            <div class="container" style="font-size: 1.2rem; height: 50%; padding-top: 4px;">
-              {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
-            </div>
-          </div>
-          <div style="font-size: 1.4rem; padding-top: 1.7rem; padding-left: 3rem;">
-            <div style="width: 50%; display: inline-block;">
-              <div>가는 날</div>
-              <div>{{this.$route.query.leavingDate}}</div>
-            </div>
-            <div v-if="this.$route.query.comingDate" style="width: 50%; display: inline-block;">
-              <div>오는 날</div>
-              <div>{{this.$route.query.comingDate}}</div>
-            </div>
-          </div>
+      <div class="FlightSearchList__Header">
+        <div>
+          <div class="FlightSearchList__Header__airport">{{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})</div>
+          <div>{{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>
+             | 좌석 구분 :<span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span></div>
+        </div>
+        <div class="FlightSearchList__Header__date">
+          <div>가는 날 <br> {{this.$route.query.leavingDate}}</div>
+        </div>
+        <div class="FlightSearchList__Header__date" v-if="this.$route.query.comingDate" style="width: 50%; display: inline-block;">
+          <div>오는 날 <br> {{this.$route.query.comingDate}}</div>
+        </div>
+      </div>
 
           <!-- 다른 조건 검색 -->
           <!-- <div style="padding-top: 10px;">
@@ -35,46 +28,68 @@
               검색해보세요.
             </div>
           </div> -->
-        </div>
-        <div v-if="searchPannel">
+        <!-- <div v-if="searchPannel">
           <FlightSearchPannel></FlightSearchPannel>
-        </div>
-      </div>
-      <div class="maingrid-a maingrid-b maingrid-c" style="">
-        <div style="margin: 0;" m-0 class="container sidegrid-a">
+        </div> -->
+      <!-- </div> -->
+
+      <div class="FlightSearchList__body maingrid-a maingrid-b maingrid-c">
+        <div class="sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
-          <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: rgb(0, 171, 132);">
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="fas fa-plane-arrival"></i> 경유
             </div>
-            <!-- <hr style="width: 220px"> -->
-            <v-checkbox v-model="selected" label="직항" value="0" @change="updateResult"></v-checkbox>
-            <v-checkbox v-model="selected" label="1회 경유" value="1" @change="updateResult"></v-checkbox>
-            <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="updateResult"></v-checkbox>
+            <div class="flightList__chkBox">
+              <v-checkbox v-model="selected" label="직항" value="0" @change="updateResult"></v-checkbox>
+              <v-checkbox v-model="selected" label="1회 경유" value="1" @change="updateResult"></v-checkbox>
+              <v-checkbox v-model="selected" label="2회 이상 경유" value="2" @change="updateResult"></v-checkbox>
+            </div>
           </div>
+
+          <div class="sidegrid-a__divider"></div>
+
           <!-- 시간대별 검색 슬라이더 -->
-          <div class="container" style="width: 220px; padding: 0px; margin-left: 10%;">
-            <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px;">
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="far fa-clock"></i> 시간대별 검색
             </div>
             <!-- <hr style="width: 220px; margin-bottom: 20px;"> -->
-            <span style="display: block; font-size: 17px;">가는 날 출발시간</span>
-            <span>{{outboundDepartStartTime}} - </span>
-            <span>{{outboundDepartEndTime}}</span>
-            <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="outrange" @change="onChange($event)">
-              <template>
-                <v-text-field v-model="outrange[0]"  class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template>
-                <v-text-field v-model="outrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template v-slot:thumb-label="props">
-                &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
-                &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
-                <!-- <span>&nbsp&nbsp&nbsp{{ season(props.value) }}</span>
-                <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
-              </template>
-            </v-range-slider>
+            <div class="sidegrid-a__box__time">
+              <span style="display: block; font-size: 17px;">가는 날 출발시간</span>
+              <span>{{outboundDepartStartTime}} - </span>
+              <span>{{outboundDepartEndTime}}</span>
+              <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="outrange" @change="onChange($event)">
+                <template>
+                  <v-text-field v-model="outrange[0]" single-line type="number"></v-text-field>
+                </template>
+                <template>
+                  <v-text-field v-model="outrange[1]" single-line type="number"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+                  <!-- <span>&nbsp&nbsp&nbsp{{ season(props.value) }}</span>
+                  <span>{{ season2(props.value) }}&nbsp&nbsp</span> -->
+                </template>
+              </v-range-slider>
+              <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
+              <span>{{inboundDepartStartTime}} - </span>
+              <span>{{inboundDepartEndTime}}</span>
+              <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
+                <template>
+                  <v-text-field v-model="inrange[0]" single-line type="number"></v-text-field>
+                </template>
+                <template>
+                  <v-text-field v-model="inrange[1]" single-line type="number"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+                </template>
+              </v-range-slider>
+            </div>
+          </div>
 
             <div v-if="this.$route.query.comingDate != ''">
               <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
@@ -94,43 +109,49 @@
               </v-range-slider>
             </div>
 
-            <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 20px;">
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="fas fa-history"></i> 총 소요시간
             </div>
             <!-- <hr style="width: 220px; margin-bottom: 20px;"> -->
             <!-- <span style="display: block; font-size: 17px;">총 소요시간</span> -->
-            <span>{{transferedMinDuration}} - </span>
-            <span>{{transferedDuration}}</span>
-            <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="updateResult($event)">
-              <template>
-                <v-text-field v-model="duration" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template v-slot:thumb-label="props">
-                &nbsp&nbsp{{ durationLabelHour(props.value) }}
-                &nbsp&nbsp&nbsp{{ durationLabelMinute(props.value) }}
-              </template>
-            </v-slider>
+            <div class="sidegrid-a__box__time">
+              <span>{{transferedMinDuration}} - </span>
+              <span>{{transferedDuration}}</span>
+              <v-slider v-model="duration" class="align-center" :max="maxDuration" :min="minDuration" hide-details thumb-size="50" @change="updateResult($event)">
+                <template>
+                  <v-text-field v-model="duration" hide-details single-line type="number"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp{{ durationLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ durationLabelMinute(props.value) }}
+                </template>
+              </v-slider>
+            </div>
           </div>
+
           <!-- 항공사별 체크 박스 -->
-          <div class="container" style="width: 220px; margin-left: 7%; padding-left: 8px;">
-            <div style="font-size: 25px !important; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 15px;">
+          <div class="sidegrid-a__divider"></div>
+          
+          <div class="sidegrid-a__box">
+            <div class="sidegrid-a__box__title">
               <i class="far fa-paper-plane"></i> 항공사
             </div>
             <!-- <hr style="width: 220px"> -->
-            <div v-for="i in flightselectedfixed.length" :key="i">
+            <div class="flightList__chkBox" v-for="i in flightselectedfixed.length" :key="i">
               <v-checkbox v-model="flightselectedName" :label="flightselectedfixed[i-1]" :value="flightselectedfixed[i-1]" @change="updateResult()"></v-checkbox>
             </div>
           </div>
         </div>
-        <!-- 항공권 리스트 -->
 
-        <div class="container" style="margin-top: 20px; padding-left: 0px; padding-right: 3px; max-width: 700px;">
-          <div class="container" v-if="error">
+        <!-- 항공권 리스트 -->
+        <div class="flightListGrid">
+          <div v-if="error">
             <v-alert :value="true" type="warning">결과가 존재하지 않습니다.</v-alert>
           </div>
 
           <v-flex v-if="loading" style="width=100px; display: flex; align-items: center; ">
-            <div class="" >
+            <div>
               <!-- <img src="http://cfile221.uf.daum.net/image/256A5E4C579AD7AB18555D" alt=""> -->
               <!-- <img src="https://t1.daumcdn.net/liveboard/emoticon/kakaofriends/v3/mujiandconspecial/emot_019_x3.gif" alt=  ""> -->
               <img src="https://4.bp.blogspot.com/-pnYVXlTcmG0/WFN6xh3pGQI/AAAAAAAACKY/lRtxZ-YDD-MbQ0Mox3xz60KwMRiwZnNLgCLcB/s200/0002.gif" alt="">
@@ -145,24 +166,25 @@
             <div v-if="!error">
               <!-- 정렬메뉴바 -->
 
-              <div style="display:grid; grid-template-columns: 68% 12% 20%" v-if="flightloaded">
-                <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
-                <div><div style="margin-top: 13px;">정렬 기준 :</div></div>
+              <div style="display:flex; justify-content: space-between; align-items: center;" v-if="flightloaded">
+                <div style="font-size: 18px;"><div style="margin-left: 25px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
                 <div>
-                  <v-menu offset-y style="display: inline-block; ">
-                    <template v-slot:activator="{ on }" >
-                      <v-btn color="rgb(0, 171, 132)" style="margin-top: 1rem;" dark v-on="on" @click="menuicon=!menuicon">
-                        {{ thisSortType }}
-                        <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
-                        <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
-                        <v-list-tile-title>{{ sortType }}</v-list-tile-title>
-                      </v-list-tile>
-                    </v-list>
-                  </v-menu>
+                  <div>정렬 기준 :
+                    <v-menu offset-y style="display: inline-block; ">
+                      <template v-slot:activator="{ on }" >
+                        <v-btn color="rgb(0, 171, 132)" dark v-on="on" @click="menuicon=!menuicon">
+                          {{ thisSortType }}
+                          <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
+                          <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
+                          <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+                        </v-list-tile>
+                      </v-list>
+                    </v-menu>
+                  </div>
                 </div>
               </div>
               <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 100%;">
@@ -202,7 +224,8 @@
               <v-btn color="rgb(0, 171, 132)" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2 ">fa-plus</v-icon> 더 보기</v-btn>
           </div>
         </div>
-        <div class="sidegrid-a sidegrid-b" style="height: 100px; width: 100%; margin-top: 50px;">
+
+        <div class="sidegrid-b">
           <div class="adSection__Title"><span class="decoBision">Bision</span>을 통해 <br>현지 가이드를 만나보세요</div>
           <div v-if="GSload">
             <div  class="adGuideServices"  @click="goToDetail(guideService.id)" v-for="(guideService, i) in guideServices"
@@ -262,7 +285,7 @@ export default {
           flightselectedfixed: [],
           flightselectedName: [],
           flightselectedCodes: '',
-          flightselected: [],      
+          flightselected: [],
           flightloaded: false,
 
           // 정렬에 따른 결과 저장
@@ -792,10 +815,10 @@ export default {
                           })
                           .then( () => {
 
-                            // if (s < 2) {                            
+                            // if (s < 2) {
                             //   return setTimeout(() => {this.getFlights(optionTypeIndex, s+1)}, 500);
                             // } else if (s == 2 && this.flights.length == 0) {
-                            //   this.loading = false                              
+                            //   this.loading = false
                             //   return
                             // } else if (s >= 2) {
                             //   console.log(s)
@@ -803,7 +826,7 @@ export default {
                             //     this.len[optionTypeIndex] = this.flightsSorted[optionTypeIndex].length
                             //     this.flightsSorted[optionTypeIndex] = []
                             //     if (optionTypeIndex == 0) this.flights = []
-                                
+
                             //     return setTimeout(() => { this.getFlights(optionTypeIndex, s+1)}, 500);
                             //     // return this.getFlights(0, s+1)
                             //   } else {
@@ -866,7 +889,7 @@ export default {
                     })
 
             })
-           
+
         },
         // 시간 변환 함수
         timeTransfer: function (time) {
