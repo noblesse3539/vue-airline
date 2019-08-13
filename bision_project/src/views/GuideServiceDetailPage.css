@@ -840,3 +840,8 @@
 .far:hover {
     cursor: pointer;
 }
+
+.GS-service-review-content-more-see {
+    display: flex; 
+    align-items: center;
+}
