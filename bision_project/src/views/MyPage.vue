@@ -65,9 +65,9 @@
         :key="idx"
       >
         <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
-        <div class="myTourExperience-description">
+        <div  @click="goToDetail(guideService.guideServiceId)" class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
-          <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
+          <p style="font-size: 1.25rem; ">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
           <!-- <p style="font-size: 1.25rem;">{{id}}</p> -->
           <!-- <p style="font-size: 1.25rem;">{{guideService.fromDate.slice(0, 10)}}</p> -->
@@ -98,7 +98,7 @@
           <div class="likeTooltip">찜 취소</div>
         </i>
 
-        <div class="myTourExperience-description">
+        <div @click="goToDetail(guideService._id)" class="myTourExperience-description">
           <p>{{guideService.city_kor[1]}} {{guideService.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.title}}</p>
         </div>
@@ -127,7 +127,7 @@
         v-for="(guideService, idx) in usedGuideServices"
         :key="idx">
         <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
-        <div class="myTourExperience-description">
+        <div @click="goToDetail(guideService.guideServiceId)" class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
@@ -450,7 +450,7 @@
 
               // 결제 취소 항목 제외하고 보여주기
               if (res.data.paymentRecords[idx].status != '결제취소') {
-                
+
                 if(res.data.paymentRecords[idx].service.date >= today){
                   this.currentGuideServices.push({
                     'guideServiceId' : res.data.options[idx][0].guideservice,
