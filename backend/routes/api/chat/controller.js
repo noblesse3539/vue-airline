@@ -39,7 +39,7 @@ exports.roomListByUser = (req, res) => {
       Room.find({'_id':{$in:roomIds}},(err,rooms)=>{
         res.json(rooms)
       })
-      .populate('user')
+      .populate('guide')
     })
     .catch(err=>{
       res.json(err)
