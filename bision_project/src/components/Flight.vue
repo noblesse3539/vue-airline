@@ -184,6 +184,7 @@
 </template>
 <script>
 import FlightDetail from '@/components/FlightDetail'
+import './Flight.css'
 import qs from 'qs'
 export default {
     name: 'Flight',
