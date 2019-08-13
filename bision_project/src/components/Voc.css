@@ -19,7 +19,7 @@
   border-radius: 7px;
 }
 .voc__openbutton:hover {
-  background-color:  rgba(0, 111, 255, 0.8);
+  background-color:  rgba(239,79,145, .7);
   color: white;
 }
 .HR__Modal {
