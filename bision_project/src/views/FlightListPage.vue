@@ -76,21 +76,23 @@
               </template>
             </v-range-slider>
 
-            <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
-            <span>{{inboundDepartStartTime}} - </span>
-            <span>{{inboundDepartEndTime}}</span>
-            <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
-              <template>
-                <v-text-field v-model="inrange[0]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template>
-                <v-text-field v-model="inrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
-              </template>
-              <template v-slot:thumb-label="props">
-                &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
-                &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
-              </template>
-            </v-range-slider>
+            <div v-if="this.$route.query.comingDate != ''">
+              <span style="display: block; font-size: 17px;">오는 날 출발시간</span>
+              <span>{{inboundDepartStartTime}} - </span>
+              <span>{{inboundDepartEndTime}}</span>
+              <v-range-slider :min="0" :max="1440" step="30" thumb-label thumb-size="50" v-model="inrange" @change="onChange($event)">
+                <template>
+                  <v-text-field v-model="inrange[0]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
+                </template>
+                <template>
+                  <v-text-field v-model="inrange[1]" class="mt-0 pt-0" single-line type="number" style="width: 60px"></v-text-field>
+                </template>
+                <template v-slot:thumb-label="props">
+                  &nbsp&nbsp&nbsp{{ thumbLabelHour(props.value) }}
+                  &nbsp&nbsp&nbsp{{ thumbLabelMinute(props.value) }}
+                </template>
+              </v-range-slider>
+            </div>
 
             <div style="font-size: 25px; color: rgb(0, 171, 132); padding-bottom: 10px; padding-top: 20px;">
               <i class="fas fa-history"></i> 총 소요시간
@@ -273,6 +275,9 @@ export default {
             [], // SortbyStops
           ],
           len: [0,0,0,0,0],
+
+          // 업데이트 변수
+          
 
 
           numofFlights: 0,
@@ -512,7 +517,7 @@ export default {
                                     let InDepartureTime = ''
                                     let InArrivalTime = ''
                                     let InCarrierId = ''
-                                    let InDuration = ''
+                                    let InDuration = 0
                                     let InDay = ''
                                     let InNumofStop = ''
                                     let InStopCodes = []
@@ -962,42 +967,33 @@ export default {
         durationLabelMinute : function (val) {
           return parseInt(val)%60 + "분"
         },
-        updateResult : function () {
+        updateResult : function () {         
           this.flights = []
           this.limit = 10
-          this.loading = true
-          console.log(this.flightsSorted[this.optionTypeIndex].length)
+          this.loading = true        
+    
           this.transferedDuration = this.durationTransfer(this.duration)
-          for (let i=0; i<this.flightsSorted[this.optionTypeIndex].length; i++) {
-            // 경유 체크박스
-            if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) != -1)
-                || (this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)
-                || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) > 1)
-                || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
+          for (let i=0; i<this.flightsSorted[this.optionTypeIndex].length; i++) {            
 
-              // 총 소요시간
-              if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
-                // 출발시간
-                if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
-                    && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]
-                    && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime >= this.inrange[0]
-                    && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime <= this.inrange[1]) {
-                  // 항공사 체크박스
-                  let flag = false
-                  for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
-                    for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
-                      if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1) {
-                        this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
-                        flag = true
-                        break;
-                      }
-                    }
-                    if (flag == true) break;
-                  }
-                  if (flag == false) {
-                    for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].InSegments.length; j++) {
-                      for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier.length; k++) {
-                        if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier[k].Name) != -1) {
+            if (this.$route.query.comingDate != '') {
+              // 경유 체크박스 (왕복)
+              if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) != -1)
+                  || (this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)
+                  || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) > 1)
+                  || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
+
+                // 총 소요시간
+                if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
+                  // 출발시간
+                  if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime >= this.inrange[0]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime <= this.inrange[1]) {
+                    // 항공사 체크박스
+                    let flag = false
+                    for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
+                      for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
+                        if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1) {                          
                           this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
                           flag = true
                           break;
@@ -1005,14 +1001,52 @@ export default {
                       }
                       if (flag == true) break;
                     }
+                    if (flag == false) {
+                      for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].InSegments.length; j++) {
+                        for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier.length; k++) {
+                          if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier[k].Name) != -1) {
+                            this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
+                            flag = true
+                            break;
+                          }
+                        }
+                        if (flag == true) break;
+                      }
+                    }
                   }
                 }
               }
-            }
-          }
-          console.log(this.flights)
+            } else {
+              console.log("편도")
+              // 경유 체크박스 (편도)
+              if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)                
+                  || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
+
+                // 총 소요시간
+                if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
+                  // 출발시간
+                  if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]) {
+                    // 항공사 체크박스
+                    let flag = false
+                    for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
+                      for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
+                        if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1) {
+                          this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
+                          flag = true
+                          break;
+                        }
+                      }
+                      if (flag == true) break;
+                    }                  
+                  }
+                }
+              }
+            }                     
+          }        
           this.numofFlights = this.flights.length
-          this.loading = false
+          // this.loading = false
+          setTimeout(() => {this.changeLoading()}, 500);
           // setTimeout("this.changeLoading()", 100);
         },
         transferforCheck : function(time) {
@@ -1021,9 +1055,9 @@ export default {
         getAirportName: function(name) {
           return name.slice(0, name.indexOf(','))
         },
-        // changeLoading : function () {
-        //   this.loading = false;
-        // }
+        changeLoading : function () {
+          this.loading = false;
+        }
 
     },
 }
