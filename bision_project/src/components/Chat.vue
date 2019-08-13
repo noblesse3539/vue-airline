@@ -1,10 +1,11 @@
 <template>
   <v-container>
-    <v-layout v-if="this.getIsLoggedIn" class="chat">
+    <!-- <v-layout v-if="this.getIsLoggedIn" class="chat"> -->
+    <v-layout>
       <v-flex hidden-xs-only sm4 md4>
         <v-card v-if="getIsGuide" class="chatInfo">
           <div class="chatInfoImg">
-            <v-img fluid style="border-radius: 50%;" :src="roomInfo.user.profileImageUrl" aspect-ratio="1" alt="profile Img"/>
+            <v-img fluid style="border-radius: 50%;" :src="roomInfo.user? roomInfo.user.profileImageUrl : '' " aspect-ratio="1" alt="profile Img"/>
           </div>
           <div class="chatInfoUsername">
             {{roomInfo.user.username}}
@@ -15,39 +16,13 @@
         </v-card>
         <v-card v-else class="chatInfo">
           <div class="chatInfoImg">
-            <v-img fluid style="border-radius: 50%;" :src="roomInfo.guide.profileImageUrl" aspect-ratio="1" alt="profile Img"/>
+            <v-img fluid style="border-radius: 50%;" :src="roomInfo.guide? roomInfo.guide.profileImageUrl : ''" aspect-ratio="1" alt="profile Img"/>
           </div>
           <div class="chatInfoUsername">
             {{roomInfo.guide.username}}
           </div>
           <div class="chatInfoEmail">
             {{roomInfo.guide.email}}
-          </div>
-        </v-card>
-        <v-card v-if="getIsGuide" v-for="(one, index) in chatList">
-          <div class="chatInfoOthersImg">
-            <!-- <router-link :to="`${'/room/'+one._id}`"> -->
-              <v-img @click="join(one._id)" fluid style="border-radius: 50%;" :src="one.user.profileImageUrl" aspect-ratio="1" alt="profile Img"/>
-            <!-- </router-link> -->
-          </div>
-          <div class="chatInfoOthersUsername">
-            {{one.user.username}}
-          </div>
-          <div class="chatInfoOthersEmail">
-            {{one.user.email}}
-          </div>
-        </v-card>
-        <v-card v-else>
-          <div class="chatInfoOthersImg">
-            <router-link :to="`${'/room/'+one._id}`">
-              <v-img @click="join(one._id)" fluid style="border-radius: 50%;" :src="one.guide? one.guide.profileImageUrl : ''" aspect-ratio="1" alt="profile Img"/>
-            </router-link>
-          </div>
-          <div class="chatInfoOthersUsername">
-            {{one.guide.username}}
-          </div>
-          <div class="chatInfoOthersEmail">
-            {{one.guide.email}}
           </div>
         </v-card>
       </v-flex>
@@ -95,11 +70,11 @@
         </div>
       </v-flex>
     </v-layout>
-    <v-layout v-else class="chat">
+    <!-- <v-layout v-else class="chat">
       <v-flex>
         채팅 서비스는 로그인이 반드시 필요합니다.
       </v-flex>
-    </v-layout>
+    </v-layout> -->
   </v-container>
 </template>
 
@@ -126,6 +101,7 @@ export default {
         this.getExistMessage()
         this.socket.on('chat', (data) => {
             this.messages.splice(0,0,data);
+            console.log('messageAdd',data);
         });
         this.getRoomInfo();
         // this.getChatList();
