@@ -41,8 +41,10 @@
               </template>
               <span>찜 하기 취소</span>
             </v-tooltip>             -->
-            <i @click="serviceLike" v-if="this.like != -1" class="fas fa-heart" style="color: red;"></i>
-            <i @click="serviceLike" v-else class="far fa-heart"></i>            
+            <div v-if="isGuide == false">
+              <i @click="serviceLike" v-if="this.like != -1" class="fas fa-heart" style="color: red;"></i>
+              <i @click="serviceLike" v-else class="far fa-heart"></i>            
+            </div>
             <!-- <i class="fas fa-heart guide-list-page-like-btn-active"></i> -->
           </div>
 
@@ -163,8 +165,9 @@
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button v-if="isGuide" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
-            <button v-else class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
+            <button v-if="isGuide == true" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
+            <button v-else-if="isGuide == false && serviceInfo.isCanceled == false" class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
+            <button v-else-if="isGuide == false && serviceInfo.isCanceled == true" class="GS-payment-decision-btn GS-payment-disabled" >종료된 상품입니다.</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -567,6 +570,7 @@ export default {
       // 결제 관련 정보
       serviceInfo: {
 
+        serviceInfo: false,
         serviceId: '',
         time: 0,
         // people: 0,
@@ -733,7 +737,7 @@ export default {
           return res.data;
         })
         .then(data => {
-          console.log(data);
+          console.log("여긴가요?", data);
           this.title = data.title;
           this.city_kor = data.city_kor;
           this.nation_kor = data.nation_kor;
@@ -755,10 +759,11 @@ export default {
           this.serviceInfo.refund = data.refund
           this.serviceInfo.guide = data.guide
           this.serviceInfo.serviceId = this.$route.query.serviceId
+          this.serviceInfo.isCanceled = data.canceled
           // this.serviceInfo.unitPrice = data.cost;
           this.serviceInfo.unitPrice = 1000;
 
-
+          console.log(this.serviceInfo.isCanceled)
           console.log(data)
 
           return
