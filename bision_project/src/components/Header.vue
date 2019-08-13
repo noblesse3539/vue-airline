@@ -2,8 +2,11 @@
     <div id="navbox" v-if="getIsHeaderOpen">
         <div class="nav-left"><form action="" method="get"></form>
                 <a href="/" exact class="nav-left-title" style="display: flex; align-items: center;">
-                <img style="width: 40%; height: auto; margin-right: 5px;" src="../../public/bisiontour.svg" alt="">
+                <img onmouseover="document.getElementById('our-commitment').style.display = 'block';" 
+                      onmouseout="document.getElementById('our-commitment').style.display = 'none';"
+                class="easter-egg" style="width: 40%; height: auto; margin-right: 5px;" src="../../public/bisiontour.svg" alt="">
                 BisionTour
+                <iframe id="our-commitment" class="our-commitment" width="1280" height="800" src="https://www.youtube.com/embed/YkPoo2p0azI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; allowfullscreen; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </a>
             <div class="nav-left-toggle">
                 <router-link to="/" class="airline-reservation"><i class="fas fa-plane-departure"></i>
