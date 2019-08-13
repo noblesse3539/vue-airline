@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="room-container">
     <v-layout v-if="getIsLoggedIn" class="chat">
       <v-flex xs12>
         <div @click="join(one._id)" v-if="getIsGuide" v-for="(one, index) in chatList" class="chatroom-box">
@@ -42,7 +42,7 @@
         </div>
       </v-flex>
 
-      <v-flex v-if="chatList.length===0" xs12>
+      <v-flex v-if="chatList ? chatList.length===0 : false" xs12>
         <div v-if="getIsGuide">
           채팅방이 존재하지 않습니다. 유저들과 채팅기능을 이용해보세요.
         </div>

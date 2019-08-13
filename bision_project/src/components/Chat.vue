@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="chat-container">
     <!-- <v-layout v-if="this.getIsLoggedIn" class="chat"> -->
     <v-layout>
       <v-flex hidden-xs-only sm4 md4>
