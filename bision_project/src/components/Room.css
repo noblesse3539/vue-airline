@@ -1,3 +1,5 @@
+
+
 .chat{
   padding-top : 130px;
   padding-bottom: 50px;
@@ -192,4 +194,10 @@
   position: absolute;
   right: 0;
   font-size: 1.25vw;
+}
+
+.no-chat-room {
+  display: flex !important;
+  justify-content: center !important;
+  
 }

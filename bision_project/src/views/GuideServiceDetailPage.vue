@@ -21,7 +21,7 @@
             <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
-              <v-btn @click="chat" color="#1e90ff" style="color: white;">메시지 보내기</v-btn>
+              <v-btn v-if="!isGuide" @click="chat" color="#1e90ff" style="color: white;">메시지 보내기</v-btn>
             </div>
           </div>
 
@@ -165,7 +165,8 @@
             </PayBtn> -->
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
-            <button v-if="isGuide == true" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
+            <button v-if="isGuide" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
+            <!-- <button v-else class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button> -->
             <button v-else-if="isGuide == false && (serviceInfo.isCanceled ? serviceInfo.isCanceled == false : true)" class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
             <button v-else-if="isGuide == false && (serviceInfo.isCanceled ? serviceInfo.isCanceled == true : false)" class="GS-payment-decision-btn GS-payment-disabled" >종료된 상품입니다.</button>
           </div>
@@ -228,11 +229,11 @@
                   <div style="color: #dcdcdc;">(성인 기준)</div>
                 </div>
               </div>
-
+        
               <!-- <div :class="GS-individual-option-loadmoreBtn `'GS-individual-option-loadmoreBtn-'idx`"> -->
               <div :class="'GS-individual-option-loadmoreBtn-' + idx" class="GS-individual-option-loadmoreBtn">
                 <button
-                  v-if="isGuide == false && (serviceInfo.isCanceled ? serviceInfo.isCanceled == false : true)"
+                  
                   class="GS-individual-option-selectBtn" :class="'GS-individual-option-selectBtn-' + idx"
                   @click="openOptionSelectingModal('.GS-individual-option-' + idx, idx)"
                 >

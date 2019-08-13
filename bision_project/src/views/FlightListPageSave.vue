@@ -944,41 +944,33 @@ export default {
           return parseInt(val)%60 + "분"
         },
         updateResult : function () {
+          console.log("업데이트")
           this.flights = []
           this.limit = 10
           this.loading = true
-          console.log(this.flightsSorted[this.optionTypeIndex].length)
+          console.log("길이", this.flightsSorted[this.optionTypeIndex].length)
           this.transferedDuration = this.durationTransfer(this.duration)
           for (let i=0; i<this.flightsSorted[this.optionTypeIndex].length; i++) {
-            // 경유 체크박스
-            if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) != -1)
-                || (this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)
-                || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) > 1)
-                || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
 
-              // 총 소요시간
-              if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
-                // 출발시간
-                if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
-                    && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]
-                    && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime >= this.inrange[0]
-                    && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime <= this.inrange[1]) {
-                  // 항공사 체크박스
-                  let flag = false
-                  for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
-                    for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
-                      if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1) {
-                        this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
-                        flag = true
-                        break;
-                      }
-                    }
-                    if (flag == true) break;
-                  }
-                  if (flag == false) {
-                    for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].InSegments.length; j++) {
-                      for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier.length; k++) {
-                        if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier[k].Name) != -1) {
+            if (this.$route.query.comingDate != '') {
+              // 경유 체크박스 (왕복)
+              if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) != -1)
+                  || (this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)
+                  || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].InNumofStop) > 1)
+                  || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
+
+                // 총 소요시간
+                if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
+                  // 출발시간
+                  if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime >= this.inrange[0]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.InDepartureTime <= this.inrange[1]) {
+                    // 항공사 체크박스
+                    let flag = false
+                    for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
+                      for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
+                        if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1) {
                           this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
                           flag = true
                           break;
@@ -986,10 +978,48 @@ export default {
                       }
                       if (flag == true) break;
                     }
+                    if (flag == false) {
+                      for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].InSegments.length; j++) {
+                        for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier.length; k++) {
+                          if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].InSegments[j].Carrier[k].Name) != -1) {
+                            this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
+                            flag = true
+                            break;
+                          }
+                        }
+                        if (flag == true) break;
+                      }
+                    }
                   }
                 }
               }
-            }
+            } else {
+              console.log("편도")
+              // 경유 체크박스 (편도)
+              if ((this.selected.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) != -1)                
+                  || (this.selected.indexOf('2') != -1 && Number(this.flightsSorted[this.optionTypeIndex][i].OutNumofStop) > 1)) {
+
+                // 총 소요시간
+                if (this.flightsSorted[this.optionTypeIndex][i].totalDuration <= this.duration) {
+                  // 출발시간
+                  if (this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime >= this.outrange[0]
+                      && this.flightsSorted[this.optionTypeIndex][i].check.OutDepartureTime <= this.outrange[1]) {
+                    // 항공사 체크박스
+                    let flag = false
+                    for (let j=0; j<this.flightsSorted[this.optionTypeIndex][i].OutSegments.length; j++) {
+                      for (let k=0; k<this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier.length; k++) {
+                        if (this.flightselectedName.indexOf(this.flightsSorted[this.optionTypeIndex][i].OutSegments[j].Carrier[k].Name) != -1) {
+                          this.flights.push(this.flightsSorted[this.optionTypeIndex][i])
+                          flag = true
+                          break;
+                        }
+                      }
+                      if (flag == true) break;
+                    }                  
+                  }
+                }
+              }
+            }            
           }
           console.log(this.flights)
           this.numofFlights = this.flights.length

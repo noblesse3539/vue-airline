@@ -15,8 +15,6 @@
                     @keydown.enter="onEnter()"
                     @click="onClick()"
                 >
-                <button @click="goToUrl()" class="guide-search-submit">가이드 검색</button>
-                <!-- 검색 input 값 없을 시 보여주기 -->
                 <div class="guide-input-tooltip guide-tooltip">
                     <h3>검색어를 입력해주세요.</h3>
                     <!-- <ul>
@@ -25,6 +23,8 @@
                     </ul> -->
                     <i></i>
                 </div>
+                <button @click="goToUrl()" class="guide-search-submit">가이드 검색</button>
+                <!-- 검색 input 값 없을 시 보여주기 -->
                 
                 <!-- 가이드 여행지 검색 결과 리스트 -->
                 <div class="guide-search-result-wrapper" v-show="isOpen">

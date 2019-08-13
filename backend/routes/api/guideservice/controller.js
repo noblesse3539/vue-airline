@@ -4,7 +4,8 @@ const Review = require('../../../models/review')
 const User = require('../../../models/user')
 const Option = require('../../../models/option')
 const PaymentStore = require('../../../models/paymentStore')
-
+const Room = require('../../../models/room')
+const Chat = require('../../../models/chat')
 
 exports.findReview = (req, res) => {
   console.log('findReview');
@@ -283,7 +284,7 @@ exports.cancelGuideService = (req, res) => {
   .then(gs => {
     if(gs.canceled) return res.status(412).json({success:false, msg:'이미 상품이 취소되어 있습니다.'})
     gs.canceled = true
-    gs.save()
+    // gs.save()
     return gs
   })
   .then(gs => { 
@@ -296,18 +297,37 @@ exports.cancelGuideService = (req, res) => {
         const gsid = await payments[i].getGSId()
         if (gsid && gsid.equals(guideServiceId)) {
           payments[i].status = "결제취소"
-          payments[i].save()
+          // payments[i].save()
           list.push({user: payments[i].user, payment:payments[i]})
         }
       }
       return list
     })
-    .then( users => { // 결제 상태를 결제 취소로 변경
-      res.json({success:true, users:users})
+    .then( canceledUserList => { // 결제 상태를 결제 취소로 변경
+      return Promise.all(canceledUserList.map( async (info) => {
+        let room = await Room.findOne({user: info.user._id, guide:info.payment.guide})
+        try {
+          if (!room) {
+            console.log(`userid: ${info.user._id}, guideid: ${info.payment.guide}`)
+            room = await Room.create({user: info.user, guide:info.payment.guide._id })
+          }
+          console.log(`roomId: ${room._id}`)
+          const msg = `여행 상품(${info.payment.service.title})이 가이드의 사정에 의해 최소되었습니다. ${info.payment.created_at}에 요청하신 결제가 취소되었습니다.`
+          const chat = await Chat.create({room: room._id, guide:info.payment.guide, chat:msg})
+          return {info: info, success: true, sendNoti:true}
+        } catch (err) {
+          console.log(err)
+          return {info: info, success: true, sendNoti:false}
+        }
+      }))
+    })
+    .then( val => {
+      console.log(val)
+      res.status(200).json({successes: val})
     })
     .catch( err => {
       console.log(err)
-      res.status(400).json({success:false})
+      res.status(400).json({success:false, err:err})
     })
   })
   .catch(err => {

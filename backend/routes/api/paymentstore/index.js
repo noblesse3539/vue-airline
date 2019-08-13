@@ -48,21 +48,22 @@ router.post('/real/:id', (req, res) => {
                 status: '결제'
             })
             .then( ps => {
-                res.json({success: true, ps})
+                res.status(200).json({success: true, ps})
             })
             .catch( err => {
-                res.json({error: err})
+                console.log(err)
+                res.status(500).json({error: err})
             })
 
         })
         .catch( err => {
             console.log(err)
-            res.json({success:false})
+            res.status(406).json({success:false})
         })
     })
     .catch( err => {
         console.log(err)
-        res.json({success:false})
+        res.status(406).json({success:false})
     })
 })
 
