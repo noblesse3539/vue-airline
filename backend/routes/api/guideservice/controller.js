@@ -4,6 +4,8 @@ const Review = require('../../../models/review')
 const User = require('../../../models/user')
 const Option = require('../../../models/option')
 const PaymentStore = require('../../../models/paymentStore')
+
+
 exports.findReview = (req, res) => {
   console.log('findReview');
     GuideService.findOne({ _id : req.params.id })
@@ -295,13 +297,21 @@ exports.cancelGuideService = (req, res) => {
         if (gsid && gsid.equals(guideServiceId)) {
           payments[i].status = "결제취소"
           payments[i].save()
-          list.push(payments[i].user)
+          list.push({user: payments[i].user, payment:payments[i]})
         }
       }
       return list
     })
     .then( users => { // 결제 상태를 결제 취소로 변경
-      res.json({ok:true, users:users})
+      res.json({success:true, users:users})
     })
+    .catch( err => {
+      console.log(err)
+      res.status(400).json({success:false})
+    })
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(400).json({success:false})
   })
 }
