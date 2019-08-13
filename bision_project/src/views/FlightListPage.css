@@ -1,0 +1,122 @@
+@media (max-width: 980px) {
+.maingrid-a {
+  display: grid;
+  grid-template-columns: 100%;
+}
+/* .sidegrid-a {
+  display: none;
+  } */
+}
+@media (min-width: 981px) and (max-width: 1200px) {
+.maingrid-b {
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
+/* .sidegrid-b {
+  display: none;
+  } */
+}
+@media only screen and (min-width: 1200px) {
+.maingrid-c {
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  }
+}
+.adGuideServices{
+  cursor: pointer;
+  margin: 1.5rem  4rem 0rem 1rem;
+  right: 10rem;
+  background: no-repeat center;
+  background-size: cover;
+  color: white;
+  height: 25rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: 1s ease-in-out;
+}
+.adGuideServices__textBox {
+  background: linear-gradient(rgba(0, 30, 40, 0), rgba(0, 0, 0, .2) 8%, rgba(0, 0, 0, .8));
+  height: 100px;
+  border-radius: 0 0 1rem 1rem;
+  padding: 1rem;
+}
+.adGuideServices__Title {
+  font-weight: 550;
+  font-size: 1.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap:break-word;
+  ine-height: 1.5em;
+  height: 3.0em;
+}
+.adGuideServices__detail{
+   font-size: 1.2rem;
+   display: none;
+   margin-top: .5rem;
+}
+.adGuideServices__Price {
+  font-weight: 550;
+  margin-top: .9rem;
+  margin-right: .5rem;
+  margin-bottom: .5rem;
+  border-radius: 7px;
+}
+.adGuideServices:hover {
+  margin-left: -7rem;
+}
+.adGuideServices:hover .adGuideServices__textBox{
+  height: max-content;
+}
+.adGuideServices:hover .adGuideServices__Title {
+  font-size: 1.6rem;
+  line-height: 1.6em;
+  height: 3.2em;
+}
+.adGuideServices:hover .adGuideServices__detail {
+  display: block;
+}
+.adGuideServices:hover .adGuideServices__Desc {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-wrap:break-word;
+  overflow: hidden;
+}
+.adGuideServices:hover .adGuideServices__Price {
+  font-size: 1.7rem;
+  padding: .2rem .8rem;
+  text-align: center;
+    margin-left: 16rem;
+  background-color: rgba(233, 22, 64, .7);
+}
+.adGuideServices:hover .adGuideServices__Price:hover {
+  background-color: rgb(233, 22, 64);
+}
+.adSection__Title{
+
+  font-size: 1.6rem;
+  font-weight: 550;
+  margin-top: -3rem;
+  /* border: solid 1.8px lightgrey; */
+  width: max-content;
+  padding: 2rem 2rem;
+  padding-bottom: 3rem;
+  border-radius: 1rem;
+  margin-left: .8rem;
+  background-color: white;
+  box-shadow: 8px 6px 5px lightgray;
+}
+.decoBision{
+font-size: 4.3rem;
+background: linear-gradient(to right,rgb(0, 171, 132),  #8066e7, #ff35ff);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+/* color: rgb(51, 51, 204); */
+margin-right: .4rem;
+}
