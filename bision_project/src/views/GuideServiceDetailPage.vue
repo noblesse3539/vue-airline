@@ -166,8 +166,8 @@
           </div>
           <div class="GS-payment-choose-option GS-payment-choose-option-reserve" v-if="isPaymentReady == false">
             <button v-if="isGuide == true" class="GS-payment-decision-btn GS-payment-disabled">가이드 예약불가</button>
-            <button v-else-if="isGuide == false && serviceInfo.isCanceled == false" class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
-            <button v-else-if="isGuide == false && serviceInfo.isCanceled == true" class="GS-payment-decision-btn GS-payment-disabled" >종료된 상품입니다.</button>
+            <button v-else-if="isGuide == false && (serviceInfo.isCanceled ? serviceInfo.isCanceled == false : true)" class="GS-payment-decision-btn" @click="goToChooseOptions">예약하기</button>
+            <button v-else-if="isGuide == false && (serviceInfo.isCanceled ? serviceInfo.isCanceled == true : false)" class="GS-payment-decision-btn GS-payment-disabled" >종료된 상품입니다.</button>
           </div>
           <div class="GS-payment-detail-info">
             <div class="GS-payment-detail-info-each">
@@ -232,10 +232,11 @@
               <!-- <div :class="GS-individual-option-loadmoreBtn `'GS-individual-option-loadmoreBtn-'idx`"> -->
               <div :class="'GS-individual-option-loadmoreBtn-' + idx" class="GS-individual-option-loadmoreBtn">
                 <button
+                  v-if="isGuide == false && (serviceInfo.isCanceled ? serviceInfo.isCanceled == false : true)"
                   class="GS-individual-option-selectBtn" :class="'GS-individual-option-selectBtn-' + idx"
                   @click="openOptionSelectingModal('.GS-individual-option-' + idx, idx)"
                 >
-                  <div v-if="selectOption.length == 0 || selectOption != idx">선택</div>
+                  <div v-if=" selectOption.length == 0 || selectOption != idx">선택</div>
                   <div v-else>접기</div>
                 </button>
               </div>
