@@ -185,9 +185,9 @@
             </div>
           </div>
           <div class="GS-payment-current-info">
-            <div class="GS-payment-current-info-each">
+            <!-- <div class="GS-payment-current-info-each">
               <i class="fas fa-user-check"></i> 100명의 고객님이 예약한 상품입니다.
-            </div>
+            </div> -->
             <div class="GS-payment-current-info-each">
               평점:
               <v-rating class="serviceRating" v-model="average" dense size="17.4" readonly></v-rating>
@@ -494,14 +494,17 @@
                       </p> -->
                       <div class="GS-service-review-content-morebutton">                                                        
                         <button :class="`gs-service-close-${i}`" style="display: none;" @click="loadReviewMore(i)">
-                          닫기 
-                          <i class="fa fa-angle-up"></i>
+                          <div class="GS-service-review-content-more-see">
+                            <div>닫기</div> 
+                            <i class="fa fa-angle-up" style="margin-left: 6px;"></i>
+                          </div>                         
                         </button>
                         <button :class="`gs-service-open-${i}`" @click="loadReviewMore(i)">              
-                          더 읽어보기
-                          <i class="fa fa-angle-down"></i>
-                        </button>
-                       
+                          <div class="GS-service-review-content-more-see">
+                            <div>더 읽어보기</div> 
+                            <i class="fa fa-angle-down" style="margin-left: 6px;"></i>
+                          </div>
+                        </button>                       
                       </div>
                     </div>
                   </div>
