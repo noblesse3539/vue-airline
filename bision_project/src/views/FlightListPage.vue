@@ -2,26 +2,19 @@
     <div class="Api">
       <!-- 헤더 공백 -->
       <div style="height: 110px; width: 100%;"></div>
-      <div style="width: 100%; background-color: rgba(0, 171, 132, 1); color: white; height: 170px; padding: 2.5rem 15rem; margin-bottom: 3rem;">
-        <div style="display:grid; grid-template-columns: 50% 34% 16%;">
-          <div>
-            <div class="container" style="font-size: 1.8rem; height: 50%; padding-top: 10px; padding-bottom: .5rem;">
-              {{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})
-            </div>
-            <div class="container" style="font-size: 1.2rem; height: 50%; padding-top: 4px;">
-              {{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>  | 좌석 구분 : <span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span>
-            </div>
-          </div>
-          <div style="font-size: 1.4rem; padding-top: 1.7rem; padding-left: 3rem;">
-            <div style="width: 50%; display: inline-block;">
-              <div>가는 날</div>
-              <div>{{this.$route.query.leavingDate}}</div>
-            </div>
-            <div v-if="this.$route.query.comingDate" style="width: 50%; display: inline-block;">
-              <div>오는 날</div>
-              <div>{{this.$route.query.comingDate}}</div>
-            </div>
-          </div>
+      <div class="FlightSearchList__Header">
+        <div>
+          <div class="FlightSearchList__Header__airport">{{getAirportName(this.$route.query.departureInput)}}({{this.$route.query.departure}}) - {{getAirportName(this.$route.query.destinationInput)}}({{this.$route.query.destination}})</div>
+          <div>{{this.$route.query.adults}} 성인 <span v-if="this.$route.query.children">{{this.$route.query.children}} 아동</span> <span v-if="this.$route.query.infants">{{this.$route.query.infants}} 유아</span>
+             | 좌석 구분 :<span v-if="this.$route.query.flightClass">{{this.$route.query.flightClass}}</span><span v-else>없음</span></div>
+        </div>
+        <div class="FlightSearchList__Header__date">
+          <div>가는 날 <br> {{this.$route.query.leavingDate}}</div>
+        </div>
+        <div class="FlightSearchList__Header__date" v-if="this.$route.query.comingDate" style="width: 50%; display: inline-block;">
+          <div>오는 날 <br> {{this.$route.query.comingDate}}</div>
+        </div>
+      </div>
 
           <!-- 다른 조건 검색 -->
           <!-- <div style="padding-top: 10px;">
@@ -35,11 +28,10 @@
               검색해보세요.
             </div>
           </div> -->
-        </div>
-        <div v-if="searchPannel">
+        <!-- <div v-if="searchPannel">
           <FlightSearchPannel></FlightSearchPannel>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
       <div class="maingrid-a maingrid-b maingrid-c" style="">
         <div style="margin: 0;" m-0 class="container sidegrid-a">
           <!-- 경유별 검색 체크박스 -->
@@ -143,24 +135,25 @@
             <div v-if="!error">
               <!-- 정렬메뉴바 -->
 
-              <div style="display:grid; grid-template-columns: 68% 12% 20%" v-if="flightloaded">
-                <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
-                <div><div style="margin-top: 13px;">정렬 기준 :</div></div>
+              <div style="display:flex; justify-content: space-between; align-items: center;" v-if="flightloaded">
+                <div style="font-size: 18px;"><div style="margin-left: 25px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
                 <div>
-                  <v-menu offset-y style="display: inline-block; ">
-                    <template v-slot:activator="{ on }" >
-                      <v-btn color="rgb(0, 171, 132)" style="margin-top: 1rem;" dark v-on="on" @click="menuicon=!menuicon">
-                        {{ thisSortType }}
-                        <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
-                        <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
-                        <v-list-tile-title>{{ sortType }}</v-list-tile-title>
-                      </v-list-tile>
-                    </v-list>
-                  </v-menu>
+                  <div>정렬 기준 :
+                    <v-menu offset-y style="display: inline-block; ">
+                      <template v-slot:activator="{ on }" >
+                        <v-btn color="rgb(0, 171, 132)" dark v-on="on" @click="menuicon=!menuicon">
+                          {{ thisSortType }}
+                          <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
+                          <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-tile v-for="(sortType, index) in sortTypes" :key="index" @click="getFlightsbyOptional(sortType, index)">
+                          <v-list-tile-title>{{ sortType }}</v-list-tile-title>
+                        </v-list-tile>
+                      </v-list>
+                    </v-menu>
+                  </div>
                 </div>
               </div>
               <v-layout mt-3 wrap v-for="i in flights.length > limits ? limits : flights.length" :key="i" style="width: 100%;">
@@ -260,7 +253,7 @@ export default {
           flightselectedfixed: [],
           flightselectedName: [],
           flightselectedCodes: '',
-          flightselected: [],      
+          flightselected: [],
           flightloaded: false,
 
           // 정렬에 따른 결과 저장
@@ -787,10 +780,10 @@ export default {
                           })
                           .then( () => {
 
-                            // if (s < 2) {                            
+                            // if (s < 2) {
                             //   return setTimeout(() => {this.getFlights(optionTypeIndex, s+1)}, 500);
                             // } else if (s == 2 && this.flights.length == 0) {
-                            //   this.loading = false                              
+                            //   this.loading = false
                             //   return
                             // } else if (s >= 2) {
                             //   console.log(s)
@@ -798,7 +791,7 @@ export default {
                             //     this.len[optionTypeIndex] = this.flightsSorted[optionTypeIndex].length
                             //     this.flightsSorted[optionTypeIndex] = []
                             //     if (optionTypeIndex == 0) this.flights = []
-                                
+
                             //     return setTimeout(() => { this.getFlights(optionTypeIndex, s+1)}, 500);
                             //     // return this.getFlights(0, s+1)
                             //   } else {
@@ -861,7 +854,7 @@ export default {
                     })
 
             })
-           
+
         },
         // 시간 변환 함수
         timeTransfer: function (time) {
