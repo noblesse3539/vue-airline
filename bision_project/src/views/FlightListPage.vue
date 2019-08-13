@@ -1023,8 +1023,8 @@ export default {
           }
           console.log(this.flights)
           this.numofFlights = this.flights.length
-          this.loading = false
-          // setTimeout("this.changeLoading()", 100);
+          // this.loading = false
+          setTimeout(() => {this.changeLoading()}, 400);
         },
         transferforCheck : function(time) {
           return parseInt(time.slice(11, 13)) * 60 + parseInt(time.slice(14, 16))
@@ -1032,9 +1032,9 @@ export default {
         getAirportName: function(name) {
           return name.slice(0, name.indexOf(','))
         },
-        // changeLoading : function () {
-        //   this.loading = false;
-        // }
+        changeLoading : function () {
+          this.loading = false;
+        }
 
     },
 }
