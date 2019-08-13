@@ -5,7 +5,7 @@
             <h1 class="GS-payment-left-title" style="margin: 0;">결제하기</h1>
             <div class="GS-payment-deco-bar"></div>
             <div class="GS-payment-means">
-                <PayBtn v-bind="serviceInfo" class="kakako-payBtn"></PayBtn>
+                <PayBtn v-bind="serviceInfo" :serviceId="serviceInfo.serviceId" class="kakako-payBtn"></PayBtn>
             </div>
         </div>
         <!-- 비로그인 시 띄워줄 로그인 유도 화면 -->
@@ -72,10 +72,10 @@ export default {
         }
     },
     mounted() {
-
+        
         this.closeHeader()
         this.serviceInfo = this.$route.query
-        console.log(this.serviceInfo)
+        console.log('서비스인포', this.serviceInfo)
         this.setServiceInfo(this.serviceInfo)
         this.addTempServiceInfo()
         // console.log(this.getServiceInfo)

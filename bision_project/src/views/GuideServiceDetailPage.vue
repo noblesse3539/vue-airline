@@ -566,6 +566,8 @@ export default {
 
       // 결제 관련 정보
       serviceInfo: {
+
+        serviceId: '',
         time: 0,
         // people: 0,
         adult: 0,
@@ -744,7 +746,7 @@ export default {
 
           this.optionId = data._id;
           this.guideId = data.guide;
-
+          
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
           this.serviceInfo.nation_kor = data.nation_kor
@@ -752,6 +754,7 @@ export default {
           this.serviceInfo.options = data.options
           this.serviceInfo.refund = data.refund
           this.serviceInfo.guide = data.guide
+          this.serviceInfo.serviceId = this.$route.query.serviceId
           // this.serviceInfo.unitPrice = data.cost;
           this.serviceInfo.unitPrice = 1000;
 

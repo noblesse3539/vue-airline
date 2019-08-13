@@ -143,7 +143,7 @@
             <div v-if="!error">
               <!-- 정렬메뉴바 -->
 
-              <div style="display:grid; grid-template-columns: 68% 12% 20%">
+              <div style="display:grid; grid-template-columns: 68% 12% 20%" v-if="flightloaded">
                 <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
                 <div><div style="margin-top: 13px;">정렬 기준 : </div></div>
                 <div>
@@ -174,6 +174,7 @@
                   :Instops="flights[i - 1].Instops"
                   :InNumofStop="flights[i - 1].InNumofStop"
                   :InSegments="flights[i - 1].InSegments"
+                  :InStopCodes="flights[i - 1].InStopCodes"
                   :OutDepartureTime="flights[i - 1].OutDepartureTime"
                   :OutArrivalTime="flights[i - 1].OutArrivalTime"
                   :OutCarrierImageUrl="flights[i - 1].OutCarrierImageUrl"
@@ -182,6 +183,7 @@
                   :Outstops="flights[i - 1].Outstops"
                   :OutNumofStop="flights[i - 1].OutNumofStop"
                   :OutSegments="flights[i - 1].OutSegments"
+                  :OutStopCodes="flights[i - 1].OutStopCodes"
                   :NumofOptions="flights[i - 1].NumofOptions"
                   :LowestPrice="flights[i - 1].LowestPrice"
                   :LowestAgentsName="flights[i - 1].LowestAgentsName"
@@ -195,7 +197,7 @@
             </div>
           </div>
           <div style="display: flex; justify-content: center;">
-              <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+              <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2" v-if="flightloaded">fa-plus</v-icon> 더 보기</v-btn>
           </div>
         </div>
         <div class="sidegrid-a sidegrid-b" style="height: 100px; width: 100%; margin-top: 50px;">
@@ -251,8 +253,8 @@ export default {
           flightselectedfixed: [],
           flightselectedName: [],
           flightselectedCodes: '',
-          flightselected: [],
-          len: 0,
+          flightselected: [],      
+          flightloaded: false,
 
           // 정렬에 따른 결과 저장
           flights: [],
@@ -263,6 +265,7 @@ export default {
             [], // SortbyInDeparture
             [], // SortbyStops
           ],
+          len: [0,0,0,0,0],
 
 
           numofFlights: 0,
@@ -336,6 +339,15 @@ export default {
         })
       },
         getFlights: function(optionTypeIndex, s =  0){
+            // this.flights = []
+            // this.flightsSorted = [
+            //   [], // SortbyPrice
+            //   [], // SortbyDuration
+            //   [], // SortbyOutDeparture
+            //   [], // SortbyInDeparture
+            //   [], // SortbyStops
+            // ]
+
             if (optionTypeIndex == 0) {
               this.loading = true
             }
@@ -362,6 +374,7 @@ export default {
                         }
             // 옵션 데이터
             let inboundDate = this.$route.query.comingDate
+            console.log(inboundDate)
             // let inboundDate = '2019-09-10'
             if (inboundDate != '') data['inboundDate'] = inboundDate
 
@@ -491,7 +504,7 @@ export default {
                                     let InDay = ''
                                     let InNumofStop = ''
                                     let InStopCodes = []
-                                    let InSegmentsId
+                                    let InSegmentsId = ''
                                     let check = {}
                                     for (let k=0; k<res.data.Legs.length; k++) {
                                       if (Outflag == false && res.data.Legs[k].Id == OutboundLegId) {
@@ -721,6 +734,7 @@ export default {
                                               'Instops': Instops,
                                               'InNumofStop': InNumofStop,
                                               'InSegments': InSegments,
+                                              'InStopCodes': InStopCodes,
                                               'OutDepartureTime': OutDepartureTime,
                                               'OutArrivalTime': OutArrivalTime,
                                               'OutCarrierImageUrl': OutCarrierImageUrl,
@@ -729,6 +743,7 @@ export default {
                                               'Outstops': Outstops,
                                               'OutNumofStop': OutNumofStop,
                                               'OutSegments': OutSegments,
+                                              'OutStopCodes': OutStopCodes,
                                               'Options': Options,
                                               'NumofOptions': NumofOptions,
                                               'LowestPrice': LowestPrice,
@@ -760,32 +775,20 @@ export default {
                           })
                           .then( () => {
 
-                            // if (s < 2) {
-                            //   this.flights = [0]
-                            //   this.flightsSorted = [
-                            //     [], // SortbyPrice
-                            //     [], // SortbyDuration
-                            //     [], // SortbyOutDeparture
-                            //     [], // SortbyInDeparture
-                            //     [], // SortbyStops
-                            //   ]
-                            //   return this.getFlights(0, s+1)
+                            // if (s < 2) {                            
+                            //   return setTimeout(() => {this.getFlights(optionTypeIndex, s+1)}, 500);
                             // } else if (s == 2 && this.flights.length == 0) {
-                            //   this.loading = false
+                            //   this.loading = false                              
                             //   return
                             // } else if (s >= 2) {
                             //   console.log(s)
-                            //   if (this.len < this.flights.length) {
-                            //     this.len = this.flights.length
-                            //     this.flights = [0]
-                            //     this.flightsSorted = [
-                            //       [], // SortbyPrice
-                            //       [], // SortbyDuration
-                            //       [], // SortbyOutDeparture
-                            //       [], // SortbyInDeparture
-                            //       [], // SortbyStops
-                            //     ]
-                            //     return this.getFlights(0, s+1)
+                            //   if (this.len[optionTypeIndex] < this.flightsSorted[optionTypeIndex].length) {
+                            //     this.len[optionTypeIndex] = this.flightsSorted[optionTypeIndex].length
+                            //     this.flightsSorted[optionTypeIndex] = []
+                            //     if (optionTypeIndex == 0) this.flights = []
+                                
+                            //     return setTimeout(() => { this.getFlights(optionTypeIndex, s+1)}, 500);
+                            //     // return this.getFlights(0, s+1)
                             //   } else {
                             //       console.log("들어옴")
                             //       if (optionTypeIndex == 4) {
@@ -803,12 +806,14 @@ export default {
                             //         // console.log(this.flights)
                             //       }
                             //       this.loading = false
+                            //       this.flightloaded = true
                             //       return
                             //     }
                             //   }
 
                             // console.log(this.flights)
                             // console.log(this.flightsSorted)
+
                             if (s == 2) {
                               if (this.flights.length == 0) {
                                 // this.error = true
@@ -829,6 +834,7 @@ export default {
                                   this.numofFlights = this.flights.length
                                   // console.log(this.flights)
                                 }
+                                this.flightloaded = true
                                 this.loading = false
                                 return
                               }
@@ -843,6 +849,7 @@ export default {
                     })
 
             })
+           
         },
         // 시간 변환 함수
         timeTransfer: function (time) {

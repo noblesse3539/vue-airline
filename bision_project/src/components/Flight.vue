@@ -1,12 +1,19 @@
 <template>
   <div class="container" style="border-radius: 20px; background-color: white;">
     <div class="wrapper">
-      <div>
-        <div style="height: 50%">
+      <div style="padding: 0px;">
+        <div :style="`${InDepartureTime? 'height: 50%;': 'height: 100%; padding-top: 2.8rem'}`">
           <div class="wrapperfour">
             <!-- 항공사이미지 -->
-            <div class="container center" style="padding: 10px;">
-              <v-img :src="OutSegments[0].Carrier[0].ImageUrl"></v-img>
+            <div>
+              <v-tooltip bottom color="rgba(0, 171, 132, 1)">
+                <template v-slot:activator="{ on }">                
+                  <v-img :src="OutSegments[0].Carrier[0].ImageUrl" v-on="on"></v-img>                
+                </template>
+                <div style="display: flex; align-content: center;">
+                  {{OutSegments[0].Carrier[0].Name}}
+                </div>
+              </v-tooltip>              
             </div>
             <!-- 출발시간, 출발공항 -->
             <div style="font-weight: bold; font-size: 15px;">
@@ -32,9 +39,19 @@
                   </div>
                 </div>
                 <div style="display: flex; justify-content: center">
-                  <span v-if="OutNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
-                  <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유&nbsp</span>
-                  <span v-for="(stop, index) in OutStopCodes">{{ stops(stop, index) }}</span>
+                  <v-tooltip bottom color="rgba(0, 171, 132, 1)">
+                    <template v-slot:activator="{ on }">
+                      <div v-on="on">
+                        <span v-if="OutNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
+                        <span v-else style="color: #ff5452; font-size: 13px;">{{OutNumofStop}}회 경유&nbsp</span>
+                        <span v-for="(stop, index) in Outstops">{{ stops(stop.code, index) }}</span>
+                      </div>
+                    </template>
+                    <div style="display: flex; align-content: center;">
+                      <img src="../assets/airplane.png" height="15px;" alt="" style="padding-right: 5px; color: white;">
+                      <span v-for="(stop, index) in Outstops">{{ stops(stop.name, index) }}</span>
+                    </div>
+                  </v-tooltip>
                 </div>
               </div>
             </div>
@@ -61,9 +78,15 @@
         <div style="height: 50%" v-if="InDepartureTime">
           <div class="wrapperfour">
             <!-- 항공사이미지 -->
-            <div class="container center" style="padding: 10px;">
-              <!-- <v-img :src="InCarrierImageUrl"></v-img> -->
-              <v-img :src="InSegments[0].Carrier[0].ImageUrl"></v-img>
+            <div>
+              <v-tooltip bottom color="rgba(0, 171, 132, 1)">
+                <template v-slot:activator="{ on }">                
+                  <v-img :src="InSegments[0].Carrier[0].ImageUrl" v-on="on"></v-img>                
+                </template>
+                <div style="display: flex; align-content: center;">
+                  {{InSegments[0].Carrier[0].Name}}
+                </div>
+              </v-tooltip>
             </div>
             <!-- 출발시간, 출발공항 -->
             <div style="font-weight: bold; font-size: 15px;">
@@ -88,10 +111,20 @@
                     <i class="fas fa-plane"></i>
                   </div>
                 </div>
-                <div style="display: flex; justify-content: center">
-                  <span v-if="InNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
-                  <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유&nbsp</span>
-                  <span v-for="(stop, index) in InStopCodes">{{ stops(stop, index) }}</span>
+                <div style="display: flex; justify-content: center">                                    
+                  <v-tooltip bottom color="rgba(0, 171, 132, 1)">
+                    <template v-slot:activator="{ on }">
+                      <div v-on="on">
+                        <span v-if="InNumofStop === '0'" style="color: #00d775; font-size: 13px;">직항</span>
+                        <span v-else style="color: #ff5452; font-size: 13px;">{{InNumofStop}}회 경유&nbsp</span>
+                        <span v-for="(stop, index) in Instops">{{ stops(stop.code, index) }}</span>
+                      </div>
+                    </template>
+                    <div style="display: flex; align-content: center;">
+                      <img src="../assets/airplane.png" height="15px;" alt="" style="padding-right: 5px; color: white;">
+                      <span v-for="(stop, index) in Instops">{{ stops(stop.name, index) }}</span>
+                    </div>
+                  </v-tooltip>
                 </div>
               </div>
             </div>
@@ -121,8 +154,13 @@
           </div> -->
           <div class="center" v-if="NumofOptions == 1" style="font-size: 13px;">상품 1개</div>
           <div class="center" v-else style="font-size: 13px;">총 {{NumofOptions}}건 중 최저가</div>
-          <div class="center" style="font-weight: bold; font-size: 20px; padding-top: 0px;">
-            {{CurrencySymbol}}&nbsp{{LowestPrice}}
+          <!-- <div class="center" style="font-weight: bold; font-size: 20px; padding-top: 0px;"> -->
+            <!-- {{CurrencySymbol}}&nbsp{{LowestPrice}}
+          </div> -->
+          <div style="font-weight: bold; font-size: 20px; padding-top: 5px; padding-bottom: 5px; display: flex; justify-content: center;">            
+            <span>
+              {{CurrencySymbol}}&nbsp{{LowestPrice}}
+            </span>           
           </div>
           <div class="center">
             <v-btn @click="showFD" depressed color="primary" style="border-radius: 20px;"><span style="color: white;">선택&nbsp&nbsp<i class="fas fa-arrow-right"></i></span></v-btn>
@@ -158,7 +196,7 @@ export default {
       InDay: {type: String},
       InNumofStop: {type: String},
       Instops: {type: Array},
-      InSegments: {type: Array},
+      InSegments: {type: Array},      
       OutDepartureTime: {type: String},
       OutArrivalTime: {type: String},
       OutCarrierImageUrl: {type: String},
@@ -166,7 +204,7 @@ export default {
       OutDay: {type: String},
       OutNumofStop: {type: String},
       Outstops: {type: Array},
-      OutSegments: {type: Array},
+      OutSegments: {type: Array},      
       NumofOptions: {type: Number},
       LowestPrice: {type: String},
       LowestAgentsName: {type: String},
@@ -200,7 +238,7 @@ export default {
       },
       stops : function (stop, index) {
         if (parseInt(index)%2 == 1) {
-          return " ," + stop.toString()
+          return ", " + stop.toString()
         } else {
           return stop
         }

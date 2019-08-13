@@ -832,3 +832,11 @@
 .GS-payment-disabled:hover {
     cursor: not-allowed;
 }
+
+.fas:hover {
+    cursor: pointer;
+}
+
+.far:hover {
+    cursor: pointer;
+}

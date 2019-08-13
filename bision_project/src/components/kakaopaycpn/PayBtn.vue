@@ -23,10 +23,10 @@ export default {
         'totalAmount',
         'taxFreeAmount',
         'title',
-        'people'
+        'people',
+        'serviceId'
     ],
     mounted() {
-
     },
     computed: {
         ...mapState({
@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         payment() {
-            const paymentURL = '/api/kakaopay'
+            const paymentURL = `/api/kakaopay/${this.serviceId}`
             const data = {
                 'item_name'         : this.title,
                 'quantity'          : this.people,
