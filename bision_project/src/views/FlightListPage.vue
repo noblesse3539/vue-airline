@@ -143,13 +143,13 @@
             <div v-if="!error">
               <!-- 정렬메뉴바 -->
 
-              <div style="display:grid; grid-template-columns: 68% 12% 20%">
+              <div style="display:grid; grid-template-columns: 68% 12% 20%; align-items: center;">
                 <div style="font-size: 18px;"><div style="margin-left: 25px; margin-top: 10px;">총{{ numofFlights }}개의 검색 결과가 있습니다.</div></div>
-                <div><div style="margin-top: 13px;">정렬 기준 : </div></div>
+                <div><div style="margin-top: 13px;">정렬 기준 :</div></div>
                 <div>
-                  <v-menu offset-y style="display: inline-block">
+                  <v-menu offset-y style="display: inline-block; ">
                     <template v-slot:activator="{ on }" >
-                      <v-btn color="rgb(0, 171, 132)" dark v-on="on" @click="menuicon=!menuicon">
+                      <v-btn color="rgb(0, 171, 132)" style="margin-top: 1rem;" dark v-on="on" @click="menuicon=!menuicon">
                         {{ thisSortType }}
                         <div v-if="menuicon"><i class="fas fa-sort-down" style="margin-left: 10px; margin-bottom: 8px;"></i></div>
                         <div v-else><i class="fas fa-sort-up" style="margin-left: 10px; margin-top: 10px;"></i></div>
@@ -195,7 +195,7 @@
             </div>
           </div>
           <div style="display: flex; justify-content: center;">
-              <v-btn color="info" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2">fa-plus</v-icon> 더 보기</v-btn>
+              <v-btn color="rgb(0, 171, 132)" dark v-on:click="loadMoreFlightList"><v-icon size="25" class="mr-2 ">fa-plus</v-icon> 더 보기</v-btn>
           </div>
         </div>
         <div class="sidegrid-a sidegrid-b" style="height: 100px; width: 100%; margin-top: 50px;">
