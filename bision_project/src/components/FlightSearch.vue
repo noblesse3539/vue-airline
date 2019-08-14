@@ -84,7 +84,7 @@
                                             :class="{ 'is-active' : id === destinationArrowCounter }"
                                         >
                                             <!-- 도착지 검색 리스트 -->
-                                            <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'destination')" style="color: black; font-size: 3rem;">
+                                            <div @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, '', 'destination')" style="color: black; font-size: 3rem;">
                                                 <div class="airportList">
                                                     <div class="airport-name">
                                                         <i class="fas fa-plane-departure"></i>
