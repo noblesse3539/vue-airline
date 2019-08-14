@@ -41,11 +41,14 @@
                                         >
                                             <!-- 출발지 검색 리스트 -->
                                             <div
-                                                @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, 'departure')"
+                                                
                                                 style="color: black; font-size: 3rem;"
+                                            
                                             >
                                                 <div class="airportList">
-                                                    <div class="airport-name">
+                                                    <div class="airport-name"
+                                                        @click="saveUserChoiceAirport(`${airport.code}`, `${airport.name_kor}`, '', 'departure')"
+                                                    >
                                                         <i class="fas fa-plane-departure"></i>
                                                         {{airport.name_kor}} {{airport.code}}<br>
                                                         <span class="nation-name">{{airport.nation_kor}}</span>
@@ -494,9 +497,10 @@ export default {
         },
         saveUserChoiceAirport: function(userChoiceAirport, airportName, cityName, travelType) {
 
+            console.log(travelType)
             const airportNameSplit = airportName.replace(/\s/g, '');
 
-            if (travelType == "departure") {
+            if (travelType === "departure") {
                 this.departure = userChoiceAirport
                 this.departureInput = `${airportNameSplit}, ${this.departure}`
                 this.departureCity = cityName
