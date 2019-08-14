@@ -28,22 +28,22 @@
           <div class="GS-guide-detail-title">
             <div style="margin-right: 10px;">{{title}}</div>
 
-            <!-- 좋아요 기능 추후 구현 -->            
+            <!-- 좋아요 기능 추후 구현 -->
             <!-- <v-tooltip right>
               <template v-slot:activator="{ on }" v-if="this.like == -1">
-                <i @click="serviceLike" class="far fa-heart" v-on="on"></i>            
+                <i @click="serviceLike" class="far fa-heart" v-on="on"></i>
               </template>
               <span>찜하기</span>
             </v-tooltip>
             <v-tooltip right>
               <template v-slot:activator="{ off }" v-if="this.like != -1">
-                <i @click="serviceLike" class="fas fa-heart" v-on="off"  style="color: red;"></i>            
+                <i @click="serviceLike" class="fas fa-heart" v-on="off"  style="color: red;"></i>
               </template>
               <span>찜 하기 취소</span>
             </v-tooltip>             -->
             <div v-if="isGuide == false">
               <i @click="serviceLike" v-if="this.like != -1" class="fas fa-heart" style="color: red;"></i>
-              <i @click="serviceLike" v-else class="far fa-heart"></i>            
+              <i @click="serviceLike" v-else class="far fa-heart"></i>
             </div>
             <!-- <i class="fas fa-heart guide-list-page-like-btn-active"></i> -->
           </div>
@@ -73,7 +73,7 @@
                 </a>
               </div>
               <!-- 최고 평점 있을 시 -->
-              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">                
+              <div class="GS-guide-detail-best-review-content" v-if="reviewsLoaded && reviews.length > 0">
                 <div class="GS-service-review-userImage">
                   <img
                     :src="reviews[maxratingReviewIdx].user.profileImageUrl"
@@ -104,7 +104,7 @@
               </div>
 
               <!-- 평점 하나도 없을 시 -->
-              <div class="GS-guide-detail-best-review-content" v-else>                
+              <div class="GS-guide-detail-best-review-content" v-else>
                 <div class="GS-service-review-userImage">
                   <img
                     src="https://i.pinimg.com/236x/43/59/f3/4359f3d05221af09e7ec7f498afa502b.jpg"
@@ -120,9 +120,9 @@
                         <div class="GS-service-review-userScore GS-service-review-info">
                           <v-rating dense size="14.7" readonly></v-rating>
                         </div>
-                        <div class="GS-service-review-userName GS-service-review-info"></div>                       
-                      </div>                      
-                    </div>                    
+                        <div class="GS-service-review-userName GS-service-review-info"></div>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="user-comment" style="margin-top: 0px;">
@@ -229,11 +229,11 @@
                   <div style="color: #dcdcdc;">(성인 기준)</div>
                 </div>
               </div>
-        
+
               <!-- <div :class="GS-individual-option-loadmoreBtn `'GS-individual-option-loadmoreBtn-'idx`"> -->
               <div :class="'GS-individual-option-loadmoreBtn-' + idx" class="GS-individual-option-loadmoreBtn">
                 <button
-                  
+
                   class="GS-individual-option-selectBtn" :class="'GS-individual-option-selectBtn-' + idx"
                   @click="openOptionSelectingModal('.GS-individual-option-' + idx, idx)"
                 >
@@ -450,8 +450,8 @@
                 style="border-radius: 50%;"
               />
             </div> -->
-            <div class="GS-service-reivew-content" v-if="reviewsLoaded">     
-              <div v-for=" (i) in reviews.length > limits ? limits : reviews.length" :key="i">                           
+            <div class="GS-service-reivew-content" v-if="reviewsLoaded">
+              <div v-for=" (i) in reviews.length > limits ? limits : reviews.length" :key="i">
                 <div class="GS-service-review-image-and-content">
                   <div class="GS-service-review-userImage">
                     <img
@@ -478,7 +478,7 @@
                     <div :class="'GS-service-reivew-userReview-' + i" class="GS-service-reivew-userReview">
                       <p>
                         {{reviews[i-1].content}}
-                      </p>           
+                      </p>
                       <!-- <p style="height: 80%">
                         혼자 조용히 여행하고싶어서 외국 여행사로 골라서 왔는데 ㅎㅎㅋㅋㅋㅋ 일
                         단 영어와 중국어로만 가이드를 해주시고 제가 다녔을 때는 한국분은 없었어요
@@ -492,19 +492,19 @@
                         일단 성인만가능하더라고요/거기에도 외국인은 있어요)아니면(한국인특성상 관섭을 많이
                         하잖아요;;)이런게 싫고 조용히 못하는영어 굴려가면서 (제기준)경험해보고싶다면 추천합니다!
                       </p> -->
-                      <div class="GS-service-review-content-morebutton">                                                        
+                      <div class="GS-service-review-content-morebutton">
                         <button :class="`gs-service-close-${i}`" style="display: none;" @click="loadReviewMore(i)">
                           <div class="GS-service-review-content-more-see">
-                            <div>닫기</div> 
+                            <div>닫기</div>
                             <i class="fa fa-angle-up" style="margin-left: 6px;"></i>
-                          </div>                         
+                          </div>
                         </button>
-                        <button :class="`gs-service-open-${i}`" @click="loadReviewMore(i)">              
+                        <button :class="`gs-service-open-${i}`" @click="loadReviewMore(i)">
                           <div class="GS-service-review-content-more-see">
-                            <div>더 읽어보기</div> 
+                            <div>더 읽어보기</div>
                             <i class="fa fa-angle-down" style="margin-left: 6px;"></i>
                           </div>
-                        </button>                       
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -588,7 +588,7 @@ export default {
         seniorprice: 0,
         childprice: 0,
         infantprice: 0,
-        
+
         // unitPrice: '1000',
         itemName: "",
         quantity: 1,
@@ -626,7 +626,7 @@ export default {
         user:'',
         guide:''
       },
-    
+
 
       // 레이팅 관련 변수
       average: 0,
@@ -755,7 +755,7 @@ export default {
 
           this.optionId = data._id;
           this.guideId = data.guide;
-          
+
           this.serviceInfo.title = data.title
           this.serviceInfo.city_kor = data.city_kor
           this.serviceInfo.nation_kor = data.nation_kor
@@ -831,7 +831,7 @@ export default {
             //     latestdate = this.dateCalculate(this.reviews[i].created_at)
             //   }
             // }
-          }         
+          }
 
           this.average = (sum/this.reviews.length).toFixed(1)
           this.maxratingReviewIdx = idx
@@ -853,20 +853,20 @@ export default {
       const loadReviewMore = document.querySelector(".GS-service-reivew-userReview-" + i)
       const reviewopen = document.querySelector(`.gs-service-open-${i}`)
       const reviewclose = document.querySelector(`.gs-service-close-${i}`)
-      
-      
+
+
       // const loadReiveMoreBtn = document.querySelector(
       //   ".GS-service-reivew-userReview"
       // );
       // const loadReviewMoreBtn2 = document.querySelector(
       //   ".GS-service-review-userReview-expand"
       // );
-      // console.log(loadReiveMoreBtn);     
+      // console.log(loadReiveMoreBtn);
       console.log(this.isLoadMore[i-1])
 
 
       // if (this.isLoadMore[i-1] == "true") {
-      if (this.isLoadMore[i-1]) {       
+      if (this.isLoadMore[i-1]) {
         console.log("닫힘")
         loadReviewMore.classList.add("GS-service-reivew-userReview");
         loadReviewMore.classList.remove("GS-service-review-userReview-expand");
@@ -875,7 +875,7 @@ export default {
         reviewclose.style.display = "none"
         console.log(isLoadMore[i-1])
         console.log("닫힘")
-  
+
       } else {
         loadReviewMore.classList.add("GS-service-review-userReview-expand");
         loadReviewMore.classList.remove("GS-service-reivew-userReview");
@@ -885,7 +885,7 @@ export default {
         reviewclose.style.display = "flex"
         console.log("열림")
       }
-     
+
     },
     openOptionSelectingModal(optionDetailToOpen, idx) {
       // const toHide = document.querySelector('.GS-individual-option-loadmoreBtn-1') || ''
@@ -1055,6 +1055,7 @@ export default {
 
       // getDate: 일요일을 0을 시작으로 요일의 번호를 나타냄
       // console.log(days)
+      // return days
       return result
     },
 

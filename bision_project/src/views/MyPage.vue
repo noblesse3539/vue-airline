@@ -127,7 +127,7 @@
         v-for="(guideService, idx) in usedGuideServices"
         :key="idx">
         <img @click="goToDetail(guideService.guideServiceId)" class="myTourExperienceImg" :src="guideService.service.mainImg" alt="myTourExperienceImg">
-        <div @click="goToDetail(guideService.guideServiceId)" class="myTourExperience-description">
+        <div class="myTourExperience-description">
           <p>{{guideService.service.city_kor[1]}} {{guideService.service.city_kor[0]}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.title}}</p>
           <p style="font-size: 1.25rem;">{{guideService.service.date}}</p>
