@@ -7,21 +7,21 @@
 
         <!-- ProfileImg -->
         <v-flex xs3 mr-5>
-          
+
           <!-- if: 본인 아닐 때 -->
           <!-- <v-img fluid style="border-radius: 50%;" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img"></v-img> -->
 
           <!-- else: 본인 일 때 -->
             <v-hover>
               <v-img fluid style="border-radius: 50%;"  @click="showIU" slot-scope="{hover}" v-on="on" class="profileImg" :src="imgurl" aspect-ratio="1" alt="profile Img">
-                <v-fade-transition>
-                  <div v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
+                <v-fade-transition v-if="guideId == getUserId">
+                  <div  v-if="hover" class="d-flex transition-fast-in-fast-out white v-card--reveal  black--text" style="height: 100%;">
                       <!-- 이미지 변경 -->
                   </div>
                 </v-fade-transition>
               </v-img>
             </v-hover>
-            <UploadImgModal v-model="imgurl" v-if="isIUVisible" @close="closeIU"/>
+            <UploadImgModal  v-model="imgurl" v-if="isIUVisible && guideId == getUserId" @close="closeIU"/>
           <!-- else 끝 -->
         </v-flex>
 
@@ -245,7 +245,7 @@
                       메세지 보내기
                     </div>
                   </div>
-                  
+
                 </div>
                 <div class="reserve-user-pick-service">
                   {{payment.payment.service.title}}<br>
@@ -779,12 +779,12 @@ export default {
           // this.getGuideCancel(this.guideId)
         })
     },
-    
+
     hideComponent(event) {
         if (event.target.classList[1] == 'dialog-delete') {
           // const dialogDelete = document.querySelector(`.dialog-delete-${idx}`)
           const dialogDelete = document.querySelectorAll(`.dialog-delete`)
-          
+
           dialogDelete.forEach( each => {
             each.style.display = "none"
           })
@@ -798,7 +798,7 @@ export default {
       }
       this.$http.post('/api/room/create',rmInfo)
         .then(res=> {
-          console.log("방 찾아지나요?", res.data)  
+          console.log("방 찾아지나요?", res.data)
           this.$router.push({path: `/room/${res.data._id}`})
         })
     },
