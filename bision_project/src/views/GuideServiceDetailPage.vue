@@ -14,14 +14,16 @@
           <!-- 가이드 유저 정보 -->
           <div class="GS-guide-detail-guideDetail">
             <div class="GS-guide-detail-guideImg">
-              <router-link :to="`${'/guide/'+guideId}`">
-              <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!"  v-if="guideImgLoaded">
-              </router-link>
+              <!-- `${'/guide/'+guideId}` -->
+              <img @click="goToGuide" class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!"  v-if="guideImgLoaded">
+              <!-- <router-link :to="`${'/guide/'+guideId}`">
+                <img class="GS-guide-detail-guideImg-image" :src="guideInfo.guideImg" alt="Our guide's beautiful face!"  v-if="guideImgLoaded">
+              </router-link> -->
             </div>
             <div class="GS-guide-detail-guideName">
               <p style="margin:0; font-size: 1rem; color: rgba(0, 0, 0, 0.54); letter-spacing: 0.05em;">WRITTEN BY</p>
               <span style="text-transform: capitalize;">{{guideInfo.guideName}}</span>
-              <v-btn v-if="!isGuide" @click="chat" color="#1e90ff" style="color: white;">메시지 보내기</v-btn>
+              <v-btn v-if="!isGuide && getIsLoggedIn " @click="chat" color="#1e90ff" style="color: white;">메시지 보내기</v-btn>
             </div>
           </div>
 
@@ -651,6 +653,14 @@ export default {
 
   },
   methods: {
+    goToGuide() {
+      if (this.getIsLoggedIn) {
+        this.$router.push({path: '/guide/'+ this.guideId })
+      } else {
+        alert("로그인 후 이용해주세요.")
+      }
+      // ${'/guide/'+guideId}
+    },
     serviceLike : function() {
 
             let userId  = this.getuserId
