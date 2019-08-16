@@ -42,7 +42,7 @@ router.get(
             }, (err, token) => {
                 if(err) {
                     console.log('토큰 생성 실패: ', err)
-                    res.redirect('http://localhost:8080')
+                    res.redirect('/')
                 }
                 res.cookie('BisionToken', token, { maxAge: 3600* 1000 * 3})
                 res.redirect(returnUrl)
@@ -77,7 +77,7 @@ router.get(
             }, (err, token) => {
                 if(err) {
                     console.log('토큰 생성 실패: ', err)
-                    res.redirect('http://localhost:8080')
+                    res.redirect('/')
                 }
                 res.cookie('BisionToken', token, { maxAge: 3600* 1000 * 3})
                 res.redirect(returnUrl)
