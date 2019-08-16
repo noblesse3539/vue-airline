@@ -17,7 +17,7 @@ module.exports = (passport) => {
     passport.use('googleUser', new GoogleStrategy({
         clientID: GoogleOAuth2Credentials.client_id,
         clientSecret: GoogleOAuth2Credentials.client_secret,
-        callbackURL: GoogleOAuth2Credentials.redirect_uris[0] ,
+        callbackURL: GoogleOAuth2Credentials.redirect_uris[2] ,
         passReqToCallback   : true 
         },
         function(req, accessToken, refreshToken, profile, done) {
@@ -42,7 +42,7 @@ module.exports = (passport) => {
     passport.use('googleGuide', new GoogleStrategy({
         clientID: GoogleOAuth2Credentials.client_id,
         clientSecret: GoogleOAuth2Credentials.client_secret,
-        callbackURL: GoogleOAuth2Credentials.redirect_uris[1] ,
+        callbackURL: GoogleOAuth2Credentials.redirect_uris[3] ,
         passReqToCallback   : true 
         },
         function(req, accessToken, refreshToken, profile, done) {
