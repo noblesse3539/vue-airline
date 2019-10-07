@@ -1,17 +1,3 @@
-# How to Start
+# 유튜브로 보기
 
-```bash
-/bision_project
-
-$ npm install
-$ npm run serve
-```
-
-
-
-```bash
-/backend
-
-$ npm install
-$ npm start
-```
+https://youtu.be/l44eWz3SKvo
